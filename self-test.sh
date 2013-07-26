@@ -272,6 +272,45 @@ $ ./doctest.sh --no-color --verbose --prompt 'prompt$ ' self-test/option-prompt.
 YOU WIN! All 3 tests have passed.
 $
 
+# Option --inline-mark
+
+$ ./doctest.sh --no-color self-test/option-inline-mark.sh
+
+FAILED: echo "1 space" #==> 1 space
+@@ -0,0 +1 @@
++1 space
+
+FAILED: echo "8 spaces"        #==> 8 spaces
+@@ -0,0 +1 @@
++8 spaces
+
+FAILED: echo "2 tabs"		#==> 2 tabs
+@@ -0,0 +1 @@
++2 tabs
+
+EPIC FAIL! All 3 tests have failed.
+$ ./doctest.sh --no-color --inline-mark '#==>' self-test/option-inline-mark.sh
+
+FAILED: echo "1 space" 
+@@ -1 +1 @@
+- 1 space
++1 space
+
+FAILED: echo "8 spaces"        
+@@ -1 +1 @@
+- 8 spaces
++8 spaces
+
+FAILED: echo "2 tabs"		
+@@ -1 +1 @@
+- 2 tabs
++2 tabs
+
+EPIC FAIL! All 3 tests have failed.
+$ ./doctest.sh --no-color --inline-mark '#==> ' self-test/option-inline-mark.sh
+YOU WIN! All 3 tests have passed.
+$
+
 # I/O, file reading
 
 $ ./doctest.sh XxnotfoundXX.sh
