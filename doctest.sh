@@ -11,6 +11,7 @@ diff_options='-u'
 ok_file="${TMPDIR:-/tmp}/doctest.ok.$$.txt"
 test_output_file="${TMPDIR:-/tmp}/doctest.output.$$.txt"
 temp_file="${TMPDIR:-/tmp}/doctest.temp.$$.txt"
+# Note: using temporary files for compatibility, since <(...) is not portable.
 
 # Flags, may be altered by command line options
 debug=0
