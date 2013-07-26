@@ -1,5 +1,5 @@
 # Test file for the --prefix option
-# Command blocks here are prefixed by a Tab
+# Command blocks here are prefixed by a tab
 # Run with --prefix '\t' or --prefix tab
 
 	$ echo "1"  #→ 1
