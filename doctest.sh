@@ -195,6 +195,12 @@ _process_test_file ()
 	# Run pending tests
 	test -n "$test_command" && _run_test "$test_command"
 
+	if test $nr_file_tests -eq 0
+	then
+		_message "$(basename "$0"): Error: no test found in input file: $test_file"
+		exit 1
+	fi
+
 	# Append file stats to global holder
 	files_stat_message=$(printf '%s\n%s' "$files_stat_message" "$(_get_file_stats)")
 }

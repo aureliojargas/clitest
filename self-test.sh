@@ -264,7 +264,7 @@ $
 # Option --prompt
 
 $ ./doctest.sh --no-color --verbose self-test/option-prompt.sh
-YOU WIN! All 0 tests have passed.
+doctest.sh: Error: no test found in input file: self-test/option-prompt.sh
 $ ./doctest.sh --no-color --verbose --prompt 'prompt$ ' self-test/option-prompt.sh
 ======= echo "1"  
 ======= echo "2"
@@ -280,6 +280,18 @@ $ ./doctest.sh self-test
 doctest.sh: Error: cannot read input file: self-test
 $ ./doctest.sh self-test/
 doctest.sh: Error: cannot read input file: self-test/
+$
+
+# No test found (message and exit code 1)
+$ ./doctest.sh self-test/no-test-found.sh; echo $?
+doctest.sh: Error: no test found in input file: self-test/no-test-found.sh
+1
+$ ./doctest.sh self-test/empty-file.sh
+doctest.sh: Error: no test found in input file: self-test/empty-file.sh
+$ ./doctest.sh self-test/empty-prompt-file.sh
+doctest.sh: Error: no test found in input file: self-test/empty-prompt-file.sh
+$ ./doctest.sh self-test/empty-prompts-file.sh
+doctest.sh: Error: no test found in input file: self-test/empty-prompts-file.sh
 $
 
 # Gotchas
