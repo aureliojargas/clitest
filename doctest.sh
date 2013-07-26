@@ -50,10 +50,18 @@ done
 # Command line options consumed, now it's just the files
 nr_files=$#
 
-# If the prefix is a number, convert it to spaces: 2 => '  '
+# Handy shortcuts for prefixes
 case "$prefix" in
-	0) prefix='' ;;
-	[1-9] | [1-9][0-9]) prefix=$(printf "%${prefix}s" ' ') ;;
+	tab)
+		prefix=$(printf '\t')
+	;;
+	0)
+		prefix=''
+	;;
+	[1-9] | [1-9][0-9])  # 1-99
+		# convert number to spaces: 2 => '  '
+		prefix=$(printf "%${prefix}s" ' ')
+	;;
 esac
 
 # Utilities, prefixed by _ to avoid overwriting command names

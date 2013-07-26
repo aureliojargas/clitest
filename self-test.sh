@@ -337,6 +337,14 @@ $ ./doctest.sh --no-color --verbose --prefix '\t' self-test/option-prefix-tab.sh
 ======= echo "5"  
 ======= echo; echo "6"; echo; echo "7"
 YOU WIN! All 6 tests have passed.
+$ ./doctest.sh --no-color --verbose --prefix tab self-test/option-prefix-tab.sh
+======= echo "1"  
+======= echo "2"
+======= echo "3"
+======= echo "4"
+======= echo "5"  
+======= echo; echo "6"; echo; echo "7"
+YOU WIN! All 6 tests have passed.
 $
 
 # I/O, file reading
