@@ -82,17 +82,6 @@ _verbose ()
 {
 	test "$verbose" = 1 && _message @cyan "$@"
 }
-_get_file_stats ()
-{
-	local nr_ok=$((nr_file_tests - nr_file_errors))
-
-	if test $nr_file_errors -eq 0
-	then
-		printf '%2d ok           %s' $nr_ok "$test_file"
-	else
-		printf '%2d ok, %2d fail  %s' $nr_ok $nr_file_errors "$test_file"
-	fi
-}
 _run_test ()  # $1=command
 {
 	local diff
@@ -258,8 +247,17 @@ do
 		exit 1
 	fi
 
+	# Compose file stats message
+	nr_file_ok=$((nr_file_tests - nr_file_errors))
+	if test $nr_file_errors -eq 0
+	then
+		msg=$(printf '%2d ok           %s' $nr_file_ok "$test_file")
+	else
+		msg=$(printf '%2d ok, %2d fail  %s' $nr_file_ok $nr_file_errors "$test_file")
+	fi
+
 	# Append file stats to global holder
-	files_stat_message=$(printf '%s\n%s' "$files_stat_message" "$(_get_file_stats)")
+	files_stat_message=$(printf '%s\n%s' "$files_stat_message" "$msg")
 done
 
 _clean_up
