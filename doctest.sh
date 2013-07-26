@@ -20,6 +20,15 @@ verbose=0
 use_colors=1
 abort_on_first_error=0
 
+# Do not change these vars
+nr_files=0
+nr_total_tests=0
+nr_total_errors=0
+nr_file_tests=0
+nr_file_errors=0
+files_stat_message=''
+original_dir=$(pwd)
+
 # Handle command line options
 while test "${1#-}" != "$1"
 do
@@ -34,6 +43,9 @@ do
 		*) break ;;
 	esac
 done
+
+# Command line options consumed, now it's just the files
+nr_files=$#
 
 # Utilities, prefixed by _ to avoid overwriting command names
 _clean_up ()
@@ -204,14 +216,6 @@ _process_test_file ()  # $1=filename
 	test -n "$test_command" && _run_test "$test_command"
 }
 
-# Do not change these vars
-nr_files=$#
-nr_total_tests=0
-nr_total_errors=0
-nr_file_tests=0
-nr_file_errors=0
-files_stat_message=''
-original_dir=$(pwd)
 
 # Loop for each input file
 while test -n "$1"
