@@ -261,6 +261,17 @@ $ ./doctest.sh --no-color --diff-options '-u -w' self-test/option-diff-options.s
 YOU WIN! The single test has passed.
 $
 
+# Option --prompt
+
+$ ./doctest.sh --no-color --verbose self-test/option-prompt.sh
+YOU WIN! All 0 tests have passed.
+$ ./doctest.sh --no-color --verbose --prompt 'prompt$ ' self-test/option-prompt.sh
+======= echo "1"  
+======= echo "2"
+======= echo "3"
+YOU WIN! All 3 tests have passed.
+$
+
 # I/O, file reading
 
 $ ./doctest.sh XxnotfoundXX.sh
