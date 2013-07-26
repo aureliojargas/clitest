@@ -124,6 +124,10 @@ _process_test_file ()  # $1=filename
 	local ok_text
 	local file="$1"
 
+	# globals
+	nr_file_tests=0
+	nr_file_errors=0
+
 	# Loop for each line of input file
 	# Note: changing IFS to avoid right-trimming of spaces/tabs
 	# Note: read -r to preserve the backslashes (also works in dash shell)
@@ -210,9 +214,6 @@ original_dir=$(pwd)
 while test -n "$1"
 do
 	test_file="$1"
-	nr_file_tests=0
-	nr_file_errors=0
-
 	shift
 
 	# Some tests may "cd" to another dir, we need to get back
