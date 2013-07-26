@@ -42,7 +42,7 @@ do
 		--diff-options) shift; diff_options="$1"; shift ;;
 		--inline-mark ) shift; inline_mark="$1"; shift ;;
 		--prompt      ) shift; prompt="$1"; shift ;;
-		--prefix      ) shift; prefix="$(printf %b "$1")"; shift ;;  # expand \t
+		--prefix      ) shift; prefix="$1"; shift ;;
 		*) break ;;
 	esac
 done
@@ -61,6 +61,9 @@ case "$prefix" in
 	[1-9] | [1-9][0-9])  # 1-99
 		# convert number to spaces: 2 => '  '
 		prefix=$(printf "%${prefix}s" ' ')
+	;;
+	*\\*)
+		prefix="$(printf %b "$prefix")"  # expand \t and others
 	;;
 esac
 
