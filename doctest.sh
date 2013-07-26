@@ -120,6 +120,7 @@ _run_test ()  # $1=command
 }
 _process_test_file ()  # $1=filename
 {
+	local test_command
 	local ok_text
 	local file="$1"
 
@@ -209,7 +210,6 @@ original_dir=$(pwd)
 while test -n "$1"
 do
 	test_file="$1"
-	test_command=
 	nr_file_tests=0
 	nr_file_errors=0
 
