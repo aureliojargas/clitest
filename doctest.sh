@@ -243,8 +243,8 @@ do
 	# 1. add \n to last line (if missing), otherwise while loop will ignore it
 	# 2. convert Windows files (CRLF) to the Unix format (LF)
 	#
-	# Note: the temporary file is required, because doing "sed | while"
-	# will isolate in a subshell all the variables inside the loop.
+	# Note: the temporary file is required, because doing "sed | while" opens
+	#       a subshell and global vars won't be updated outside the loop.
 	#
 	sed "s/$(printf '\r')$//" "$test_file" > "$temp_file"
 
