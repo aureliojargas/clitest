@@ -5,6 +5,7 @@
 # by Aurelio Jargas (http://aurelio.net), since 2013-07-25
 
 # Customization (if needed), some may be altered by command line options
+prefix=''
 prompt='$ '
 inline_mark='#→ '
 diff_options='-u'
@@ -41,6 +42,7 @@ do
 		--diff-options) shift; diff_options="$1"; shift ;;
 		--inline-mark ) shift; inline_mark="$1"; shift ;;
 		--prompt      ) shift; prompt="$1"; shift ;;
+		--prefix      ) shift; prefix="$(printf %b "$1")"; shift ;;  # expand \t
 		*) break ;;
 	esac
 done
@@ -139,7 +141,7 @@ _process_test_file ()  # $1=filename
 		case "$input_line" in
 
 			# Prompt alone: closes previous command line (if any)
-			"$prompt" | "${prompt% }" | "$prompt ")
+			"$prefix$prompt" | "$prefix${prompt% }" | "$prefix$prompt ")
 				_debug "[ CLOSE ] $input_line"
 
 				# Run pending tests
@@ -150,14 +152,14 @@ _process_test_file ()  # $1=filename
 			;;
 
 			# This line is a command line to be tested
-			"$prompt"*)
+			"$prefix$prompt"*)
 				_debug "[CMDLINE] $input_line"
 
 				# Run pending tests
 				test -n "$test_command" && _run_test "$test_command"
 
 				# Remove the prompt
-				test_command="${input_line#$prompt}"
+				test_command="${input_line#$prefix$prompt}"
 
 				# This is a special test with inline output?
 				if echo "$test_command" | grep "$inline_mark" > /dev/null
@@ -192,8 +194,18 @@ _process_test_file ()  # $1=filename
 				# Ignore this line if there's no pending test
 				test -n "$test_command" || continue
 
-				# This line is a test output, save it
-				echo "$input_line" >> "$ok_file"
+				# Required prefix is missing: we just left a command block
+				if test -n "$prefix" -a "${input_line#$prefix}" = "$input_line"
+				then
+					_debug "[BLOKOUT] $input_line"
+
+					# Run the pending test and reset
+					_run_test "$test_command"
+					test_command=
+				fi
+
+				# This line is a test output, save it (without prefix)
+				echo "${input_line#$prefix}" >> "$ok_file"
 
 				_debug "[OK LINE] $input_line"
 			;;
