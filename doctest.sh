@@ -124,7 +124,7 @@ _process_test_file ()  # $1=filename
 	local ok_text
 	local file="$1"
 
-	# globals
+	# reset globals
 	nr_file_tests=0
 	nr_file_errors=0
 
