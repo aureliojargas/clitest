@@ -1,0 +1,2 @@
+$ echo fail
+ok
