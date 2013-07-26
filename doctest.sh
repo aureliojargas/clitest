@@ -4,9 +4,10 @@
 # License: MIT
 # by Aurelio Jargas (http://aurelio.net), since 2013-07-25
 
-# Customization (if needed)
+# Customization (if needed), some may be altered by command line options
 prompt='$ '
 inline_mark='#→ '
+diff_options='-u'
 ok_file="${TMPDIR:-/tmp}/doctest.ok.$$.txt"
 test_output_file="${TMPDIR:-/tmp}/doctest.output.$$.txt"
 temp_file="${TMPDIR:-/tmp}/doctest.temp.$$.txt"
@@ -22,11 +23,12 @@ abort_on_first_error=0
 while test "${1#-}" != "$1"
 do
 	case "$1" in
-		-d|--debug  ) shift; debug=1 ;;
-		-q|--quiet  ) shift; quiet=1 ;;
-		-v|--verbose) shift; verbose=1 ;;
-		--no-color  ) shift; use_colors=0 ;;
-		--abort     ) shift; abort_on_first_error=1 ;;
+		-d|--debug    ) shift; debug=1 ;;
+		-q|--quiet    ) shift; quiet=1 ;;
+		-v|--verbose  ) shift; verbose=1 ;;
+		--no-color    ) shift; use_colors=0 ;;
+		--abort       ) shift; abort_on_first_error=1 ;;
+		--diff-options) shift; diff_options="$1"; shift ;;
 		*) break ;;
 	esac
 done
@@ -92,7 +94,7 @@ _run_test ()
 
 	_debug "[OUTPUT ] $(cat "$test_output_file")"
 
-	diff=$(diff -u "$ok_file" "$test_output_file")
+	diff=$(diff $diff_options "$ok_file" "$test_output_file")
 
 	# Test failed
 	if test $? -eq 1

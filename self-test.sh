@@ -247,6 +247,20 @@ $ ./doctest.sh --quiet --debug self-test/ok.sh self-test/ok.sh
 $ ./doctest.sh --quiet --debug self-test/ok.sh self-test/error-2.sh
 $
 
+# Option --diff-options
+
+$ ./doctest.sh --no-color self-test/option-diff-options.sh
+
+FAILED: echo "	diff -w to ignore spaces    "
+@@ -1 +1 @@
+-diff -w    to ignore     spaces
++	diff -w to ignore spaces    
+
+FAIL: The single test has failed.
+$ ./doctest.sh --no-color --diff-options '-u -w' self-test/option-diff-options.sh
+YOU WIN! The single test has passed.
+$
+
 # I/O, file reading
 
 $ ./doctest.sh XxnotfoundXX.sh
