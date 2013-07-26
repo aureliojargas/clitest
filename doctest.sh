@@ -80,7 +80,7 @@ _get_file_stats ()
 		printf '%2d ok, %2d fail  %s' $nr_ok $nr_file_errors "$test_file"
 	fi
 }
-_run_test ()
+_run_test ()  # $1=command
 {
 	local diff
 	local cmd="$1"; shift
@@ -118,7 +118,7 @@ _run_test ()
 	# Reset holder for the OK output
 	> "$ok_file"
 }
-_process_test_file ()
+_process_test_file ()  # $1=filename
 {
 	local ok_text
 	local file="$1"
