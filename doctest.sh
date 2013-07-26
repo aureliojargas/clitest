@@ -120,6 +120,7 @@ _run_test ()
 _process_test_file ()
 {
 	local ok_text
+	local file="$1"
 
 	# Loop for each line of input file
 	# Note: changing IFS to avoid right-trimming of spaces/tabs
@@ -188,7 +189,7 @@ _process_test_file ()
 				_debug "[OK LINE] $input_line"
 			;;
 		esac
-	done < "$temp_file"
+	done < "$file"
 
 	_debug "[LOOPOUT] test_command: $test_command"
 
