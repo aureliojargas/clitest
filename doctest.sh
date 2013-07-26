@@ -208,6 +208,8 @@ _process_test_file ()  # $1=filename
 nr_files=$#
 nr_total_tests=0
 nr_total_errors=0
+nr_file_tests=0
+nr_file_errors=0
 files_stat_message=''
 original_dir=$(pwd)
 
