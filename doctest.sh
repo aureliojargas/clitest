@@ -50,6 +50,12 @@ done
 # Command line options consumed, now it's just the files
 nr_files=$#
 
+# If the prefix is a number, convert it to spaces: 2 => '  '
+case "$prefix" in
+	0) prefix='' ;;
+	[1-9] | [1-9][0-9]) prefix=$(printf "%${prefix}s" ' ') ;;
+esac
+
 # Utilities, prefixed by _ to avoid overwriting command names
 _clean_up ()
 {
