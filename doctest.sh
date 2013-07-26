@@ -39,7 +39,8 @@ _clean_up ()
 {
 	rm -f "$ok_file" "$test_output_file" "$temp_file"
 }
-_message () {
+_message ()
+{
 	local color_code
 
 	test "$quiet" = 1 && return
