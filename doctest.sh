@@ -133,6 +133,7 @@ _verbose ()
 _run_test ()  # $1=command
 {
 	local diff
+	local failed
 	local cmd="$1"; shift
 
 	nr_total_tests=$((nr_total_tests + 1))
@@ -154,9 +155,10 @@ _run_test ()  # $1=command
 	_debug "[OUTPUT ] $(cat "$test_output_file")"
 
 	diff=$(diff $diff_options "$ok_file" "$test_output_file")
+	failed=$?
 
-	# Test failed
-	if test $? -eq 1
+	# Test failed :(
+	if test $failed -eq 1
 	then
 		nr_file_errors=$((nr_file_errors + 1))
 		nr_total_errors=$((nr_total_errors + 1))
