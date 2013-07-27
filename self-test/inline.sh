@@ -1,4 +1,4 @@
-# The blank space before the #→ mark matters?
+# The blank space before the #→ marker matters?
 
 $ echo 'one space' #→ one space
 $ echo 'one tab'	#→ one tab

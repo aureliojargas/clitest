@@ -12,7 +12,7 @@ Usage: $my_name [OPTIONS] <FILES>
 Options:
   -1, --abort                Abort the tests on the first error
       --diff-options STRING  Customize options for diff (default: -u)
-      --inline-mark STRING   Set inline output prefix (default: '#→ ')
+      --inline-prefix STRING   Set inline output prefix (default: '#→ ')
       --no-color             Turn off colors in the program output
       --prefix STRING        Set command line prefix (default: none)
       --prompt STRING        Set prompt string (default: '$ ')
@@ -23,7 +23,7 @@ Options:
 # Customization (if needed), some may be altered by command line options
 prefix=''
 prompt='$ '
-inline_mark='#→ '
+inline_prefix='#→ '
 diff_options='-u'
 ok_file="${TMPDIR:-/tmp}/doctest.ok.$$.txt"
 test_output_file="${TMPDIR:-/tmp}/doctest.output.$$.txt"
@@ -56,7 +56,7 @@ do
 		-1|--abort    ) shift; abort_on_first_error=1 ;;
 		--no-color    ) shift; use_colors=0 ;;
 		--diff-options) shift; diff_options="$1"; shift ;;
-		--inline-mark ) shift; inline_mark="$1"; shift ;;
+		--inline-prefix ) shift; inline_prefix="$1"; shift ;;
 		--prompt      ) shift; prompt="$1"; shift ;;
 		--prefix      ) shift; prefix="$1"; shift ;;
 		-V|--version  ) echo "$my_name $my_version"; exit 0 ;;
@@ -197,11 +197,11 @@ _process_test_file ()  # $1=filename
 				test_command="${input_line#$prefix$prompt}"
 
 				# This is a special test with inline output?
-				if echo "$test_command" | grep "$inline_mark" > /dev/null
+				if echo "$test_command" | grep "$inline_prefix" > /dev/null
 				then
 					# Separate command from inline output
-					test_command="${test_command%$inline_mark*}"
-					ok_text="${input_line##*$inline_mark}"
+					test_command="${test_command%$inline_prefix*}"
+					ok_text="${input_line##*$inline_prefix}"
 
 					_debug "[NEW CMD] $test_command"
 					_debug "[OK TEXT] $ok_text"

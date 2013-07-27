@@ -304,9 +304,9 @@ $ ./doctest.sh --no-color --verbose --prompt '♥ ' self-test/option-prompt-unic
 YOU WIN! All 3 tests have passed.
 $
 
-# Option --inline-mark
+# Option --inline-prefix
 
-$ ./doctest.sh --no-color self-test/option-inline-mark.sh
+$ ./doctest.sh --no-color self-test/option-inline-prefix.sh
 
 FAILED: echo "1 space" #==> 1 space
 @@ -0,0 +1 @@
@@ -321,7 +321,7 @@ FAILED: echo "2 tabs"		#==> 2 tabs
 +2 tabs
 
 EPIC FAIL! All 3 tests have failed.
-$ ./doctest.sh --no-color --inline-mark '#==>' self-test/option-inline-mark.sh
+$ ./doctest.sh --no-color --inline-prefix '#==>' self-test/option-inline-prefix.sh
 
 FAILED: echo "1 space" 
 @@ -1 +1 @@
@@ -339,7 +339,7 @@ FAILED: echo "2 tabs"
 +2 tabs
 
 EPIC FAIL! All 3 tests have failed.
-$ ./doctest.sh --no-color --inline-mark '#==> ' self-test/option-inline-mark.sh
+$ ./doctest.sh --no-color --inline-prefix '#==> ' self-test/option-inline-prefix.sh
 YOU WIN! All 3 tests have passed.
 $
 
