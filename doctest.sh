@@ -107,7 +107,7 @@ _message ()
 {
 	local color_code
 
-	test "$quiet" = 1 && return
+	test $quiet -eq 1 && return
 
 	case "$1" in
 		@red  ) color_code=31; shift;;
@@ -118,7 +118,7 @@ _message ()
 	esac
 	# Note: colors must be readable in dark and light backgrounds
 
-	if test "$use_colors" = 1 -a -n "$color_code"
+	if test $use_colors -eq 1 -a -n "$color_code"
 	then
 		printf '%b%s%b\n' "\033[${color_code}m" "$*" '\033[m'
 	else
@@ -127,11 +127,11 @@ _message ()
 }
 _debug ()
 {
-	test "$debug" = 1 && _message @blue "$@"
+	test $debug -eq 1 && _message @blue "$@"
 }
 _verbose ()
 {
-	test "$verbose" = 1 && _message @cyan "$@"
+	test $verbose -eq 1 && _message @cyan "$@"
 }
 _list_line ()  # $1=command $2=ok|fail
 {
@@ -144,7 +144,7 @@ _list_line ()  # $1=command $2=ok|fail
 	case "$2" in
 		ok)
 			# Green line or OK stamp (--list-run)
-			if test "$use_colors" -eq 1
+			if test $use_colors -eq 1
 			then
 				_message @green "${n}${tab}${cmd}"
 			else
@@ -153,7 +153,7 @@ _list_line ()  # $1=command $2=ok|fail
 		;;
 		fail)
 			# Red line or FAIL stamp (--list-run)
-			if test "$use_colors" -eq 1
+			if test $use_colors -eq 1
 			then
 				_message @red "${n}${tab}${cmd}"
 			else
@@ -176,7 +176,7 @@ _run_test ()  # $1=command
 	nr_file_tests=$((nr_file_tests + 1))
 
 	# List mode: just show the command (no execution)
-	if test "$list_mode" = 1
+	if test $list_mode -eq 1
 	then
 		_list_line "$cmd"
 		return 0
@@ -200,7 +200,7 @@ _run_test ()  # $1=command
 		nr_total_errors=$((nr_total_errors + 1))
 
 		# Decide the message format
-		if test "$list_run" = 1
+		if test $list_run -eq 1
 		then
 			# List mode
 			_list_line "$cmd" fail
@@ -208,7 +208,7 @@ _run_test ()  # $1=command
 			# Normal mode: show FAILED message and the diff
 			_message
 			_message @red "FAILED: $cmd"
-			test "$quiet" = 1 || echo "$diff" | sed '1,2 d'  # no +++/--- headers
+			test $quiet -eq 1 || echo "$diff" | sed '1,2 d'  # no +++/--- headers
 		fi
 
 		# Should I abort now?
@@ -220,7 +220,7 @@ _run_test ()  # $1=command
 
 	# Test OK
 	else
-		test "$list_run" = 1 && _list_line "$cmd" ok
+		test $list_run -eq 1 && _list_line "$cmd" ok
 	fi
 
 	# Reset holder for the OK output
@@ -340,7 +340,7 @@ do
 	fi
 
 	# In multifile mode, identify the current file
-	if test $nr_files -gt 1 -a "$list_mode" -ne 1 -a "$list_run" -ne 1
+	if test $nr_files -gt 1 -a $list_mode -ne 1 -a $list_run -ne 1
 	then
 		_message "Testing file $test_file"
 	fi
@@ -382,7 +382,7 @@ done
 _clean_up
 
 # List mode has no stats
-test "$list_mode" -eq 1 -o "$list_run" -eq 1 && exit 0
+test $list_mode -eq 1 -o $list_run -eq 1 && exit 0
 
 # Show stats
 if test $nr_files -gt 1
