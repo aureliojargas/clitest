@@ -4,6 +4,7 @@
 # License: MIT
 # by Aurelio Jargas (http://aurelio.net), since 2013-07-25
 
+my_name="$(basename "$0")"
 # Customization (if needed), some may be altered by command line options
 prefix=''
 prompt='$ '
