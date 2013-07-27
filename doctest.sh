@@ -32,7 +32,7 @@ test_output_file="${TMPDIR:-/tmp}/doctest.output.$$.txt"
 temp_file="${TMPDIR:-/tmp}/doctest.temp.$$.txt"
 # Note: using temporary files for compatibility, since <(...) is not portable.
 
-# Flags, may be altered by command line options
+# Flags (0=off, 1=on), may be altered by command line options
 debug=0
 quiet=0
 verbose=0
