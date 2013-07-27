@@ -225,6 +225,15 @@ $ ./doctest.sh --no-color --verbose self-test/inline.sh
 YOU WIN! All 18 tests have passed.
 $
 
+# Option --version
+
+$ v="$(grep ^my_version= ./doctest.sh | cut -d = -f 2 | tr -d \')"
+$ ./doctest.sh -V | fgrep -x "doctest.sh $v" > /dev/null; echo $?
+0
+$ ./doctest.sh --version | fgrep -x "doctest.sh $v" > /dev/null; echo $?
+0
+$
+
 
 # Option --quiet and exit code
 

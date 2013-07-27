@@ -5,6 +5,7 @@
 # by Aurelio Jargas (http://aurelio.net), since 2013-07-25
 
 my_name="$(basename "$0")"
+my_version='dev'
 # Customization (if needed), some may be altered by command line options
 prefix=''
 prompt='$ '
@@ -44,6 +45,7 @@ do
 		--inline-mark ) shift; inline_mark="$1"; shift ;;
 		--prompt      ) shift; prompt="$1"; shift ;;
 		--prefix      ) shift; prefix="$1"; shift ;;
+		-V|--version  ) echo "$my_name $my_version"; exit 0 ;;
 		*) break ;;
 	esac
 done
