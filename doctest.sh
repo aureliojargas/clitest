@@ -183,12 +183,12 @@ _run_test ()  # $1=command
 	fi
 
 	_verbose "======= $cmd"
-	_debug "[ EVAL  ] $cmd"
+	#_debug "[ EVAL  ] $cmd"
 
 	# Execute the command, saving STDOUT and STDERR to a file
 	eval "$cmd" > "$test_output_file" 2>&1
 
-	_debug "[OUTPUT ] $(cat "$test_output_file")"
+	#_debug "[OUTPUT ] $(cat "$test_output_file")"
 
 	diff=$(diff $diff_options "$ok_file" "$test_output_file")
 	failed=$?
@@ -245,7 +245,7 @@ _process_test_file ()  # $1=filename
 
 			# Prompt alone: closes previous command line (if any)
 			"$prefix$prompt" | "$prefix${prompt% }" | "$prefix$prompt ")
-				_debug "[ CLOSE ] $input_line"
+				#_debug "[ CLOSE ] $input_line"
 
 				# Run pending tests
 				test -n "$test_command" && _run_test "$test_command"
@@ -256,7 +256,7 @@ _process_test_file ()  # $1=filename
 
 			# This line is a command line to be tested
 			"$prefix$prompt"*)
-				_debug "[CMDLINE] $input_line"
+				#_debug "[CMDLINE] $input_line"
 
 				# Run pending tests
 				test -n "$test_command" && _run_test "$test_command"
@@ -271,8 +271,8 @@ _process_test_file ()  # $1=filename
 					test_command="${test_command%$inline_prefix*}"
 					ok_text="${input_line##*$inline_prefix}"
 
-					_debug "[NEW CMD] $test_command"
-					_debug "[OK TEXT] $ok_text"
+					#_debug "[NEW CMD] $test_command"
+					#_debug "[OK TEXT] $ok_text"
 
 					# Save the output and run test
 					echo "$ok_text" > "$ok_file"
@@ -286,13 +286,13 @@ _process_test_file ()  # $1=filename
 					# Reset holder for the OK output
 					> "$ok_file"
 
-					_debug "[NEW CMD] $test_command"
+					#_debug "[NEW CMD] $test_command"
 				fi
 			;;
 
 			# Test output, blank line or comment
 			*)
-				_debug "[ ? LINE] $input_line"
+				#_debug "[ ? LINE] $input_line"
 
 				# Ignore this line if there's no pending test
 				test -n "$test_command" || continue
@@ -300,7 +300,7 @@ _process_test_file ()  # $1=filename
 				# Required prefix is missing: we just left a command block
 				if test -n "$prefix" -a "${input_line#$prefix}" = "$input_line"
 				then
-					_debug "[BLOKOUT] $input_line"
+					#_debug "[BLOKOUT] $input_line"
 
 					# Run the pending test and reset
 					_run_test "$test_command"
@@ -310,12 +310,12 @@ _process_test_file ()  # $1=filename
 				# This line is a test output, save it (without prefix)
 				echo "${input_line#$prefix}" >> "$ok_file"
 
-				_debug "[OK LINE] $input_line"
+				#_debug "[OK LINE] $input_line"
 			;;
 		esac
 	done < "$file"
 
-	_debug "[LOOPOUT] test_command: $test_command"
+	#_debug "[LOOPOUT] test_command: $test_command"
 
 	# Run pending tests
 	test -n "$test_command" && _run_test "$test_command"
@@ -429,3 +429,6 @@ else
 fi
 # Note: Those messages are for FUN. When automating, check the exit code.
 
+# Dev notes:
+# - Comment   all debug lines: sed 's/	_debug/	#_debug/'
+# - Uncomment all debug lines: sed 's/#_debug/_debug/'
