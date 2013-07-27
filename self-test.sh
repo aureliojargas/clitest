@@ -16,9 +16,9 @@ $
 
 # Single file, OK
 
-$ ./doctest.sh --no-color self-test/ok.sh
+$ ./doctest.sh --no-color self-test/ok-2.sh
 YOU WIN! All 2 tests have passed.
-$ ./doctest.sh --no-color --verbose self-test/ok.sh
+$ ./doctest.sh --no-color --verbose self-test/ok-2.sh
 ======= echo ok
 ======= echo ok  
 YOU WIN! All 2 tests have passed.
@@ -26,32 +26,32 @@ $
 
 # Multifile, all OK
 
-$ ./doctest.sh --no-color self-test/ok.sh self-test/ok.sh
-Testing file self-test/ok.sh
-Testing file self-test/ok.sh
+$ ./doctest.sh --no-color self-test/ok-2.sh self-test/ok-2.sh
+Testing file self-test/ok-2.sh
+Testing file self-test/ok-2.sh
 
 --------------------------------------------------
- 2 ok           self-test/ok.sh
- 2 ok           self-test/ok.sh
+ 2 ok           self-test/ok-2.sh
+ 2 ok           self-test/ok-2.sh
 --------------------------------------------------
 
 YOU WIN! All 4 tests have passed.
-$ ./doctest.sh --no-color self-test/{ok,inline,exit-code,windows}.sh
-Testing file self-test/ok.sh
+$ ./doctest.sh --no-color self-test/{ok-2,inline,exit-code,windows}.sh
+Testing file self-test/ok-2.sh
 Testing file self-test/inline.sh
 Testing file self-test/exit-code.sh
 Testing file self-test/windows.sh
 
 --------------------------------------------------
- 2 ok           self-test/ok.sh
+ 2 ok           self-test/ok-2.sh
 18 ok           self-test/inline.sh
  2 ok           self-test/exit-code.sh
  1 ok           self-test/windows.sh
 --------------------------------------------------
 
 YOU WIN! All 23 tests have passed.
-$ ./doctest.sh --no-color --verbose self-test/{ok,inline,exit-code,windows}.sh
-Testing file self-test/ok.sh
+$ ./doctest.sh --no-color --verbose self-test/{ok-2,inline,exit-code,windows}.sh
+Testing file self-test/ok-2.sh
 ======= echo ok
 ======= echo ok  
 Testing file self-test/inline.sh
@@ -80,7 +80,7 @@ Testing file self-test/windows.sh
 ======= echo "a file with CRLF line ending"
 
 --------------------------------------------------
- 2 ok           self-test/ok.sh
+ 2 ok           self-test/ok-2.sh
 18 ok           self-test/inline.sh
  2 ok           self-test/exit-code.sh
  1 ok           self-test/windows.sh
@@ -91,8 +91,8 @@ $
 
 # Multifile, OK and error
 
-$ ./doctest.sh --no-color self-test/{ok,error-2,exit-code,windows}.sh
-Testing file self-test/ok.sh
+$ ./doctest.sh --no-color self-test/{ok-2,error-2,exit-code,windows}.sh
+Testing file self-test/ok-2.sh
 Testing file self-test/error-2.sh
 
 FAILED: echo fail
@@ -108,15 +108,15 @@ Testing file self-test/exit-code.sh
 Testing file self-test/windows.sh
 
 --------------------------------------------------
- 2 ok           self-test/ok.sh
+ 2 ok           self-test/ok-2.sh
  0 ok,  2 fail  self-test/error-2.sh
  2 ok           self-test/exit-code.sh
  1 ok           self-test/windows.sh
 --------------------------------------------------
 
 FAIL: 2 of 7 tests have failed.
-$ ./doctest.sh --no-color --verbose self-test/{ok,error-2,exit-code,windows}.sh
-Testing file self-test/ok.sh
+$ ./doctest.sh --no-color --verbose self-test/{ok-2,error-2,exit-code,windows}.sh
+Testing file self-test/ok-2.sh
 ======= echo ok
 ======= echo ok  
 Testing file self-test/error-2.sh
@@ -139,7 +139,7 @@ Testing file self-test/windows.sh
 ======= echo "a file with CRLF line ending"
 
 --------------------------------------------------
- 2 ok           self-test/ok.sh
+ 2 ok           self-test/ok-2.sh
  0 ok,  2 fail  self-test/error-2.sh
  2 ok           self-test/exit-code.sh
  1 ok           self-test/windows.sh
@@ -257,26 +257,26 @@ $
 
 # Option --quiet and exit code
 
-$ ./doctest.sh -q self-test/ok.sh; echo $?
+$ ./doctest.sh -q self-test/ok-2.sh; echo $?
 0
-$ ./doctest.sh --quiet self-test/ok.sh; echo $?
+$ ./doctest.sh --quiet self-test/ok-2.sh; echo $?
 0
-$ ./doctest.sh --quiet self-test/ok.sh self-test/ok.sh; echo $?
+$ ./doctest.sh --quiet self-test/ok-2.sh self-test/ok-2.sh; echo $?
 0
 $ ./doctest.sh --quiet self-test/error-2.sh; echo $?
 1
 $ ./doctest.sh --quiet self-test/error-2.sh self-test/error-2.sh; echo $?
 1
-$ ./doctest.sh --quiet self-test/ok.sh self-test/error-2.sh; echo $?
+$ ./doctest.sh --quiet self-test/ok-2.sh self-test/error-2.sh; echo $?
 1
-$ ./doctest.sh --quiet --verbose self-test/ok.sh
+$ ./doctest.sh --quiet --verbose self-test/ok-2.sh
 $ ./doctest.sh --quiet --verbose self-test/error-2.sh
-$ ./doctest.sh --quiet --verbose self-test/ok.sh self-test/ok.sh
-$ ./doctest.sh --quiet --verbose self-test/ok.sh self-test/error-2.sh
-$ ./doctest.sh --quiet --debug self-test/ok.sh
+$ ./doctest.sh --quiet --verbose self-test/ok-2.sh self-test/ok-2.sh
+$ ./doctest.sh --quiet --verbose self-test/ok-2.sh self-test/error-2.sh
+$ ./doctest.sh --quiet --debug self-test/ok-2.sh
 $ ./doctest.sh --quiet --debug self-test/error-2.sh
-$ ./doctest.sh --quiet --debug self-test/ok.sh self-test/ok.sh
-$ ./doctest.sh --quiet --debug self-test/ok.sh self-test/error-2.sh
+$ ./doctest.sh --quiet --debug self-test/ok-2.sh self-test/ok-2.sh
+$ ./doctest.sh --quiet --debug self-test/ok-2.sh self-test/error-2.sh
 $
 
 # Option --diff-options
@@ -439,13 +439,13 @@ $ ./doctest.sh --no-color --verbose self-test/stdout-stderr.sh
 ======= cp XXnotfoundXX foo 2> /dev/null
 ======= cp XXnotfoundXX foo > /dev/null 2>&1
 YOU WIN! All 10 tests have passed.
-$ ./doctest.sh --no-color self-test/cd.sh self-test/ok.sh
+$ ./doctest.sh --no-color self-test/cd.sh self-test/ok-2.sh
 Testing file self-test/cd.sh
-Testing file self-test/ok.sh
+Testing file self-test/ok-2.sh
 
 --------------------------------------------------
  1 ok           self-test/cd.sh
- 2 ok           self-test/ok.sh
+ 2 ok           self-test/ok-2.sh
 --------------------------------------------------
 
 YOU WIN! All 3 tests have passed.
