@@ -19,11 +19,15 @@ $
 $ ./doctest.sh --no-color self-test/ok-1.sh
 OK! The single test has passed.
 $ ./doctest.sh --no-color self-test/ok-2.sh
-YOU WIN! All 2 tests have passed.
+OK! All 2 tests have passed.
+$ ./doctest.sh --no-color self-test/ok-50.sh
+YOU WIN! All 50 tests have passed.
+$ ./doctest.sh --no-color self-test/ok-100.sh
+YOU WIN! PERFECT! All 100 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/ok-2.sh
 ======= echo ok
 ======= echo ok  
-YOU WIN! All 2 tests have passed.
+OK! All 2 tests have passed.
 $
 
 # Multifile, all OK
@@ -37,7 +41,7 @@ Testing file self-test/ok-2.sh
  2 ok           self-test/ok-2.sh
 --------------------------------------------------
 
-YOU WIN! All 4 tests have passed.
+OK! All 4 tests have passed.
 $ ./doctest.sh --no-color self-test/{ok-2,inline,exit-code,windows}.sh
 Testing file self-test/ok-2.sh
 Testing file self-test/inline.sh
@@ -51,7 +55,7 @@ Testing file self-test/windows.sh
  1 ok           self-test/windows.sh
 --------------------------------------------------
 
-YOU WIN! All 23 tests have passed.
+OK! All 23 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/{ok-2,inline,exit-code,windows}.sh
 Testing file self-test/ok-2.sh
 ======= echo ok
@@ -88,7 +92,7 @@ Testing file self-test/windows.sh
  1 ok           self-test/windows.sh
 --------------------------------------------------
 
-YOU WIN! All 23 tests have passed.
+OK! All 23 tests have passed.
 $
 
 # Multifile, OK and error
@@ -232,7 +236,7 @@ $ ./doctest.sh --no-color --verbose self-test/inline.sh
 ======= printf '\t\n' 
 ======= printf '\t\t\t\n' 
 ======= printf ' \t  \t\t   \n' 
-YOU WIN! All 18 tests have passed.
+OK! All 18 tests have passed.
 $
 
 # Option --version
@@ -303,12 +307,12 @@ $ ./doctest.sh --no-color --verbose --prompt 'prompt$ ' self-test/option-prompt.
 ======= echo "1"  
 ======= echo "2"
 ======= echo "3"
-YOU WIN! All 3 tests have passed.
+OK! All 3 tests have passed.
 $ ./doctest.sh --no-color --verbose --prompt '♥ ' self-test/option-prompt-unicode.sh
 ======= echo "1"  
 ======= echo "2"
 ======= echo "3"
-YOU WIN! All 3 tests have passed.
+OK! All 3 tests have passed.
 $
 
 # Option --inline-prefix
@@ -347,7 +351,7 @@ FAILED: echo "2 tabs"
 
 COMPLETE FAIL! All 3 tests have failed.
 $ ./doctest.sh --no-color --inline-prefix '#==> ' self-test/option-inline-prefix.sh
-YOU WIN! All 3 tests have passed.
+OK! All 3 tests have passed.
 $
 
 # Option --prefix
@@ -359,7 +363,7 @@ $ ./doctest.sh --no-color --verbose --prefix '    ' self-test/option-prefix.sh
 ======= echo "4"
 ======= echo "5"  
 ======= echo; echo "6"; echo; echo "7"
-YOU WIN! All 6 tests have passed.
+OK! All 6 tests have passed.
 $ ./doctest.sh --no-color --verbose --prefix 4 self-test/option-prefix.sh
 ======= echo "1"  
 ======= echo "2"
@@ -367,7 +371,7 @@ $ ./doctest.sh --no-color --verbose --prefix 4 self-test/option-prefix.sh
 ======= echo "4"
 ======= echo "5"  
 ======= echo; echo "6"; echo; echo "7"
-YOU WIN! All 6 tests have passed.
+OK! All 6 tests have passed.
 $ ./doctest.sh --no-color --verbose --prefix '\t' self-test/option-prefix-tab.sh
 ======= echo "1"  
 ======= echo "2"
@@ -375,7 +379,7 @@ $ ./doctest.sh --no-color --verbose --prefix '\t' self-test/option-prefix-tab.sh
 ======= echo "4"
 ======= echo "5"  
 ======= echo; echo "6"; echo; echo "7"
-YOU WIN! All 6 tests have passed.
+OK! All 6 tests have passed.
 $ ./doctest.sh --no-color --verbose --prefix tab self-test/option-prefix-tab.sh
 ======= echo "1"  
 ======= echo "2"
@@ -383,7 +387,7 @@ $ ./doctest.sh --no-color --verbose --prefix tab self-test/option-prefix-tab.sh
 ======= echo "4"
 ======= echo "5"  
 ======= echo; echo "6"; echo; echo "7"
-YOU WIN! All 6 tests have passed.
+OK! All 6 tests have passed.
 $
 
 # I/O, file reading
@@ -411,9 +415,9 @@ $
 # Gotchas
 
 $ ./doctest.sh --no-color self-test/exit-code.sh
-YOU WIN! All 2 tests have passed.
+OK! All 2 tests have passed.
 $ ./doctest.sh --no-color self-test/blank-output.sh
-YOU WIN! All 10 tests have passed.
+OK! All 10 tests have passed.
 $ ./doctest.sh --no-color self-test/special-chars.sh
 YOU WIN! PERFECT! All 206 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/windows.sh
@@ -423,12 +427,12 @@ $ ./doctest.sh --no-color --verbose self-test/close-command.sh
 ======= echo 1
 ======= echo 2
 ======= echo 3
-YOU WIN! All 3 tests have passed.
+OK! All 3 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/multi-commands.sh
 ======= echo 1; echo 2; echo 3; echo 4; echo 5
 ======= (echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p
 ======= (echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p  
-YOU WIN! All 3 tests have passed.
+OK! All 3 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/stdout-stderr.sh
 ======= echo "stdout"
 ======= echo "stdout" 2> /dev/null
@@ -440,7 +444,7 @@ $ ./doctest.sh --no-color --verbose self-test/stdout-stderr.sh
 ======= cp XXnotfoundXX foo 2>&1
 ======= cp XXnotfoundXX foo 2> /dev/null
 ======= cp XXnotfoundXX foo > /dev/null 2>&1
-YOU WIN! All 10 tests have passed.
+OK! All 10 tests have passed.
 $ ./doctest.sh --no-color self-test/cd.sh self-test/ok-2.sh
 Testing file self-test/cd.sh
 Testing file self-test/ok-2.sh
@@ -450,7 +454,7 @@ Testing file self-test/ok-2.sh
  2 ok           self-test/ok-2.sh
 --------------------------------------------------
 
-YOU WIN! All 3 tests have passed.
+OK! All 3 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/no-nl-file.sh
 ======= echo "a file with no \n at the last line"
 OK! The single test has passed.

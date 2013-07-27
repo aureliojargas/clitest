@@ -333,6 +333,9 @@ then
 	if test $nr_total_tests -eq 1
 	then
 		_message "$(_message @green OK!) The single test has passed."
+	elif test $nr_total_tests -lt 50
+	then
+		_message "$(_message @green OK!) All $nr_total_tests tests have passed."
 	elif test $nr_total_tests -lt 100
 	then
 		_message "$(_message @green YOU WIN!) All $nr_total_tests tests have passed."
