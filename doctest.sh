@@ -68,6 +68,13 @@ done
 # Command line options consumed, now it's just the files
 nr_files=$#
 
+# No files? Show help.
+if test $nr_files -eq 0
+then
+	echo "$my_help"
+	exit 0
+fi
+
 # Handy shortcuts for prefixes
 case "$prefix" in
 	tab)

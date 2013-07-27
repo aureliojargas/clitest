@@ -242,6 +242,9 @@ $
 
 # Option --help
 
+$ ./doctest.sh | sed -n '1p; $p'
+Usage: doctest.sh [OPTIONS] <FILES>
+  -V, --version               Show program version and exit
 $ ./doctest.sh -h | sed -n '1p; $p'
 Usage: doctest.sh [OPTIONS] <FILES>
   -V, --version               Show program version and exit
