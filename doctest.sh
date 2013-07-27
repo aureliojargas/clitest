@@ -153,7 +153,7 @@ _process_test_file ()  # $1=filename
 	# Loop for each line of input file
 	# Note: changing IFS to avoid right-trimming of spaces/tabs
 	# Note: read -r to preserve the backslashes (also works in dash shell)
-	while IFS='\n' read -r input_line
+	while IFS='' read -r input_line
 	do
 		case "$input_line" in
 
