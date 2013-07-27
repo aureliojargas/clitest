@@ -270,6 +270,11 @@ $ ./doctest.sh --no-color --verbose --prompt 'prompt$ ' self-test/option-prompt.
 ======= echo "2"
 ======= echo "3"
 YOU WIN! All 3 tests have passed.
+$ ./doctest.sh --no-color --verbose --prompt '♥ ' self-test/option-prompt-unicode.sh
+======= echo "1"  
+======= echo "2"
+======= echo "3"
+YOU WIN! All 3 tests have passed.
 $
 
 # Option --inline-mark
