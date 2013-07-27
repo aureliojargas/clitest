@@ -309,6 +309,40 @@ $ ./doctest.sh --list self-test/no-nl-command.sh
 9	printf 'error'   
 $
 
+# Option --list-run
+
+$ ./doctest.sh --list-run self-test/no-nl-command.sh
+[32m1	echo 'ok'[m
+[32m2	printf 'ok\n'[m
+[31m3	echo -n 'error'[m
+[31m4	printf 'error'[m
+[31m5	printf 'ok\nok\nerror'[m
+[32m6	echo 'ok'        [m
+[32m7	printf 'ok\n'    [m
+[31m8	echo -n 'error'  [m
+[31m9	printf 'error'   [m
+$ ./doctest.sh --list-run --no-color self-test/no-nl-command.sh
+1	echo 'ok'  [ OK ]
+2	printf 'ok\n'  [ OK ]
+3	echo -n 'error'  [FAIL]
+4	printf 'error'  [FAIL]
+5	printf 'ok\nok\nerror'  [FAIL]
+6	echo 'ok'          [ OK ]
+7	printf 'ok\n'      [ OK ]
+8	echo -n 'error'    [FAIL]
+9	printf 'error'     [FAIL]
+$ ./doctest.sh -L --no-color self-test/no-nl-command.sh
+1	echo 'ok'  [ OK ]
+2	printf 'ok\n'  [ OK ]
+3	echo -n 'error'  [FAIL]
+4	printf 'error'  [FAIL]
+5	printf 'ok\nok\nerror'  [FAIL]
+6	echo 'ok'          [ OK ]
+7	printf 'ok\n'      [ OK ]
+8	echo -n 'error'    [FAIL]
+9	printf 'error'     [FAIL]
+$
+
 # Option --diff-options
 
 $ ./doctest.sh --no-color self-test/option-diff-options.sh

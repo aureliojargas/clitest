@@ -14,6 +14,7 @@ Options:
       --diff-options STRING   Customize options for diff (default: -u)
       --inline-prefix STRING  Set inline output prefix (default: '#→ ')
   -l, --list                  List all the tests (no execution)
+  -L, --list-run              List all the tests with OK/FAIL status
       --no-color              Turn off colors in the program output
       --prefix STRING         Set command line prefix (default: none)
       --prompt STRING         Set prompt string (default: '$ ')
@@ -36,6 +37,7 @@ debug=0
 quiet=0
 verbose=0
 list_mode=0
+list_run=0
 use_colors=1
 abort_on_first_error=0
 
@@ -55,6 +57,7 @@ do
 		-q|--quiet     ) shift; quiet=1 ;;
 		-v|--verbose   ) shift; verbose=1 ;;
 		-l|--list      ) shift; list_mode=1;;
+		-L|--list-run  ) shift; list_run=1;;
 		-1|--abort     ) shift; abort_on_first_error=1 ;;
 		--no-color     ) shift; use_colors=0 ;;
   		--debug        ) shift; debug=1 ;;
@@ -134,16 +137,23 @@ _run_test ()  # $1=command
 {
 	local diff
 	local failed
+	local list_mode_string
 	local cmd="$1"; shift
 
 	nr_total_tests=$((nr_total_tests + 1))
 	nr_file_tests=$((nr_file_tests + 1))
 
+	# Compose the list line: 99 \t command
+	if test "$list_mode" = 1 -o "$list_run" = 1
+	then
+		list_mode_string="${nr_total_tests}$(printf '\t')$cmd"
+	fi
+
 	# List mode: just show the command (no execution)
 	if test "$list_mode" = 1
 	then
-		_message "${nr_total_tests}$(printf '\t')$cmd"
-		return 0
+		_message "$list_mode_string"
+		test $list_run -eq 0 && return 0
 	fi
 
 	_verbose "======= $cmd"
@@ -163,14 +173,41 @@ _run_test ()  # $1=command
 		nr_file_errors=$((nr_file_errors + 1))
 		nr_total_errors=$((nr_total_errors + 1))
 
-		_message
-		_message @red "FAILED: $cmd"
-		test "$quiet" = 1 || echo "$diff" | sed '1,2 d'  # no +++/--- headers
+		# Decide the message format
+		if test "$list_run" = 1
+		then
+			# List Run mode: a oneliner in red (or with a FAIL stamp)
+			if test "$use_colors" -eq 1
+			then
+				_message @red "$list_mode_string"
+			else
+				_message "$list_mode_string  [FAIL]"
+			fi
+		else
+			# Normal mode: show FAILED message and the diff
+			_message
+			_message @red "FAILED: $cmd"
+			test "$quiet" = 1 || echo "$diff" | sed '1,2 d'  # no +++/--- headers
+		fi
 
+		# Should I abort now?
 		if test $abort_on_first_error -eq 1
 		then
 			_clean_up
 			exit 1
+		fi
+
+	# Test OK
+	else
+		if test "$list_run" = 1
+		then
+			# List Run mode: a oneliner in green (or with a OK stamp)
+			if test "$use_colors" -eq 1
+			then
+				_message @green "$list_mode_string"
+			else
+				_message "$list_mode_string  [ OK ]"
+			fi
 		fi
 	fi
 
@@ -330,7 +367,7 @@ done
 _clean_up
 
 # List mode has no stats
-test "$list_mode" -eq 1  && exit 0
+test "$list_mode" -eq 1 -o "$list_run" -eq 1 && exit 0
 
 # Show stats
 if test $nr_files -gt 1
