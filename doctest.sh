@@ -132,11 +132,11 @@ _run_test ()  # $1=command
 	local diff
 	local cmd="$1"; shift
 
-	_verbose "======= $cmd"
-	_debug "[ EVAL  ] $cmd"
-
 	nr_total_tests=$((nr_total_tests + 1))
 	nr_file_tests=$((nr_file_tests + 1))
+
+	_verbose "======= $cmd"
+	_debug "[ EVAL  ] $cmd"
 
 	# Execute the command, saving STDOUT and STDERR
 	eval "$cmd" > "$test_output_file" 2>&1
