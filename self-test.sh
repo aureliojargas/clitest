@@ -285,6 +285,30 @@ $ ./doctest.sh --quiet --debug self-test/ok-2.sh self-test/ok-2.sh
 $ ./doctest.sh --quiet --debug self-test/ok-2.sh self-test/error-2.sh
 $
 
+# Option --list
+
+$ ./doctest.sh -l self-test/no-nl-command.sh
+1	echo 'ok'
+2	printf 'ok\n'
+3	echo -n 'error'
+4	printf 'error'
+5	printf 'ok\nok\nerror'
+6	echo 'ok'        
+7	printf 'ok\n'    
+8	echo -n 'error'  
+9	printf 'error'   
+$ ./doctest.sh --list self-test/no-nl-command.sh
+1	echo 'ok'
+2	printf 'ok\n'
+3	echo -n 'error'
+4	printf 'error'
+5	printf 'ok\nok\nerror'
+6	echo 'ok'        
+7	printf 'ok\n'    
+8	echo -n 'error'  
+9	printf 'error'   
+$
+
 # Option --diff-options
 
 $ ./doctest.sh --no-color self-test/option-diff-options.sh

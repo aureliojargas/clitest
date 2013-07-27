@@ -13,6 +13,7 @@ Options:
   -1, --abort                 Abort the tests on the first error
       --diff-options STRING   Customize options for diff (default: -u)
       --inline-prefix STRING  Set inline output prefix (default: '#→ ')
+  -l, --list                  List all the tests (no execution)
       --no-color              Turn off colors in the program output
       --prefix STRING         Set command line prefix (default: none)
       --prompt STRING         Set prompt string (default: '$ ')
@@ -34,6 +35,7 @@ temp_file="${TMPDIR:-/tmp}/doctest.temp.$$.txt"
 debug=0
 quiet=0
 verbose=0
+list_mode=0
 use_colors=1
 abort_on_first_error=0
 
@@ -52,6 +54,7 @@ do
 	case "$1" in
 		-q|--quiet     ) shift; quiet=1 ;;
 		-v|--verbose   ) shift; verbose=1 ;;
+		-l|--list      ) shift; list_mode=1;;
 		-1|--abort     ) shift; abort_on_first_error=1 ;;
 		--no-color     ) shift; use_colors=0 ;;
   		--debug        ) shift; debug=1 ;;
@@ -134,6 +137,13 @@ _run_test ()  # $1=command
 
 	nr_total_tests=$((nr_total_tests + 1))
 	nr_file_tests=$((nr_file_tests + 1))
+
+	# List mode: just show the command (no execution)
+	if test "$list_mode" = 1
+	then
+		_message "${nr_total_tests}$(printf '\t')$cmd"
+		return 0
+	fi
 
 	_verbose "======= $cmd"
 	_debug "[ EVAL  ] $cmd"
@@ -279,7 +289,7 @@ do
 	fi
 
 	# In multifile mode, identify the current file
-	test $nr_files -gt 1 && _message "Testing file $test_file"
+	test $nr_files -gt 1 -a "$list_mode" != 1 && _message "Testing file $test_file"
 
 	### Prepare input file
 	#
@@ -316,6 +326,9 @@ do
 done
 
 _clean_up
+
+# List mode has no stats
+test "$list_mode" -eq 1  && exit 0
 
 # Show stats
 if test $nr_files -gt 1
