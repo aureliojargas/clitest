@@ -240,6 +240,15 @@ $ ./doctest.sh --version | fgrep -x "doctest.sh $v" > /dev/null; echo $?
 0
 $
 
+# Option --help
+
+$ ./doctest.sh -h | sed -n '1p; $p'
+Usage: doctest.sh [OPTIONS] <FILES>
+  -V, --version              Show program version and exit
+$ ./doctest.sh --help | sed -n '1p; $p'
+Usage: doctest.sh [OPTIONS] <FILES>
+  -V, --version              Show program version and exit
+$
 
 # Option --quiet and exit code
 
