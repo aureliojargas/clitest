@@ -133,33 +133,59 @@ _verbose ()
 {
 	test "$verbose" = 1 && _message @cyan "$@"
 }
+_list_line ()  # $1=command $2=ok|fail
+{
+	# Compose the output lines for --list and --list-run
+
+	local cmd="$1"
+	local tab="$(printf '\t')"
+	local n=$nr_total_tests
+
+	case "$2" in
+		ok)
+			# Green line or OK stamp (--list-run)
+			if test "$use_colors" -eq 1
+			then
+				_message @green "${n}${tab}${cmd}"
+			else
+				_message "${n}${tab}OK${tab}${cmd}"
+			fi
+		;;
+		fail)
+			# Red line or FAIL stamp (--list-run)
+			if test "$use_colors" -eq 1
+			then
+				_message @red "${n}${tab}${cmd}"
+			else
+				_message "${n}${tab}FAIL${tab}${cmd}"
+			fi
+		;;
+		*)
+			# Normal line, no color, no stamp (--list)
+			_message "${n}${tab}${cmd}"
+		;;
+	esac
+}
 _run_test ()  # $1=command
 {
 	local diff
 	local failed
-	local list_mode_string
 	local cmd="$1"; shift
 
 	nr_total_tests=$((nr_total_tests + 1))
 	nr_file_tests=$((nr_file_tests + 1))
 
-	# Compose the list line: 99 \t command
-	if test "$list_mode" = 1 -o "$list_run" = 1
-	then
-		list_mode_string="${nr_total_tests}$(printf '\t')$cmd"
-	fi
-
 	# List mode: just show the command (no execution)
 	if test "$list_mode" = 1
 	then
-		_message "$list_mode_string"
-		test $list_run -eq 0 && return 0
+		_list_line "$cmd"
+		return 0
 	fi
 
 	_verbose "======= $cmd"
 	_debug "[ EVAL  ] $cmd"
 
-	# Execute the command, saving STDOUT and STDERR
+	# Execute the command, saving STDOUT and STDERR to a file
 	eval "$cmd" > "$test_output_file" 2>&1
 
 	_debug "[OUTPUT ] $(cat "$test_output_file")"
@@ -176,13 +202,8 @@ _run_test ()  # $1=command
 		# Decide the message format
 		if test "$list_run" = 1
 		then
-			# List Run mode: a oneliner in red (or with a FAIL stamp)
-			if test "$use_colors" -eq 1
-			then
-				_message @red "$list_mode_string"
-			else
-				_message "$list_mode_string  [FAIL]"
-			fi
+			# List mode
+			_list_line "$cmd" fail
 		else
 			# Normal mode: show FAILED message and the diff
 			_message
@@ -199,16 +220,7 @@ _run_test ()  # $1=command
 
 	# Test OK
 	else
-		if test "$list_run" = 1
-		then
-			# List Run mode: a oneliner in green (or with a OK stamp)
-			if test "$use_colors" -eq 1
-			then
-				_message @green "$list_mode_string"
-			else
-				_message "$list_mode_string  [ OK ]"
-			fi
-		fi
+		test "$list_run" = 1 && _list_line "$cmd" ok
 	fi
 
 	# Reset holder for the OK output
@@ -328,7 +340,10 @@ do
 	fi
 
 	# In multifile mode, identify the current file
-	test $nr_files -gt 1 -a "$list_mode" != 1 && _message "Testing file $test_file"
+	if test $nr_files -gt 1 -a "$list_mode" -ne 1 -a "$list_run" -ne 1
+	then
+		_message "Testing file $test_file"
+	fi
 
 	### Prepare input file
 	#
