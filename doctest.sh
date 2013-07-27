@@ -50,11 +50,11 @@ original_dir=$(pwd)
 while test "${1#-}" != "$1"
 do
 	case "$1" in
-		-d|--debug     ) shift; debug=1 ;;
 		-q|--quiet     ) shift; quiet=1 ;;
 		-v|--verbose   ) shift; verbose=1 ;;
 		-1|--abort     ) shift; abort_on_first_error=1 ;;
 		--no-color     ) shift; use_colors=0 ;;
+  		--debug        ) shift; debug=1 ;;
 		--diff-options ) shift; diff_options="$1"; shift ;;
 		--inline-prefix) shift; inline_prefix="$1"; shift ;;
 		--prompt       ) shift; prompt="$1"; shift ;;
