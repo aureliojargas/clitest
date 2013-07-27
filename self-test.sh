@@ -225,8 +225,11 @@ $ ./doctest.sh --no-color --verbose self-test/inline.sh
 YOU WIN! All 18 tests have passed.
 $
 
-# Quiet output with --quiet and exit code
 
+# Option --quiet and exit code
+
+$ ./doctest.sh -q self-test/ok.sh; echo $?
+0
 $ ./doctest.sh --quiet self-test/ok.sh; echo $?
 0
 $ ./doctest.sh --quiet self-test/ok.sh self-test/ok.sh; echo $?
