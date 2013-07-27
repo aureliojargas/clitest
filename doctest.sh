@@ -39,8 +39,8 @@ do
 		-d|--debug    ) shift; debug=1 ;;
 		-q|--quiet    ) shift; quiet=1 ;;
 		-v|--verbose  ) shift; verbose=1 ;;
+		-1|--abort    ) shift; abort_on_first_error=1 ;;
 		--no-color    ) shift; use_colors=0 ;;
-		--abort       ) shift; abort_on_first_error=1 ;;
 		--diff-options) shift; diff_options="$1"; shift ;;
 		--inline-mark ) shift; inline_mark="$1"; shift ;;
 		--prompt      ) shift; prompt="$1"; shift ;;

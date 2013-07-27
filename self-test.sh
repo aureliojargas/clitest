@@ -171,6 +171,12 @@ FAILED: echo fail
 +fail
 
 EPIC FAIL! All 2 tests have failed.
+$ ./doctest.sh --no-color -1 self-test/error-2.sh
+
+FAILED: echo fail
+@@ -1 +1 @@
+-ok
++fail
 $ ./doctest.sh --no-color --abort self-test/error-2.sh
 
 FAILED: echo fail
