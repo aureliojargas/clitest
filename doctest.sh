@@ -360,3 +360,5 @@ else
 	fi
 	exit 1
 fi
+# Note: Those messages are for FUN. When automating, check the exit code.
+
