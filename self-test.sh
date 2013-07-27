@@ -97,15 +97,15 @@ $ ./doctest.sh --no-color self-test/{ok-2,error-2,exit-code,windows}.sh
 Testing file self-test/ok-2.sh
 Testing file self-test/error-2.sh
 
-FAILED: echo fail
+FAILED: echo ok
 @@ -1 +1 @@
--ok
-+fail
+-fail
++ok
 
-FAILED: echo fail  
+FAILED: echo ok  
 @@ -1 +1 @@
--ok
-+fail
+-fail
++ok
 Testing file self-test/exit-code.sh
 Testing file self-test/windows.sh
 
@@ -122,18 +122,18 @@ Testing file self-test/ok-2.sh
 ======= echo ok
 ======= echo ok  
 Testing file self-test/error-2.sh
-======= echo fail
+======= echo ok
 
-FAILED: echo fail
+FAILED: echo ok
 @@ -1 +1 @@
--ok
-+fail
-======= echo fail  
+-fail
++ok
+======= echo ok  
 
-FAILED: echo fail  
+FAILED: echo ok  
 @@ -1 +1 @@
--ok
-+fail
+-fail
++ok
 Testing file self-test/exit-code.sh
 ======= echo "ok"            > /dev/null; echo $?
 ======= cp XXnotfoundXX foo 2> /dev/null; echo $?
@@ -154,59 +154,59 @@ $
 
 $ ./doctest.sh --no-color self-test/error-1.sh
 
-FAILED: echo fail
+FAILED: echo ok
 @@ -1 +1 @@
--ok
-+fail
+-fail
++ok
 
 FAIL: The single test has failed.
 $ ./doctest.sh --no-color self-test/error-2.sh
 
-FAILED: echo fail
+FAILED: echo ok
 @@ -1 +1 @@
--ok
-+fail
+-fail
++ok
 
-FAILED: echo fail  
+FAILED: echo ok  
 @@ -1 +1 @@
--ok
-+fail
+-fail
++ok
 
 COMPLETE FAIL! All 2 tests have failed.
 $ ./doctest.sh --no-color self-test/error-50.sh | tail -1
 EPIC FAIL! All 50 tests have failed.
 $ ./doctest.sh --no-color -1 self-test/error-2.sh
 
-FAILED: echo fail
+FAILED: echo ok
 @@ -1 +1 @@
--ok
-+fail
+-fail
++ok
 $ ./doctest.sh --no-color --abort self-test/error-2.sh
 
-FAILED: echo fail
+FAILED: echo ok
 @@ -1 +1 @@
--ok
-+fail
+-fail
++ok
 $ ./doctest.sh --no-color --abort --verbose self-test/error-2.sh
-======= echo fail
+======= echo ok
 
-FAILED: echo fail
+FAILED: echo ok
 @@ -1 +1 @@
--ok
-+fail
+-fail
++ok
 $ ./doctest.sh --no-color --verbose self-test/error-2.sh
-======= echo fail
+======= echo ok
 
-FAILED: echo fail
+FAILED: echo ok
 @@ -1 +1 @@
--ok
-+fail
-======= echo fail  
+-fail
++ok
+======= echo ok  
 
-FAILED: echo fail  
+FAILED: echo ok  
 @@ -1 +1 @@
--ok
-+fail
+-fail
++ok
 
 COMPLETE FAIL! All 2 tests have failed.
 $
@@ -504,7 +504,7 @@ $
 
 $ ./doctest.sh --abort self-test/error-2.sh
 
-[31mFAILED: echo fail[m
+[31mFAILED: echo ok[m
 @@ -1 +1 @@
--ok
-+fail
+-fail
++ok

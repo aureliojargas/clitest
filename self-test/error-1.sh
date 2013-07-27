@@ -1,2 +1,2 @@
-$ echo fail
-ok
+$ echo ok
+fail

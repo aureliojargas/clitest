@@ -1,3 +1,3 @@
-$ echo fail
-ok
-$ echo fail  #→ ok
+$ echo ok
+fail
+$ echo ok  #→ fail
