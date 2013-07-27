@@ -170,7 +170,9 @@ FAILED: echo fail
 -ok
 +fail
 
-EPIC FAIL! All 2 tests have failed.
+COMPLETE FAIL! All 2 tests have failed.
+$ ./doctest.sh --no-color self-test/error-50.sh | tail -1
+EPIC FAIL! All 50 tests have failed.
 $ ./doctest.sh --no-color -1 self-test/error-2.sh
 
 FAILED: echo fail
@@ -204,7 +206,7 @@ FAILED: echo fail
 -ok
 +fail
 
-EPIC FAIL! All 2 tests have failed.
+COMPLETE FAIL! All 2 tests have failed.
 $
 
 # Inline output with #→
@@ -323,7 +325,7 @@ FAILED: echo "2 tabs"		#==> 2 tabs
 @@ -0,0 +1 @@
 +2 tabs
 
-EPIC FAIL! All 3 tests have failed.
+COMPLETE FAIL! All 3 tests have failed.
 $ ./doctest.sh --no-color --inline-prefix '#==>' self-test/option-inline-prefix.sh
 
 FAILED: echo "1 space" 
@@ -341,7 +343,7 @@ FAILED: echo "2 tabs"
 - 2 tabs
 +2 tabs
 
-EPIC FAIL! All 3 tests have failed.
+COMPLETE FAIL! All 3 tests have failed.
 $ ./doctest.sh --no-color --inline-prefix '#==> ' self-test/option-inline-prefix.sh
 YOU WIN! All 3 tests have passed.
 $

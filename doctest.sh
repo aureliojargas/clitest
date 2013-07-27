@@ -346,7 +346,10 @@ else
 	if test $nr_total_tests -eq 1
 	then
 		_message "$(_message @red FAIL:) The single test has failed."
-	elif test $nr_total_errors -gt 1 -a $nr_total_errors -eq $nr_total_tests
+	elif test $nr_total_errors -eq $nr_total_tests -a $nr_total_errors -lt 50
+	then
+		_message "$(_message @red COMPLETE FAIL!) All $nr_total_tests tests have failed."
+	elif test $nr_total_errors -eq $nr_total_tests
 	then
 		_message "$(_message @red EPIC FAIL!) All $nr_total_tests tests have failed."
 	else
