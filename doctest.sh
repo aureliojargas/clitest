@@ -10,15 +10,15 @@ my_help="\
 Usage: $my_name [OPTIONS] <FILES>
 
 Options:
-  -1, --abort                Abort the tests on the first error
-      --diff-options STRING  Customize options for diff (default: -u)
-      --inline-prefix STRING   Set inline output prefix (default: '#→ ')
-      --no-color             Turn off colors in the program output
-      --prefix STRING        Set command line prefix (default: none)
-      --prompt STRING        Set prompt string (default: '$ ')
-  -q, --quiet                Quiet operation, no output shown
-  -v, --verbose              Show each test being executed
-  -V, --version              Show program version and exit"
+  -1, --abort                 Abort the tests on the first error
+      --diff-options STRING   Customize options for diff (default: -u)
+      --inline-prefix STRING  Set inline output prefix (default: '#→ ')
+      --no-color              Turn off colors in the program output
+      --prefix STRING         Set command line prefix (default: none)
+      --prompt STRING         Set prompt string (default: '$ ')
+  -q, --quiet                 Quiet operation, no output shown
+  -v, --verbose               Show each test being executed
+  -V, --version               Show program version and exit"
 
 # Customization (if needed), some may be altered by command line options
 prefix=''
@@ -50,17 +50,17 @@ original_dir=$(pwd)
 while test "${1#-}" != "$1"
 do
 	case "$1" in
-		-d|--debug    ) shift; debug=1 ;;
-		-q|--quiet    ) shift; quiet=1 ;;
-		-v|--verbose  ) shift; verbose=1 ;;
-		-1|--abort    ) shift; abort_on_first_error=1 ;;
-		--no-color    ) shift; use_colors=0 ;;
-		--diff-options) shift; diff_options="$1"; shift ;;
-		--inline-prefix ) shift; inline_prefix="$1"; shift ;;
-		--prompt      ) shift; prompt="$1"; shift ;;
-		--prefix      ) shift; prefix="$1"; shift ;;
-		-V|--version  ) echo "$my_name $my_version"; exit 0 ;;
-		-h|--help     ) echo "$my_help"; exit 0 ;;
+		-d|--debug     ) shift; debug=1 ;;
+		-q|--quiet     ) shift; quiet=1 ;;
+		-v|--verbose   ) shift; verbose=1 ;;
+		-1|--abort     ) shift; abort_on_first_error=1 ;;
+		--no-color     ) shift; use_colors=0 ;;
+		--diff-options ) shift; diff_options="$1"; shift ;;
+		--inline-prefix) shift; inline_prefix="$1"; shift ;;
+		--prompt       ) shift; prompt="$1"; shift ;;
+		--prefix       ) shift; prefix="$1"; shift ;;
+		-V|--version   ) echo "$my_name $my_version"; exit 0 ;;
+		-h|--help      ) echo "$my_help"; exit 0 ;;
 		*) break ;;
 	esac
 done
