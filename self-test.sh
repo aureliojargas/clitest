@@ -16,6 +16,8 @@ $
 
 # Single file, OK
 
+$ ./doctest.sh --no-color self-test/ok-1.sh
+OK! The single test has passed.
 $ ./doctest.sh --no-color self-test/ok-2.sh
 YOU WIN! All 2 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/ok-2.sh
@@ -290,7 +292,7 @@ FAILED: echo "	diff -w to ignore spaces    "
 
 FAIL: The single test has failed.
 $ ./doctest.sh --no-color --diff-options '-u -w' self-test/option-diff-options.sh
-YOU WIN! The single test has passed.
+OK! The single test has passed.
 $
 
 # Option --prompt
@@ -416,7 +418,7 @@ $ ./doctest.sh --no-color self-test/special-chars.sh
 YOU WIN! PERFECT! All 206 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/windows.sh
 ======= echo "a file with CRLF line ending"
-YOU WIN! The single test has passed.
+OK! The single test has passed.
 $ ./doctest.sh --no-color --verbose self-test/close-command.sh
 ======= echo 1
 ======= echo 2
@@ -451,7 +453,7 @@ Testing file self-test/ok-2.sh
 YOU WIN! All 3 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/no-nl-file.sh
 ======= echo "a file with no \n at the last line"
-YOU WIN! The single test has passed.
+OK! The single test has passed.
 $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
 ======= echo 'ok'
 ======= printf 'ok\n'
