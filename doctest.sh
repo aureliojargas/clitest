@@ -388,9 +388,9 @@ test $list_mode -eq 1 -o $list_run -eq 1 && exit 0
 if test $nr_files -gt 1
 then
 	_message
-	_message '--------------------------------------------------'
+	_message ==================================================
 	_message "${files_stat_message#?}"  # remove \n at start
-	_message '--------------------------------------------------'
+	_message ==================================================
 	_message
 fi
 

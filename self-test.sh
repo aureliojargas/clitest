@@ -36,10 +36,10 @@ $ ./doctest.sh --no-color self-test/ok-2.sh self-test/ok-2.sh
 Testing file self-test/ok-2.sh
 Testing file self-test/ok-2.sh
 
---------------------------------------------------
+==================================================
  2 ok           self-test/ok-2.sh
  2 ok           self-test/ok-2.sh
---------------------------------------------------
+==================================================
 
 OK! All 4 tests have passed.
 $ ./doctest.sh --no-color self-test/{ok-2,inline,exit-code,windows}.sh
@@ -48,12 +48,12 @@ Testing file self-test/inline.sh
 Testing file self-test/exit-code.sh
 Testing file self-test/windows.sh
 
---------------------------------------------------
+==================================================
  2 ok           self-test/ok-2.sh
 18 ok           self-test/inline.sh
  2 ok           self-test/exit-code.sh
  1 ok           self-test/windows.sh
---------------------------------------------------
+==================================================
 
 OK! All 23 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/{ok-2,inline,exit-code,windows}.sh
@@ -85,12 +85,12 @@ Testing file self-test/exit-code.sh
 Testing file self-test/windows.sh
 ======= echo "a file with CRLF line ending"
 
---------------------------------------------------
+==================================================
  2 ok           self-test/ok-2.sh
 18 ok           self-test/inline.sh
  2 ok           self-test/exit-code.sh
  1 ok           self-test/windows.sh
---------------------------------------------------
+==================================================
 
 OK! All 23 tests have passed.
 $
@@ -113,12 +113,12 @@ Testing file self-test/error-2.sh
 Testing file self-test/exit-code.sh
 Testing file self-test/windows.sh
 
---------------------------------------------------
+==================================================
  2 ok           self-test/ok-2.sh
  0 ok,  2 fail  self-test/error-2.sh
  2 ok           self-test/exit-code.sh
  1 ok           self-test/windows.sh
---------------------------------------------------
+==================================================
 
 FAIL: 2 of 7 tests have failed.
 $ ./doctest.sh --no-color --verbose self-test/{ok-2,error-2,exit-code,windows}.sh
@@ -144,12 +144,12 @@ Testing file self-test/exit-code.sh
 Testing file self-test/windows.sh
 ======= echo "a file with CRLF line ending"
 
---------------------------------------------------
+==================================================
  2 ok           self-test/ok-2.sh
  0 ok,  2 fail  self-test/error-2.sh
  2 ok           self-test/exit-code.sh
  1 ok           self-test/windows.sh
---------------------------------------------------
+==================================================
 
 FAIL: 2 of 7 tests have failed.
 $
@@ -518,10 +518,10 @@ $ ./doctest.sh --no-color self-test/cd.sh self-test/ok-2.sh
 Testing file self-test/cd.sh
 Testing file self-test/ok-2.sh
 
---------------------------------------------------
+==================================================
  1 ok           self-test/cd.sh
  2 ok           self-test/ok-2.sh
---------------------------------------------------
+==================================================
 
 OK! All 3 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/no-nl-file.sh
