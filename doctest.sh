@@ -358,9 +358,16 @@ do
 	fi
 
 	# In multifile mode, identify the current file
-	if test $nr_files -gt 1 -a $list_mode -ne 1 -a $list_run -ne 1
+	if test $nr_files -gt 1
 	then
-		_message "Testing file $test_file"
+		if test $list_mode -ne 1 -a $list_run -ne 1
+		then
+			# Normal mode, show a message
+			_message "Testing file $test_file"
+		else
+			# List mode, show ------ and the filename
+			_message $(_separator_line | cut -c 1-40) $test_file
+		fi
 	fi
 
 	### Prepare input file
