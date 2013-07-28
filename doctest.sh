@@ -207,7 +207,7 @@ _run_test ()  # $1=command
 		else
 			# Normal mode: show FAILED message and the diff
 			_message
-			_message @red "FAILED: $cmd"
+			_message @red "#$nr_total_tests FAILED: $cmd"
 			test $quiet -eq 1 || echo "$diff" | sed '1,2 d'  # no +++/--- headers
 		fi
 
