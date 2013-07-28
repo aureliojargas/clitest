@@ -132,10 +132,6 @@ _debug ()
 {
 	test $debug -eq 1 && _message @blue "$@"
 }
-_verbose ()
-{
-	test $verbose -eq 1 && _message @cyan "$@"
-}
 _list_line ()  # $1=command $2=ok|fail
 {
 	# Compose the output lines for --list and --list-run
@@ -185,7 +181,12 @@ _run_test ()  # $1=command
 		return 0
 	fi
 
-	_verbose "=======[$nr_total_tests] $cmd"
+	# Verbose mode: show the command
+	if test $verbose -eq 1
+	then
+		_message @cyan "=======[$nr_total_tests] $cmd"
+	fi
+
 	#_debug "[ EVAL  ] $cmd"
 
 	# Execute the command, saving STDOUT and STDERR to a file
