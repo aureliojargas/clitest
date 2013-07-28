@@ -185,7 +185,7 @@ _run_test ()  # $1=command
 		return 0
 	fi
 
-	_verbose "======= $cmd"
+	_verbose "=======[$nr_total_tests] $cmd"
 	#_debug "[ EVAL  ] $cmd"
 
 	# Execute the command, saving STDOUT and STDERR to a file

@@ -25,8 +25,8 @@ YOU WIN! All 50 tests have passed.
 $ ./doctest.sh --no-color self-test/ok-100.sh
 YOU WIN! PERFECT! All 100 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/ok-2.sh
-======= echo ok
-======= echo ok  
+=======[1] echo ok
+=======[2] echo ok  
 OK! All 2 tests have passed.
 $
 
@@ -58,32 +58,32 @@ Testing file self-test/windows.sh
 OK! All 23 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/{ok-2,inline,exit-code,windows}.sh
 Testing file self-test/ok-2.sh
-======= echo ok
-======= echo ok  
+=======[1] echo ok
+=======[2] echo ok  
 Testing file self-test/inline.sh
-======= echo 'one space' 
-======= echo 'one tab'	
-======= echo 'multi spaces'           
-======= echo 'multi tabs'				
-======= echo 'mixed'  	 		 	
-======= echo ' leading space' 
-======= echo '    leading spaces' 
-======= printf '\tleading tab\n' 
-======= printf '\t\tleading tabs\n' 
-======= echo 'trailing space ' 
-======= echo 'trailing spaces    ' 
-======= printf 'trailing tab\t\n' 
-======= printf 'trailing tabs\t\t\n' 
-======= echo ' ' 
-======= echo '    ' 
-======= printf '\t\n' 
-======= printf '\t\t\t\n' 
-======= printf ' \t  \t\t   \n' 
+=======[3] echo 'one space' 
+=======[4] echo 'one tab'	
+=======[5] echo 'multi spaces'           
+=======[6] echo 'multi tabs'				
+=======[7] echo 'mixed'  	 		 	
+=======[8] echo ' leading space' 
+=======[9] echo '    leading spaces' 
+=======[10] printf '\tleading tab\n' 
+=======[11] printf '\t\tleading tabs\n' 
+=======[12] echo 'trailing space ' 
+=======[13] echo 'trailing spaces    ' 
+=======[14] printf 'trailing tab\t\n' 
+=======[15] printf 'trailing tabs\t\t\n' 
+=======[16] echo ' ' 
+=======[17] echo '    ' 
+=======[18] printf '\t\n' 
+=======[19] printf '\t\t\t\n' 
+=======[20] printf ' \t  \t\t   \n' 
 Testing file self-test/exit-code.sh
-======= echo "ok"            > /dev/null; echo $?
-======= cp XXnotfoundXX foo 2> /dev/null; echo $?
+=======[21] echo "ok"            > /dev/null; echo $?
+=======[22] cp XXnotfoundXX foo 2> /dev/null; echo $?
 Testing file self-test/windows.sh
-======= echo "a file with CRLF line ending"
+=======[23] echo "a file with CRLF line ending"
 
 ==================================================
  2 ok           self-test/ok-2.sh
@@ -124,17 +124,17 @@ Testing file self-test/windows.sh
 FAIL: 2 of 7 tests have failed.
 $ ./doctest.sh --no-color --verbose self-test/{ok-2,error-2,exit-code,windows}.sh
 Testing file self-test/ok-2.sh
-======= echo ok
-======= echo ok  
+=======[1] echo ok
+=======[2] echo ok  
 Testing file self-test/error-2.sh
-======= echo ok
+=======[3] echo ok
 --------------------------------------------------
 #3 FAILED: echo ok
 @@ -1 +1 @@
 -fail
 +ok
 --------------------------------------------------
-======= echo ok  
+=======[4] echo ok  
 --------------------------------------------------
 #4 FAILED: echo ok  
 @@ -1 +1 @@
@@ -142,10 +142,10 @@ Testing file self-test/error-2.sh
 +ok
 --------------------------------------------------
 Testing file self-test/exit-code.sh
-======= echo "ok"            > /dev/null; echo $?
-======= cp XXnotfoundXX foo 2> /dev/null; echo $?
+=======[5] echo "ok"            > /dev/null; echo $?
+=======[6] cp XXnotfoundXX foo 2> /dev/null; echo $?
 Testing file self-test/windows.sh
-======= echo "a file with CRLF line ending"
+=======[7] echo "a file with CRLF line ending"
 
 ==================================================
  2 ok           self-test/ok-2.sh
@@ -199,7 +199,7 @@ $ ./doctest.sh --no-color --abort self-test/error-2.sh
 +ok
 --------------------------------------------------
 $ ./doctest.sh --no-color --abort --verbose self-test/error-2.sh
-======= echo ok
+=======[1] echo ok
 --------------------------------------------------
 #1 FAILED: echo ok
 @@ -1 +1 @@
@@ -207,14 +207,14 @@ $ ./doctest.sh --no-color --abort --verbose self-test/error-2.sh
 +ok
 --------------------------------------------------
 $ ./doctest.sh --no-color --verbose self-test/error-2.sh
-======= echo ok
+=======[1] echo ok
 --------------------------------------------------
 #1 FAILED: echo ok
 @@ -1 +1 @@
 -fail
 +ok
 --------------------------------------------------
-======= echo ok  
+=======[2] echo ok  
 --------------------------------------------------
 #2 FAILED: echo ok  
 @@ -1 +1 @@
@@ -228,24 +228,24 @@ $
 # Inline output with #→
 
 $ ./doctest.sh --no-color --verbose self-test/inline.sh
-======= echo 'one space' 
-======= echo 'one tab'	
-======= echo 'multi spaces'           
-======= echo 'multi tabs'				
-======= echo 'mixed'  	 		 	
-======= echo ' leading space' 
-======= echo '    leading spaces' 
-======= printf '\tleading tab\n' 
-======= printf '\t\tleading tabs\n' 
-======= echo 'trailing space ' 
-======= echo 'trailing spaces    ' 
-======= printf 'trailing tab\t\n' 
-======= printf 'trailing tabs\t\t\n' 
-======= echo ' ' 
-======= echo '    ' 
-======= printf '\t\n' 
-======= printf '\t\t\t\n' 
-======= printf ' \t  \t\t   \n' 
+=======[1] echo 'one space' 
+=======[2] echo 'one tab'	
+=======[3] echo 'multi spaces'           
+=======[4] echo 'multi tabs'				
+=======[5] echo 'mixed'  	 		 	
+=======[6] echo ' leading space' 
+=======[7] echo '    leading spaces' 
+=======[8] printf '\tleading tab\n' 
+=======[9] printf '\t\tleading tabs\n' 
+=======[10] echo 'trailing space ' 
+=======[11] echo 'trailing spaces    ' 
+=======[12] printf 'trailing tab\t\n' 
+=======[13] printf 'trailing tabs\t\t\n' 
+=======[14] echo ' ' 
+=======[15] echo '    ' 
+=======[16] printf '\t\n' 
+=======[17] printf '\t\t\t\n' 
+=======[18] printf ' \t  \t\t   \n' 
 OK! All 18 tests have passed.
 $
 
@@ -384,14 +384,14 @@ $
 $ ./doctest.sh --no-color --verbose self-test/option-prompt.sh
 doctest.sh: Error: no test found in input file: self-test/option-prompt.sh
 $ ./doctest.sh --no-color --verbose --prompt 'prompt$ ' self-test/option-prompt.sh
-======= echo "1"  
-======= echo "2"
-======= echo "3"
+=======[1] echo "1"  
+=======[2] echo "2"
+=======[3] echo "3"
 OK! All 3 tests have passed.
 $ ./doctest.sh --no-color --verbose --prompt '♥ ' self-test/option-prompt-unicode.sh
-======= echo "1"  
-======= echo "2"
-======= echo "3"
+=======[1] echo "1"  
+=======[2] echo "2"
+=======[3] echo "3"
 OK! All 3 tests have passed.
 $
 
@@ -439,36 +439,36 @@ $
 # Option --prefix
 
 $ ./doctest.sh --no-color --verbose --prefix '    ' self-test/option-prefix.sh
-======= echo "1"  
-======= echo "2"
-======= echo "3"
-======= echo "4"
-======= echo "5"  
-======= echo; echo "6"; echo; echo "7"
+=======[1] echo "1"  
+=======[2] echo "2"
+=======[3] echo "3"
+=======[4] echo "4"
+=======[5] echo "5"  
+=======[6] echo; echo "6"; echo; echo "7"
 OK! All 6 tests have passed.
 $ ./doctest.sh --no-color --verbose --prefix 4 self-test/option-prefix.sh
-======= echo "1"  
-======= echo "2"
-======= echo "3"
-======= echo "4"
-======= echo "5"  
-======= echo; echo "6"; echo; echo "7"
+=======[1] echo "1"  
+=======[2] echo "2"
+=======[3] echo "3"
+=======[4] echo "4"
+=======[5] echo "5"  
+=======[6] echo; echo "6"; echo; echo "7"
 OK! All 6 tests have passed.
 $ ./doctest.sh --no-color --verbose --prefix '\t' self-test/option-prefix-tab.sh
-======= echo "1"  
-======= echo "2"
-======= echo "3"
-======= echo "4"
-======= echo "5"  
-======= echo; echo "6"; echo; echo "7"
+=======[1] echo "1"  
+=======[2] echo "2"
+=======[3] echo "3"
+=======[4] echo "4"
+=======[5] echo "5"  
+=======[6] echo; echo "6"; echo; echo "7"
 OK! All 6 tests have passed.
 $ ./doctest.sh --no-color --verbose --prefix tab self-test/option-prefix-tab.sh
-======= echo "1"  
-======= echo "2"
-======= echo "3"
-======= echo "4"
-======= echo "5"  
-======= echo; echo "6"; echo; echo "7"
+=======[1] echo "1"  
+=======[2] echo "2"
+=======[3] echo "3"
+=======[4] echo "4"
+=======[5] echo "5"  
+=======[6] echo; echo "6"; echo; echo "7"
 OK! All 6 tests have passed.
 $
 
@@ -503,29 +503,29 @@ OK! All 10 tests have passed.
 $ ./doctest.sh --no-color self-test/special-chars.sh
 YOU WIN! PERFECT! All 206 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/windows.sh
-======= echo "a file with CRLF line ending"
+=======[1] echo "a file with CRLF line ending"
 OK! The single test has passed.
 $ ./doctest.sh --no-color --verbose self-test/close-command.sh
-======= echo 1
-======= echo 2
-======= echo 3
+=======[1] echo 1
+=======[2] echo 2
+=======[3] echo 3
 OK! All 3 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/multi-commands.sh
-======= echo 1; echo 2; echo 3; echo 4; echo 5
-======= (echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p
-======= (echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p  
+=======[1] echo 1; echo 2; echo 3; echo 4; echo 5
+=======[2] (echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p
+=======[3] (echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p  
 OK! All 3 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/stdout-stderr.sh
-======= echo "stdout"
-======= echo "stdout" 2> /dev/null
-======= echo "stderr" 1>&2
-======= echo "stdout" > /dev/null
-======= echo "stdout" 2> /dev/null 1>&2
-======= cp XXnotfoundXX foo
-======= cp XXnotfoundXX foo > /dev/null
-======= cp XXnotfoundXX foo 2>&1
-======= cp XXnotfoundXX foo 2> /dev/null
-======= cp XXnotfoundXX foo > /dev/null 2>&1
+=======[1] echo "stdout"
+=======[2] echo "stdout" 2> /dev/null
+=======[3] echo "stderr" 1>&2
+=======[4] echo "stdout" > /dev/null
+=======[5] echo "stdout" 2> /dev/null 1>&2
+=======[6] cp XXnotfoundXX foo
+=======[7] cp XXnotfoundXX foo > /dev/null
+=======[8] cp XXnotfoundXX foo 2>&1
+=======[9] cp XXnotfoundXX foo 2> /dev/null
+=======[10] cp XXnotfoundXX foo > /dev/null 2>&1
 OK! All 10 tests have passed.
 $ ./doctest.sh --no-color self-test/cd.sh self-test/ok-2.sh
 Testing file self-test/cd.sh
@@ -538,12 +538,12 @@ Testing file self-test/ok-2.sh
 
 OK! All 3 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/no-nl-file.sh
-======= echo "a file with no \n at the last line"
+=======[1] echo "a file with no \n at the last line"
 OK! The single test has passed.
 $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
-======= echo 'ok'
-======= printf 'ok\n'
-======= echo -n 'error'
+=======[1] echo 'ok'
+=======[2] printf 'ok\n'
+=======[3] echo -n 'error'
 --------------------------------------------------
 #3 FAILED: echo -n 'error'
 @@ -1 +1 @@
@@ -551,7 +551,7 @@ $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
 +error
 \ No newline at end of file
 --------------------------------------------------
-======= printf 'error'
+=======[4] printf 'error'
 --------------------------------------------------
 #4 FAILED: printf 'error'
 @@ -1 +1 @@
@@ -559,7 +559,7 @@ $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
 +error
 \ No newline at end of file
 --------------------------------------------------
-======= printf 'ok\nok\nerror'
+=======[5] printf 'ok\nok\nerror'
 --------------------------------------------------
 #5 FAILED: printf 'ok\nok\nerror'
 @@ -1,3 +1,3 @@
@@ -569,9 +569,9 @@ $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
 +error
 \ No newline at end of file
 --------------------------------------------------
-======= echo 'ok'        
-======= printf 'ok\n'    
-======= echo -n 'error'  
+=======[6] echo 'ok'        
+=======[7] printf 'ok\n'    
+=======[8] echo -n 'error'  
 --------------------------------------------------
 #8 FAILED: echo -n 'error'  
 @@ -1 +1 @@
@@ -579,7 +579,7 @@ $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
 +error
 \ No newline at end of file
 --------------------------------------------------
-======= printf 'error'   
+=======[9] printf 'error'   
 --------------------------------------------------
 #9 FAILED: printf 'error'   
 @@ -1 +1 @@
