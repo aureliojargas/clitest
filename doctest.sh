@@ -332,7 +332,7 @@ _process_test_file ()  # $1=filename
 
 
 # Loop for each input file
-while test -n "$1"
+while test $# -gt 0
 do
 	test_file="$1"
 	shift
