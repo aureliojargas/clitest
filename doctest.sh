@@ -133,6 +133,13 @@ _debug ()
 {
 	test $debug -eq 1 && _message @blue "$@"
 }
+_separator_line ()
+{
+	# Occupy the full terminal width if the $COLUMNS environment
+	# variable is available (it needs to be exported in ~/.bashrc).
+	# If not, defaults to 50 columns, a conservative amount.
+	printf "%${COLUMNS:-50}s" ' ' | tr ' ' -
+}
 _list_line ()  # $1=command $2=ok|fail
 {
 	# Compose the output lines for --list and --list-run
@@ -213,11 +220,11 @@ _run_test ()  # $1=command
 			# Normal mode: show FAILED message and the diff
 			if test $separator_line_shown -eq 0  # avoid dups
 			then
-				_message @red --------------------------------------------------
+				_message @red $(_separator_line)
 			fi
 			_message @red "#$nr_total_tests FAILED: $cmd"
 			test $quiet -eq 1 || echo "$diff" | sed '1,2 d'  # no +++/--- headers
-			_message @red --------------------------------------------------
+			_message @red $(_separator_line)
 			separator_line_shown=1
 		fi
 
@@ -399,9 +406,9 @@ test $list_mode -eq 1 -o $list_run -eq 1 && exit 0
 if test $nr_files -gt 1
 then
 	_message
-	_message ==================================================
+	_message $(_separator_line | tr - =)
 	_message "${files_stat_message#?}"  # remove \n at start
-	_message ==================================================
+	_message $(_separator_line | tr - =)
 	_message
 fi
 
