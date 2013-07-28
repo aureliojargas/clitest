@@ -42,6 +42,7 @@ use_colors=1
 abort_on_first_error=0
 
 # Do not change these vars
+file_counter=0
 nr_files=0
 nr_total_tests=0
 nr_total_errors=0
@@ -334,6 +335,7 @@ _process_test_file ()  # $1=filename
 # Loop for each input file
 while test $# -gt 0
 do
+	file_counter=$(($file_counter + 1))
 	test_file="$1"
 	shift
 
