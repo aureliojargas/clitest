@@ -47,6 +47,7 @@ nr_total_tests=0
 nr_total_errors=0
 nr_file_tests=0
 nr_file_errors=0
+separator_line_shown=0
 files_stat_message=''
 original_dir=$(pwd)
 
@@ -124,6 +125,8 @@ _message ()
 	else
 		echo "$*"
 	fi
+
+	separator_line_shown=0
 }
 _debug ()
 {
@@ -206,9 +209,14 @@ _run_test ()  # $1=command
 			_list_line "$cmd" fail
 		else
 			# Normal mode: show FAILED message and the diff
-			_message
+			if test $separator_line_shown -eq 0  # avoid dups
+			then
+				_message --------------------------------------------------
+			fi
 			_message @red "#$nr_total_tests FAILED: $cmd"
 			test $quiet -eq 1 || echo "$diff" | sed '1,2 d'  # no +++/--- headers
+			_message --------------------------------------------------
+			separator_line_shown=1
 		fi
 
 		# Should I abort now?

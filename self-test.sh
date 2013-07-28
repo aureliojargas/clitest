@@ -100,16 +100,17 @@ $
 $ ./doctest.sh --no-color self-test/{ok-2,error-2,exit-code,windows}.sh
 Testing file self-test/ok-2.sh
 Testing file self-test/error-2.sh
-
+--------------------------------------------------
 #3 FAILED: echo ok
 @@ -1 +1 @@
 -fail
 +ok
-
+--------------------------------------------------
 #4 FAILED: echo ok  
 @@ -1 +1 @@
 -fail
 +ok
+--------------------------------------------------
 Testing file self-test/exit-code.sh
 Testing file self-test/windows.sh
 
@@ -127,17 +128,19 @@ Testing file self-test/ok-2.sh
 ======= echo ok  
 Testing file self-test/error-2.sh
 ======= echo ok
-
+--------------------------------------------------
 #3 FAILED: echo ok
 @@ -1 +1 @@
 -fail
 +ok
+--------------------------------------------------
 ======= echo ok  
-
+--------------------------------------------------
 #4 FAILED: echo ok  
 @@ -1 +1 @@
 -fail
 +ok
+--------------------------------------------------
 Testing file self-test/exit-code.sh
 ======= echo "ok"            > /dev/null; echo $?
 ======= cp XXnotfoundXX foo 2> /dev/null; echo $?
@@ -157,60 +160,67 @@ $
 # Errors
 
 $ ./doctest.sh --no-color self-test/error-1.sh
-
+--------------------------------------------------
 #1 FAILED: echo ok
 @@ -1 +1 @@
 -fail
 +ok
+--------------------------------------------------
 
 FAIL: The single test has failed.
 $ ./doctest.sh --no-color self-test/error-2.sh
-
+--------------------------------------------------
 #1 FAILED: echo ok
 @@ -1 +1 @@
 -fail
 +ok
-
+--------------------------------------------------
 #2 FAILED: echo ok  
 @@ -1 +1 @@
 -fail
 +ok
+--------------------------------------------------
 
 COMPLETE FAIL! All 2 tests have failed.
 $ ./doctest.sh --no-color self-test/error-50.sh | tail -1
 EPIC FAIL! All 50 tests have failed.
 $ ./doctest.sh --no-color -1 self-test/error-2.sh
-
+--------------------------------------------------
 #1 FAILED: echo ok
 @@ -1 +1 @@
 -fail
 +ok
+--------------------------------------------------
 $ ./doctest.sh --no-color --abort self-test/error-2.sh
-
+--------------------------------------------------
 #1 FAILED: echo ok
 @@ -1 +1 @@
 -fail
 +ok
+--------------------------------------------------
 $ ./doctest.sh --no-color --abort --verbose self-test/error-2.sh
 ======= echo ok
-
+--------------------------------------------------
 #1 FAILED: echo ok
 @@ -1 +1 @@
 -fail
 +ok
+--------------------------------------------------
 $ ./doctest.sh --no-color --verbose self-test/error-2.sh
 ======= echo ok
-
+--------------------------------------------------
 #1 FAILED: echo ok
 @@ -1 +1 @@
 -fail
 +ok
+--------------------------------------------------
 ======= echo ok  
-
+--------------------------------------------------
 #2 FAILED: echo ok  
 @@ -1 +1 @@
 -fail
 +ok
+--------------------------------------------------
 
 COMPLETE FAIL! All 2 tests have failed.
 $
@@ -357,11 +367,12 @@ $
 # Option --diff-options
 
 $ ./doctest.sh --no-color self-test/option-diff-options.sh
-
+--------------------------------------------------
 #1 FAILED: echo "	diff -w to ignore spaces    "
 @@ -1 +1 @@
 -diff -w    to ignore     spaces
 +	diff -w to ignore spaces    
+--------------------------------------------------
 
 FAIL: The single test has failed.
 $ ./doctest.sh --no-color --diff-options '-u -w' self-test/option-diff-options.sh
@@ -387,36 +398,38 @@ $
 # Option --inline-prefix
 
 $ ./doctest.sh --no-color self-test/option-inline-prefix.sh
-
+--------------------------------------------------
 #1 FAILED: echo "1 space" #==> 1 space
 @@ -0,0 +1 @@
 +1 space
-
+--------------------------------------------------
 #2 FAILED: echo "8 spaces"        #==> 8 spaces
 @@ -0,0 +1 @@
 +8 spaces
-
+--------------------------------------------------
 #3 FAILED: echo "2 tabs"		#==> 2 tabs
 @@ -0,0 +1 @@
 +2 tabs
+--------------------------------------------------
 
 COMPLETE FAIL! All 3 tests have failed.
 $ ./doctest.sh --no-color --inline-prefix '#==>' self-test/option-inline-prefix.sh
-
+--------------------------------------------------
 #1 FAILED: echo "1 space" 
 @@ -1 +1 @@
 - 1 space
 +1 space
-
+--------------------------------------------------
 #2 FAILED: echo "8 spaces"        
 @@ -1 +1 @@
 - 8 spaces
 +8 spaces
-
+--------------------------------------------------
 #3 FAILED: echo "2 tabs"		
 @@ -1 +1 @@
 - 2 tabs
 +2 tabs
+--------------------------------------------------
 
 COMPLETE FAIL! All 3 tests have failed.
 $ ./doctest.sh --no-color --inline-prefix '#==> ' self-test/option-inline-prefix.sh
@@ -531,21 +544,23 @@ $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
 ======= echo 'ok'
 ======= printf 'ok\n'
 ======= echo -n 'error'
-
+--------------------------------------------------
 #3 FAILED: echo -n 'error'
 @@ -1 +1 @@
 -error
 +error
 \ No newline at end of file
+--------------------------------------------------
 ======= printf 'error'
-
+--------------------------------------------------
 #4 FAILED: printf 'error'
 @@ -1 +1 @@
 -error
 +error
 \ No newline at end of file
+--------------------------------------------------
 ======= printf 'ok\nok\nerror'
-
+--------------------------------------------------
 #5 FAILED: printf 'ok\nok\nerror'
 @@ -1,3 +1,3 @@
  ok
@@ -553,22 +568,25 @@ $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
 -error
 +error
 \ No newline at end of file
+--------------------------------------------------
 ======= echo 'ok'        
 ======= printf 'ok\n'    
 ======= echo -n 'error'  
-
+--------------------------------------------------
 #8 FAILED: echo -n 'error'  
 @@ -1 +1 @@
 -error
 +error
 \ No newline at end of file
+--------------------------------------------------
 ======= printf 'error'   
-
+--------------------------------------------------
 #9 FAILED: printf 'error'   
 @@ -1 +1 @@
 -error
 +error
 \ No newline at end of file
+--------------------------------------------------
 
 FAIL: 5 of 9 tests have failed.
 $
@@ -576,8 +594,9 @@ $
 # And now, the colored output tests
 
 $ ./doctest.sh --abort self-test/error-2.sh
-
+--------------------------------------------------
 [31m#1 FAILED: echo ok[m
 @@ -1 +1 @@
 -fail
 +ok
+--------------------------------------------------
