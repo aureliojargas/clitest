@@ -211,11 +211,11 @@ _run_test ()  # $1=command
 			# Normal mode: show FAILED message and the diff
 			if test $separator_line_shown -eq 0  # avoid dups
 			then
-				_message --------------------------------------------------
+				_message @red --------------------------------------------------
 			fi
 			_message @red "#$nr_total_tests FAILED: $cmd"
 			test $quiet -eq 1 || echo "$diff" | sed '1,2 d'  # no +++/--- headers
-			_message --------------------------------------------------
+			_message @red --------------------------------------------------
 			separator_line_shown=1
 		fi
 
