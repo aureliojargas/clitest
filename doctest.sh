@@ -172,8 +172,8 @@ _run_test ()  # $1=command
 	local failed
 	local cmd="$1"; shift
 
-	nr_total_tests=$((nr_total_tests + 1))
-	nr_file_tests=$((nr_file_tests + 1))
+	nr_total_tests=$(($nr_total_tests + 1))
+	nr_file_tests=$(($nr_file_tests + 1))
 
 	# List mode: just show the command (no execution)
 	if test $list_mode -eq 1
@@ -196,8 +196,8 @@ _run_test ()  # $1=command
 	# Test failed :(
 	if test $failed -eq 1
 	then
-		nr_file_errors=$((nr_file_errors + 1))
-		nr_total_errors=$((nr_total_errors + 1))
+		nr_file_errors=$(($nr_file_errors + 1))
+		nr_total_errors=$(($nr_total_errors + 1))
 
 		# Decide the message format
 		if test $list_run -eq 1
@@ -367,7 +367,7 @@ do
 	fi
 
 	# Compose file stats message
-	nr_file_ok=$((nr_file_tests - nr_file_errors))
+	nr_file_ok=$(($nr_file_tests - $nr_file_errors))
 	if test $nr_file_errors -eq 0
 	then
 		msg=$(printf '%2d ok           %s' $nr_file_ok "$test_file")
