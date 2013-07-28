@@ -178,7 +178,7 @@ _run_test ()  # $1=command
 	nr_total_tests=$(($nr_total_tests + 1))
 	nr_file_tests=$(($nr_file_tests + 1))
 
-	# List mode: just show the command (no execution)
+	# List mode: just show the command and return (no execution)
 	if test $list_mode -eq 1
 	then
 		_list_line "$cmd"
