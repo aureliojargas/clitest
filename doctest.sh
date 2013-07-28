@@ -16,6 +16,7 @@ Options:
   -l, --list                  List all the tests (no execution)
   -L, --list-run              List all the tests with OK/FAIL status
       --no-color              Turn off colors in the program output
+  -n, --number RANGE          Run specific tests, by number (1,2,4-7)
       --prefix STRING         Set command line prefix (default: none)
       --prompt STRING         Set prompt string (default: '$ ')
   -q, --quiet                 Quiet operation, no output shown
@@ -27,6 +28,7 @@ prefix=''
 prompt='$ '
 inline_prefix='#→ '
 diff_options='-u'
+user_range=''
 ok_file="${TMPDIR:-/tmp}/doctest.ok.$$.txt"
 test_output_file="${TMPDIR:-/tmp}/doctest.output.$$.txt"
 temp_file="${TMPDIR:-/tmp}/doctest.temp.$$.txt"
@@ -43,11 +45,13 @@ abort_on_first_error=0
 
 # Do not change these vars
 file_counter=0
+test_number=0
 nr_files=0
-nr_total_tests=0
+nr_total_tests=0          # count only executed tests
 nr_total_errors=0
-nr_file_tests=0
+nr_file_tests=0           # count only executed tests
 nr_file_errors=0
+test_range=''
 separator_line_shown=0
 files_stat_message=''
 original_dir=$(pwd)
@@ -61,6 +65,7 @@ do
 		-l|--list      ) shift; list_mode=1;;
 		-L|--list-run  ) shift; list_run=1;;
 		-1|--abort     ) shift; abort_on_first_error=1 ;;
+		-n|--number    ) shift; user_range="$1"; shift ;;
 		--no-color     ) shift; use_colors=0 ;;
   		--debug        ) shift; debug=1 ;;
 		--diff-options ) shift; diff_options="$1"; shift ;;
@@ -146,7 +151,7 @@ _list_line ()  # $1=command $2=ok|fail
 
 	local cmd="$1"
 	local tab="$(printf '\t')"
-	local n=$nr_total_tests
+	local n=$test_number
 
 	case "$2" in
 		ok)
@@ -173,11 +178,86 @@ _list_line ()  # $1=command $2=ok|fail
 		;;
 	esac
 }
+_parse_range ()
+{
+	# Parse -n, --number ranges and save results to $test_range
+	#
+	#     Supported formats            Parsed
+	#     ------------------------------------------------------
+	#     Single:  1                    :1:
+	#     List:    1,3,4,7              :1:3:4:7:
+	#     Range:   1-4                  :1:2:3:4:
+	#     Mixed:   1,3,4-7,11,13-15     :1:3:4:5:6:7:11:13:14:15:
+	#
+	#     Reverse ranges and repeated/unordered numbers are ok.
+	#     Later we will just grep for :number: in each test.
+
+	local part
+	local n1
+	local n2
+	local operation
+	local numbers=':'  # :1:2:4:7:
+
+	case "$user_range" in
+		# No range, nothing to do
+		0 | '')
+			return 0
+		;;
+		# Error: strange chars, not 0123456789,-
+		*[!0-9,-]*)
+			return 1
+		;;
+	esac
+
+	# OK, all valid chars in range, let's parse them
+
+	# Loop each component: a number or a range
+	for part in $(echo $user_range | tr , ' ')
+	do
+		# If there's an hyphen, it's a range
+		case $part in
+			*-*)
+				# Error: Invalid range format, must be: number-number
+				echo $part | grep '^[0-9][0-9]*-[0-9][0-9]*$' > /dev/null || return 1
+
+				n1=${part%-*}
+				n2=${part#*-}
+
+				operation='+'
+				test $n1 -gt $n2 && operation='-'
+
+				# Expand the range (1-4 => 1:2:3:4)
+				part=$n1:
+				while test $n1 -ne $n2
+				do
+					n1=$(($n1 $operation 1))
+					part=$part$n1:
+				done
+				part=${part%:}
+			;;
+		esac
+
+		# Append the number or expanded range to the holder
+		test $part != 0 && numbers=$numbers$part:
+	done
+
+	# Save parsed range
+	test $numbers != ':' && test_range=$numbers
+	return 0
+}
 _run_test ()  # $1=command
 {
 	local diff
 	local failed
 	local cmd="$1"; shift
+
+	test_number=$(($test_number + 1))
+
+	# Test range on: skip this test if it's not listed in $test_range
+	if test -n "$test_range" -a "$test_range" = "${test_range#*:$test_number:}"
+	then
+		return 0
+	fi
 
 	nr_total_tests=$(($nr_total_tests + 1))
 	nr_file_tests=$(($nr_file_tests + 1))
@@ -192,7 +272,7 @@ _run_test ()  # $1=command
 	# Verbose mode: show the command
 	if test $verbose -eq 1
 	then
-		_message @cyan "=======[$nr_total_tests] $cmd"
+		_message @cyan "=======[$test_number] $cmd"
 	fi
 
 	#_debug "[ EVAL  ] $cmd"
@@ -222,7 +302,7 @@ _run_test ()  # $1=command
 			then
 				_message @red $(_separator_line)
 			fi
-			_message @red "#$nr_total_tests FAILED: $cmd"
+			_message @red "#$test_number FAILED: $cmd"
 			test $quiet -eq 1 || echo "$diff" | sed '1,2 d'  # no +++/--- headers
 			_message @red $(_separator_line)
 			separator_line_shown=1
@@ -338,6 +418,14 @@ _process_test_file ()  # $1=filename
 	test -n "$test_command" && _run_test "$test_command"
 }
 
+# Parse and validate --number option value, if informed
+_parse_range
+if test $? -eq 1
+then
+	_message "$(basename "$0"): Error: invalid argument for -n or --number: $user_range"
+	exit 1
+fi
+
 
 # Loop for each input file
 while test $# -gt 0
@@ -385,7 +473,7 @@ do
 	_process_test_file "$temp_file"
 
 	# Abort when no test found
-	if test $nr_file_tests -eq 0
+	if test $nr_file_tests -eq 0 -a -z "$test_range"
 	then
 		_message "$(basename "$0"): Error: no test found in input file: $test_file"
 		exit 1
@@ -408,6 +496,13 @@ _clean_up
 
 # List mode has no stats
 test $list_mode -eq 1 -o $list_run -eq 1 && exit 0
+
+# Range active, but no test matched :(
+if test $nr_total_tests -eq 0 -a -n "$test_range"
+then
+	_message "$(basename "$0"): Error: no test found for the specified number or range '$user_range'"
+	exit 1
+fi
 
 # Show stats
 if test $nr_files -gt 1

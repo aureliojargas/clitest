@@ -384,6 +384,130 @@ $ ./doctest.sh -L --no-color self-test/no-nl-command.sh self-test/ok-1.sh
 10	OK	echo ok
 $
 
+# Option -n, --number
+
+$ ./doctest.sh -n - self-test/ok-2.sh
+doctest.sh: Error: invalid argument for -n or --number: -
+$ ./doctest.sh -n -1 self-test/ok-2.sh
+doctest.sh: Error: invalid argument for -n or --number: -1
+$ ./doctest.sh -n 1- self-test/ok-2.sh
+doctest.sh: Error: invalid argument for -n or --number: 1-
+$ ./doctest.sh -n 1--2 self-test/ok-2.sh
+doctest.sh: Error: invalid argument for -n or --number: 1--2
+$ ./doctest.sh -n 1-2-3 self-test/ok-2.sh
+doctest.sh: Error: invalid argument for -n or --number: 1-2-3
+$ ./doctest.sh -n 99 self-test/ok-2.sh
+doctest.sh: Error: no test found for the specified number or range '99'
+$ ./doctest.sh --no-color -n '' self-test/ok-2.sh
+OK! All 2 tests have passed.
+$ ./doctest.sh --no-color -n 0 self-test/ok-2.sh
+OK! All 2 tests have passed.
+$ ./doctest.sh --no-color -n ,,,0,0-0,,, self-test/ok-2.sh
+OK! All 2 tests have passed.
+$ ./doctest.sh --no-color --verbose -n 1 self-test/ok-10.sh
+=======[1] echo 1 
+OK! The single test has passed.
+$ ./doctest.sh --no-color --verbose --number 1 self-test/ok-10.sh
+=======[1] echo 1 
+OK! The single test has passed.
+$ ./doctest.sh --no-color --verbose -n 0-1,1-0 self-test/ok-10.sh
+=======[1] echo 1 
+OK! The single test has passed.
+$ ./doctest.sh --no-color --verbose -n 1-1 self-test/ok-10.sh
+=======[1] echo 1 
+OK! The single test has passed.
+$ ./doctest.sh --no-color --verbose -n 1,1,1,0,1 self-test/ok-10.sh
+=======[1] echo 1 
+OK! The single test has passed.
+$ ./doctest.sh --no-color --verbose -n 10-20 self-test/ok-10.sh
+=======[10] echo 10 
+OK! The single test has passed.
+$ ./doctest.sh --no-color --verbose -n 3,2,1 self-test/ok-10.sh
+=======[1] echo 1 
+=======[2] echo 2 
+=======[3] echo 3 
+OK! All 3 tests have passed.
+$ ./doctest.sh --no-color --verbose -n 3-1 self-test/ok-10.sh
+=======[1] echo 1 
+=======[2] echo 2 
+=======[3] echo 3 
+OK! All 3 tests have passed.
+$ ./doctest.sh --no-color -n 1,5,13 self-test/ok-{1,2,10}.sh
+Testing file self-test/ok-1.sh
+Testing file self-test/ok-2.sh
+Testing file self-test/ok-10.sh
+
+================================================================================
+ 1 ok           self-test/ok-1.sh
+ 0 ok           self-test/ok-2.sh
+ 2 ok           self-test/ok-10.sh
+================================================================================
+
+OK! All 3 tests have passed.
+$ ./doctest.sh --no-color -n 1,5 self-test/ok-[12].sh self-test/error-2.sh
+Testing file self-test/ok-1.sh
+Testing file self-test/ok-2.sh
+Testing file self-test/error-2.sh
+--------------------------------------------------------------------------------
+#5 FAILED: echo ok  
+@@ -1 +1 @@
+-fail
++ok
+--------------------------------------------------------------------------------
+
+================================================================================
+ 1 ok           self-test/ok-1.sh
+ 0 ok           self-test/ok-2.sh
+ 0 ok,  1 fail  self-test/error-2.sh
+================================================================================
+
+FAIL: 1 of 2 tests have failed.
+$ ./doctest.sh --no-color -n 1 self-test/ok-[12].sh self-test/error-2.sh
+Testing file self-test/ok-1.sh
+Testing file self-test/ok-2.sh
+Testing file self-test/error-2.sh
+
+================================================================================
+ 1 ok           self-test/ok-1.sh
+ 0 ok           self-test/ok-2.sh
+ 0 ok           self-test/error-2.sh
+================================================================================
+
+OK! The single test has passed.
+$
+
+# Option --number with --list and --list-run
+
+$ ./doctest.sh --no-color --list -n 3,5-7 self-test/ok-10.sh
+3	echo 3 
+5	echo 5 
+6	echo 6 
+7	echo 7 
+$ ./doctest.sh --no-color --list-run -n 3,5-7 self-test/ok-10.sh
+3	OK	echo 3 
+5	OK	echo 5 
+6	OK	echo 6 
+7	OK	echo 7 
+$ ./doctest.sh --no-color --list -n 1,3,5-7 self-test/{ok-1,error-2,ok-10}.sh
+---------------------------------------- self-test/ok-1.sh
+1	echo ok
+---------------------------------------- self-test/error-2.sh
+3	echo ok  
+---------------------------------------- self-test/ok-10.sh
+5	echo 2 
+6	echo 3 
+7	echo 4 
+$ ./doctest.sh --no-color --list-run -n 1,3,5-7 self-test/{ok-1,error-2,ok-10}.sh
+---------------------------------------- self-test/ok-1.sh
+1	OK	echo ok
+---------------------------------------- self-test/error-2.sh
+3	FAIL	echo ok  
+---------------------------------------- self-test/ok-10.sh
+5	OK	echo 2 
+6	OK	echo 3 
+7	OK	echo 4 
+$
+
 # Option --diff-options
 
 $ ./doctest.sh --no-color self-test/option-diff-options.sh
