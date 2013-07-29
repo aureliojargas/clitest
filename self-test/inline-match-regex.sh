@@ -45,7 +45,23 @@ $ printf 'will\nfail'           #→ --regex will\nfail
 
 # Syntax: Must be exactly one space before and after --regex
 
-$ echo 'fail'             #→   --regex fail
-$ echo 'fail'             #→ --regex  fail
-$ echo 'fail'             #→ --regex	fail
+$ echo 'fail'                   #→   --regex fail with 2 spaces
+$ echo 'fail'                   #→ --regex	fail with tab
 
+# Syntax: The extra space after '--regex ' is already part of the regex
+
+$ echo ' ok'                   #→ --regex  ok
+
+# Syntax: The space after --regex is required.
+# When missing, the '--regex' is considered a normal text.
+
+$ echo '--regex'                #→ --regex
+
+# Syntax: Make sure we won't catch partial matches.
+
+$ echo '--regexpal'             #→ --regexpal
+
+# Syntax: Empty inline output contents are considered an error
+# Note: Tested in a separate file: inline-match-regex-error-1.sh
+#
+# $ echo 'no contents'          #→ --regex 

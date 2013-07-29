@@ -50,9 +50,12 @@ $ printf 'ok'; echo             #→ ok
 
 # Syntax: Must be exactly one space before and after --text
 
-$ echo 'fail'                   #→   --text fail
-$ echo 'fail'                   #→ --text  fail
-$ echo 'fail'                   #→ --text	fail
+$ echo 'fail'                   #→   --text fail with 2 spaces
+$ echo 'fail'                   #→ --text	fail with tab
+
+# Syntax: The extra space after '--text ' is already part of the output
+
+$ echo ' ok'                    #→ --text  ok
 
 # Syntax: The space after --text is required.
 # When missing, the '--text' is considered a normal text.
@@ -64,7 +67,7 @@ $ echo '--text'                 #→ --text
 $ echo '--textual'              #→ --textual
 
 # Syntax: Empty inline output contents are considered an error
-
-## Tested in separate files inline-match-text-error-*
-# $ echo 'missing'                #→ 
-# $ echo 'missing'                #→ --text 
+# Note: Tested in separate files: inline-match-file-error-?.sh
+#
+# $ echo 'no contents'          #→ 
+# $ echo 'no contents'          #→ --text 
