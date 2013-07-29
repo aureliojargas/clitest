@@ -131,7 +131,7 @@ _message ()
 	esac
 	# Note: colors must be readable in dark and light backgrounds
 
-	if test $use_colors -eq 1 -a -n "$color_code"
+	if test $use_colors -eq 1 && test -n "$color_code"
 	then
 		printf '%b%s%b\n' "\033[${color_code}m" "$*" '\033[m'
 	else
@@ -265,7 +265,7 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 	test_number=$(($test_number + 1))
 
 	# Test range on: skip this test if it's not listed in $test_range
-	if test -n "$test_range" -a "$test_range" = "${test_range#*:$test_number:}"
+	if test -n "$test_range" && test "$test_range" = "${test_range#*:$test_number:}"
 	then
 		return 0
 	fi
@@ -501,7 +501,7 @@ _process_test_file ()  # $1=filename
 				test -n "$test_command" || continue
 
 				# Required prefix is missing: we just left a command block
-				if test -n "$prefix" -a "${input_line#$prefix}" = "$input_line"
+				if test -n "$prefix" && test "${input_line#$prefix}" = "$input_line"
 				then
 					#_debug "[BLOKOUT] $input_line"
 
@@ -545,7 +545,7 @@ do
 	cd "$original_dir"
 
 	# Abort when test file not found/readable
-	if ! test -f "$test_file" -a -r "$test_file"
+	if test ! -f "$test_file" || test ! -r "$test_file"
 	then
 		_message "$(basename "$0"): Error: cannot read input file: $test_file"
 		exit 1
@@ -554,7 +554,7 @@ do
 	# In multifile mode, identify the current file
 	if test $nr_files -gt 1
 	then
-		if test $list_mode -ne 1 -a $list_run -ne 1
+		if test $list_mode -ne 1 && test $list_run -ne 1
 		then
 			# Normal mode, show a message
 			_message "Testing file $test_file"
@@ -579,7 +579,7 @@ do
 	_process_test_file "$temp_file"
 
 	# Abort when no test found
-	if test $nr_file_tests -eq 0 -a -z "$test_range"
+	if test $nr_file_tests -eq 0 && test -z "$test_range"
 	then
 		_message "$(basename "$0"): Error: no test found in input file: $test_file"
 		exit 1
@@ -604,7 +604,7 @@ _clean_up
 test $list_mode -eq 1 -o $list_run -eq 1 && exit 0
 
 # Range active, but no test matched :(
-if test $nr_total_tests -eq 0 -a -n "$test_range"
+if test $nr_total_tests -eq 0 && test -n "$test_range"
 then
 	_message "$(basename "$0"): Error: no test found for the specified number or range '$user_range'"
 	exit 1
@@ -642,7 +642,7 @@ else
 	if test $nr_total_tests -eq 1
 	then
 		_message "$(_message @red FAIL:) The single test has failed."
-	elif test $nr_total_errors -eq $nr_total_tests -a $nr_total_errors -lt 50
+	elif test $nr_total_errors -eq $nr_total_tests && test $nr_total_errors -lt 50
 	then
 		_message "$(_message @red COMPLETE FAIL!) All $nr_total_tests tests have failed."
 	elif test $nr_total_errors -eq $nr_total_tests
