@@ -45,6 +45,10 @@ $ printf 'will\tmatch'          #→ --regex ^will	match$
 $ printf 'will\nfail'           #→ --regex will.*fail
 $ printf 'will\nfail'           #→ --regex will\nfail
 
+# If one line of a multiline results matches, the test is OK
+
+$ printf '1\n2\n3\n4\nok\n'     #→ --regex ok
+
 # Syntax: Must be exactly one space before and after --regex
 
 $ echo 'fail'                   #→   --regex fail with 2 spaces
@@ -52,7 +56,7 @@ $ echo 'fail'                   #→ --regex	fail with tab
 
 # Syntax: The extra space after '--regex ' is already part of the regex
 
-$ echo ' ok'                   #→ --regex  ok
+$ echo ' ok'                    #→ --regex  ok
 
 # Syntax: The space after --regex is required.
 # When missing, the '--regex' is considered a normal text.

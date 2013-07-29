@@ -305,11 +305,12 @@ $ ./doctest.sh --no-color --list-run self-test/inline-match-regex.sh
 12	OK	printf 'will\tmatch'          
 13	FAIL	printf 'will\nfail'           
 14	FAIL	printf 'will\nfail'           
-15	FAIL	echo 'fail'                   
+15	OK	printf '1\n2\n3\n4\nok\n'     
 16	FAIL	echo 'fail'                   
-17	OK	echo ' ok'                   
-18	OK	echo '--regex'                
-19	OK	echo '--regexpal'             
+17	FAIL	echo 'fail'                   
+18	OK	echo ' ok'                    
+19	OK	echo '--regex'                
+20	OK	echo '--regexpal'             
 $ ./doctest.sh --no-color --list-run self-test/inline-match-file.sh
 1	OK	printf '$ echo ok\nok\n'      
 2	OK	echo 'ok' > /tmp/foo.txt
