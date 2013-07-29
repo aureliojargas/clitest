@@ -46,6 +46,7 @@ abort_on_first_error=0
 # Do not change these vars
 file_counter=0
 test_number=0
+line_number=0
 nr_files=0
 nr_total_tests=0          # count only executed tests
 nr_total_errors=0
@@ -392,12 +393,14 @@ _process_test_file ()  # $1=filename
 	# reset globals
 	nr_file_tests=0
 	nr_file_errors=0
+	line_number=0
 
 	# Loop for each line of input file
 	# Note: changing IFS to avoid right-trimming of spaces/tabs
 	# Note: read -r to preserve the backslashes (also works in dash shell)
 	while IFS='' read -r input_line
 	do
+		line_number=$(($line_number + 1))
 		case "$input_line" in
 
 			# Prompt alone: closes previous command line (if any)
