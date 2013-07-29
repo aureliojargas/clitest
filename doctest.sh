@@ -249,11 +249,13 @@ _parse_range ()
 	test $numbers != ':' && test_range=$numbers
 	return 0
 }
-_run_test ()  # $1=command
+_run_test ()  # $1=command [$2=ok_text]
 {
 	local diff
 	local failed
+	local output_text
 	local cmd="$1"
+	local ok_text="$2"
 
 	test_number=$(($test_number + 1))
 
@@ -281,13 +283,34 @@ _run_test ()  # $1=command
 
 	#_debug "[ EVAL  ] $cmd"
 
-	# Execute the command, saving STDOUT and STDERR to a file
-	eval "$cmd" > "$test_output_file" 2>&1
+	# Execute the test command and compare the results.
+	# We have two alternatives: using variables (faster!) and using files.
+	# However, in failed tests we always need to use real files with diff.
+	if test -n "$ok_text"
+	then
+		# All-var execution and comparison, no files saved here
+		output_text="$(eval "$cmd" 2>&1; printf x)"
+		output_text=${output_text%x}
+		test "$output_text" = "$ok_text"
+		failed=$?
+		# Note: The 'print x' trick is to avoid losing the \n's
+		#       at the output's end when using $(...)
 
-	#_debug "[OUTPUT ] $(cat "$test_output_file")"
+		if test $failed -eq 1
+		then
+			printf %s "$output_text" > "$test_output_file"
+			printf %s "$ok_text" > "$ok_file"
+			diff=$(diff $diff_options "$ok_file" "$test_output_file")
+		fi
+	else
+		# Execute the command, saving STDOUT and STDERR to a file
+		eval "$cmd" > "$test_output_file" 2>&1
 
-	diff=$(diff $diff_options "$ok_file" "$test_output_file")
-	failed=$?
+		#_debug "[OUTPUT ] $(cat "$test_output_file")"
+
+		diff=$(diff $diff_options "$ok_file" "$test_output_file")
+		failed=$?
+	fi
 
 	# Test failed :(
 	if test $failed -eq 1
@@ -375,9 +398,11 @@ _process_test_file ()  # $1=filename
 					#_debug "[NEW CMD] $test_command"
 					#_debug "[OK TEXT] $ok_text"
 
+					# Inline OK text represents a full line, with \n
+					ok_text="$ok_text$nl"
+
 					# Save the output and run test
-					echo "$ok_text" > "$ok_file"
-					_run_test "$test_command"
+					_run_test "$test_command" "$ok_text"
 
 					# Reset current command holder, since we're done
 					test_command=
