@@ -28,6 +28,11 @@ $ echo '--file'                 #→ --file
 
 $ echo '--filer'                #→ --filer
 
+# Syntax: To insert a literal text that begins with '--file '
+#         just prefix it with --text.
+
+$ echo '--file is cool'         #→ --text --file is cool
+
 # Syntax: Empty inline output contents are considered an error
 # Note: Tested in a separate file: inline-match-file-error-1.sh
 #

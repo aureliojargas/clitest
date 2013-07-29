@@ -290,6 +290,7 @@ $ ./doctest.sh --no-color --list-run self-test/inline-match-text.sh
 31	OK	echo ' ok'                    
 32	OK	echo '--text'                 
 33	OK	echo '--textual'              
+34	OK	echo '--text is cool'         
 $ ./doctest.sh --no-color --list-run self-test/inline-match-regex.sh
 1	OK	echo 'abc123'                 
 2	OK	echo 'abc123'                 
@@ -311,6 +312,7 @@ $ ./doctest.sh --no-color --list-run self-test/inline-match-regex.sh
 18	OK	echo ' ok'                    
 19	OK	echo '--regex'                
 20	OK	echo '--regexpal'             
+21	OK	echo '--regex is cool'        
 $ ./doctest.sh --no-color --list-run self-test/inline-match-file.sh
 1	OK	printf '$ echo ok\nok\n'      
 2	OK	echo 'ok' > /tmp/foo.txt
@@ -319,6 +321,7 @@ $ ./doctest.sh --no-color --list-run self-test/inline-match-file.sh
 5	FAIL	echo 'fail'                   
 6	OK	echo '--file'                 
 7	OK	echo '--filer'                
+8	OK	echo '--file is cool'         
 $ ./doctest.sh self-test/inline-match-text-error-1.sh
 doctest.sh: Error: missing inline output text at line 1 of self-test/inline-match-text-error-1.sh
 $ ./doctest.sh self-test/inline-match-text-error-2.sh

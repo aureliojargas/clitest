@@ -67,6 +67,11 @@ $ echo '--regex'                #→ --regex
 
 $ echo '--regexpal'             #→ --regexpal
 
+# Syntax: To insert a literal text that begins with '--regex '
+#         just prefix it with --text.
+
+$ echo '--regex is cool'        #→ --text --regex is cool
+
 # Syntax: Empty inline output contents are considered an error
 # Note: Tested in a separate file: inline-match-regex-error-1.sh
 #

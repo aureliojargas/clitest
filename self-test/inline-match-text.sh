@@ -66,6 +66,11 @@ $ echo '--text'                 #→ --text
 
 $ echo '--textual'              #→ --textual
 
+# Syntax: To insert a literal text that begins with '--text '
+#         just prefix it with another --text.
+
+$ echo '--text is cool'         #→ --text --text is cool
+
 # Syntax: Empty inline output contents are considered an error
 # Note: Tested in separate files: inline-match-file-error-?.sh
 #
