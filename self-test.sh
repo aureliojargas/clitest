@@ -279,9 +279,17 @@ $ ./doctest.sh --no-color --list-run self-test/inline-match-text.sh
 20	OK	echo 'trailing spaces    '    
 21	OK	printf 'trailing tab\t\n'     
 22	OK	printf 'trailing tabs\t\t\n'  
-23	FAIL	echo 'fail'                   
-24	FAIL	echo 'fail'                   
-25	FAIL	echo 'fail'                   
+23	OK	echo 'ok'                     
+24	OK	printf 'ok\n'                 
+25	FAIL	echo -n 'fail'                
+26	FAIL	printf 'fail'                 
+27	OK	echo -n 'ok'; echo            
+28	OK	printf 'ok'; echo             
+29	FAIL	echo 'fail'                   
+30	FAIL	echo 'fail'                   
+31	FAIL	echo 'fail'                   
+32	OK	echo '--text'                 
+33	OK	echo '--textual'              
 $ ./doctest.sh --no-color --list-run self-test/inline-match-regex.sh
 1	OK	echo 'abc123'           
 2	OK	echo 'abc123'           
@@ -300,6 +308,14 @@ $ ./doctest.sh --no-color --list-run self-test/inline-match-regex.sh
 15	FAIL	echo 'fail'             
 16	FAIL	echo 'fail'             
 17	FAIL	echo 'fail'             
+$ ./doctest.sh self-test/inline-match-text-error-1.sh
+doctest.sh: Error: missing inline output text at line 1 of self-test/inline-match-text-error-1.sh
+$ ./doctest.sh self-test/inline-match-text-error-2.sh
+doctest.sh: Error: missing inline output text at line 1 of self-test/inline-match-text-error-2.sh
+$ ./doctest.sh self-test/inline-match-regex-error-1.sh
+doctest.sh: Error: missing inline output regex at line 1 of self-test/inline-match-regex-error-1.sh
+$ ./doctest.sh self-test/inline-match-file-error-1.sh
+doctest.sh: Error: missing inline output file at line 1 of self-test/inline-match-file-error-1.sh
 $
 
 # Option --version

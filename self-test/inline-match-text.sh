@@ -35,11 +35,36 @@ $ echo 'trailing spaces    '    #→ trailing spaces
 $ printf 'trailing tab\t\n'     #→ trailing tab	
 $ printf 'trailing tabs\t\t\n'  #→ trailing tabs		
 
+# As seen in all these examples, the final \n is implied.
+# You can't match lines with no \n.
+
+$ echo 'ok'                     #→ ok
+$ printf 'ok\n'                 #→ ok
+$ echo -n 'fail'                #→ fail
+$ printf 'fail'                 #→ fail
+
+# An easy workaround is to add an empty 'echo' at the end:
+
+$ echo -n 'ok'; echo            #→ ok
+$ printf 'ok'; echo             #→ ok
+
 # Syntax: Must be exactly one space before and after --text
 
 $ echo 'fail'                   #→   --text fail
 $ echo 'fail'                   #→ --text  fail
 $ echo 'fail'                   #→ --text	fail
 
-# As seen in all these examples, the final \n is implied.
-# You can't match parcial lines
+# Syntax: The space after --text is required.
+# When missing, the '--text' is considered a normal text.
+
+$ echo '--text'                 #→ --text
+
+# Syntax: Make sure we won't catch partial matches.
+
+$ echo '--textual'              #→ --textual
+
+# Syntax: Empty inline output contents are considered an error
+
+## Tested in separate files inline-match-text-error-*
+# $ echo 'missing'                #→ 
+# $ echo 'missing'                #→ --text 

@@ -449,6 +449,13 @@ _process_test_file ()  # $1=filename
 						;;
 					esac
 
+					# An empty inline output is an error user must see
+					if test -z "$ok_text"
+					then
+						_message "$(basename "$0"): Error: missing inline output $match_method at line $line_number of $test_file"
+						exit 1
+					fi
+
 					# Save the output and run test
 					_run_test "$test_command" "$ok_text" "$match_method"
 
