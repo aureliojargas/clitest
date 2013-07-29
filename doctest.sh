@@ -28,7 +28,7 @@ Options:
   -v, --verbose               Show each test being executed
   -V, --version               Show program version and exit"
 
-# Customization (if needed), some may be altered by command line options
+# Customization (if needed), most may be altered by command line options
 prefix=''
 prompt='$ '
 inline_prefix='#→ '
@@ -53,16 +53,16 @@ file_counter=0
 test_number=0
 line_number=0
 nr_files=0
-nr_total_tests=0          # count only executed tests
+nr_total_tests=0      # count only executed (not skipped with -n) tests
 nr_total_errors=0
-nr_file_tests=0           # count only executed tests
+nr_file_tests=0       # count only executed (not skipped with -n) tests
 nr_file_errors=0
 test_range=''
 separator_line_shown=0
 files_stat_message=''
 original_dir=$(pwd)
 
-# Special chars
+# Special useful chars
 tab='	'
 nl='
 '
