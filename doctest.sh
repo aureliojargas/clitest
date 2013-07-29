@@ -432,7 +432,7 @@ _process_test_file ()  # $1=filename
 					ok_text="${input_line##*$inline_prefix}"
 
 					#_debug "[NEW CMD] $test_command"
-					#_debug "[OK TEXT] $ok_text"
+					#_debug "[OK TEXT] $ok_text$"
 
 					# Maybe the OK text has options?
 					case "$ok_text" in
