@@ -24,7 +24,7 @@ $ echo 'abc123'                 #→ --regex [0-9]+$
 $ echo 'abc123'                 #→ --regex bc
 $ echo 'abc123'                 #→ --regex .
 
-# Blanks are preserved, no escaping needed
+# Blanks are preserved, no escaping or quoting needed
 
 $ echo 'abc 123'                #→ --regex ^abc [0-9]+$
 
