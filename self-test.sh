@@ -254,6 +254,54 @@ $ ./doctest.sh --no-color --verbose self-test/inline.sh
 OK! All 18 tests have passed.
 $
 
+# Inline match modes
+
+$ ./doctest.sh --no-color --list-run self-test/inline-match-text.sh
+1	OK	echo 'abc'                    
+2	OK	echo 'abc'                    
+3	OK	echo '\t'                     
+4	OK	echo '\n'                     
+5	OK	echo '$'                      
+6	OK	echo '>'                      
+7	OK	echo '?'                      
+8	OK	echo '!'                      
+9	OK	echo '*'                      
+10	OK	echo '['                      
+11	OK	echo '('                      
+12	OK	echo '123456789'              
+13	OK	echo '1 3   7 9'              
+14	OK	echo '    5    '              
+15	OK	echo ' leading space'         
+16	OK	echo '    leading spaces'     
+17	OK	printf '\tleading tab\n'      
+18	OK	printf '\t\tleading tabs\n'   
+19	OK	echo 'trailing space '        
+20	OK	echo 'trailing spaces    '    
+21	OK	printf 'trailing tab\t\n'     
+22	OK	printf 'trailing tabs\t\t\n'  
+23	FAIL	echo 'fail'                   
+24	FAIL	echo 'fail'                   
+25	FAIL	echo 'fail'                   
+$ ./doctest.sh --no-color --list-run self-test/inline-match-regex.sh
+1	OK	echo 'abc123'           
+2	OK	echo 'abc123'           
+3	OK	echo 'abc123'           
+4	OK	echo 'abc123'           
+5	OK	echo 'abc123'           
+6	OK	echo 'abc123'           
+7	OK	echo 'abc123'           
+8	OK	echo 'abc123'           
+9	OK	echo 'abc 123'          
+10	OK	printf 'may\tfail'      
+11	FAIL	printf 'may\tfail'      
+12	OK	printf 'will\tmatch'    
+13	FAIL	printf 'will\nfail'     
+14	FAIL	printf 'will\nfail'     
+15	FAIL	echo 'fail'             
+16	FAIL	echo 'fail'             
+17	FAIL	echo 'fail'             
+$
+
 # Option --version
 
 $ v="$(grep ^my_version= ./doctest.sh | cut -d = -f 2 | tr -d \')"

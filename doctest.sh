@@ -249,13 +249,14 @@ _parse_range ()
 	test $numbers != ':' && test_range=$numbers
 	return 0
 }
-_run_test ()  # $1=command [$2=ok_text]
+_run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 {
 	local diff
 	local failed
 	local output_text
 	local cmd="$1"
 	local ok_text="$2"
+	local match_method="$3"
 
 	test_number=$(($test_number + 1))
 
@@ -289,12 +290,26 @@ _run_test ()  # $1=command [$2=ok_text]
 	if test -n "$ok_text"
 	then
 		# All-var execution and comparison, no files saved here
-		output_text="$(eval "$cmd" 2>&1; printf x)"
-		output_text=${output_text%x}
-		test "$output_text" = "$ok_text"
-		failed=$?
 		# Note: The 'print x' trick is to avoid losing the \n's
 		#       at the output's end when using $(...)
+		output_text="$(eval "$cmd" 2>&1; printf x)"
+		output_text=${output_text%x}
+
+		_debug "[OK TEXT] $ok_text"
+
+		case $match_method in
+			text)
+				# Inline OK text represents a full line, with \n
+				ok_text="$ok_text$nl"
+
+				test "$output_text" = "$ok_text"
+				failed=$?
+			;;
+			regex)
+				printf %s "$output_text" | egrep "$ok_text" > /dev/null
+				failed=$?
+			;;
+		esac
 
 		if test $failed -eq 1
 		then
@@ -358,6 +373,7 @@ _process_test_file ()  # $1=filename
 {
 	local test_command
 	local ok_text
+	local match_method
 	local file="$1"
 
 	# reset globals
@@ -402,11 +418,23 @@ _process_test_file ()  # $1=filename
 					#_debug "[NEW CMD] $test_command"
 					#_debug "[OK TEXT] $ok_text"
 
-					# Inline OK text represents a full line, with \n
-					ok_text="$ok_text$nl"
+					# Maybe the OK text has options?
+					case "$ok_text" in
+						'--regex '*)
+							ok_text=${ok_text#--regex }
+							match_method='regex'
+						;;
+						'--text '*)
+							ok_text=${ok_text#--text }
+							match_method='text'
+						;;
+						*)
+							match_method='text'
+						;;
+					esac
 
 					# Save the output and run test
-					_run_test "$test_command" "$ok_text"
+					_run_test "$test_command" "$ok_text" "$match_method"
 
 					# Reset current command holder, since we're done
 					test_command=
