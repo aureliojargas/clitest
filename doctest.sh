@@ -255,7 +255,7 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 	# If ok_text is not informed, we'll get it from $ok_file
 
 	local diff
-	local failed
+	local exit_code
 	local output_text
 	local output_mode
 	local cmd="$1"
@@ -322,11 +322,11 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 			ok_text="$ok_text$nl"
 
 			test "$output_text" = "$ok_text"
-			failed=$?
+			exit_code=$?
 		;;
 		regex)
 			printf %s "$output_text" | egrep "$ok_text" > /dev/null
-			failed=$?
+			exit_code=$?
 		;;
 		file)
 			# Abort when ok file not found/readable
@@ -337,16 +337,16 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 			fi
 
 			diff=$(diff $diff_options "$ok_text" "$test_output_file")
-			failed=$?
+			exit_code=$?
 		;;
 		*)
 			diff=$(diff $diff_options "$ok_file" "$test_output_file")
-			failed=$?
+			exit_code=$?
 		;;
 	esac
 
 	# If the var test failed, we'll have to run diff using real files
-	if test $failed -eq 1 && test "$output_mode" = 'var'
+	if test $exit_code -ne 0 && test "$output_mode" = 'var'
 	then
 		printf %s "$output_text" > "$test_output_file"
 		printf %s "$ok_text" > "$ok_file"
@@ -354,7 +354,7 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 	fi
 
 	# Test failed :(
-	if test $failed -eq 1
+	if test $exit_code -ne 0
 	then
 		nr_file_errors=$(($nr_file_errors + 1))
 		nr_total_errors=$(($nr_total_errors + 1))
@@ -389,7 +389,7 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 	fi
 
 	# Reset holder for the OK output
-	if test $failed -eq 1 -o -z "$ok_text"
+	if test $exit_code -ne 0 -o -z "$ok_text"
 	then
 		> "$ok_file"
 	fi
