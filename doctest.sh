@@ -602,7 +602,12 @@ _clean_up
 # List mode has no stats
 if test $list_mode -eq 1 || test $list_run -eq 1
 then
-	exit 0
+	if test $nr_total_errors -eq 0
+	then
+		exit 0
+	else
+		exit 1
+	fi
 fi
 
 # Range active, but no test matched :(

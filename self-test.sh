@@ -387,7 +387,7 @@ $
 
 # Option --list
 
-$ ./doctest.sh -l self-test/no-nl-command.sh
+$ ./doctest.sh -l self-test/no-nl-command.sh; echo $?
 1	echo 'ok'
 2	printf 'ok\n'
 3	echo -n 'error'
@@ -399,6 +399,7 @@ $ ./doctest.sh -l self-test/no-nl-command.sh
 9	printf 'error'   
 10	echo -n 'ok'; echo  
 11	printf 'ok'; echo   
+0
 $ ./doctest.sh --list self-test/no-nl-command.sh
 1	echo 'ok'
 2	printf 'ok\n'
@@ -411,7 +412,7 @@ $ ./doctest.sh --list self-test/no-nl-command.sh
 9	printf 'error'   
 10	echo -n 'ok'; echo  
 11	printf 'ok'; echo   
-$ ./doctest.sh --list self-test/no-nl-command.sh self-test/ok-1.sh
+$ ./doctest.sh --list self-test/no-nl-command.sh self-test/ok-1.sh; echo $?
 ---------------------------------------- self-test/no-nl-command.sh
 1	echo 'ok'
 2	printf 'ok\n'
@@ -426,11 +427,12 @@ $ ./doctest.sh --list self-test/no-nl-command.sh self-test/ok-1.sh
 11	printf 'ok'; echo   
 ---------------------------------------- self-test/ok-1.sh
 12	echo ok
+0
 $
 
 # Option --list-run
 
-$ ./doctest.sh --list-run self-test/no-nl-command.sh
+$ ./doctest.sh --list-run self-test/no-nl-command.sh; echo $?
 [32m1	echo 'ok'[m
 [32m2	printf 'ok\n'[m
 [31m3	echo -n 'error'[m
@@ -442,7 +444,8 @@ $ ./doctest.sh --list-run self-test/no-nl-command.sh
 [31m9	printf 'error'   [m
 [32m10	echo -n 'ok'; echo  [m
 [32m11	printf 'ok'; echo   [m
-$ ./doctest.sh --list-run --no-color self-test/no-nl-command.sh
+1
+$ ./doctest.sh --list-run --no-color self-test/no-nl-command.sh; echo $?
 1	OK	echo 'ok'
 2	OK	printf 'ok\n'
 3	FAIL	echo -n 'error'
@@ -454,6 +457,7 @@ $ ./doctest.sh --list-run --no-color self-test/no-nl-command.sh
 9	FAIL	printf 'error'   
 10	OK	echo -n 'ok'; echo  
 11	OK	printf 'ok'; echo   
+1
 $ ./doctest.sh -L --no-color self-test/no-nl-command.sh
 1	OK	echo 'ok'
 2	OK	printf 'ok\n'
@@ -466,7 +470,7 @@ $ ./doctest.sh -L --no-color self-test/no-nl-command.sh
 9	FAIL	printf 'error'   
 10	OK	echo -n 'ok'; echo  
 11	OK	printf 'ok'; echo   
-$ ./doctest.sh -L --no-color self-test/no-nl-command.sh self-test/ok-1.sh
+$ ./doctest.sh -L --no-color self-test/no-nl-command.sh self-test/ok-1.sh; echo $?
 ---------------------------------------- self-test/no-nl-command.sh
 1	OK	echo 'ok'
 2	OK	printf 'ok\n'
@@ -481,6 +485,10 @@ $ ./doctest.sh -L --no-color self-test/no-nl-command.sh self-test/ok-1.sh
 11	OK	printf 'ok'; echo   
 ---------------------------------------- self-test/ok-1.sh
 12	OK	echo ok
+1
+$ ./doctest.sh -L --no-color self-test/ok-1.sh; echo $?
+1	OK	echo ok
+0
 $
 
 # Option -n, --number
