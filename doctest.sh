@@ -2,7 +2,7 @@
 # doctest.sh - Automatic tests for shell script command lines
 #              https://github.com/aureliojargas/doctest.sh
 # License: MIT
-# by Aurelio Jargas (http://aurelio.net), since 2013-07-25
+# by Aurelio Jargas (http://aurelio.net), since 2013-07-24
 
 my_name="$(basename "$0")"
 my_version='dev'
