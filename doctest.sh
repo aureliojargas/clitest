@@ -56,6 +56,11 @@ separator_line_shown=0
 files_stat_message=''
 original_dir=$(pwd)
 
+# Special chars
+tab='	'
+nl='
+'
+
 # Handle command line options
 while test "${1#-}" != "$1"
 do
@@ -91,7 +96,7 @@ fi
 # Handy shortcuts for prefixes
 case "$prefix" in
 	tab)
-		prefix=$(printf '\t')
+		prefix="$tab"
 	;;
 	0)
 		prefix=''
@@ -150,7 +155,6 @@ _list_line ()  # $1=command $2=ok|fail
 	# Compose the output lines for --list and --list-run
 
 	local cmd="$1"
-	local tab="$(printf '\t')"
 	local n=$test_number
 
 	case "$2" in
