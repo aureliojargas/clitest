@@ -256,6 +256,7 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 	local diff
 	local failed
 	local output_text
+	local output_mode
 	local cmd="$1"
 	local ok_text="$2"
 	local match_method="$3"
@@ -286,48 +287,58 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 
 	#_debug "[ EVAL  ] $cmd"
 
-	# Execute the test command and compare the results.
-	# We have two alternatives: using variables (faster!) and using files.
-	# However, in failed tests we always need to use real files with diff.
-	if test -n "$ok_text"
+	# To execute the test command and compare the results, we can use
+	# files (slow, trustable) or variables (quick, hacky). Variables
+	# are the preferred way for inline output with #→, unless you're
+	# inlining a file name with '#→ --file ...'.
+	if test -z "$ok_text" || test "$match_method" = 'file'
 	then
-		# All-var execution and comparison, no files saved here
-		# Note: The 'print x' trick is to avoid losing the \n's
-		#       at the output's end when using $(...)
+		output_mode='file'
+	else
+		output_mode='var'
+	fi
+
+	# Execute the test command, saving output (STDOUT and STDERR)
+	if test "$output_mode" = 'file'
+	then
+		eval "$cmd" > "$test_output_file" 2>&1
+
+		#_debug "[OUTPUT ] $(cat "$test_output_file")"		
+	else
 		output_text="$(eval "$cmd" 2>&1; printf x)"
 		output_text=${output_text%x}
 
-		_debug "[OK TEXT] $ok_text"
+		# Note: The 'print x' trick is to avoid losing the \n's
+		#       at the output's end when using $(...)
 
-		case $match_method in
-			text)
-				# Inline OK text represents a full line, with \n
-				ok_text="$ok_text$nl"
+		#_debug "[OUTPUT ] $output_text"
+	fi
 
-				test "$output_text" = "$ok_text"
-				failed=$?
-			;;
-			regex)
-				printf %s "$output_text" | egrep "$ok_text" > /dev/null
-				failed=$?
-			;;
-		esac
+	# The command output matches the expected output?
+	case $match_method in
+		text)
+			# Inline OK text represents a full line, with \n
+			ok_text="$ok_text$nl"
 
-		if test $failed -eq 1
-		then
-			# Test failed. Now we can't avoid creating files :(
-			printf %s "$output_text" > "$test_output_file"
-			printf %s "$ok_text" > "$ok_file"
+			test "$output_text" = "$ok_text"
+			failed=$?
+		;;
+		regex)
+			printf %s "$output_text" | egrep "$ok_text" > /dev/null
+			failed=$?
+		;;
+		*)
 			diff=$(diff $diff_options "$ok_file" "$test_output_file")
-		fi
-	else
-		# Execute the command, saving STDOUT and STDERR to a file
-		eval "$cmd" > "$test_output_file" 2>&1
+			failed=$?
+		;;
+	esac
 
-		#_debug "[OUTPUT ] $(cat "$test_output_file")"
-
+	# If the var test failed, we'll have to run diff using real files
+	if test $failed -eq 1 && test "$output_mode" = 'var'
+	then
+		printf %s "$output_text" > "$test_output_file"
+		printf %s "$ok_text" > "$ok_file"
 		diff=$(diff $diff_options "$ok_file" "$test_output_file")
-		failed=$?
 	fi
 
 	# Test failed :(
