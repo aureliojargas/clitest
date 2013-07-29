@@ -140,6 +140,11 @@ _message ()
 
 	separator_line_shown=0
 }
+_error ()
+{
+	_message "$my_name: Error: $1"
+	exit 1
+}
 _debug ()
 {
 	test $debug -eq 1 && _message @blue "$@"
@@ -331,16 +336,14 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 			# Regex errors are common and user must take action to fix them
 			if test $exit_code -eq 2
 			then
-				_message "$(basename "$0"): egrep Error: check your inline regex at line $line_number of $test_file"
-				exit 1
+				_error "egrep: check your inline regex at line $line_number of $test_file"
 			fi
 		;;
 		file)
 			# Abort when ok file not found/readable
 			if test ! -f "$ok_text" || test ! -r "$ok_text"
 			then
-				_message "$(basename "$0"): Error: cannot read inline output file '$ok_text', from line $line_number of $test_file"
-				exit 1
+				_error "cannot read inline output file '$ok_text', from line $line_number of $test_file"
 			fi
 
 			diff=$(diff $diff_options "$ok_text" "$test_output_file")
@@ -474,8 +477,7 @@ _process_test_file ()  # $1=filename
 					# An empty inline output is an error user must see
 					if test -z "$ok_text"
 					then
-						_message "$(basename "$0"): Error: missing inline output $match_method at line $line_number of $test_file"
-						exit 1
+						_error "missing inline output $match_method at line $line_number of $test_file"
 					fi
 
 					# Save the output and run test
@@ -528,8 +530,7 @@ _process_test_file ()  # $1=filename
 _parse_range
 if test $? -eq 1
 then
-	_message "$(basename "$0"): Error: invalid argument for -n or --number: $user_range"
-	exit 1
+	_error "invalid argument for -n or --number: $user_range"
 fi
 
 
@@ -547,8 +548,7 @@ do
 	# Abort when test file not found/readable
 	if test ! -f "$test_file" || test ! -r "$test_file"
 	then
-		_message "$(basename "$0"): Error: cannot read input file: $test_file"
-		exit 1
+		_error "cannot read input file: $test_file"
 	fi
 
 	# In multifile mode, identify the current file
@@ -581,8 +581,7 @@ do
 	# Abort when no test found
 	if test $nr_file_tests -eq 0 && test -z "$test_range"
 	then
-		_message "$(basename "$0"): Error: no test found in input file: $test_file"
-		exit 1
+		_error "no test found in input file: $test_file"
 	fi
 
 	# Compose file stats message
@@ -609,8 +608,7 @@ fi
 # Range active, but no test matched :(
 if test $nr_total_tests -eq 0 && test -n "$test_range"
 then
-	_message "$(basename "$0"): Error: no test found for the specified number or range '$user_range'"
-	exit 1
+	_error "no test found for the specified number or range '$user_range'"
 fi
 
 # Show stats
