@@ -2,10 +2,12 @@
 # Matches a egrep-style regular expression in the command output
 #
 # In fact, it's a real egrep match: eval $command | egrep 'regex'
-# If egrep matched, we have a successful test.
+# If egrep matched, we have a successful test. That means that in
+# a multiline result, even if just a single line matches the regex,
+# the test is considered OK.
 #
 # Test your regexes with egrep at the command line before adding
-# test using them.
+# tests using them.
 
 # See man re_format in your system
 # http://www.freebsd.org/cgi/man.cgi?query=re_format&sektion=7
