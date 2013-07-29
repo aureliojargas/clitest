@@ -249,7 +249,7 @@ _run_test ()  # $1=command
 {
 	local diff
 	local failed
-	local cmd="$1"; shift
+	local cmd="$1"
 
 	test_number=$(($test_number + 1))
 
