@@ -298,6 +298,7 @@ _run_test ()  # $1=command [$2=ok_text]
 
 		if test $failed -eq 1
 		then
+			# Test failed. Now we can't avoid creating files :(
 			printf %s "$output_text" > "$test_output_file"
 			printf %s "$ok_text" > "$ok_file"
 			diff=$(diff $diff_options "$ok_file" "$test_output_file")
