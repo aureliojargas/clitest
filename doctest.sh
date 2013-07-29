@@ -251,6 +251,8 @@ _parse_range ()
 }
 _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 {
+	# If ok_text is not informed, we'll get it from $ok_file
+
 	local diff
 	local failed
 	local output_text
@@ -276,7 +278,7 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 		return 0
 	fi
 
-	# Verbose mode: show the command
+	# Verbose mode: show the command that will be tested
 	if test $verbose -eq 1
 	then
 		_message @cyan "=======[$test_number] $cmd"
