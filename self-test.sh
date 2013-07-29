@@ -312,6 +312,8 @@ $ ./doctest.sh -l self-test/no-nl-command.sh
 7	printf 'ok\n'    
 8	echo -n 'error'  
 9	printf 'error'   
+10	echo -n 'ok'; echo  
+11	printf 'ok'; echo   
 $ ./doctest.sh --list self-test/no-nl-command.sh
 1	echo 'ok'
 2	printf 'ok\n'
@@ -322,6 +324,8 @@ $ ./doctest.sh --list self-test/no-nl-command.sh
 7	printf 'ok\n'    
 8	echo -n 'error'  
 9	printf 'error'   
+10	echo -n 'ok'; echo  
+11	printf 'ok'; echo   
 $ ./doctest.sh --list self-test/no-nl-command.sh self-test/ok-1.sh
 ---------------------------------------- self-test/no-nl-command.sh
 1	echo 'ok'
@@ -333,8 +337,10 @@ $ ./doctest.sh --list self-test/no-nl-command.sh self-test/ok-1.sh
 7	printf 'ok\n'    
 8	echo -n 'error'  
 9	printf 'error'   
+10	echo -n 'ok'; echo  
+11	printf 'ok'; echo   
 ---------------------------------------- self-test/ok-1.sh
-10	echo ok
+12	echo ok
 $
 
 # Option --list-run
@@ -349,6 +355,8 @@ $ ./doctest.sh --list-run self-test/no-nl-command.sh
 [32m7	printf 'ok\n'    [m
 [31m8	echo -n 'error'  [m
 [31m9	printf 'error'   [m
+[32m10	echo -n 'ok'; echo  [m
+[32m11	printf 'ok'; echo   [m
 $ ./doctest.sh --list-run --no-color self-test/no-nl-command.sh
 1	OK	echo 'ok'
 2	OK	printf 'ok\n'
@@ -359,6 +367,8 @@ $ ./doctest.sh --list-run --no-color self-test/no-nl-command.sh
 7	OK	printf 'ok\n'    
 8	FAIL	echo -n 'error'  
 9	FAIL	printf 'error'   
+10	OK	echo -n 'ok'; echo  
+11	OK	printf 'ok'; echo   
 $ ./doctest.sh -L --no-color self-test/no-nl-command.sh
 1	OK	echo 'ok'
 2	OK	printf 'ok\n'
@@ -369,6 +379,8 @@ $ ./doctest.sh -L --no-color self-test/no-nl-command.sh
 7	OK	printf 'ok\n'    
 8	FAIL	echo -n 'error'  
 9	FAIL	printf 'error'   
+10	OK	echo -n 'ok'; echo  
+11	OK	printf 'ok'; echo   
 $ ./doctest.sh -L --no-color self-test/no-nl-command.sh self-test/ok-1.sh
 ---------------------------------------- self-test/no-nl-command.sh
 1	OK	echo 'ok'
@@ -380,8 +392,10 @@ $ ./doctest.sh -L --no-color self-test/no-nl-command.sh self-test/ok-1.sh
 7	OK	printf 'ok\n'    
 8	FAIL	echo -n 'error'  
 9	FAIL	printf 'error'   
+10	OK	echo -n 'ok'; echo  
+11	OK	printf 'ok'; echo   
 ---------------------------------------- self-test/ok-1.sh
-10	OK	echo ok
+12	OK	echo ok
 $
 
 # Option -n, --number
@@ -731,8 +745,10 @@ $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
 +error
 \ No newline at end of file
 --------------------------------------------------------------------------------
+=======[10] echo -n 'ok'; echo  
+=======[11] printf 'ok'; echo   
 
-FAIL: 5 of 9 tests have failed.
+FAIL: 5 of 11 tests have failed.
 $
 
 # And now, the colored output tests
