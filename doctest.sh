@@ -396,7 +396,7 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 	fi
 
 	# Reset holder for the OK output
-	if test $exit_code -ne 0 -o -z "$ok_text"
+	if test $exit_code -ne 0 || test -z "$ok_text"
 	then
 		> "$ok_file"
 	fi
@@ -601,7 +601,10 @@ done
 _clean_up
 
 # List mode has no stats
-test $list_mode -eq 1 -o $list_run -eq 1 && exit 0
+if test $list_mode -eq 1 || test $list_run -eq 1
+then
+	exit 0
+fi
 
 # Range active, but no test matched :(
 if test $nr_total_tests -eq 0 && test -n "$test_range"
