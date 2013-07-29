@@ -328,6 +328,17 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 			printf %s "$output_text" | egrep "$ok_text" > /dev/null
 			failed=$?
 		;;
+		file)
+			# Abort when ok file not found/readable
+			if test ! -f "$ok_text" || test ! -r "$ok_text"
+			then
+				_message "$(basename "$0"): Error: cannot read inline output file '$ok_text', from line $line_number of $test_file"
+				exit 1
+			fi
+
+			diff=$(diff $diff_options "$ok_text" "$test_output_file")
+			failed=$?
+		;;
 		*)
 			diff=$(diff $diff_options "$ok_file" "$test_output_file")
 			failed=$?
@@ -439,6 +450,10 @@ _process_test_file ()  # $1=filename
 						'--regex '*)
 							ok_text=${ok_text#--regex }
 							match_method='regex'
+						;;
+						'--file '*)
+							ok_text=${ok_text#--file }
+							match_method='file'
 						;;
 						'--text '*)
 							ok_text=${ok_text#--text }

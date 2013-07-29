@@ -1,0 +1,1 @@
+$ echo "directory"  #→ --file /etc/

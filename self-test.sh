@@ -310,6 +310,14 @@ $ ./doctest.sh --no-color --list-run self-test/inline-match-regex.sh
 17	OK	echo ' ok'                   
 18	OK	echo '--regex'                
 19	OK	echo '--regexpal'             
+$ ./doctest.sh --no-color --list-run self-test/inline-match-file.sh
+1	OK	printf '$ echo ok\nok\n'      
+2	OK	echo 'ok' > /tmp/foo.txt
+3	OK	echo 'ok'                     
+4	FAIL	echo 'fail'                   
+5	FAIL	echo 'fail'                   
+6	OK	echo '--file'                 
+7	OK	echo '--filer'                
 $ ./doctest.sh self-test/inline-match-text-error-1.sh
 doctest.sh: Error: missing inline output text at line 1 of self-test/inline-match-text-error-1.sh
 $ ./doctest.sh self-test/inline-match-text-error-2.sh
@@ -318,6 +326,10 @@ $ ./doctest.sh self-test/inline-match-regex-error-1.sh
 doctest.sh: Error: missing inline output regex at line 1 of self-test/inline-match-regex-error-1.sh
 $ ./doctest.sh self-test/inline-match-file-error-1.sh
 doctest.sh: Error: missing inline output file at line 1 of self-test/inline-match-file-error-1.sh
+$ ./doctest.sh self-test/inline-match-file-error-2.sh
+doctest.sh: Error: cannot read inline output file 'XXnotfoundXX', from line 1 of self-test/inline-match-file-error-2.sh
+$ ./doctest.sh self-test/inline-match-file-error-3.sh
+doctest.sh: Error: cannot read inline output file '/etc/', from line 1 of self-test/inline-match-file-error-3.sh
 $
 
 # Option --version
