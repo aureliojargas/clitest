@@ -327,6 +327,13 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 		regex)
 			printf %s "$output_text" | egrep "$ok_text" > /dev/null
 			exit_code=$?
+
+			# Regex errors are common and user must take action to fix them
+			if test $exit_code -eq 2
+			then
+				_message "$(basename "$0"): egrep Error: check your inline regex at line $line_number of $test_file"
+				exit 1
+			fi
 		;;
 		file)
 			# Abort when ok file not found/readable

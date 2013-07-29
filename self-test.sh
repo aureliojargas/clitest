@@ -324,6 +324,9 @@ $ ./doctest.sh self-test/inline-match-text-error-2.sh
 doctest.sh: Error: missing inline output text at line 1 of self-test/inline-match-text-error-2.sh
 $ ./doctest.sh self-test/inline-match-regex-error-1.sh
 doctest.sh: Error: missing inline output regex at line 1 of self-test/inline-match-regex-error-1.sh
+$ ./doctest.sh self-test/inline-match-regex-error-2.sh
+egrep: parentheses not balanced
+doctest.sh: egrep Error: check your inline regex at line 1 of self-test/inline-match-regex-error-2.sh
 $ ./doctest.sh self-test/inline-match-file-error-1.sh
 doctest.sh: Error: missing inline output file at line 1 of self-test/inline-match-file-error-1.sh
 $ ./doctest.sh self-test/inline-match-file-error-2.sh
