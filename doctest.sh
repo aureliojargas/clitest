@@ -3,6 +3,11 @@
 #              https://github.com/aureliojargas/doctest.sh
 # License: MIT
 # by Aurelio Jargas (http://aurelio.net), since 2013-07-24
+#
+# Exit codes:
+#   0  All tests passed, or normal operation (--help, --list, ...)
+#   1  One or more tests have failed
+#   2  An error occurred (file not found, invalid range, ...)
 
 my_name="$(basename "$0")"
 my_version='dev'
