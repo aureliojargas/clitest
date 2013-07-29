@@ -348,7 +348,10 @@ _run_test ()  # $1=command [$2=ok_text]
 	fi
 
 	# Reset holder for the OK output
-	> "$ok_file"
+	if test $failed -eq 1 -o -z "$ok_text"
+	then
+		> "$ok_file"
+	fi
 }
 _process_test_file ()  # $1=filename
 {
