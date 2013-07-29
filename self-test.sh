@@ -725,10 +725,11 @@ $ ./doctest.sh self-test/
 doctest.sh: Error: cannot read input file: self-test/
 $
 
-# No test found (message and exit code 1)
+# No test found (message and exit code)
+
 $ ./doctest.sh self-test/no-test-found.sh; echo $?
 doctest.sh: Error: no test found in input file: self-test/no-test-found.sh
-1
+2
 $ ./doctest.sh self-test/empty-file.sh
 doctest.sh: Error: no test found in input file: self-test/empty-file.sh
 $ ./doctest.sh self-test/empty-prompt-file.sh

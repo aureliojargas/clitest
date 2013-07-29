@@ -143,7 +143,7 @@ _message ()
 _error ()
 {
 	_message "$my_name: Error: $1"
-	exit 1
+	exit 2
 }
 _debug ()
 {
