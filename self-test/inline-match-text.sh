@@ -26,6 +26,18 @@ $ echo '*'                      #→ *
 $ echo '['                      #→ [
 $ echo '('                      #→ (
 
+# For commands with no output, just leave it empty
+
+$ true                          #→ 
+$ echo "fail"                   #→ 
+
+# But don't forget the blank space after the →, because in this
+# case the #→ marker will be considered a plain comment and ignored
+
+$ echo "not inline output"      #→
+not inline output
+$
+
 # Blanks are preserved
 
 $ echo '123456789'              #→ 123456789

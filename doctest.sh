@@ -330,7 +330,7 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 	case $match_method in
 		text)
 			# Inline OK text represents a full line, with \n
-			ok_text="$ok_text$nl"
+			test -n "$ok_text" && ok_text="$ok_text$nl"
 
 			test "$output_text" = "$ok_text"
 			exit_code=$?
@@ -474,8 +474,8 @@ _process_test_file ()  # $1=filename
 						;;
 					esac
 
-					# An empty inline output is an error user must see
-					if test -z "$ok_text"
+					# An empty inline parameter is an error user must see
+					if test -z "$ok_text" && test "$match_method" != 'text'
 					then
 						_error "missing inline output $match_method at line $line_number of $test_file"
 					fi

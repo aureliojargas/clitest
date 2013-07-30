@@ -272,34 +272,37 @@ $ ./doctest.sh --no-color --list-run self-test/inline-match-text.sh
 11	OK	echo '*'                      
 12	OK	echo '['                      
 13	OK	echo '('                      
-14	OK	echo '123456789'              
-15	OK	echo '1 3   7 9'              
-16	OK	echo '    5    '              
-17	OK	echo ' leading space'         
-18	OK	echo '    leading spaces'     
-19	OK	printf '\tleading tab\n'      
-20	OK	printf '\t\tleading tabs\n'   
-21	OK	echo 'trailing space '        
-22	OK	echo 'trailing spaces    '    
-23	OK	printf 'trailing tab\t\n'     
-24	OK	printf 'trailing tabs\t\t\n'  
-25	OK	echo ' '                      
-26	FAIL	echo '   '                    
-27	OK	printf '\t\n'                 
-28	OK	printf '\t\t\t\n'             
-29	OK	printf ' \t  \t\t   \n'       
-30	OK	echo 'ok'                     
-31	OK	printf 'ok\n'                 
-32	FAIL	echo -n 'fail'                
-33	FAIL	printf 'fail'                 
-34	OK	echo -n 'ok'; echo            
-35	OK	printf 'ok'; echo             
-36	FAIL	echo 'fail'                   
-37	FAIL	echo 'fail'                   
-38	OK	echo ' ok'                    
-39	OK	echo '--text'                 
-40	OK	echo '--textual'              
-41	OK	echo '--text is cool'         
+14	OK	true                          
+15	FAIL	echo "fail"                   
+16	OK	echo "not inline output"      #→
+17	OK	echo '123456789'              
+18	OK	echo '1 3   7 9'              
+19	OK	echo '    5    '              
+20	OK	echo ' leading space'         
+21	OK	echo '    leading spaces'     
+22	OK	printf '\tleading tab\n'      
+23	OK	printf '\t\tleading tabs\n'   
+24	OK	echo 'trailing space '        
+25	OK	echo 'trailing spaces    '    
+26	OK	printf 'trailing tab\t\n'     
+27	OK	printf 'trailing tabs\t\t\n'  
+28	OK	echo ' '                      
+29	FAIL	echo '   '                    
+30	OK	printf '\t\n'                 
+31	OK	printf '\t\t\t\n'             
+32	OK	printf ' \t  \t\t   \n'       
+33	OK	echo 'ok'                     
+34	OK	printf 'ok\n'                 
+35	FAIL	echo -n 'fail'                
+36	FAIL	printf 'fail'                 
+37	OK	echo -n 'ok'; echo            
+38	OK	printf 'ok'; echo             
+39	FAIL	echo 'fail'                   
+40	FAIL	echo 'fail'                   
+41	OK	echo ' ok'                    
+42	OK	echo '--text'                 
+43	OK	echo '--textual'              
+44	OK	echo '--text is cool'         
 $ ./doctest.sh --no-color --list-run self-test/inline-match-regex.sh
 1	OK	echo 'abc123'                 
 2	OK	echo 'abc123'                 
@@ -340,10 +343,6 @@ $ ./doctest.sh --no-color --list-run self-test/inline-match-file.sh
 6	OK	echo '--file'                 
 7	OK	echo '--filer'                
 8	OK	echo '--file is cool'         
-$ ./doctest.sh self-test/inline-match-text-error-1.sh
-doctest.sh: Error: missing inline output text at line 1 of self-test/inline-match-text-error-1.sh
-$ ./doctest.sh self-test/inline-match-text-error-2.sh
-doctest.sh: Error: missing inline output text at line 1 of self-test/inline-match-text-error-2.sh
 $ ./doctest.sh self-test/inline-match-regex-error-1.sh
 doctest.sh: Error: missing inline output regex at line 1 of self-test/inline-match-regex-error-1.sh
 $ ./doctest.sh self-test/inline-match-regex-error-2.sh
