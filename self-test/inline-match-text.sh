@@ -11,6 +11,11 @@ $ echo 'abc'                    #→ abc
 $ echo '\t'                     #→ \t
 $ echo '\n'                     #→ \n
 
+# Variables and commands are not parsed (see #→ --eval for that).
+
+$ echo '$PWD'                   #→ $PWD
+$ echo '$(date)'                #→ $(date)
+
 # It's a literal text, with no special characters.
 
 $ echo '$'                      #→ $
