@@ -30,6 +30,14 @@ $ echo 'abc123'                 #→ --regex .
 
 $ echo 'abc 123'                #→ --regex ^abc [0-9]+$
 
+# Blank output can also be matched
+
+$ echo ' '                      #→ --regex ^ $
+$ echo '    '                   #→ --regex ^    $
+$ printf '\t\n'                 #→ --regex ^	$
+$ printf '\t\t\t\n'             #→ --regex ^			$
+$ printf ' \t  \t\t   \n'       #→ --regex ^ 	  		   $
+
 # In some systems, the special sequence \t is expanded to a tab in
 # egrep regexes. You'll need to test in your system if that's the
 # case. I recommend using a literal tab to avoid problems.
