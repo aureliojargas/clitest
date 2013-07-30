@@ -27,3 +27,9 @@ $ echo '    ' #→
 $ printf '\t\n' #→ 	
 $ printf '\t\t\t\n' #→ 			
 $ printf ' \t  \t\t   \n' #→  	  		   
+
+# Inline results have precedence over normal results
+$ echo "both inline and normal output"  #→ both inline and normal output
+Inline wins.
+The normal output is just ignored.
+$

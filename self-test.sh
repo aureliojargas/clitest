@@ -55,12 +55,12 @@ Testing file self-test/windows.sh
 
 ================================================================================
  2 ok           self-test/ok-2.sh
-18 ok           self-test/inline.sh
+19 ok           self-test/inline.sh
  2 ok           self-test/exit-code.sh
  1 ok           self-test/windows.sh
 ================================================================================
 
-OK! All 23 tests have passed.
+OK! All 24 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/{ok-2,inline,exit-code,windows}.sh
 Testing file self-test/ok-2.sh
 =======[1] echo ok
@@ -84,20 +84,21 @@ Testing file self-test/inline.sh
 =======[18] printf '\t\n' 
 =======[19] printf '\t\t\t\n' 
 =======[20] printf ' \t  \t\t   \n' 
+=======[21] echo "both inline and normal output"  
 Testing file self-test/exit-code.sh
-=======[21] echo "ok"            > /dev/null; echo $?
-=======[22] cp XXnotfoundXX foo 2> /dev/null; echo $?
+=======[22] echo "ok"            > /dev/null; echo $?
+=======[23] cp XXnotfoundXX foo 2> /dev/null; echo $?
 Testing file self-test/windows.sh
-=======[23] echo "a file with CRLF line ending"
+=======[24] echo "a file with CRLF line ending"
 
 ================================================================================
  2 ok           self-test/ok-2.sh
-18 ok           self-test/inline.sh
+19 ok           self-test/inline.sh
  2 ok           self-test/exit-code.sh
  1 ok           self-test/windows.sh
 ================================================================================
 
-OK! All 23 tests have passed.
+OK! All 24 tests have passed.
 $
 
 # Multifile, OK and error
@@ -251,7 +252,8 @@ $ ./doctest.sh --no-color --verbose self-test/inline.sh
 =======[16] printf '\t\n' 
 =======[17] printf '\t\t\t\n' 
 =======[18] printf ' \t  \t\t   \n' 
-OK! All 18 tests have passed.
+=======[19] echo "both inline and normal output"  
+OK! All 19 tests have passed.
 $
 
 # Inline match modes
