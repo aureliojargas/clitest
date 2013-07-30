@@ -403,12 +403,6 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 	else
 		test $list_run -eq 1 && _list_line "$cmd" ok
 	fi
-
-	# Reset holder for the OK output
-	if test $exit_code -ne 0 || test -z "$ok_text"
-	then
-		> "$ok_file"
-	fi
 }
 _process_test_file ()  # $1=filename
 {
