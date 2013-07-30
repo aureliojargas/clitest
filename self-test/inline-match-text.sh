@@ -39,6 +39,11 @@ $ echo 'trailing space '        #→ trailing space
 $ echo 'trailing spaces    '    #→ trailing spaces    
 $ printf 'trailing tab\t\n'     #→ trailing tab	
 $ printf 'trailing tabs\t\t\n'  #→ trailing tabs		
+$ echo ' '                      #→  
+$ echo '   '                    #→  
+$ printf '\t\n'                 #→ 	
+$ printf '\t\t\t\n'             #→ 			
+$ printf ' \t  \t\t   \n'       #→  	  		   
 
 # As seen in all these examples, the final \n is implied.
 # You can't match lines with no \n.
