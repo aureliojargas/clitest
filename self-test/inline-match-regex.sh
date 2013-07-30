@@ -49,6 +49,14 @@ $ printf 'will\nfail'           #→ --regex will\nfail
 
 $ printf '1\n2\n3\n4\nok\n'     #→ --regex ok
 
+# As egrep is used for the test and it ignores the line break,
+# you can match both full (with \n) and partial (without \n).
+
+$ echo 'ok'                     #→ --regex ok
+$ echo -n 'ok'                  #→ --regex ok
+$ printf 'ok'                   #→ --regex ok
+$ printf 'ok\n'                 #→ --regex ok
+
 # Syntax: Must be exactly one space before and after --regex
 
 $ echo 'fail'                   #→   --regex fail with 2 spaces
