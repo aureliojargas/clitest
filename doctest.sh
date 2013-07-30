@@ -330,7 +330,7 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 	case $match_method in
 		text)
 			# Inline OK text represents a full line, with \n
-			test -n "$ok_text" && ok_text="$ok_text$nl"
+			ok_text="$ok_text$nl"
 
 			test "$output_text" = "$ok_text"
 			exit_code=$?

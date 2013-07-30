@@ -26,10 +26,9 @@ $ echo '*'                      #→ *
 $ echo '['                      #→ [
 $ echo '('                      #→ (
 
-# For commands with no output, just leave it empty
+# For commands that return an empty line, just leave it empty
 
-$ true                          #→ 
-$ echo "fail"                   #→ 
+$ echo                          #→ 
 
 # But don't forget the blank space after the →, because in this
 # case the #→ marker will be considered a plain comment and ignored
