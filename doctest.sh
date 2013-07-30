@@ -303,7 +303,7 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 	# files (slow, trustable) or variables (quick, hacky). Variables
 	# are the preferred way for inline output with #→, unless you're
 	# inlining a file name with '#→ --file ...'.
-	if test -z "$ok_text" || test "$match_method" = 'file'
+	if test -z "$match_method" || test "$match_method" = 'file'
 	then
 		output_mode='file'
 	else
