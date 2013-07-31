@@ -344,8 +344,8 @@ $ ./doctest.sh --no-color --list-run self-test/inline-match-file.sh
 8	OK	echo '--file is cool'         
 $ ./doctest.sh self-test/inline-match-regex-error-1.sh
 doctest.sh: Error: missing inline output regex at line 1 of self-test/inline-match-regex-error-1.sh
-$ ./doctest.sh self-test/inline-match-regex-error-2.sh
-egrep: parentheses not balanced
+$ ./doctest.sh self-test/inline-match-regex-error-2.sh 2>&1 | sed 's/^egrep: .*/egrep: ERROR_MSG/'
+egrep: ERROR_MSG
 doctest.sh: Error: egrep: check your inline regex at line 1 of self-test/inline-match-regex-error-2.sh
 $ ./doctest.sh self-test/inline-match-file-error-1.sh
 doctest.sh: Error: missing inline output file at line 1 of self-test/inline-match-file-error-1.sh
