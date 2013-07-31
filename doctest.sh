@@ -79,7 +79,7 @@ do
 		-n|--number    ) shift; user_range="$1"; shift ;;
 		--no-color     ) shift; use_colors=0 ;;
   		--debug        ) shift; debug=1 ;;
-		--include      ) shift; source "$1" >/dev/null; shift ;;  # XXX dev temp option
+		--include      ) shift; . "$1" >/dev/null; shift ;;  # XXX dev temp option
 		--diff-options ) shift; diff_options="$1"; shift ;;
 		--inline-prefix) shift; inline_prefix="$1"; shift ;;
 		--prompt       ) shift; prompt="$1"; shift ;;
