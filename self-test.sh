@@ -17,6 +17,7 @@ $
 # Set a default terminal width of 80 columns (used by separator lines) 
 
 $ COLUMNS=80
+$ export COLUMNS
 $
 
 # Single file, OK
