@@ -92,64 +92,75 @@ $
 
 # Multifile, OK and error
 
-$ ./doctest.sh --no-color self-test/{ok-2,error-2,exit-code,windows}.sh
+$ ./doctest.sh --no-color self-test/ok-1.sh self-test/error-1.sh self-test/ok-2.sh self-test/error-2.sh
+Testing file self-test/ok-1.sh
+Testing file self-test/error-1.sh
+--------------------------------------------------------------------------------
+#2 FAILED: echo ok
+@@ -1 +1 @@
+-fail
++ok
+--------------------------------------------------------------------------------
 Testing file self-test/ok-2.sh
 Testing file self-test/error-2.sh
 --------------------------------------------------------------------------------
-#3 FAILED: echo ok
+#5 FAILED: echo ok
 @@ -1 +1 @@
 -fail
 +ok
 --------------------------------------------------------------------------------
-#4 FAILED: echo ok  
+#6 FAILED: echo ok  
 @@ -1 +1 @@
 -fail
 +ok
 --------------------------------------------------------------------------------
-Testing file self-test/exit-code.sh
-Testing file self-test/windows.sh
 
 ================================================================================
+ 1 ok           self-test/ok-1.sh
+ 0 ok,  1 fail  self-test/error-1.sh
  2 ok           self-test/ok-2.sh
  0 ok,  2 fail  self-test/error-2.sh
- 2 ok           self-test/exit-code.sh
- 1 ok           self-test/windows.sh
 ================================================================================
 
-FAIL: 2 of 7 tests have failed.
-$ ./doctest.sh --no-color --verbose self-test/{ok-2,error-2,exit-code,windows}.sh
-Testing file self-test/ok-2.sh
+FAIL: 3 of 6 tests have failed.
+$ ./doctest.sh --no-color --verbose self-test/ok-1.sh self-test/error-1.sh self-test/ok-2.sh self-test/error-2.sh
+Testing file self-test/ok-1.sh
 =======[1] echo ok
-=======[2] echo ok  
-Testing file self-test/error-2.sh
+Testing file self-test/error-1.sh
+=======[2] echo ok
+--------------------------------------------------------------------------------
+#2 FAILED: echo ok
+@@ -1 +1 @@
+-fail
++ok
+--------------------------------------------------------------------------------
+Testing file self-test/ok-2.sh
 =======[3] echo ok
---------------------------------------------------------------------------------
-#3 FAILED: echo ok
-@@ -1 +1 @@
--fail
-+ok
---------------------------------------------------------------------------------
 =======[4] echo ok  
+Testing file self-test/error-2.sh
+=======[5] echo ok
 --------------------------------------------------------------------------------
-#4 FAILED: echo ok  
+#5 FAILED: echo ok
 @@ -1 +1 @@
 -fail
 +ok
 --------------------------------------------------------------------------------
-Testing file self-test/exit-code.sh
-=======[5] echo "ok"            > /dev/null; echo $?
-=======[6] cp XXnotfoundXX foo 2> /dev/null; echo $?
-Testing file self-test/windows.sh
-=======[7] echo "a file with CRLF line ending"
+=======[6] echo ok  
+--------------------------------------------------------------------------------
+#6 FAILED: echo ok  
+@@ -1 +1 @@
+-fail
++ok
+--------------------------------------------------------------------------------
 
 ================================================================================
+ 1 ok           self-test/ok-1.sh
+ 0 ok,  1 fail  self-test/error-1.sh
  2 ok           self-test/ok-2.sh
  0 ok,  2 fail  self-test/error-2.sh
- 2 ok           self-test/exit-code.sh
- 1 ok           self-test/windows.sh
 ================================================================================
 
-FAIL: 2 of 7 tests have failed.
+FAIL: 3 of 6 tests have failed.
 $
 
 # Errors
