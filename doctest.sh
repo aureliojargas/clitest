@@ -386,7 +386,7 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 			then
 				_message @red $(_separator_line)
 			fi
-			_message @red "#$test_number FAILED: $cmd"
+			_message @red "[FAILED #$test_number] $cmd"
 			test $quiet -eq 1 || printf '%s\n' "$diff" | sed '1,2 d'  # no +++/--- headers
 			_message @red $(_separator_line)
 			separator_line_shown=1
