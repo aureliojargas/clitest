@@ -810,7 +810,11 @@ $ ./doctest.sh --no-color --verbose self-test/no-nl-file-1.sh
 =======[1] printf '%s\n' 'a file with no \n at the last line'
 OK! The single test has passed.
 $ ./doctest.sh --no-color --verbose self-test/no-nl-file-2.sh
+=======[1] printf '%s\n' 'another file with no \n at the last line'
+OK! The single test has passed.
 $ ./doctest.sh --no-color --verbose self-test/no-nl-file-3.sh
+=======[1] printf '%s\n' 'oneliner, no \n'  
+OK! The single test has passed.
 $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
 =======[1] echo 'ok'
 =======[2] printf 'ok\n'
