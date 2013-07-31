@@ -47,58 +47,47 @@ Testing file self-test/ok-2.sh
 ================================================================================
 
 OK! All 4 tests have passed.
-$ ./doctest.sh --no-color self-test/{ok-2,inline,exit-code,windows}.sh
+$ ./doctest.sh --no-color self-test/ok-[0-9]*.sh
+Testing file self-test/ok-1.sh
+Testing file self-test/ok-10.sh
+Testing file self-test/ok-100.sh
 Testing file self-test/ok-2.sh
-Testing file self-test/inline.sh
-Testing file self-test/exit-code.sh
-Testing file self-test/windows.sh
+Testing file self-test/ok-50.sh
 
 ================================================================================
+ 1 ok           self-test/ok-1.sh
+10 ok           self-test/ok-10.sh
+100 ok           self-test/ok-100.sh
  2 ok           self-test/ok-2.sh
-19 ok           self-test/inline.sh
- 2 ok           self-test/exit-code.sh
- 1 ok           self-test/windows.sh
+50 ok           self-test/ok-50.sh
 ================================================================================
 
-OK! All 24 tests have passed.
-$ ./doctest.sh --no-color --verbose self-test/{ok-2,inline,exit-code,windows}.sh
-Testing file self-test/ok-2.sh
+YOU WIN! PERFECT! All 163 tests have passed.
+$ ./doctest.sh --no-color --verbose self-test/ok-?.sh self-test/ok-10.sh
+Testing file self-test/ok-1.sh
 =======[1] echo ok
-=======[2] echo ok  
-Testing file self-test/inline.sh
-=======[3] echo 'one space' 
-=======[4] echo 'one tab'	
-=======[5] echo 'multi spaces'           
-=======[6] echo 'multi tabs'				
-=======[7] echo 'mixed'  	 		 	
-=======[8] echo ' leading space' 
-=======[9] echo '    leading spaces' 
-=======[10] printf '\tleading tab\n' 
-=======[11] printf '\t\tleading tabs\n' 
-=======[12] echo 'trailing space ' 
-=======[13] echo 'trailing spaces    ' 
-=======[14] printf 'trailing tab\t\n' 
-=======[15] printf 'trailing tabs\t\t\n' 
-=======[16] echo ' ' 
-=======[17] echo '    ' 
-=======[18] printf '\t\n' 
-=======[19] printf '\t\t\t\n' 
-=======[20] printf ' \t  \t\t   \n' 
-=======[21] echo "both inline and normal output"  
-Testing file self-test/exit-code.sh
-=======[22] echo "ok"            > /dev/null; echo $?
-=======[23] cp XXnotfoundXX foo 2> /dev/null; echo $?
-Testing file self-test/windows.sh
-=======[24] echo "a file with CRLF line ending"
+Testing file self-test/ok-2.sh
+=======[2] echo ok
+=======[3] echo ok  
+Testing file self-test/ok-10.sh
+=======[4] echo 1 
+=======[5] echo 2 
+=======[6] echo 3 
+=======[7] echo 4 
+=======[8] echo 5 
+=======[9] echo 6 
+=======[10] echo 7 
+=======[11] echo 8 
+=======[12] echo 9 
+=======[13] echo 10 
 
 ================================================================================
+ 1 ok           self-test/ok-1.sh
  2 ok           self-test/ok-2.sh
-19 ok           self-test/inline.sh
- 2 ok           self-test/exit-code.sh
- 1 ok           self-test/windows.sh
+10 ok           self-test/ok-10.sh
 ================================================================================
 
-OK! All 24 tests have passed.
+OK! All 13 tests have passed.
 $
 
 # Multifile, OK and error
