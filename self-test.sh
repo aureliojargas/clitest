@@ -555,7 +555,7 @@ $ ./doctest.sh --no-color --verbose -n 3-1 self-test/ok-10.sh
 =======[2] echo 2 
 =======[3] echo 3 
 OK! All 3 tests have passed.
-$ ./doctest.sh --no-color -n 1,5,13 self-test/ok-{1,2,10}.sh
+$ ./doctest.sh --no-color -n 1,5,13 self-test/ok-?.sh self-test/ok-10.sh
 Testing file self-test/ok-1.sh
 Testing file self-test/ok-2.sh
 Testing file self-test/ok-10.sh
@@ -611,7 +611,7 @@ $ ./doctest.sh --no-color --list-run -n 3,5-7 self-test/ok-10.sh
 5	OK	echo 5 
 6	OK	echo 6 
 7	OK	echo 7 
-$ ./doctest.sh --no-color --list -n 1,3,5-7 self-test/{ok-1,error-2,ok-10}.sh
+$ ./doctest.sh --no-color --list -n 1,3,5-7 self-test/ok-1.sh self-test/error-2.sh self-test/ok-10.sh
 ---------------------------------------- self-test/ok-1.sh
 1	echo ok
 ---------------------------------------- self-test/error-2.sh
@@ -620,7 +620,7 @@ $ ./doctest.sh --no-color --list -n 1,3,5-7 self-test/{ok-1,error-2,ok-10}.sh
 5	echo 2 
 6	echo 3 
 7	echo 4 
-$ ./doctest.sh --no-color --list-run -n 1,3,5-7 self-test/{ok-1,error-2,ok-10}.sh
+$ ./doctest.sh --no-color --list-run -n 1,3,5-7 self-test/ok-1.sh self-test/error-2.sh self-test/ok-10.sh
 ---------------------------------------- self-test/ok-1.sh
 1	OK	echo ok
 ---------------------------------------- self-test/error-2.sh
