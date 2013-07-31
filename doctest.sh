@@ -419,7 +419,7 @@ _process_test_file ()  # $1=filename
 	# Loop for each line of input file
 	# Note: changing IFS to avoid right-trimming of spaces/tabs
 	# Note: read -r to preserve the backslashes (also works in dash shell)
-	while IFS='' read -r input_line
+	while IFS='' read -r input_line || test -n "$input_line"
 	do
 		line_number=$(($line_number + 1))
 		case "$input_line" in
@@ -564,15 +564,9 @@ do
 		fi
 	fi
 
-	### Prepare input file
-	#
-	# This sed has two purposes:
-	# 1. add \n to last line (if missing), otherwise while loop will ignore it
-	# 2. convert Windows files (CRLF) to the Unix format (LF)
-	#
+	# Convert Windows files (CRLF) to the Unix format (LF)
 	# Note: the temporary file is required, because doing "sed | while" opens
 	#       a subshell and global vars won't be updated outside the loop.
-	#
 	sed "s/$(printf '\r')$//" "$test_file" > "$temp_file"
 
 	# The magic happens here
