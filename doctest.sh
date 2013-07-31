@@ -84,8 +84,8 @@ do
 		--inline-prefix) shift; inline_prefix="$1"; shift ;;
 		--prompt       ) shift; prompt="$1"; shift ;;
 		--prefix       ) shift; prefix="$1"; shift ;;
-		-V|--version   ) echo "$my_name $my_version"; exit 0 ;;
-		-h|--help      ) echo "$my_help"; exit 0 ;;
+		-V|--version   ) printf '%s\n' "$my_name $my_version"; exit 0 ;;
+		-h|--help      ) printf '%s\n' "$my_help"; exit 0 ;;
 		*) break ;;
 	esac
 done
@@ -96,7 +96,7 @@ nr_files=$#
 # No files? Show help.
 if test $nr_files -eq 0
 then
-	echo "$my_help"
+	printf '%s\n' "$my_help"
 	exit 0
 fi
 
@@ -141,7 +141,7 @@ _message ()
 	then
 		printf '%b%s%b\n' "\033[${color_code}m" "$*" '\033[m'
 	else
-		echo "$*"
+		printf '%s\n' "$*"
 	fi
 
 	separator_line_shown=0
@@ -387,7 +387,7 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 				_message @red $(_separator_line)
 			fi
 			_message @red "#$test_number FAILED: $cmd"
-			test $quiet -eq 1 || echo "$diff" | sed '1,2 d'  # no +++/--- headers
+			test $quiet -eq 1 || printf '%s\n' "$diff" | sed '1,2 d'  # no +++/--- headers
 			_message @red $(_separator_line)
 			separator_line_shown=1
 		fi
@@ -446,7 +446,7 @@ _process_test_file ()  # $1=filename
 				test_command="${input_line#$prefix$prompt}"
 
 				# This is a special test with inline output?
-				if echo "$test_command" | grep "$inline_prefix" > /dev/null
+				if printf '%s\n' "$test_command" | grep "$inline_prefix" > /dev/null
 				then
 					# Separate command from inline output
 					test_command="${test_command%$inline_prefix*}"
@@ -513,7 +513,7 @@ _process_test_file ()  # $1=filename
 				fi
 
 				# This line is a test output, save it (without prefix)
-				echo "${input_line#$prefix}" >> "$ok_file"
+				printf '%s\n' "${input_line#$prefix}" >> "$ok_file"
 
 				#_debug "[OK LINE] $input_line"
 			;;

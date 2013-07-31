@@ -261,8 +261,8 @@ $
 $ ./doctest.sh --no-color --list-run self-test/inline-match-text.sh
 1	OK	echo 'abc'                    
 2	OK	echo 'abc'                    
-3	OK	echo '\t'                     
-4	OK	echo '\n'                     
+3	OK	printf '%s\n' '\t'            
+4	OK	printf '%s\n' '\n'            
 5	OK	echo '$PWD'                   
 6	OK	echo '$(date)'                
 7	OK	echo '$'                      
@@ -806,7 +806,7 @@ Testing file self-test/ok-2.sh
 
 OK! All 3 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/no-nl-file.sh
-=======[1] echo "a file with no \n at the last line"
+=======[1] printf '%s\n' 'a file with no \n at the last line'
 OK! The single test has passed.
 $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
 =======[1] echo 'ok'

@@ -6,10 +6,10 @@
 $ echo 'abc'                    #→ --text abc
 $ echo 'abc'                    #→ abc
 
-# Special printf characters as \t and \n are not expanded.
+# Special characters as \t and \n are not expanded.
 
-$ echo '\t'                     #→ \t
-$ echo '\n'                     #→ \n
+$ printf '%s\n' '\t'            #→ \t
+$ printf '%s\n' '\n'            #→ \n
 
 # Variables and commands are not parsed (see #→ --eval for that).
 
