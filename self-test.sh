@@ -43,8 +43,8 @@ Testing file self-test/ok-2.sh
 Testing file self-test/ok-2.sh
 
 ================================================================================
- 2 ok           self-test/ok-2.sh
- 2 ok           self-test/ok-2.sh
+  2 ok            self-test/ok-2.sh
+  2 ok            self-test/ok-2.sh
 ================================================================================
 
 OK! All 4 tests have passed.
@@ -56,11 +56,11 @@ Testing file self-test/ok-2.sh
 Testing file self-test/ok-50.sh
 
 ================================================================================
- 1 ok           self-test/ok-1.sh
-10 ok           self-test/ok-10.sh
-100 ok           self-test/ok-100.sh
- 2 ok           self-test/ok-2.sh
-50 ok           self-test/ok-50.sh
+  1 ok            self-test/ok-1.sh
+ 10 ok            self-test/ok-10.sh
+100 ok            self-test/ok-100.sh
+  2 ok            self-test/ok-2.sh
+ 50 ok            self-test/ok-50.sh
 ================================================================================
 
 YOU WIN! PERFECT! All 163 tests have passed.
@@ -83,9 +83,9 @@ Testing file self-test/ok-10.sh
 =======[13] echo 10 
 
 ================================================================================
- 1 ok           self-test/ok-1.sh
- 2 ok           self-test/ok-2.sh
-10 ok           self-test/ok-10.sh
+  1 ok            self-test/ok-1.sh
+  2 ok            self-test/ok-2.sh
+ 10 ok            self-test/ok-10.sh
 ================================================================================
 
 OK! All 13 tests have passed.
@@ -117,10 +117,10 @@ Testing file self-test/error-2.sh
 --------------------------------------------------------------------------------
 
 ================================================================================
- 1 ok           self-test/ok-1.sh
- 0 ok,  1 fail  self-test/error-1.sh
- 2 ok           self-test/ok-2.sh
- 0 ok,  2 fail  self-test/error-2.sh
+  1 ok            self-test/ok-1.sh
+  0 ok,   1 fail  self-test/error-1.sh
+  2 ok            self-test/ok-2.sh
+  0 ok,   2 fail  self-test/error-2.sh
 ================================================================================
 
 FAIL: 3 of 6 tests have failed.
@@ -155,10 +155,10 @@ Testing file self-test/error-2.sh
 --------------------------------------------------------------------------------
 
 ================================================================================
- 1 ok           self-test/ok-1.sh
- 0 ok,  1 fail  self-test/error-1.sh
- 2 ok           self-test/ok-2.sh
- 0 ok,  2 fail  self-test/error-2.sh
+  1 ok            self-test/ok-1.sh
+  0 ok,   1 fail  self-test/error-1.sh
+  2 ok            self-test/ok-2.sh
+  0 ok,   2 fail  self-test/error-2.sh
 ================================================================================
 
 FAIL: 3 of 6 tests have failed.
@@ -562,9 +562,9 @@ Testing file self-test/ok-2.sh
 Testing file self-test/ok-10.sh
 
 ================================================================================
- 1 ok           self-test/ok-1.sh
- 0 ok           self-test/ok-2.sh
- 2 ok           self-test/ok-10.sh
+  1 ok            self-test/ok-1.sh
+  0 ok            self-test/ok-2.sh
+  2 ok            self-test/ok-10.sh
 ================================================================================
 
 OK! All 3 tests have passed.
@@ -580,9 +580,9 @@ Testing file self-test/error-2.sh
 --------------------------------------------------------------------------------
 
 ================================================================================
- 1 ok           self-test/ok-1.sh
- 0 ok           self-test/ok-2.sh
- 0 ok,  1 fail  self-test/error-2.sh
+  1 ok            self-test/ok-1.sh
+  0 ok            self-test/ok-2.sh
+  0 ok,   1 fail  self-test/error-2.sh
 ================================================================================
 
 FAIL: 1 of 2 tests have failed.
@@ -592,9 +592,9 @@ Testing file self-test/ok-2.sh
 Testing file self-test/error-2.sh
 
 ================================================================================
- 1 ok           self-test/ok-1.sh
- 0 ok           self-test/ok-2.sh
- 0 ok           self-test/error-2.sh
+  1 ok            self-test/ok-1.sh
+  0 ok            self-test/ok-2.sh
+  0 ok            self-test/error-2.sh
 ================================================================================
 
 OK! The single test has passed.
@@ -801,8 +801,8 @@ Testing file self-test/cd.sh
 Testing file self-test/ok-2.sh
 
 ================================================================================
- 1 ok           self-test/cd.sh
- 2 ok           self-test/ok-2.sh
+  1 ok            self-test/cd.sh
+  2 ok            self-test/ok-2.sh
 ================================================================================
 
 OK! All 3 tests have passed.

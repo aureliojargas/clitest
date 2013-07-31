@@ -582,9 +582,9 @@ do
 	nr_file_ok=$(($nr_file_tests - $nr_file_errors))
 	if test $nr_file_errors -eq 0
 	then
-		msg=$(printf '%2d ok           %s' $nr_file_ok "$test_file")
+		msg=$(printf '%3d ok            %s' $nr_file_ok "$test_file")
 	else
-		msg=$(printf '%2d ok, %2d fail  %s' $nr_file_ok $nr_file_errors "$test_file")
+		msg=$(printf '%3d ok, %3d fail  %s' $nr_file_ok $nr_file_errors "$test_file")
 	fi
 
 	# Append file stats to global holder
