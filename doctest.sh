@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # doctest.sh - Automatic tests for shell script command lines
 #              https://github.com/aureliojargas/doctest.sh
 # License: MIT
