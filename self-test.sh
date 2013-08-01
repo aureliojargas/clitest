@@ -796,7 +796,9 @@ $ ./doctest.sh --no-color self-test/special-chars.sh
 YOU WIN! PERFECT! All 206 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/windows.sh
 =======[1] echo "a file with CRLF line ending"
-OK! The single test has passed.
+=======[2] echo "inline output"  
+=======[3] echo "inline regex"  
+OK! All 3 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/close-command.sh
 =======[1] echo 1
 =======[2] echo 2
