@@ -130,6 +130,13 @@ then
 	color_off=$(  printf '\033[m')
 fi
 
+# Find the terminal width
+# The COLUMNS env var is set by Bash (must be exported in ~/.bashrc).
+# In other shells, try to use tput cols (not POSIX).
+# If not, defaults to 50 columns, a conservative amount.
+: ${COLUMNS:=$(tput cols 2> /dev/null)}
+: ${COLUMNS:=50}
+
 # Utilities, prefixed by _ to avoid overwriting command names
 _clean_up ()
 {
@@ -152,10 +159,7 @@ _debug ()
 }
 _separator_line ()
 {
-	# Occupy the full terminal width if the $COLUMNS environment
-	# variable is available (it needs to be exported in ~/.bashrc).
-	# If not, defaults to 50 columns, a conservative amount.
-	printf "%${COLUMNS:-50}s" ' ' | tr ' ' -
+	printf "%${COLUMNS}s" ' ' | tr ' ' -
 }
 _list_line ()  # $1=command $2=ok|fail
 {
