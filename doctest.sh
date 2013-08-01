@@ -87,6 +87,7 @@ do
 		--prefix       ) shift; prefix="$1"; shift ;;
 		-V|--version   ) printf '%s\n' "$my_name $my_version"; exit 0 ;;
 		-h|--help      ) printf '%s\n' "$my_help"; exit 0 ;;
+		--) shift; break ;;
 		*) break ;;
 	esac
 done

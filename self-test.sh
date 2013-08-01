@@ -740,6 +740,12 @@ $ ./doctest.sh --no-color --verbose --prefix tab self-test/option-prefix-tab.sh
 OK! All 6 tests have passed.
 $
 
+# Options terminator -- 
+
+$ ./doctest.sh -n 99 -- --quiet
+doctest.sh: Error: cannot read input file: --quiet
+$
+
 # I/O, file reading
 
 $ ./doctest.sh XxnotfoundXX.sh
