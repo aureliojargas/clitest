@@ -59,7 +59,11 @@ test_range=''
 separator_line_shown=0
 files_stat_message=''
 original_dir=$(pwd)
-match_method=''
+test_command=
+match_method=
+inline_text=
+exit_code=2
+diff=
 ok_file="$temp_dir/ok.txt"
 test_output_file="$temp_dir/output.txt"
 temp_file="$temp_dir/temp.txt"
@@ -262,21 +266,14 @@ _parse_range ()
 	test $numbers != ':' && test_range=$numbers
 	return 0
 }
-_run_test ()  # $1=command [$2=inline_text]
+_run_test ()
 {
-	# If inline_text is not informed, we'll get it from $ok_file
-
-	local diff
-	local exit_code
-	local output_text
-	local cmd="$1"
-	local inline_text="$2"
-
 	test_number=$(($test_number + 1))
 
 	# Test range on: skip this test if it's not listed in $test_range
 	if test -n "$test_range" && test "$test_range" = "${test_range#*:$test_number:}"
 	then
+		test_command=
 		return 0
 	fi
 
@@ -286,20 +283,23 @@ _run_test ()  # $1=command [$2=inline_text]
 	# List mode: just show the command and return (no execution)
 	if test $list_mode -eq 1
 	then
-		_list_line "$cmd"
+		_list_line "$test_command"
+		test_command=
 		return 0
 	fi
 
 	# Verbose mode: show the command that will be tested
 	if test $verbose -eq 1
 	then
-		_message "${color_cyan}=======[$test_number] $cmd${color_off}"
+		_message "${color_cyan}=======[$test_number] $test_command${color_off}"
 	fi
 
-	#_debug "[ EVAL  ] $cmd"
+	#_debug "[ EVAL  ] $test_command"
 
 	# Execute the test command, saving output (STDOUT and STDERR)
-	eval "$cmd" > "$test_output_file" 2>&1
+	eval "$test_command" > "$test_output_file" 2>&1
+	diff=
+	exit_code=2
 
 	#_debug "[OUTPUT ] $(cat "$test_output_file")"
 
@@ -357,14 +357,14 @@ _run_test ()  # $1=command [$2=inline_text]
 		if test $list_run -eq 1
 		then
 			# List mode
-			_list_line "$cmd" fail
+			_list_line "$test_command" fail
 		else
 			# Normal mode: show FAILED message and the diff
 			if test $separator_line_shown -eq 0  # avoid dups
 			then
 				_message "${color_red}$(_separator_line)${color_off}"
 			fi
-			_message "${color_red}[FAILED #$test_number] $cmd${color_off}"
+			_message "${color_red}[FAILED #$test_number] $test_command${color_off}"
 			test $quiet -eq 1 || printf '%s\n' "$diff" | sed '1,2 d'  # no +++/--- headers
 			_message "${color_red}$(_separator_line)${color_off}"
 			separator_line_shown=1
@@ -379,14 +379,15 @@ _run_test ()  # $1=command [$2=inline_text]
 
 	# Test OK
 	else
-		test $list_run -eq 1 && _list_line "$cmd" ok
+		test $list_run -eq 1 && _list_line "$test_command" ok
 	fi
+
+	# Reset current command holder
+	test_command=
 }
 _process_test_file ()  # $1=filename
 {
-	local test_command
 	local file="$1"
-	local inline_text
 
 	# reset globals
 	nr_file_tests=0
@@ -406,10 +407,7 @@ _process_test_file ()  # $1=filename
 				#_debug "[ CLOSE ] $input_line"
 
 				# Run pending tests
-				test -n "$test_command" && _run_test "$test_command"
-
-				# Reset current command holder
-				test_command=
+				test -n "$test_command" && _run_test
 			;;
 
 			# This line is a command line to be tested
@@ -417,7 +415,7 @@ _process_test_file ()  # $1=filename
 				#_debug "[CMDLINE] $input_line"
 
 				# Run pending tests
-				test -n "$test_command" && _run_test "$test_command"
+				test -n "$test_command" && _run_test
 
 				# Remove the prompt
 				test_command="${input_line#$prefix$prompt}"
@@ -458,10 +456,7 @@ _process_test_file ()  # $1=filename
 					fi
 
 					# Save the output and run test
-					_run_test "$test_command" "$inline_text"
-
-					# Reset current command holder, since we're done
-					test_command=
+					_run_test
 				else
 					# It's a normal command line, output begins in next line
 					match_method='output'
@@ -485,9 +480,8 @@ _process_test_file ()  # $1=filename
 				then
 					#_debug "[BLOKOUT] $input_line"
 
-					# Run the pending test and reset
-					_run_test "$test_command"
-					test_command=
+					# Run the pending test
+					_run_test
 				fi
 
 				# This line is a test output, save it (without prefix)
@@ -501,7 +495,7 @@ _process_test_file ()  # $1=filename
 	#_debug "[LOOPOUT] test_command: $test_command"
 
 	# Run pending tests
-	test -n "$test_command" && _run_test "$test_command"
+	test -n "$test_command" && _run_test
 }
 
 
