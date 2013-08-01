@@ -638,13 +638,18 @@ $ ./doctest.sh --no-color self-test/option-diff-options.sh
 --------------------------------------------------------------------------------
 [FAILED #1] echo "	diff -w to ignore spaces    "
 @@ -1 +1 @@
--diff -w    to ignore     spaces
+-diff -w    to ignore    spaces
 +	diff -w to ignore spaces    
 --------------------------------------------------------------------------------
+[FAILED #2] echo "	diff -w now inline    "  
+@@ -1 +1 @@
+-diff    -w    now    inline
++	diff -w now inline    
+--------------------------------------------------------------------------------
 
-FAIL: The single test has failed.
+COMPLETE FAIL! All 2 tests have failed.
 $ ./doctest.sh --no-color --diff-options '-u -w' self-test/option-diff-options.sh
-OK! The single test has passed.
+OK! All 2 tests have passed.
 $
 
 # Option --prompt
