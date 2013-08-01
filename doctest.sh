@@ -12,7 +12,7 @@
 my_name="$(basename "$0")"
 my_version='dev'
 my_help="\
-Usage: $my_name [OPTIONS] <FILES>
+Usage: $my_name [options] <file ...>
 
 Options:
   -1, --abort                 Abort the tests on the first error
