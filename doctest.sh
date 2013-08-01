@@ -37,7 +37,7 @@ user_range=''
 temp_dir="${TMPDIR:-/tmp}/doctest.$$"
 # Note: using temporary files for compatibility, since <(...) is not portable.
 
-# Flags (0=off, 1=on), may be altered by command line options
+# Flags (0=off, 1=on), some may be altered by command line options
 debug=0
 quiet=0
 verbose=0
@@ -45,6 +45,7 @@ list_mode=0
 list_run=0
 use_colors=1
 stop_on_first_error=0
+separator_line_shown=0
 
 # Do not change these vars
 test_number=0
@@ -54,7 +55,6 @@ nr_total_tests=0      # count only executed (not skipped with -n) tests
 nr_total_errors=0
 nr_file_tests=0       # count only executed (not skipped with -n) tests
 nr_file_errors=0
-separator_line_shown=0
 files_stat_message=''
 original_dir=$(pwd)
 tests_range=
