@@ -59,6 +59,7 @@ test_range=''
 separator_line_shown=0
 files_stat_message=''
 original_dir=$(pwd)
+match_method=''
 ok_file="$temp_dir/ok.txt"
 test_output_file="$temp_dir/output.txt"
 temp_file="$temp_dir/temp.txt"
@@ -261,17 +262,15 @@ _parse_range ()
 	test $numbers != ':' && test_range=$numbers
 	return 0
 }
-_run_test ()  # $1=command [$2=ok_text] [$3=match_method]
+_run_test ()  # $1=command [$2=inline_text]
 {
-	# If ok_text is not informed, we'll get it from $ok_file
+	# If inline_text is not informed, we'll get it from $ok_file
 
 	local diff
 	local exit_code
 	local output_text
-	local output_mode
 	local cmd="$1"
-	local ok_text="$2"
-	local match_method="$3"
+	local inline_text="$2"
 
 	test_number=$(($test_number + 1))
 
@@ -299,75 +298,54 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 
 	#_debug "[ EVAL  ] $cmd"
 
-	# To execute the test command and compare the results, we can use
-	# files (slow, trustable) or variables (quick, hacky). Variables
-	# are the preferred way for inline output with #→, unless you're
-	# inlining a file name with '#→ --file ...'.
-	if test -z "$match_method" || test "$match_method" = 'file'
-	then
-		output_mode='file'
-	else
-		output_mode='var'
-	fi
-
 	# Execute the test command, saving output (STDOUT and STDERR)
-	if test "$output_mode" = 'file'
-	then
-		eval "$cmd" > "$test_output_file" 2>&1
+	eval "$cmd" > "$test_output_file" 2>&1
 
-		#_debug "[OUTPUT ] $(cat "$test_output_file")"		
-	else
-		output_text="$(eval "$cmd" 2>&1; printf x)"
-		output_text=${output_text%x}
-
-		# Note: The 'print x' trick is to avoid losing the \n's
-		#       at the output's end when using $(...)
-
-		#_debug "[OUTPUT ] $output_text"
-	fi
+	#_debug "[OUTPUT ] $(cat "$test_output_file")"
 
 	# The command output matches the expected output?
 	case $match_method in
 		text)
 			# Inline OK text represents a full line, with \n
-			ok_text="$ok_text$nl"
+			printf '%s\n' "$inline_text" > "$ok_file"
 
-			test "$output_text" = "$ok_text"
+			diff=$(diff $diff_options "$ok_file" "$test_output_file")
 			exit_code=$?
 		;;
 		regex)
-			printf %s "$output_text" | egrep "$ok_text" > /dev/null
+			egrep "$inline_text" "$test_output_file" > /dev/null
 			exit_code=$?
 
+			# Failed, now we need a real file to make the diff
+			if test $exit_code -eq 1
+			then
+				printf %s "$inline_text" > "$ok_file"
+				diff=$(diff $diff_options "$ok_file" "$test_output_file")
+
 			# Regex errors are common and user must take action to fix them
-			if test $exit_code -eq 2
+			elif test $exit_code -eq 2
 			then
 				_error "egrep: check your inline regex at line $line_number of $test_file"
 			fi
 		;;
 		file)
 			# Abort when ok file not found/readable
-			if test ! -f "$ok_text" || test ! -r "$ok_text"
+			if test ! -f "$inline_text" || test ! -r "$inline_text"
 			then
-				_error "cannot read inline output file '$ok_text', from line $line_number of $test_file"
+				_error "cannot read inline output file '$inline_text', from line $line_number of $test_file"
 			fi
 
-			diff=$(diff $diff_options "$ok_text" "$test_output_file")
+			diff=$(diff $diff_options "$inline_text" "$test_output_file")
 			exit_code=$?
 		;;
-		*)
+		output)
 			diff=$(diff $diff_options "$ok_file" "$test_output_file")
 			exit_code=$?
 		;;
+		*)
+			_error "unknown match method '$match_method'"
+		;;
 	esac
-
-	# If the var test failed, we'll have to run diff using real files
-	if test $exit_code -ne 0 && test "$output_mode" = 'var'
-	then
-		printf %s "$output_text" > "$test_output_file"
-		printf %s "$ok_text" > "$ok_file"
-		diff=$(diff $diff_options "$ok_file" "$test_output_file")
-	fi
 
 	# Test failed :(
 	if test $exit_code -ne 0
@@ -407,9 +385,8 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 _process_test_file ()  # $1=filename
 {
 	local test_command
-	local ok_text
-	local match_method
 	local file="$1"
+	local inline_text
 
 	# reset globals
 	nr_file_tests=0
@@ -450,23 +427,23 @@ _process_test_file ()  # $1=filename
 				then
 					# Separate command from inline output
 					test_command="${test_command%$inline_prefix*}"
-					ok_text="${input_line##*$inline_prefix}"
+					inline_text="${input_line##*$inline_prefix}"
 
 					#_debug "[NEW CMD] $test_command"
-					#_debug "[OK TEXT] $ok_text$"
+					#_debug "[OK TEXT] $inline_text$"
 
 					# Maybe the OK text has options?
-					case "$ok_text" in
+					case "$inline_text" in
 						'--regex '*)
-							ok_text=${ok_text#--regex }
+							inline_text=${inline_text#--regex }
 							match_method='regex'
 						;;
 						'--file '*)
-							ok_text=${ok_text#--file }
+							inline_text=${inline_text#--file }
 							match_method='file'
 						;;
 						'--text '*)
-							ok_text=${ok_text#--text }
+							inline_text=${inline_text#--text }
 							match_method='text'
 						;;
 						*)
@@ -475,18 +452,19 @@ _process_test_file ()  # $1=filename
 					esac
 
 					# An empty inline parameter is an error user must see
-					if test -z "$ok_text" && test "$match_method" != 'text'
+					if test -z "$inline_text" && test "$match_method" != 'text'
 					then
 						_error "missing inline output $match_method at line $line_number of $test_file"
 					fi
 
 					# Save the output and run test
-					_run_test "$test_command" "$ok_text" "$match_method"
+					_run_test "$test_command" "$inline_text"
 
 					# Reset current command holder, since we're done
 					test_command=
 				else
 					# It's a normal command line, output begins in next line
+					match_method='output'
 
 					# Reset holder for the OK output
 					> "$ok_file"
