@@ -118,6 +118,17 @@ case "$prefix" in
 	;;
 esac
 
+# Set colors
+# Note: colors must be readable in dark and light backgrounds
+if test $use_colors -eq 1
+then
+	color_red=$(  printf '\033[31m')
+	color_green=$(printf '\033[32m')
+	color_blue=$( printf '\033[34m')
+	color_cyan=$( printf '\033[36m')
+	color_off=$(  printf '\033[m')
+fi
+
 # Utilities, prefixed by _ to avoid overwriting command names
 _clean_up ()
 {
@@ -125,26 +136,8 @@ _clean_up ()
 }
 _message ()
 {
-	local color_code
-
 	test $quiet -eq 1 && return
-
-	case "$1" in
-		@red  ) color_code=31; shift;;
-		@green) color_code=32; shift;;
-		@blue ) color_code=34; shift;;
-		@pink ) color_code=35; shift;;
-		@cyan ) color_code=36; shift;;
-	esac
-	# Note: colors must be readable in dark and light backgrounds
-
-	if test $use_colors -eq 1 && test -n "$color_code"
-	then
-		printf '%b%s%b\n' "\033[${color_code}m" "$*" '\033[m'
-	else
-		printf '%s\n' "$*"
-	fi
-
+	printf '%s\n' "$*"
 	separator_line_shown=0
 }
 _error ()
@@ -154,7 +147,7 @@ _error ()
 }
 _debug ()
 {
-	test $debug -eq 1 && _message @blue "$@"
+	test $debug -eq 1 && _message "${color_blue}$@${color_off}"
 }
 _separator_line ()
 {
@@ -175,7 +168,7 @@ _list_line ()  # $1=command $2=ok|fail
 			# Green line or OK stamp (--list-run)
 			if test $use_colors -eq 1
 			then
-				_message @green "${n}${tab}${cmd}"
+				_message "${color_green}${n}${tab}${cmd}${color_off}"
 			else
 				_message "${n}${tab}OK${tab}${cmd}"
 			fi
@@ -184,7 +177,7 @@ _list_line ()  # $1=command $2=ok|fail
 			# Red line or FAIL stamp (--list-run)
 			if test $use_colors -eq 1
 			then
-				_message @red "${n}${tab}${cmd}"
+				_message "${color_red}${n}${tab}${cmd}${color_off}"
 			else
 				_message "${n}${tab}FAIL${tab}${cmd}"
 			fi
@@ -295,7 +288,7 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 	# Verbose mode: show the command that will be tested
 	if test $verbose -eq 1
 	then
-		_message @cyan "=======[$test_number] $cmd"
+		_message "${color_cyan}=======[$test_number] $cmd${color_off}"
 	fi
 
 	#_debug "[ EVAL  ] $cmd"
@@ -385,11 +378,11 @@ _run_test ()  # $1=command [$2=ok_text] [$3=match_method]
 			# Normal mode: show FAILED message and the diff
 			if test $separator_line_shown -eq 0  # avoid dups
 			then
-				_message @red $(_separator_line)
+				_message "${color_red}$(_separator_line)${color_off}"
 			fi
-			_message @red "[FAILED #$test_number] $cmd"
+			_message "${color_red}[FAILED #$test_number] $cmd${color_off}"
 			test $quiet -eq 1 || printf '%s\n' "$diff" | sed '1,2 d'  # no +++/--- headers
-			_message @red $(_separator_line)
+			_message "${color_red}$(_separator_line)${color_off}"
 			separator_line_shown=1
 		fi
 
@@ -628,15 +621,15 @@ if test $nr_total_errors -eq 0
 then
 	if test $nr_total_tests -eq 1
 	then
-		_message "$(_message @green OK!) The single test has passed."
+		_message "${color_green}OK!${color_off} The single test has passed."
 	elif test $nr_total_tests -lt 50
 	then
-		_message "$(_message @green OK!) All $nr_total_tests tests have passed."
+		_message "${color_green}OK!${color_off} All $nr_total_tests tests have passed."
 	elif test $nr_total_tests -lt 100
 	then
-		_message "$(_message @green YOU WIN!) All $nr_total_tests tests have passed."
+		_message "${color_green}YOU WIN!${color_off} All $nr_total_tests tests have passed."
 	else
-		_message "$(_message @green YOU WIN! PERFECT!) All $nr_total_tests tests have passed."
+		_message "${color_green}YOU WIN! PERFECT!${color_off} All $nr_total_tests tests have passed."
 	fi
 	exit 0
 else
@@ -644,15 +637,15 @@ else
 
 	if test $nr_total_tests -eq 1
 	then
-		_message "$(_message @red FAIL:) The single test has failed."
+		_message "${color_red}FAIL:${color_off} The single test has failed."
 	elif test $nr_total_errors -eq $nr_total_tests && test $nr_total_errors -lt 50
 	then
-		_message "$(_message @red COMPLETE FAIL!) All $nr_total_tests tests have failed."
+		_message "${color_red}COMPLETE FAIL!${color_off} All $nr_total_tests tests have failed."
 	elif test $nr_total_errors -eq $nr_total_tests
 	then
-		_message "$(_message @red EPIC FAIL!) All $nr_total_tests tests have failed."
+		_message "${color_red}EPIC FAIL!${color_off} All $nr_total_tests tests have failed."
 	else
-		_message "$(_message @red FAIL:) $nr_total_errors of $nr_total_tests tests have failed."
+		_message "${color_red}FAIL:${color_off} $nr_total_errors of $nr_total_tests tests have failed."
 	fi
 	exit 1
 fi
