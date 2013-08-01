@@ -54,16 +54,16 @@ nr_total_tests=0      # count only executed (not skipped with -n) tests
 nr_total_errors=0
 nr_file_tests=0       # count only executed (not skipped with -n) tests
 nr_file_errors=0
-test_range=''
 separator_line_shown=0
 files_stat_message=''
 original_dir=$(pwd)
+tests_range=
 test_command=
-match_method=
-inline_text=
-exit_code=2
-diff=
-ok_file="$temp_dir/ok.txt"
+test_inline=
+test_mode=
+test_status=2
+test_diff=
+test_ok_file="$temp_dir/ok.txt"
 test_output_file="$temp_dir/output.txt"
 temp_file="$temp_dir/temp.txt"
 
@@ -200,7 +200,7 @@ _list_line ()  # $1=command $2=ok|fail
 }
 _parse_range ()
 {
-	# Parse -n, --number ranges and save results to $test_range
+	# Parse -n, --number ranges and save results to $tests_range
 	#
 	#     Supported formats            Parsed
 	#     ------------------------------------------------------
@@ -262,15 +262,15 @@ _parse_range ()
 	done
 
 	# Save parsed range
-	test $numbers != ':' && test_range=$numbers
+	test $numbers != ':' && tests_range=$numbers
 	return 0
 }
 _run_test ()
 {
 	test_number=$(($test_number + 1))
 
-	# Test range on: skip this test if it's not listed in $test_range
-	if test -n "$test_range" && test "$test_range" = "${test_range#*:$test_number:}"
+	# Test range on: skip this test if it's not listed in $tests_range
+	if test -n "$tests_range" && test "$tests_range" = "${tests_range#*:$test_number:}"
 	then
 		test_command=
 		return 0
@@ -297,57 +297,57 @@ _run_test ()
 
 	# Execute the test command, saving output (STDOUT and STDERR)
 	eval "$test_command" > "$test_output_file" 2>&1
-	diff=
-	exit_code=2
+	test_diff=
+	test_status=2
 
 	#_debug "[OUTPUT ] $(cat "$test_output_file")"
 
 	# The command output matches the expected output?
-	case $match_method in
+	case $test_mode in
 		text)
 			# Inline OK text represents a full line, with \n
-			printf '%s\n' "$inline_text" > "$ok_file"
+			printf '%s\n' "$test_inline" > "$test_ok_file"
 
-			diff=$(diff $diff_options "$ok_file" "$test_output_file")
-			exit_code=$?
+			test_diff=$(diff $diff_options "$test_ok_file" "$test_output_file")
+			test_status=$?
 		;;
 		regex)
-			egrep "$inline_text" "$test_output_file" > /dev/null
-			exit_code=$?
+			egrep "$test_inline" "$test_output_file" > /dev/null
+			test_status=$?
 
 			# Failed, now we need a real file to make the diff
-			if test $exit_code -eq 1
+			if test $test_status -eq 1
 			then
-				printf %s "$inline_text" > "$ok_file"
-				diff=$(diff $diff_options "$ok_file" "$test_output_file")
+				printf %s "$test_inline" > "$test_ok_file"
+				test_diff=$(diff $diff_options "$test_ok_file" "$test_output_file")
 
 			# Regex errors are common and user must take action to fix them
-			elif test $exit_code -eq 2
+			elif test $test_status -eq 2
 			then
 				_error "egrep: check your inline regex at line $line_number of $test_file"
 			fi
 		;;
 		file)
 			# Abort when ok file not found/readable
-			if test ! -f "$inline_text" || test ! -r "$inline_text"
+			if test ! -f "$test_inline" || test ! -r "$test_inline"
 			then
-				_error "cannot read inline output file '$inline_text', from line $line_number of $test_file"
+				_error "cannot read inline output file '$test_inline', from line $line_number of $test_file"
 			fi
 
-			diff=$(diff $diff_options "$inline_text" "$test_output_file")
-			exit_code=$?
+			test_diff=$(diff $diff_options "$test_inline" "$test_output_file")
+			test_status=$?
 		;;
 		output)
-			diff=$(diff $diff_options "$ok_file" "$test_output_file")
-			exit_code=$?
+			test_diff=$(diff $diff_options "$test_ok_file" "$test_output_file")
+			test_status=$?
 		;;
 		*)
-			_error "unknown match method '$match_method'"
+			_error "unknown test mode '$test_mode'"
 		;;
 	esac
 
 	# Test failed :(
-	if test $exit_code -ne 0
+	if test $test_status -ne 0
 	then
 		nr_file_errors=$(($nr_file_errors + 1))
 		nr_total_errors=$(($nr_total_errors + 1))
@@ -364,7 +364,7 @@ _run_test ()
 				_message "${color_red}$(_separator_line)${color_off}"
 			fi
 			_message "${color_red}[FAILED #$test_number] $test_command${color_off}"
-			test $quiet -eq 1 || printf '%s\n' "$diff" | sed '1,2 d'  # no +++/--- headers
+			test $quiet -eq 1 || printf '%s\n' "$test_diff" | sed '1,2 d'  # no +++/--- headers
 			_message "${color_red}$(_separator_line)${color_off}"
 			separator_line_shown=1
 		fi
@@ -424,44 +424,44 @@ _process_test_file ()  # $1=filename
 				then
 					# Separate command from inline output
 					test_command="${test_command%$inline_prefix*}"
-					inline_text="${input_line##*$inline_prefix}"
+					test_inline="${input_line##*$inline_prefix}"
 
 					#_debug "[NEW CMD] $test_command"
-					#_debug "[OK TEXT] $inline_text$"
+					#_debug "[OK TEXT] $test_inline$"
 
 					# Maybe the OK text has options?
-					case "$inline_text" in
+					case "$test_inline" in
 						'--regex '*)
-							inline_text=${inline_text#--regex }
-							match_method='regex'
+							test_inline=${test_inline#--regex }
+							test_mode='regex'
 						;;
 						'--file '*)
-							inline_text=${inline_text#--file }
-							match_method='file'
+							test_inline=${test_inline#--file }
+							test_mode='file'
 						;;
 						'--text '*)
-							inline_text=${inline_text#--text }
-							match_method='text'
+							test_inline=${test_inline#--text }
+							test_mode='text'
 						;;
 						*)
-							match_method='text'
+							test_mode='text'
 						;;
 					esac
 
 					# An empty inline parameter is an error user must see
-					if test -z "$inline_text" && test "$match_method" != 'text'
+					if test -z "$test_inline" && test "$test_mode" != 'text'
 					then
-						_error "missing inline output $match_method at line $line_number of $test_file"
+						_error "missing inline output $test_mode at line $line_number of $test_file"
 					fi
 
 					# Save the output and run test
 					_run_test
 				else
 					# It's a normal command line, output begins in next line
-					match_method='output'
+					test_mode='output'
 
 					# Reset holder for the OK output
-					> "$ok_file"
+					> "$test_ok_file"
 
 					#_debug "[NEW CMD] $test_command"
 				fi
@@ -484,7 +484,7 @@ _process_test_file ()  # $1=filename
 				fi
 
 				# This line is a test output, save it (without prefix)
-				printf '%s\n' "${input_line#$prefix}" >> "$ok_file"
+				printf '%s\n' "${input_line#$prefix}" >> "$test_ok_file"
 
 				#_debug "[OK LINE] $input_line"
 			;;
@@ -548,7 +548,7 @@ do
 	_process_test_file "$temp_file"
 
 	# Abort when no test found
-	if test $nr_file_tests -eq 0 && test -z "$test_range"
+	if test $nr_file_tests -eq 0 && test -z "$tests_range"
 	then
 		_error "no test found in input file: $test_file"
 	fi
@@ -580,7 +580,7 @@ then
 fi
 
 # Range active, but no test matched :(
-if test $nr_total_tests -eq 0 && test -n "$test_range"
+if test $nr_total_tests -eq 0 && test -n "$tests_range"
 then
 	_error "no test found for the specified number or range '$user_range'"
 fi
