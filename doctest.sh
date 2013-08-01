@@ -34,9 +34,7 @@ prompt='$ '
 inline_prefix='#→ '
 diff_options='-u'
 user_range=''
-ok_file="${TMPDIR:-/tmp}/doctest.ok.$$.txt"
-test_output_file="${TMPDIR:-/tmp}/doctest.output.$$.txt"
-temp_file="${TMPDIR:-/tmp}/doctest.temp.$$.txt"
+temp_dir="${TMPDIR:-/tmp}/doctest.$$"
 # Note: using temporary files for compatibility, since <(...) is not portable.
 
 # Flags (0=off, 1=on), may be altered by command line options
@@ -61,6 +59,9 @@ test_range=''
 separator_line_shown=0
 files_stat_message=''
 original_dir=$(pwd)
+ok_file="$temp_dir/ok.txt"
+test_output_file="$temp_dir/output.txt"
+temp_file="$temp_dir/temp.txt"
 
 # Special useful chars
 tab='	'
@@ -120,7 +121,7 @@ esac
 # Utilities, prefixed by _ to avoid overwriting command names
 _clean_up ()
 {
-	rm -f "$ok_file" "$test_output_file" "$temp_file"
+	rm -rf "$temp_dir"
 }
 _message ()
 {
@@ -533,6 +534,8 @@ then
 	_error "invalid argument for -n or --number: $user_range"
 fi
 
+# Create temp dir, protected from others
+umask 077 && mkdir "$temp_dir" || _error "cannot create temporary dir: $temp_dir"
 
 # Loop for each input file
 while test $# -gt 0

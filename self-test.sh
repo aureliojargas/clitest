@@ -763,6 +763,17 @@ $ ./doctest.sh self-test/empty-prompts-file.sh
 doctest.sh: Error: no test found in input file: self-test/empty-prompts-file.sh
 $
 
+# Temp dir
+
+$ TMPDIR___SAVE="$TMPDIR"
+$ TMPDIR=/XXnotfoundXX
+$ export TMPDIR
+$ ./doctest.sh self-test/ok-1.sh 2>&1 | sed 's/doctest\.[0-9]*$/doctest.NNN/'
+mkdir: /XXnotfoundXX: No such file or directory
+doctest.sh: Error: cannot create temporary dir: /XXnotfoundXX/doctest.NNN
+$ TMPDIR="$TMPDIR___SAVE"
+$
+
 # Gotchas
 
 $ ./doctest.sh --no-color self-test/exit-code.sh
