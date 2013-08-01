@@ -746,6 +746,12 @@ $ ./doctest.sh -n 99 -- --quiet
 doctest.sh: Error: cannot read input file: --quiet
 $
 
+# File - meaning STDIN (no support for now)
+
+$ cat self-test/ok-1.sh | ./doctest.sh -
+doctest.sh: Error: cannot read input file: -
+$
+
 # I/O, file reading
 
 $ ./doctest.sh XxnotfoundXX.sh
