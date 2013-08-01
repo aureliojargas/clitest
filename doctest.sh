@@ -47,7 +47,6 @@ use_colors=1
 abort_on_first_error=0
 
 # Do not change these vars
-file_counter=0
 test_number=0
 line_number=0
 nr_files=0
@@ -514,7 +513,6 @@ umask 077 && mkdir "$temp_dir" || _error "cannot create temporary dir: $temp_dir
 # Loop for each input file
 while test $# -gt 0
 do
-	file_counter=$(($file_counter + 1))
 	test_file="$1"
 	shift
 
