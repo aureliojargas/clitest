@@ -526,12 +526,15 @@ _process_test_file ()  # $1=filename
 	test -n "$test_command" && _run_test "$test_command"
 }
 
+
 # Parse and validate --number option value, if informed
 _parse_range
 if test $? -eq 1
 then
 	_error "invalid argument for -n or --number: $user_range"
 fi
+
+### Real execution begins here
 
 # Create temp dir, protected from others
 umask 077 && mkdir "$temp_dir" || _error "cannot create temporary dir: $temp_dir"
