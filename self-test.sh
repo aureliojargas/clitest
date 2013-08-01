@@ -198,14 +198,14 @@ $ ./doctest.sh --no-color -1 self-test/error-2.sh
 -fail
 +ok
 --------------------------------------------------------------------------------
-$ ./doctest.sh --no-color --abort self-test/error-2.sh
+$ ./doctest.sh --no-color --first self-test/error-2.sh
 --------------------------------------------------------------------------------
 [FAILED #1] echo ok
 @@ -1 +1 @@
 -fail
 +ok
 --------------------------------------------------------------------------------
-$ ./doctest.sh --no-color --abort --verbose self-test/error-2.sh
+$ ./doctest.sh --no-color --first --verbose self-test/error-2.sh
 =======[1] echo ok
 --------------------------------------------------------------------------------
 [FAILED #1] echo ok
@@ -900,7 +900,7 @@ $
 
 # And now, the colored output tests
 
-$ ./doctest.sh --abort self-test/error-2.sh
+$ ./doctest.sh --first self-test/error-2.sh
 [31m--------------------------------------------------------------------------------[m
 [31m[FAILED #1] echo ok[m
 @@ -1 +1 @@

@@ -15,8 +15,8 @@ my_help="\
 Usage: $my_name [options] <file ...>
 
 Options:
-  -1, --abort                 Abort the tests on the first error
       --diff-options STRING   Customize options for diff (default: -u)
+  -1, --first                 Stop the tests on the first error
       --inline-prefix STRING  Set inline output prefix (default: '#→ ')
   -l, --list                  List all the tests (no execution)
   -L, --list-run              List all the tests with OK/FAIL status
@@ -44,7 +44,7 @@ verbose=0
 list_mode=0
 list_run=0
 use_colors=1
-abort_on_first_error=0
+stop_on_first_error=0
 
 # Do not change these vars
 test_number=0
@@ -80,7 +80,7 @@ do
 		-v|--verbose   ) shift; verbose=1 ;;
 		-l|--list      ) shift; list_mode=1;;
 		-L|--list-run  ) shift; list_run=1;;
-		-1|--abort     ) shift; abort_on_first_error=1 ;;
+		-1|--first     ) shift; stop_on_first_error=1 ;;
 		-n|--number    ) shift; user_range="$1"; shift ;;
 		--no-color     ) shift; use_colors=0 ;;
   		--debug        ) shift; debug=1 ;;
@@ -370,7 +370,7 @@ _run_test ()
 		fi
 
 		# Should I abort now?
-		if test $abort_on_first_error -eq 1
+		if test $stop_on_first_error -eq 1
 		then
 			_clean_up
 			exit 1
