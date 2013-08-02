@@ -31,6 +31,225 @@ $ echo $not_exported
 $ echo $not_exported  #→ 1
 $ echo $not_exported  #→ --regex ^1$
 
+# Check the temporary dir creation
+
+$ TMPDIR___SAVE="$TMPDIR"
+$ TMPDIR=/XXnotfoundXX
+$ export TMPDIR
+$ ./doctest.sh self-test/ok-1.sh 2>&1 | sed 's/doctest\.[0-9]*$/doctest.NNN/'
+mkdir: /XXnotfoundXX: No such file or directory
+doctest.sh: Error: cannot create temporary dir: /XXnotfoundXX/doctest.NNN
+$ TMPDIR="$TMPDIR___SAVE"
+$
+
+# I/O, file reading  (message and exit code)
+
+$ ./doctest.sh XxnotfoundXX.sh; echo $?
+doctest.sh: Error: cannot read input file: XxnotfoundXX.sh
+2
+$ ./doctest.sh self-test
+doctest.sh: Error: cannot read input file: self-test
+$ ./doctest.sh self-test/
+doctest.sh: Error: cannot read input file: self-test/
+$
+
+# No test found (message and exit code)
+
+$ ./doctest.sh self-test/no-test-found.sh; echo $?
+doctest.sh: Error: no test found in input file: self-test/no-test-found.sh
+2
+$ ./doctest.sh self-test/empty-file.sh
+doctest.sh: Error: no test found in input file: self-test/empty-file.sh
+$ ./doctest.sh self-test/empty-prompt-file.sh
+doctest.sh: Error: no test found in input file: self-test/empty-prompt-file.sh
+$ ./doctest.sh self-test/empty-prompts-file.sh
+doctest.sh: Error: no test found in input file: self-test/empty-prompts-file.sh
+$
+
+# Option --version
+
+$ v="$(grep ^my_version= ./doctest.sh | cut -d = -f 2 | tr -d \')"
+$ ./doctest.sh -V | grep "^doctest.sh ${v}$" > /dev/null; echo $?
+0
+$ ./doctest.sh --version | grep "^doctest.sh ${v}$" > /dev/null; echo $?
+0
+$
+
+# Option --help
+
+$ ./doctest.sh | sed -n '1p; $p'
+Usage: doctest.sh [options] <file ...>
+  -V, --version               Show program version and exit
+$ ./doctest.sh -h | sed -n '1p; $p'
+Usage: doctest.sh [options] <file ...>
+  -V, --version               Show program version and exit
+$ ./doctest.sh --help | sed -n '1p; $p'
+Usage: doctest.sh [options] <file ...>
+  -V, --version               Show program version and exit
+$
+
+# Option --quiet and exit code
+
+$ ./doctest.sh -q self-test/ok-2.sh; echo $?
+0
+$ ./doctest.sh --quiet self-test/ok-2.sh; echo $?
+0
+$ ./doctest.sh --quiet self-test/ok-2.sh self-test/ok-2.sh; echo $?
+0
+$ ./doctest.sh --quiet self-test/error-2.sh; echo $?
+1
+$ ./doctest.sh --quiet self-test/error-2.sh self-test/error-2.sh; echo $?
+1
+$ ./doctest.sh --quiet self-test/ok-2.sh self-test/error-2.sh; echo $?
+1
+$ ./doctest.sh --quiet --verbose self-test/ok-2.sh
+$ ./doctest.sh --quiet --verbose self-test/error-2.sh
+$ ./doctest.sh --quiet --verbose self-test/ok-2.sh self-test/ok-2.sh
+$ ./doctest.sh --quiet --verbose self-test/ok-2.sh self-test/error-2.sh
+$ ./doctest.sh --quiet --debug self-test/ok-2.sh
+$ ./doctest.sh --quiet --debug self-test/error-2.sh
+$ ./doctest.sh --quiet --debug self-test/ok-2.sh self-test/ok-2.sh
+$ ./doctest.sh --quiet --debug self-test/ok-2.sh self-test/error-2.sh
+$
+
+# Option --list
+
+$ ./doctest.sh -l self-test/no-nl-command.sh; echo $?
+1	echo 'ok'
+2	printf 'ok\n'
+3	echo -n 'error'
+4	printf 'error'
+5	printf 'ok\nok\nerror'
+6	echo 'ok'        
+7	printf 'ok\n'    
+8	echo -n 'error'  
+9	printf 'error'   
+10	echo -n 'ok'; echo  
+11	printf 'ok'; echo   
+0
+$ ./doctest.sh --list self-test/no-nl-command.sh
+1	echo 'ok'
+2	printf 'ok\n'
+3	echo -n 'error'
+4	printf 'error'
+5	printf 'ok\nok\nerror'
+6	echo 'ok'        
+7	printf 'ok\n'    
+8	echo -n 'error'  
+9	printf 'error'   
+10	echo -n 'ok'; echo  
+11	printf 'ok'; echo   
+$ ./doctest.sh --list self-test/no-nl-command.sh self-test/ok-1.sh; echo $?
+---------------------------------------- self-test/no-nl-command.sh
+1	echo 'ok'
+2	printf 'ok\n'
+3	echo -n 'error'
+4	printf 'error'
+5	printf 'ok\nok\nerror'
+6	echo 'ok'        
+7	printf 'ok\n'    
+8	echo -n 'error'  
+9	printf 'error'   
+10	echo -n 'ok'; echo  
+11	printf 'ok'; echo   
+---------------------------------------- self-test/ok-1.sh
+12	echo ok
+0
+$
+
+# Option --list-run
+
+$ ./doctest.sh --list-run self-test/no-nl-command.sh; echo $?
+[32m1	echo 'ok'[m
+[32m2	printf 'ok\n'[m
+[31m3	echo -n 'error'[m
+[31m4	printf 'error'[m
+[31m5	printf 'ok\nok\nerror'[m
+[32m6	echo 'ok'        [m
+[32m7	printf 'ok\n'    [m
+[31m8	echo -n 'error'  [m
+[31m9	printf 'error'   [m
+[32m10	echo -n 'ok'; echo  [m
+[32m11	printf 'ok'; echo   [m
+1
+$ ./doctest.sh --list-run --no-color self-test/no-nl-command.sh; echo $?
+1	OK	echo 'ok'
+2	OK	printf 'ok\n'
+3	FAIL	echo -n 'error'
+4	FAIL	printf 'error'
+5	FAIL	printf 'ok\nok\nerror'
+6	OK	echo 'ok'        
+7	OK	printf 'ok\n'    
+8	FAIL	echo -n 'error'  
+9	FAIL	printf 'error'   
+10	OK	echo -n 'ok'; echo  
+11	OK	printf 'ok'; echo   
+1
+$ ./doctest.sh -L --no-color self-test/no-nl-command.sh
+1	OK	echo 'ok'
+2	OK	printf 'ok\n'
+3	FAIL	echo -n 'error'
+4	FAIL	printf 'error'
+5	FAIL	printf 'ok\nok\nerror'
+6	OK	echo 'ok'        
+7	OK	printf 'ok\n'    
+8	FAIL	echo -n 'error'  
+9	FAIL	printf 'error'   
+10	OK	echo -n 'ok'; echo  
+11	OK	printf 'ok'; echo   
+$ ./doctest.sh -L --no-color self-test/no-nl-command.sh self-test/ok-1.sh; echo $?
+---------------------------------------- self-test/no-nl-command.sh
+1	OK	echo 'ok'
+2	OK	printf 'ok\n'
+3	FAIL	echo -n 'error'
+4	FAIL	printf 'error'
+5	FAIL	printf 'ok\nok\nerror'
+6	OK	echo 'ok'        
+7	OK	printf 'ok\n'    
+8	FAIL	echo -n 'error'  
+9	FAIL	printf 'error'   
+10	OK	echo -n 'ok'; echo  
+11	OK	printf 'ok'; echo   
+---------------------------------------- self-test/ok-1.sh
+12	OK	echo ok
+1
+$ ./doctest.sh -L --no-color self-test/ok-1.sh; echo $?
+1	OK	echo ok
+0
+$
+
+# Option --number with --list and --list-run
+
+$ ./doctest.sh --no-color --list -n 3,5-7 self-test/ok-10.sh
+3	echo 3 
+5	echo 5 
+6	echo 6 
+7	echo 7 
+$ ./doctest.sh --no-color --list-run -n 3,5-7 self-test/ok-10.sh
+3	OK	echo 3 
+5	OK	echo 5 
+6	OK	echo 6 
+7	OK	echo 7 
+$ ./doctest.sh --no-color --list -n 1,3,5-7 self-test/ok-1.sh self-test/error-2.sh self-test/ok-10.sh
+---------------------------------------- self-test/ok-1.sh
+1	echo ok
+---------------------------------------- self-test/error-2.sh
+3	echo ok  
+---------------------------------------- self-test/ok-10.sh
+5	echo 2 
+6	echo 3 
+7	echo 4 
+$ ./doctest.sh --no-color --list-run -n 1,3,5-7 self-test/ok-1.sh self-test/error-2.sh self-test/ok-10.sh
+---------------------------------------- self-test/ok-1.sh
+1	OK	echo ok
+---------------------------------------- self-test/error-2.sh
+3	FAIL	echo ok  
+---------------------------------------- self-test/ok-10.sh
+5	OK	echo 2 
+6	OK	echo 3 
+7	OK	echo 4 
+$
+
 # Single file, OK
 
 $ ./doctest.sh --no-color self-test/ok-1.sh
@@ -367,158 +586,6 @@ $ ./doctest.sh self-test/inline-match-file-error-3.sh
 doctest.sh: Error: cannot read inline output file '/etc/', from line 1 of self-test/inline-match-file-error-3.sh
 $
 
-# Option --version
-
-$ v="$(grep ^my_version= ./doctest.sh | cut -d = -f 2 | tr -d \')"
-$ ./doctest.sh -V | fgrep -x "doctest.sh $v" > /dev/null; echo $?
-0
-$ ./doctest.sh --version | fgrep -x "doctest.sh $v" > /dev/null; echo $?
-0
-$
-
-# Option --help
-
-$ ./doctest.sh | sed -n '1p; $p'
-Usage: doctest.sh [options] <file ...>
-  -V, --version               Show program version and exit
-$ ./doctest.sh -h | sed -n '1p; $p'
-Usage: doctest.sh [options] <file ...>
-  -V, --version               Show program version and exit
-$ ./doctest.sh --help | sed -n '1p; $p'
-Usage: doctest.sh [options] <file ...>
-  -V, --version               Show program version and exit
-$
-
-# Option --quiet and exit code
-
-$ ./doctest.sh -q self-test/ok-2.sh; echo $?
-0
-$ ./doctest.sh --quiet self-test/ok-2.sh; echo $?
-0
-$ ./doctest.sh --quiet self-test/ok-2.sh self-test/ok-2.sh; echo $?
-0
-$ ./doctest.sh --quiet self-test/error-2.sh; echo $?
-1
-$ ./doctest.sh --quiet self-test/error-2.sh self-test/error-2.sh; echo $?
-1
-$ ./doctest.sh --quiet self-test/ok-2.sh self-test/error-2.sh; echo $?
-1
-$ ./doctest.sh --quiet --verbose self-test/ok-2.sh
-$ ./doctest.sh --quiet --verbose self-test/error-2.sh
-$ ./doctest.sh --quiet --verbose self-test/ok-2.sh self-test/ok-2.sh
-$ ./doctest.sh --quiet --verbose self-test/ok-2.sh self-test/error-2.sh
-$ ./doctest.sh --quiet --debug self-test/ok-2.sh
-$ ./doctest.sh --quiet --debug self-test/error-2.sh
-$ ./doctest.sh --quiet --debug self-test/ok-2.sh self-test/ok-2.sh
-$ ./doctest.sh --quiet --debug self-test/ok-2.sh self-test/error-2.sh
-$
-
-# Option --list
-
-$ ./doctest.sh -l self-test/no-nl-command.sh; echo $?
-1	echo 'ok'
-2	printf 'ok\n'
-3	echo -n 'error'
-4	printf 'error'
-5	printf 'ok\nok\nerror'
-6	echo 'ok'        
-7	printf 'ok\n'    
-8	echo -n 'error'  
-9	printf 'error'   
-10	echo -n 'ok'; echo  
-11	printf 'ok'; echo   
-0
-$ ./doctest.sh --list self-test/no-nl-command.sh
-1	echo 'ok'
-2	printf 'ok\n'
-3	echo -n 'error'
-4	printf 'error'
-5	printf 'ok\nok\nerror'
-6	echo 'ok'        
-7	printf 'ok\n'    
-8	echo -n 'error'  
-9	printf 'error'   
-10	echo -n 'ok'; echo  
-11	printf 'ok'; echo   
-$ ./doctest.sh --list self-test/no-nl-command.sh self-test/ok-1.sh; echo $?
----------------------------------------- self-test/no-nl-command.sh
-1	echo 'ok'
-2	printf 'ok\n'
-3	echo -n 'error'
-4	printf 'error'
-5	printf 'ok\nok\nerror'
-6	echo 'ok'        
-7	printf 'ok\n'    
-8	echo -n 'error'  
-9	printf 'error'   
-10	echo -n 'ok'; echo  
-11	printf 'ok'; echo   
----------------------------------------- self-test/ok-1.sh
-12	echo ok
-0
-$
-
-# Option --list-run
-
-$ ./doctest.sh --list-run self-test/no-nl-command.sh; echo $?
-[32m1	echo 'ok'[m
-[32m2	printf 'ok\n'[m
-[31m3	echo -n 'error'[m
-[31m4	printf 'error'[m
-[31m5	printf 'ok\nok\nerror'[m
-[32m6	echo 'ok'        [m
-[32m7	printf 'ok\n'    [m
-[31m8	echo -n 'error'  [m
-[31m9	printf 'error'   [m
-[32m10	echo -n 'ok'; echo  [m
-[32m11	printf 'ok'; echo   [m
-1
-$ ./doctest.sh --list-run --no-color self-test/no-nl-command.sh; echo $?
-1	OK	echo 'ok'
-2	OK	printf 'ok\n'
-3	FAIL	echo -n 'error'
-4	FAIL	printf 'error'
-5	FAIL	printf 'ok\nok\nerror'
-6	OK	echo 'ok'        
-7	OK	printf 'ok\n'    
-8	FAIL	echo -n 'error'  
-9	FAIL	printf 'error'   
-10	OK	echo -n 'ok'; echo  
-11	OK	printf 'ok'; echo   
-1
-$ ./doctest.sh -L --no-color self-test/no-nl-command.sh
-1	OK	echo 'ok'
-2	OK	printf 'ok\n'
-3	FAIL	echo -n 'error'
-4	FAIL	printf 'error'
-5	FAIL	printf 'ok\nok\nerror'
-6	OK	echo 'ok'        
-7	OK	printf 'ok\n'    
-8	FAIL	echo -n 'error'  
-9	FAIL	printf 'error'   
-10	OK	echo -n 'ok'; echo  
-11	OK	printf 'ok'; echo   
-$ ./doctest.sh -L --no-color self-test/no-nl-command.sh self-test/ok-1.sh; echo $?
----------------------------------------- self-test/no-nl-command.sh
-1	OK	echo 'ok'
-2	OK	printf 'ok\n'
-3	FAIL	echo -n 'error'
-4	FAIL	printf 'error'
-5	FAIL	printf 'ok\nok\nerror'
-6	OK	echo 'ok'        
-7	OK	printf 'ok\n'    
-8	FAIL	echo -n 'error'  
-9	FAIL	printf 'error'   
-10	OK	echo -n 'ok'; echo  
-11	OK	printf 'ok'; echo   
----------------------------------------- self-test/ok-1.sh
-12	OK	echo ok
-1
-$ ./doctest.sh -L --no-color self-test/ok-1.sh; echo $?
-1	OK	echo ok
-0
-$
-
 # Option -n, --number
 
 $ ./doctest.sh -n - self-test/ok-2.sh
@@ -609,38 +676,6 @@ Testing file self-test/error-2.sh
 ================================================================================
 
 OK! The single test has passed.
-$
-
-# Option --number with --list and --list-run
-
-$ ./doctest.sh --no-color --list -n 3,5-7 self-test/ok-10.sh
-3	echo 3 
-5	echo 5 
-6	echo 6 
-7	echo 7 
-$ ./doctest.sh --no-color --list-run -n 3,5-7 self-test/ok-10.sh
-3	OK	echo 3 
-5	OK	echo 5 
-6	OK	echo 6 
-7	OK	echo 7 
-$ ./doctest.sh --no-color --list -n 1,3,5-7 self-test/ok-1.sh self-test/error-2.sh self-test/ok-10.sh
----------------------------------------- self-test/ok-1.sh
-1	echo ok
----------------------------------------- self-test/error-2.sh
-3	echo ok  
----------------------------------------- self-test/ok-10.sh
-5	echo 2 
-6	echo 3 
-7	echo 4 
-$ ./doctest.sh --no-color --list-run -n 1,3,5-7 self-test/ok-1.sh self-test/error-2.sh self-test/ok-10.sh
----------------------------------------- self-test/ok-1.sh
-1	OK	echo ok
----------------------------------------- self-test/error-2.sh
-3	FAIL	echo ok  
----------------------------------------- self-test/ok-10.sh
-5	OK	echo 2 
-6	OK	echo 3 
-7	OK	echo 4 
 $
 
 # Option --diff-options
@@ -766,40 +801,6 @@ $
 
 $ cat self-test/ok-1.sh | ./doctest.sh -
 doctest.sh: Error: cannot read input file: -
-$
-
-# I/O, file reading
-
-$ ./doctest.sh XxnotfoundXX.sh
-doctest.sh: Error: cannot read input file: XxnotfoundXX.sh
-$ ./doctest.sh self-test
-doctest.sh: Error: cannot read input file: self-test
-$ ./doctest.sh self-test/
-doctest.sh: Error: cannot read input file: self-test/
-$
-
-# No test found (message and exit code)
-
-$ ./doctest.sh self-test/no-test-found.sh; echo $?
-doctest.sh: Error: no test found in input file: self-test/no-test-found.sh
-2
-$ ./doctest.sh self-test/empty-file.sh
-doctest.sh: Error: no test found in input file: self-test/empty-file.sh
-$ ./doctest.sh self-test/empty-prompt-file.sh
-doctest.sh: Error: no test found in input file: self-test/empty-prompt-file.sh
-$ ./doctest.sh self-test/empty-prompts-file.sh
-doctest.sh: Error: no test found in input file: self-test/empty-prompts-file.sh
-$
-
-# Temp dir
-
-$ TMPDIR___SAVE="$TMPDIR"
-$ TMPDIR=/XXnotfoundXX
-$ export TMPDIR
-$ ./doctest.sh self-test/ok-1.sh 2>&1 | sed 's/doctest\.[0-9]*$/doctest.NNN/'
-mkdir: /XXnotfoundXX: No such file or directory
-doctest.sh: Error: cannot create temporary dir: /XXnotfoundXX/doctest.NNN
-$ TMPDIR="$TMPDIR___SAVE"
 $
 
 # Gotchas
