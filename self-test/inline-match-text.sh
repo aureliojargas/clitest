@@ -59,14 +59,11 @@ $ printf ' \t  \t\t   \n'       #→
 # As seen in all these examples, the final \n is implied.
 # You can't match lines with no \n.
 
-$ echo 'ok'                     #→ ok
 $ printf 'ok\n'                 #→ ok
-$ echo -n 'fail'                #→ fail
 $ printf 'fail'                 #→ fail
 
 # An easy workaround is to add an empty 'echo' at the end:
 
-$ echo -n 'ok'; echo            #→ ok
 $ printf 'ok'; echo             #→ ok
 
 # Syntax: Must be exactly one space before and after --text

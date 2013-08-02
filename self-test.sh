@@ -144,103 +144,68 @@ $
 # Option --list
 
 $ ./doctest.sh -l self-test/no-nl-command.sh; echo $?
-1	echo 'ok'
-2	printf 'ok\n'
-3	echo -n 'error'
-4	printf 'error'
-5	printf 'ok\nok\nerror'
-6	echo 'ok'        
-7	printf 'ok\n'    
-8	echo -n 'error'  
-9	printf 'error'   
-10	echo -n 'ok'; echo  
-11	printf 'ok'; echo   
+1	printf 'ok\n'
+2	printf 'error'
+3	printf 'ok\nok\nerror'
+4	printf 'ok\n'    
+5	printf 'error'   
+6	printf 'ok'; echo   
 0
 $ ./doctest.sh --list self-test/no-nl-command.sh
-1	echo 'ok'
-2	printf 'ok\n'
-3	echo -n 'error'
-4	printf 'error'
-5	printf 'ok\nok\nerror'
-6	echo 'ok'        
-7	printf 'ok\n'    
-8	echo -n 'error'  
-9	printf 'error'   
-10	echo -n 'ok'; echo  
-11	printf 'ok'; echo   
+1	printf 'ok\n'
+2	printf 'error'
+3	printf 'ok\nok\nerror'
+4	printf 'ok\n'    
+5	printf 'error'   
+6	printf 'ok'; echo   
 $ ./doctest.sh --list self-test/no-nl-command.sh self-test/ok-1.sh; echo $?
 ---------------------------------------- self-test/no-nl-command.sh
-1	echo 'ok'
-2	printf 'ok\n'
-3	echo -n 'error'
-4	printf 'error'
-5	printf 'ok\nok\nerror'
-6	echo 'ok'        
-7	printf 'ok\n'    
-8	echo -n 'error'  
-9	printf 'error'   
-10	echo -n 'ok'; echo  
-11	printf 'ok'; echo   
+1	printf 'ok\n'
+2	printf 'error'
+3	printf 'ok\nok\nerror'
+4	printf 'ok\n'    
+5	printf 'error'   
+6	printf 'ok'; echo   
 ---------------------------------------- self-test/ok-1.sh
-12	echo ok
+7	echo ok
 0
 $
 
 # Option --list-run
 
 $ ./doctest.sh --list-run self-test/no-nl-command.sh; echo $?
-[32m1	echo 'ok'[m
-[32m2	printf 'ok\n'[m
-[31m3	echo -n 'error'[m
-[31m4	printf 'error'[m
-[31m5	printf 'ok\nok\nerror'[m
-[32m6	echo 'ok'        [m
-[32m7	printf 'ok\n'    [m
-[31m8	echo -n 'error'  [m
-[31m9	printf 'error'   [m
-[32m10	echo -n 'ok'; echo  [m
-[32m11	printf 'ok'; echo   [m
+[32m1	printf 'ok\n'[m
+[31m2	printf 'error'[m
+[31m3	printf 'ok\nok\nerror'[m
+[32m4	printf 'ok\n'    [m
+[31m5	printf 'error'   [m
+[32m6	printf 'ok'; echo   [m
 1
 $ ./doctest.sh --list-run --no-color self-test/no-nl-command.sh; echo $?
-1	OK	echo 'ok'
-2	OK	printf 'ok\n'
-3	FAIL	echo -n 'error'
-4	FAIL	printf 'error'
-5	FAIL	printf 'ok\nok\nerror'
-6	OK	echo 'ok'        
-7	OK	printf 'ok\n'    
-8	FAIL	echo -n 'error'  
-9	FAIL	printf 'error'   
-10	OK	echo -n 'ok'; echo  
-11	OK	printf 'ok'; echo   
+1	OK	printf 'ok\n'
+2	FAIL	printf 'error'
+3	FAIL	printf 'ok\nok\nerror'
+4	OK	printf 'ok\n'    
+5	FAIL	printf 'error'   
+6	OK	printf 'ok'; echo   
 1
 $ ./doctest.sh -L --no-color self-test/no-nl-command.sh
-1	OK	echo 'ok'
-2	OK	printf 'ok\n'
-3	FAIL	echo -n 'error'
-4	FAIL	printf 'error'
-5	FAIL	printf 'ok\nok\nerror'
-6	OK	echo 'ok'        
-7	OK	printf 'ok\n'    
-8	FAIL	echo -n 'error'  
-9	FAIL	printf 'error'   
-10	OK	echo -n 'ok'; echo  
-11	OK	printf 'ok'; echo   
+1	OK	printf 'ok\n'
+2	FAIL	printf 'error'
+3	FAIL	printf 'ok\nok\nerror'
+4	OK	printf 'ok\n'    
+5	FAIL	printf 'error'   
+6	OK	printf 'ok'; echo   
 $ ./doctest.sh -L --no-color self-test/no-nl-command.sh self-test/ok-1.sh; echo $?
 ---------------------------------------- self-test/no-nl-command.sh
-1	OK	echo 'ok'
-2	OK	printf 'ok\n'
-3	FAIL	echo -n 'error'
-4	FAIL	printf 'error'
-5	FAIL	printf 'ok\nok\nerror'
-6	OK	echo 'ok'        
-7	OK	printf 'ok\n'    
-8	FAIL	echo -n 'error'  
-9	FAIL	printf 'error'   
-10	OK	echo -n 'ok'; echo  
-11	OK	printf 'ok'; echo   
+1	OK	printf 'ok\n'
+2	FAIL	printf 'error'
+3	FAIL	printf 'ok\nok\nerror'
+4	OK	printf 'ok\n'    
+5	FAIL	printf 'error'   
+6	OK	printf 'ok'; echo   
 ---------------------------------------- self-test/ok-1.sh
-12	OK	echo ok
+7	OK	echo ok
 1
 $ ./doctest.sh -L --no-color self-test/ok-1.sh; echo $?
 1	OK	echo ok
@@ -550,18 +515,15 @@ $ ./doctest.sh --no-color --list-run self-test/inline-match-text.sh
 29	OK	printf '\t\n'                 
 30	OK	printf '\t\t\t\n'             
 31	OK	printf ' \t  \t\t   \n'       
-32	OK	echo 'ok'                     
-33	OK	printf 'ok\n'                 
-34	FAIL	echo -n 'fail'                
-35	FAIL	printf 'fail'                 
-36	OK	echo -n 'ok'; echo            
-37	OK	printf 'ok'; echo             
-38	FAIL	echo 'fail'                   
-39	FAIL	echo 'fail'                   
-40	OK	echo ' ok'                    
-41	OK	echo '--text'                 
-42	OK	echo '--textual'              
-43	OK	echo '--text is cool'         
+32	OK	printf 'ok\n'                 
+33	FAIL	printf 'fail'                 
+34	OK	printf 'ok'; echo             
+35	FAIL	echo 'fail'                   
+36	FAIL	echo 'fail'                   
+37	OK	echo ' ok'                    
+38	OK	echo '--text'                 
+39	OK	echo '--textual'              
+40	OK	echo '--text is cool'         
 $ ./doctest.sh --no-color --list-run self-test/inline-match-regex.sh
 1	OK	echo 'abc123'                 
 2	OK	echo 'abc123'                 
@@ -583,16 +545,14 @@ $ ./doctest.sh --no-color --list-run self-test/inline-match-regex.sh
 18	FAIL	printf 'will\nfail'           
 19	FAIL	printf 'will\nfail'           
 20	OK	printf '1\n2\n3\n4\nok\n'     
-21	OK	echo 'ok'                     
-22	OK	echo -n 'ok'                  
-23	OK	printf 'ok'                   
-24	OK	printf 'ok\n'                 
-25	FAIL	echo 'fail'                   
-26	FAIL	echo 'fail'                   
-27	OK	echo ' ok'                    
-28	OK	echo '--regex'                
-29	OK	echo '--regexpal'             
-30	OK	echo '--regex is cool'        
+21	OK	printf 'ok'                   
+22	OK	printf 'ok\n'                 
+23	FAIL	echo 'fail'                   
+24	FAIL	echo 'fail'                   
+25	OK	echo ' ok'                    
+26	OK	echo '--regex'                
+27	OK	echo '--regexpal'             
+28	OK	echo '--regex is cool'        
 $ ./doctest.sh --no-color --list-run self-test/inline-match-file.sh
 1	OK	printf '$ echo ok\nok\n'      
 2	OK	echo 'ok' > /tmp/foo.txt
@@ -887,27 +847,18 @@ $ ./doctest.sh --no-color --verbose self-test/no-nl-file-3.sh
 =======[1] printf '%s\n' 'oneliner, no \n'  
 OK! The single test has passed.
 $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
-=======[1] echo 'ok'
-=======[2] printf 'ok\n'
-=======[3] echo -n 'error'
+=======[1] printf 'ok\n'
+=======[2] printf 'error'
 --------------------------------------------------------------------------------
-[FAILED #3] echo -n 'error'
+[FAILED #2] printf 'error'
 @@ -1 +1 @@
 -error
 +error
 \ No newline at end of file
 --------------------------------------------------------------------------------
-=======[4] printf 'error'
+=======[3] printf 'ok\nok\nerror'
 --------------------------------------------------------------------------------
-[FAILED #4] printf 'error'
-@@ -1 +1 @@
--error
-+error
-\ No newline at end of file
---------------------------------------------------------------------------------
-=======[5] printf 'ok\nok\nerror'
---------------------------------------------------------------------------------
-[FAILED #5] printf 'ok\nok\nerror'
+[FAILED #3] printf 'ok\nok\nerror'
 @@ -1,3 +1,3 @@
  ok
  ok
@@ -915,28 +866,18 @@ $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
 +error
 \ No newline at end of file
 --------------------------------------------------------------------------------
-=======[6] echo 'ok'        
-=======[7] printf 'ok\n'    
-=======[8] echo -n 'error'  
+=======[4] printf 'ok\n'    
+=======[5] printf 'error'   
 --------------------------------------------------------------------------------
-[FAILED #8] echo -n 'error'  
+[FAILED #5] printf 'error'   
 @@ -1 +1 @@
 -error
 +error
 \ No newline at end of file
 --------------------------------------------------------------------------------
-=======[9] printf 'error'   
---------------------------------------------------------------------------------
-[FAILED #9] printf 'error'   
-@@ -1 +1 @@
--error
-+error
-\ No newline at end of file
---------------------------------------------------------------------------------
-=======[10] echo -n 'ok'; echo  
-=======[11] printf 'ok'; echo   
+=======[6] printf 'ok'; echo   
 
-FAIL: 5 of 11 tests have failed.
+FAIL: 3 of 6 tests have failed.
 $
 
 # And now, the colored output tests
