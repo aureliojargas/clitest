@@ -265,6 +265,14 @@ _parse_range ()
 	test $numbers != ':' && tests_range=$numbers
 	return 0
 }
+_reset_test_data ()
+{
+	test_command=
+	test_inline=
+	test_mode=
+	test_status=2
+	test_diff=
+}
 _run_test ()
 {
 	test_number=$(($test_number + 1))
@@ -272,7 +280,7 @@ _run_test ()
 	# Test range on: skip this test if it's not listed in $tests_range
 	if test -n "$tests_range" && test "$tests_range" = "${tests_range#*:$test_number:}"
 	then
-		test_command=
+		_reset_test_data
 		return 0
 	fi
 
@@ -283,7 +291,7 @@ _run_test ()
 	if test $list_mode -eq 1
 	then
 		_list_line "$test_command"
-		test_command=
+		_reset_test_data
 		return 0
 	fi
 
@@ -297,8 +305,6 @@ _run_test ()
 
 	# Execute the test command, saving output (STDOUT and STDERR)
 	eval "$test_command" > "$test_output_file" 2>&1
-	test_diff=
-	test_status=2
 
 	#_debug "[OUTPUT ] $(cat "$test_output_file")"
 
@@ -381,8 +387,7 @@ _run_test ()
 		test $list_run -eq 1 && _list_line "$test_command" ok
 	fi
 
-	# Reset current command holder
-	test_command=
+	_reset_test_data
 }
 _process_test_file ()
 {
