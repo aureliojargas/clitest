@@ -120,26 +120,26 @@ $ ./doctest.sh --quiet /etc
 doctest.sh: Error: cannot read input file: /etc
 $
 
-# Option --quiet has no effect in --debug
-
-$ ./doctest.sh --no-color --quiet --debug self-test/ok-2.sh
-[INPUT_LINE: $ echo ok]
-[  LINE_CMD: $ echo ok]
-[   NEW_CMD: echo ok]
-[INPUT_LINE: ok]
-[    LINE_*: ok]
-[   OK_TEXT: ok]
-[INPUT_LINE: $ echo ok  #→ ok]
-[  LINE_CMD: $ echo ok  #→ ok]
-[      EVAL: echo ok]
-[    OUTPUT: ok]
-[   NEW_CMD: echo ok  ]
-[ OK_INLINE: ok]
-[   OK_TEXT: ok]
-[      EVAL: echo ok  ]
-[    OUTPUT: ok]
-[  LOOP_OUT: $test_command=]
-$
+# # Option --quiet has no effect in --debug
+# 
+# $ ./doctest.sh --no-color --quiet --debug self-test/ok-2.sh
+# [INPUT_LINE: $ echo ok]
+# [  LINE_CMD: $ echo ok]
+# [   NEW_CMD: echo ok]
+# [INPUT_LINE: ok]
+# [    LINE_*: ok]
+# [   OK_TEXT: ok]
+# [INPUT_LINE: $ echo ok  #→ ok]
+# [  LINE_CMD: $ echo ok  #→ ok]
+# [      EVAL: echo ok]
+# [    OUTPUT: ok]
+# [   NEW_CMD: echo ok  ]
+# [ OK_INLINE: ok]
+# [   OK_TEXT: ok]
+# [      EVAL: echo ok  ]
+# [    OUTPUT: ok]
+# [  LOOP_OUT: $test_command=]
+# $
 
 # Option --list
 
