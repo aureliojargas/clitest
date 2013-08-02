@@ -175,12 +175,6 @@ _parse_range ()
 	#     Reverse ranges and repeated/unordered numbers are ok.
 	#     Later we will just grep for :number: in each test.
 
-	local part
-	local n1
-	local n2
-	local operation
-	local numbers=':'  # :1:2:4:7:
-
 	case "$user_range" in
 		# No range, nothing to do
 		0 | '')
@@ -193,6 +187,12 @@ _parse_range ()
 	esac
 
 	# OK, all valid chars in range, let's parse them
+
+	part=
+	n1=
+	n2=
+	operation=
+	tests_range=':'  # :1:2:4:7:
 
 	# Loop each component: a number or a range
 	for part in $(echo $user_range | tr , ' ')
@@ -221,11 +221,10 @@ _parse_range ()
 		esac
 
 		# Append the number or expanded range to the holder
-		test $part != 0 && numbers=$numbers$part:
+		test $part != 0 && tests_range=$tests_range$part:
 	done
 
-	# Save parsed range
-	test $numbers != ':' && tests_range=$numbers
+	test $tests_range = ':' && tests_range=
 	return 0
 }
 _reset_test_data ()
