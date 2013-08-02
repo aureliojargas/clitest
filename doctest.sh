@@ -643,7 +643,7 @@ else
 	else
 		_message "${color_red}FAIL:${color_off} $nr_total_errors of $nr_total_tests tests have failed."
 	fi
-	test $test_file = 'self-test.sh' && test $range_failed != ',' && _message "-n ${range_failed%,}"  # dev helper
+	test $test_file = 'self-test.sh' && _message "-n ${range_failed%,}"  # dev helper
 	exit 1
 fi
 # Note: Those messages are for FUN. When automating, check the exit code.
