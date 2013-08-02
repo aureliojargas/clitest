@@ -115,7 +115,7 @@ _clean_up ()
 }
 _message ()
 {
-	test $quiet -eq 1 && return
+	test $quiet -eq 1 && return 0
 	printf '%s\n' "$*"
 	separator_line_shown=0
 }
