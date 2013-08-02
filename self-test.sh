@@ -44,8 +44,8 @@ $
 
 # I/O, file reading  (message and exit code)
 
-$ ./doctest.sh XxnotfoundXX.sh; echo $?
-doctest.sh: Error: cannot read input file: XxnotfoundXX.sh
+$ ./doctest.sh XXnotfoundXX.sh; echo $?
+doctest.sh: Error: cannot read input file: XXnotfoundXX.sh
 2
 $ ./doctest.sh self-test
 doctest.sh: Error: cannot read input file: self-test
