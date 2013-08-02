@@ -88,9 +88,3 @@ $ echo '--textual'              #→ --textual
 #         just prefix it with another --text.
 
 $ echo '--text is cool'         #→ --text --text is cool
-
-# Syntax: Empty inline output contents are considered an error
-# Note: Tested in separate files: inline-match-file-error-?.sh
-#
-# $ echo 'no contents'          #→ 
-# $ echo 'no contents'          #→ --text 
