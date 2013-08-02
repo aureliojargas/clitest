@@ -11,7 +11,8 @@
 # Make sure we're on the same folder as doctest.sh, since all the
 # file paths here are relative, not absolute.
 
-$ cd "$(dirname "$0")"
+$ cd "$(dirname "$0")"; echo $?
+0
 $
 
 # Set a default terminal width of 80 columns (used by separator lines) 
