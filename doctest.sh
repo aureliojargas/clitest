@@ -307,7 +307,6 @@ _run_test ()
 		text)
 			# Inline OK text represents a full line, with \n
 			printf '%s\n' "$test_inline" > "$test_ok_file"
-
 			test_diff=$(diff $diff_options "$test_ok_file" "$test_output_file")
 			test_status=$?
 		;;
