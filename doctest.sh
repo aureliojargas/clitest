@@ -376,13 +376,13 @@ _process_test_file ()
 	while IFS='' read -r input_line || test -n "$input_line"
 	do
 		line_number=$(($line_number + 1))
-		#_debug 'INPUT_LINE' "$input_line"
+		#_debug INPUT_LINE "$input_line"
 
 		case "$input_line" in
 
 			# Prompt alone: closes previous command line (if any)
 			"$prefix$prompt" | "$prefix${prompt% }" | "$prefix$prompt ")
-				#_debug '<   LINE_$' "$input_line"
+				#_debug 'LINE_$' "$input_line"
 
 				# Run pending tests
 				test -n "$test_command" && _run_test
@@ -390,7 +390,7 @@ _process_test_file ()
 
 			# This line is a command line to be tested
 			"$prefix$prompt"*)
-				#_debug '< LINE_CMD' "$input_line"
+				#_debug LINE_CMD "$input_line"
 
 				# Run pending tests
 				test -n "$test_command" && _run_test
@@ -447,7 +447,7 @@ _process_test_file ()
 
 			# Test output, blank line or comment
 			*)
-				#_debug '<   LINE_*' "$input_line"
+				#_debug 'LINE_*' "$input_line"
 
 				# Ignore this line if there's no pending test
 				test -n "$test_command" || continue
