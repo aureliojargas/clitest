@@ -21,6 +21,16 @@ $ COLUMNS=80
 $ export COLUMNS
 $
 
+# Variables are persistent between tests?
+
+$ echo $COLUMNS
+80
+$ not_exported=1
+$ echo $not_exported
+1
+$ echo $not_exported  #→ 1
+$ echo $not_exported  #→ --regex ^1$
+
 # Single file, OK
 
 $ ./doctest.sh --no-color self-test/ok-1.sh
