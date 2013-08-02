@@ -514,12 +514,9 @@ fi
 # Create temp dir, protected from others
 umask 077 && mkdir "$temp_dir" || _error "cannot create temporary dir: $temp_dir"
 
-# Loop for each input file
-while test $# -gt 0
+# For each input file in $@
+for test_file
 do
-	test_file="$1"
-	shift
-
 	# Some tests may "cd" to another dir, we need to get back
 	# to preserve the relative paths of the input files
 	cd "$original_dir"
