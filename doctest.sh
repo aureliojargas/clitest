@@ -195,13 +195,13 @@ _parse_range ()
 	tests_range=':'  # :1:2:4:7:
 
 	# Loop each component: a number or a range
-	for part in $(echo $user_range | tr , ' ')
+	for part in $(echo "$user_range" | tr , ' ')
 	do
 		# If there's an hyphen, it's a range
-		case $part in
+		case "$part" in
 			*-*)
 				# Error: Invalid range format, must be: number-number
-				echo $part | grep '^[0-9][0-9]*-[0-9][0-9]*$' > /dev/null || return 1
+				echo "$part" | grep '^[0-9][0-9]*-[0-9][0-9]*$' > /dev/null || return 1
 
 				n1=${part%-*}
 				n2=${part#*-}
