@@ -31,7 +31,7 @@ Usage: $my_name [options] <file ...>
 
 Options:
       --diff-options STRING   Customize options for diff (default: -u)
-  -1, --first                 Stop the tests on the first error
+  -1, --first                 Stop execution upon first error
       --inline-prefix STRING  Set inline output prefix (default: '#→ ')
   -l, --list                  List all the tests (no execution)
   -L, --list-run              List all the tests with OK/FAIL status
