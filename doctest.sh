@@ -121,7 +121,7 @@ _message ()
 }
 _error ()
 {
-	_message "$my_name: Error: $1" >&2
+	printf '%s\n' "$my_name: Error: $1" >&2
 	_clean_up
 	exit 2
 }
