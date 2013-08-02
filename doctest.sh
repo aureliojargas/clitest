@@ -33,7 +33,6 @@ prefix=''
 prompt='$ '
 inline_prefix='#→ '
 diff_options='-u'
-user_range=''
 temp_dir="${TMPDIR:-/tmp}/doctest.$$"
 # Note: using temporary files for compatibility, since <(...) is not portable.
 
@@ -57,6 +56,7 @@ nr_file_tests=0       # count only executed (not skipped with -n) tests
 nr_file_errors=0
 files_stat_message=''
 original_dir=$(pwd)
+user_range=
 tests_range=
 test_command=
 test_inline=
