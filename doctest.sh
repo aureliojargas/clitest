@@ -628,6 +628,3 @@ else
 fi
 # Note: Those messages are for FUN. When automating, check the exit code.
 
-# Dev notes:
-# - Comment   all debug lines: sed 's/	_debug/	#_debug/'
-# - Uncomment all debug lines: sed 's/#_debug/_debug/'
