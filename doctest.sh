@@ -299,11 +299,26 @@ _run_test ()
 
 	# The command output matches the expected output?
 	case $test_mode in
+		output)
+			printf %s "$test_ok_text" > "$test_ok_file"
+			test_diff=$(diff $diff_options "$test_ok_file" "$test_output_file")
+			test_status=$?
+		;;
 		text)
 			# Inline OK text represents a full line, with \n
 			printf '%s\n' "$test_inline" > "$test_ok_file"
 
 			test_diff=$(diff $diff_options "$test_ok_file" "$test_output_file")
+			test_status=$?
+		;;
+		file)
+			# Abort when ok file not found/readable
+			if test ! -f "$test_inline" || test ! -r "$test_inline"
+			then
+				_error "cannot read inline output file '$test_inline', from line $line_number of $test_file"
+			fi
+
+			test_diff=$(diff $diff_options "$test_inline" "$test_output_file")
 			test_status=$?
 		;;
 		regex)
@@ -321,21 +336,6 @@ _run_test ()
 			then
 				_error "egrep: check your inline regex at line $line_number of $test_file"
 			fi
-		;;
-		file)
-			# Abort when ok file not found/readable
-			if test ! -f "$test_inline" || test ! -r "$test_inline"
-			then
-				_error "cannot read inline output file '$test_inline', from line $line_number of $test_file"
-			fi
-
-			test_diff=$(diff $diff_options "$test_inline" "$test_output_file")
-			test_status=$?
-		;;
-		output)
-			printf %s "$test_ok_text" > "$test_ok_file"
-			test_diff=$(diff $diff_options "$test_ok_file" "$test_output_file")
-			test_status=$?
 		;;
 		*)
 			_error "unknown test mode '$test_mode'"
