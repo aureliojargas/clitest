@@ -1,6 +1,6 @@
 # Test file for the --prefix option
 # Command blocks here are prefixed by 4 spaces (Markdown-style)
-# Run with --prefix '    '
+# Run with --prefix '    ' or --prefix 4
 
     $ echo "1"  #→ 1
     $ echo "2"
