@@ -107,42 +107,8 @@ then
 	exit 0
 fi
 
-# Handy shortcuts for prefixes
-case "$prefix" in
-	tab)
-		prefix="$tab"
-	;;
-	0)
-		prefix=''
-	;;
-	[1-9] | [1-9][0-9])  # 1-99
-		# convert number to spaces: 2 => '  '
-		prefix=$(printf "%${prefix}s" ' ')
-	;;
-	*\\*)
-		prefix="$(printf %b "$prefix")"  # expand \t and others
-	;;
-esac
+### Utilities, prefixed by _ to avoid overwriting command names
 
-# Set colors
-# Note: colors must be readable in dark and light backgrounds
-if test $use_colors -eq 1
-then
-	color_red=$(  printf '\033[31m')
-	color_green=$(printf '\033[32m')
-	color_blue=$( printf '\033[34m')
-	color_cyan=$( printf '\033[36m')
-	color_off=$(  printf '\033[m')
-fi
-
-# Find the terminal width
-# The COLUMNS env var is set by Bash (must be exported in ~/.bashrc).
-# In other shells, try to use tput cols (not POSIX).
-# If not, defaults to 50 columns, a conservative amount.
-: ${COLUMNS:=$(tput cols 2> /dev/null)}
-: ${COLUMNS:=50}
-
-# Utilities, prefixed by _ to avoid overwriting command names
 _clean_up ()
 {
 	rm -rf "$temp_dir"
@@ -502,6 +468,44 @@ _process_test_file ()
 }
 
 
+### Init process
+
+# Handy shortcuts for prefixes
+case "$prefix" in
+	tab)
+		prefix="$tab"
+	;;
+	0)
+		prefix=''
+	;;
+	[1-9] | [1-9][0-9])  # 1-99
+		# convert number to spaces: 2 => '  '
+		prefix=$(printf "%${prefix}s" ' ')
+	;;
+	*\\*)
+		prefix="$(printf %b "$prefix")"  # expand \t and others
+	;;
+esac
+
+# Set colors
+# Remember: colors must be readable in dark and light backgrounds
+# Tweak the numbers after [ to adjust the colors
+if test $use_colors -eq 1
+then
+	color_red=$(  printf '\033[31m')  # fail
+	color_green=$(printf '\033[32m')  # ok
+	color_blue=$( printf '\033[34m')  # debug
+	color_cyan=$( printf '\033[36m')  # verbose
+	color_off=$(  printf '\033[m')
+fi
+
+# Find the terminal width
+# The COLUMNS env var is set by Bash (must be exported in ~/.bashrc).
+# In other shells, try to use tput cols (not POSIX).
+# If not, defaults to 50 columns, a conservative amount.
+: ${COLUMNS:=$(tput cols 2> /dev/null)}
+: ${COLUMNS:=50}
+
 # Parse and validate --number option value, if informed
 _parse_range
 if test $? -eq 1
@@ -509,10 +513,11 @@ then
 	_error "invalid argument for -n or --number: $user_range"
 fi
 
-### Real execution begins here
-
 # Create temp dir, protected from others
 umask 077 && mkdir "$temp_dir" || _error "cannot create temporary dir: $temp_dir"
+
+
+### Real execution begins here
 
 # For each input file in $@
 for test_file
