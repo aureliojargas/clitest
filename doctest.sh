@@ -8,6 +8,21 @@
 #   0  All tests passed, or normal operation (--help, --list, ...)
 #   1  One or more tests have failed
 #   2  An error occurred (file not found, invalid range, ...)
+#
+# POSIX shell script:
+#   This script was coded to be compatible with POSIX shells.
+#   Tested in Bash 3.2, dash 0.5.5.1, ksh 93u 2011-02-08.
+
+
+# Unfortunatelly I can't use $POSIXLY_CORRECT or set -o posix because
+# I can't change anything in the environment, since the user tests
+# are evaluated in the current shell. Subshells are not an option:
+# variables, working directory, etc must persist between tests.
+#
+# # Force Bash into POSIX mode
+# test -n "$BASH_VERSION" && set -o posix
+# # Force system utilities into POSIX mode
+# export POSIXLY_CORRECT=1
 
 my_name="$(basename "$0")"
 my_version='dev'
