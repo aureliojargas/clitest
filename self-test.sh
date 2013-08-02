@@ -524,6 +524,33 @@ $ ./doctest.sh --no-color --list-run self-test/inline-match-text.sh
 38	OK	echo '--text'                 
 39	OK	echo '--textual'              
 40	OK	echo '--text is cool'         
+$ ./doctest.sh --no-color --list-run self-test/inline-match-eval.sh
+1	OK	folder=$(pwd)
+2	OK	echo $folder                  
+3	OK	var='abc'
+4	OK	echo abc                      
+5	OK	echo 4                        
+6	OK	today=$(date +%D)
+7	OK	echo "Today is $today"        
+8	OK	printf 'ok'                   
+9	OK	echo ' leading space'         
+10	OK	echo '    leading spaces'     
+11	OK	printf '\tleading tab\n'      
+12	OK	printf '\t\tleading tabs\n'   
+13	OK	echo 'trailing space '        
+14	OK	echo 'trailing spaces    '    
+15	OK	printf 'trailing tab\t\n'     
+16	OK	printf 'trailing tabs\t\t\n'  
+17	OK	echo ' '                      
+18	OK	echo '   '                    
+19	OK	printf '\t\n'                 
+20	OK	printf '\t\t\t\n'             
+21	OK	printf ' \t  \t\t   \n'       
+22	FAIL	echo 'fail'                   
+23	FAIL	echo 'fail'                   
+24	OK	echo '--eval'                 
+25	OK	echo '--evaluate'             
+26	OK	echo '--eval is evil'         
 $ ./doctest.sh --no-color --list-run self-test/inline-match-regex.sh
 1	OK	echo 'abc123'                 
 2	OK	echo 'abc123'                 
@@ -573,6 +600,18 @@ $ ./doctest.sh self-test/inline-match-file-error-2.sh
 doctest.sh: Error: cannot read inline output file 'XXnotfoundXX', from line 1 of self-test/inline-match-file-error-2.sh
 $ ./doctest.sh self-test/inline-match-file-error-3.sh
 doctest.sh: Error: cannot read inline output file '/etc/', from line 1 of self-test/inline-match-file-error-3.sh
+$ ./doctest.sh self-test/inline-match-eval-error-1.sh
+doctest.sh: Error: missing inline output eval at line 1 of self-test/inline-match-eval-error-1.sh
+$ ./doctest.sh --no-color self-test/inline-match-eval-error-2.sh
+./doctest.sh: eval: line 314: unexpected EOF while looking for matching `)'
+./doctest.sh: eval: line 315: syntax error: unexpected end of file
+--------------------------------------------------------------------------------
+[FAILED #1] echo 'no contents'  
+@@ -0,0 +1 @@
++no contents
+--------------------------------------------------------------------------------
+
+FAIL: The single test has failed.
 $
 
 # Option -n, --number

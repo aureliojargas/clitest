@@ -310,6 +310,11 @@ _run_test ()
 			test_diff=$(diff $diff_options "$test_ok_file" "$test_output_file")
 			test_status=$?
 		;;
+		eval)
+			eval "$test_inline" > "$test_ok_file"
+			test_diff=$(diff $diff_options "$test_ok_file" "$test_output_file")
+			test_status=$?
+		;;
 		file)
 			# Abort when ok file not found/readable
 			if test ! -f "$test_inline" || test ! -r "$test_inline"
@@ -433,6 +438,10 @@ _process_test_file ()
 						'--file '*)
 							test_inline=${test_inline#--file }
 							test_mode='file'
+						;;
+						'--eval '*)
+							test_inline=${test_inline#--eval }
+							test_mode='eval'
 						;;
 						'--text '*)
 							test_inline=${test_inline#--text }
