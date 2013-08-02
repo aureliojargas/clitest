@@ -63,6 +63,7 @@ test_inline=
 test_mode=
 test_status=2
 test_diff=
+test_ok_text=
 test_ok_file="$temp_dir/ok.txt"
 test_output_file="$temp_dir/output.txt"
 temp_file="$temp_dir/temp.txt"
@@ -272,6 +273,7 @@ _reset_test_data ()
 	test_mode=
 	test_status=2
 	test_diff=
+	test_ok_text=
 }
 _run_test ()
 {
@@ -344,6 +346,7 @@ _run_test ()
 			test_status=$?
 		;;
 		output)
+			printf %s "$test_ok_text" > "$test_ok_file"
 			test_diff=$(diff $diff_options "$test_ok_file" "$test_output_file")
 			test_status=$?
 		;;
@@ -457,14 +460,11 @@ _process_test_file ()
 						_error "missing inline output $test_mode at line $line_number of $test_file"
 					fi
 
-					# Save the output and run test
+					# Since we already have the command and the output, run test
 					_run_test
 				else
 					# It's a normal command line, output begins in next line
 					test_mode='output'
-
-					# Reset holder for the OK output
-					> "$test_ok_file"
 
 					#_debug "[NEW CMD] $test_command"
 				fi
@@ -482,12 +482,13 @@ _process_test_file ()
 				then
 					#_debug "[BLOKOUT] $input_line"
 
-					# Run the pending test
+					# Run the pending test and we're done in this line
 					_run_test
+					continue
 				fi
 
 				# This line is a test output, save it (without prefix)
-				printf '%s\n' "${input_line#$prefix}" >> "$test_ok_file"
+				test_ok_text="$test_ok_text${input_line#$prefix}$nl"
 
 				#_debug "[OK LINE] $input_line"
 			;;
