@@ -56,7 +56,7 @@ nr_file_tests=0       # count only executed (not skipped with -n) tests
 nr_file_errors=0
 files_stat_message=''
 original_dir=$(pwd)
-user_range=
+range_user=
 range_data=
 test_command=
 test_inline=
@@ -82,7 +82,7 @@ do
 		-l|--list      ) shift; list_mode=1;;
 		-L|--list-run  ) shift; list_run=1;;
 		-1|--first     ) shift; stop_on_first_error=1 ;;
-		-n|--number    ) shift; user_range="$1"; shift ;;
+		-n|--number    ) shift; range_user="$1"; shift ;;
 		--no-color     ) shift; use_colors=0 ;;
   		--debug        ) shift; debug=1 ;;
 		--include      ) shift; . "$1" ''; shift ;;  # XXX dev temp option
@@ -185,7 +185,7 @@ _parse_range ()
 	#     Reverse ranges and repeated/unordered numbers are ok.
 	#     Later we will just grep for :number: in each test.
 
-	case "$user_range" in
+	case "$range_user" in
 		# No range, nothing to do
 		0 | '')
 			return 0
@@ -205,7 +205,7 @@ _parse_range ()
 	range_data=':'  # :1:2:4:7:
 
 	# Loop each component: a number or a range
-	for part in $(echo "$user_range" | tr , ' ')
+	for part in $(echo "$range_user" | tr , ' ')
 	do
 		# If there's an hyphen, it's a range
 		case "$part" in
@@ -519,7 +519,7 @@ fi
 _parse_range
 if test $? -eq 1
 then
-	_error "invalid argument for -n or --number: $user_range"
+	_error "invalid argument for -n or --number: $range_user"
 fi
 
 # Create temp dir, protected from others
@@ -597,7 +597,7 @@ fi
 # Range active, but no test matched :(
 if test $nr_total_tests -eq 0 && test -n "$range_data"
 then
-	_error "no test found for the specified number or range '$user_range'"
+	_error "no test found for the specified number or range '$range_user'"
 fi
 
 # Show stats
