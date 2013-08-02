@@ -384,11 +384,9 @@ _run_test ()
 	# Reset current command holder
 	test_command=
 }
-_process_test_file ()  # $1=filename
+_process_test_file ()
 {
-	local file="$1"
-
-	# reset globals
+	# Reset counters
 	nr_file_tests=0
 	nr_file_errors=0
 	line_number=0
@@ -489,7 +487,7 @@ _process_test_file ()  # $1=filename
 				#_debug "[OK LINE] $input_line"
 			;;
 		esac
-	done < "$file"
+	done < "$temp_file"
 
 	#_debug "[LOOPOUT] test_command: $test_command"
 
@@ -545,7 +543,7 @@ do
 	sed "s/$(printf '\r')$//" "$test_file" > "$temp_file"
 
 	# The magic happens here
-	_process_test_file "$temp_file"
+	_process_test_file
 
 	# Abort when no test found
 	if test $nr_file_tests -eq 0 && test -z "$tests_range"
