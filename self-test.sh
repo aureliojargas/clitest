@@ -47,10 +47,12 @@ $
 $ ./doctest.sh XXnotfoundXX.sh; echo $?
 doctest.sh: Error: cannot read input file: XXnotfoundXX.sh
 2
-$ ./doctest.sh self-test
-doctest.sh: Error: cannot read input file: self-test
-$ ./doctest.sh self-test/
-doctest.sh: Error: cannot read input file: self-test/
+$ ./doctest.sh .
+doctest.sh: Error: cannot read input file: .
+$ ./doctest.sh ./
+doctest.sh: Error: cannot read input file: ./
+$ ./doctest.sh /etc
+doctest.sh: Error: cannot read input file: /etc
 $
 
 # No test found (message and exit code)
