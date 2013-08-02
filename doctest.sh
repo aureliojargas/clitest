@@ -57,7 +57,7 @@ nr_file_errors=0
 files_stat_message=''
 original_dir=$(pwd)
 user_range=
-tests_range=
+range_data=
 test_command=
 test_inline=
 test_mode=
@@ -173,7 +173,7 @@ _list_line ()  # $1=ok|fail
 }
 _parse_range ()
 {
-	# Parse -n, --number ranges and save results to $tests_range
+	# Parse -n, --number ranges and save results to $range_data
 	#
 	#     Supported formats            Parsed
 	#     ------------------------------------------------------
@@ -202,7 +202,7 @@ _parse_range ()
 	n1=
 	n2=
 	operation=
-	tests_range=':'  # :1:2:4:7:
+	range_data=':'  # :1:2:4:7:
 
 	# Loop each component: a number or a range
 	for part in $(echo "$user_range" | tr , ' ')
@@ -231,10 +231,10 @@ _parse_range ()
 		esac
 
 		# Append the number or expanded range to the holder
-		test $part != 0 && tests_range=$tests_range$part:
+		test $part != 0 && range_data=$range_data$part:
 	done
 
-	test $tests_range = ':' && tests_range=
+	test $range_data = ':' && range_data=
 	return 0
 }
 _reset_test_data ()
@@ -250,8 +250,8 @@ _run_test ()
 {
 	test_number=$(($test_number + 1))
 
-	# Test range on: skip this test if it's not listed in $tests_range
-	if test -n "$tests_range" && test "$tests_range" = "${tests_range#*:$test_number:}"
+	# Test range on: skip this test if it's not listed in $range_data
+	if test -n "$range_data" && test "$range_data" = "${range_data#*:$test_number:}"
 	then
 		_reset_test_data
 		return 0
@@ -563,7 +563,7 @@ do
 	_process_test_file
 
 	# Abort when no test found
-	if test $nr_file_tests -eq 0 && test -z "$tests_range"
+	if test $nr_file_tests -eq 0 && test -z "$range_data"
 	then
 		_error "no test found in input file: $test_file"
 	fi
@@ -595,7 +595,7 @@ then
 fi
 
 # Range active, but no test matched :(
-if test $nr_total_tests -eq 0 && test -n "$tests_range"
+if test $nr_total_tests -eq 0 && test -n "$range_data"
 then
 	_error "no test found for the specified number or range '$user_range'"
 fi
