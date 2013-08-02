@@ -127,7 +127,7 @@ _error ()
 }
 _debug ()  # $1=id, $2=contents
 {
-	test $debug -eq 1 || return 0
+	test $debug -ne 1 && return 0
 	if test INPUT_LINE = "$1"
 	then
 		# Original input line is all blue
