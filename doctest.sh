@@ -125,9 +125,19 @@ _error ()
 	_clean_up
 	exit 2
 }
-_debug ()
+_debug ()  # $1=id, $2=contents
 {
-	test $debug -eq 1 && _message "${color_blue}$@${color_off}"
+	test $debug -eq 1 || return 0
+	if test INPUT_LINE = "$1"
+	then
+		# Original input line is all blue
+		printf "${color_blue}[%10s: %s]${color_off}\n" "$1" "$2"
+	else
+		# Highlight tabs and #→
+		printf "${color_blue}[%10s:${color_off} %s${color_blue}]${color_off}\n" "$1" "$2" |
+			sed "/LINE_CMD:/ s/$inline_prefix/${color_red}&${color_off}/g" |
+			sed "s/$tab/${color_green}<tab>${color_off}/g"
+	fi
 }
 _separator_line ()
 {
@@ -264,12 +274,12 @@ _run_test ()
 		_message "${color_cyan}=======[$test_number] $test_command${color_off}"
 	fi
 
-	#_debug "[ EVAL  ] $test_command"
+	#_debug EVAL "$test_command"
 
 	# Execute the test command, saving output (STDOUT and STDERR)
 	eval "$test_command" > "$test_output_file" 2>&1
 
-	#_debug "[OUTPUT ] $(cat "$test_output_file")"
+	#_debug OUTPUT "$(cat "$test_output_file")"
 
 	# The command output matches the expected output?
 	case $test_mode in
@@ -366,11 +376,13 @@ _process_test_file ()
 	while IFS='' read -r input_line || test -n "$input_line"
 	do
 		line_number=$(($line_number + 1))
+		#_debug 'INPUT_LINE' "$input_line"
+
 		case "$input_line" in
 
 			# Prompt alone: closes previous command line (if any)
 			"$prefix$prompt" | "$prefix${prompt% }" | "$prefix$prompt ")
-				#_debug "[ CLOSE ] $input_line"
+				#_debug '<   LINE_$' "$input_line"
 
 				# Run pending tests
 				test -n "$test_command" && _run_test
@@ -378,7 +390,7 @@ _process_test_file ()
 
 			# This line is a command line to be tested
 			"$prefix$prompt"*)
-				#_debug "[CMDLINE] $input_line"
+				#_debug '< LINE_CMD' "$input_line"
 
 				# Run pending tests
 				test -n "$test_command" && _run_test
@@ -393,8 +405,8 @@ _process_test_file ()
 					test_command="${test_command%$inline_prefix*}"
 					test_inline="${input_line##*$inline_prefix}"
 
-					#_debug "[NEW CMD] $test_command"
-					#_debug "[OK TEXT] $test_inline$"
+					#_debug NEW_CMD "$test_command"
+					#_debug OK_INLINE "$test_inline"
 
 					# Maybe the OK text has options?
 					case "$test_inline" in
@@ -415,6 +427,8 @@ _process_test_file ()
 						;;
 					esac
 
+					#_debug OK_TEXT "$test_inline"
+
 					# An empty inline parameter is an error user must see
 					if test -z "$test_inline" && test "$test_mode" != 'text'
 					then
@@ -427,13 +441,13 @@ _process_test_file ()
 					# It's a normal command line, output begins in next line
 					test_mode='output'
 
-					#_debug "[NEW CMD] $test_command"
+					#_debug NEW_CMD "$test_command"
 				fi
 			;;
 
 			# Test output, blank line or comment
 			*)
-				#_debug "[ ? LINE] $input_line"
+				#_debug '<   LINE_*' "$input_line"
 
 				# Ignore this line if there's no pending test
 				test -n "$test_command" || continue
@@ -441,7 +455,7 @@ _process_test_file ()
 				# Required prefix is missing: we just left a command block
 				if test -n "$prefix" && test "${input_line#$prefix}" = "$input_line"
 				then
-					#_debug "[BLOKOUT] $input_line"
+					#_debug BLOCK_OUT "$input_line"
 
 					# Run the pending test and we're done in this line
 					_run_test
@@ -451,12 +465,12 @@ _process_test_file ()
 				# This line is a test output, save it (without prefix)
 				test_ok_text="$test_ok_text${input_line#$prefix}$nl"
 
-				#_debug "[OK LINE] $input_line"
+				#_debug OK_TEXT "${input_line#$prefix}"
 			;;
 		esac
 	done < "$temp_file"
 
-	#_debug "[LOOPOUT] test_command: $test_command"
+	#_debug LOOP_OUT "\$test_command=$test_command"
 
 	# Run pending tests
 	test -n "$test_command" && _run_test
