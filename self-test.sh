@@ -11,7 +11,9 @@
 # Make sure we're on the same folder as doctest.sh, since all the
 # file paths here are relative, not absolute.
 
-$ cd "$(dirname "$0")"; echo $?
+$ test -f ./doctest.sh; echo $?
+0
+$ test -d ./self-test/; echo $?
 0
 $
 
