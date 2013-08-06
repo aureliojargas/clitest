@@ -591,6 +591,24 @@ $ ./doctest.sh --no-color --list-run self-test/inline-match-file.sh
 6	OK	echo '--file'                 
 7	OK	echo '--filer'                
 8	OK	echo '--file is cool'         
+$ ./doctest.sh --no-color --list-run self-test/inline-match-lines.sh
+1	OK	a=1                           
+2	OK	echo 'ok'                     
+3	OK	printf '1\n2\n3\n'            
+4	OK	printf 'no-nl'                
+5	OK	printf '1\n2\nno-nl'          
+6	FAIL	echo 'fail'                   
+7	FAIL	echo 'fail'                   
+8	FAIL	echo 'fail'                   
+9	FAIL	echo 'fail'                   
+10	OK	echo '--lines'                 
+11	OK	echo '--linesout'             
+12	OK	echo '--lines is cool'         
+$ doctest.sh --no-color --first self-test/inline-match-lines.sh
+--------------------------------------------------------------------------------
+[FAILED #6] echo 'fail'                   
+Expected 99 lines, got 1.
+--------------------------------------------------------------------------------
 $ ./doctest.sh self-test/inline-match-regex-error-1.sh
 doctest.sh: Error: missing inline output regex at line 1 of self-test/inline-match-regex-error-1.sh
 $ ./doctest.sh self-test/inline-match-regex-error-2.sh 2>&1 | sed 's/^egrep: .*/egrep: ERROR_MSG/'
@@ -602,11 +620,19 @@ $ ./doctest.sh self-test/inline-match-file-error-2.sh
 doctest.sh: Error: cannot read inline output file 'XXnotfoundXX', from line 1 of self-test/inline-match-file-error-2.sh
 $ ./doctest.sh self-test/inline-match-file-error-3.sh
 doctest.sh: Error: cannot read inline output file '/etc/', from line 1 of self-test/inline-match-file-error-3.sh
+$ ./doctest.sh self-test/inline-match-lines-error-1.sh
+doctest.sh: Error: --lines requires a number. See line 1 of self-test/inline-match-lines-error-1.sh
+$ ./doctest.sh self-test/inline-match-lines-error-2.sh
+doctest.sh: Error: --lines requires a number. See line 1 of self-test/inline-match-lines-error-2.sh
+$ ./doctest.sh self-test/inline-match-lines-error-3.sh
+doctest.sh: Error: --lines requires a number. See line 1 of self-test/inline-match-lines-error-3.sh
+$ ./doctest.sh self-test/inline-match-lines-error-4.sh
+doctest.sh: Error: --lines requires a number. See line 1 of self-test/inline-match-lines-error-4.sh
 $ ./doctest.sh self-test/inline-match-eval-error-1.sh
 doctest.sh: Error: missing inline output eval at line 1 of self-test/inline-match-eval-error-1.sh
 $ ./doctest.sh --no-color self-test/inline-match-eval-error-2.sh
-./doctest.sh: eval: line 314: unexpected EOF while looking for matching `)'
-./doctest.sh: eval: line 315: syntax error: unexpected end of file
+./doctest.sh: eval: line 316: unexpected EOF while looking for matching `)'
+./doctest.sh: eval: line 317: syntax error: unexpected end of file
 --------------------------------------------------------------------------------
 [FAILED #1] echo 'error: syntax error'  
 @@ -0,0 +1 @@

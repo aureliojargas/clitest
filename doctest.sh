@@ -78,6 +78,7 @@ test_command=
 test_inline=
 test_mode=
 test_status=2
+test_output=
 test_diff=
 test_ok_text=
 test_ok_file="$temp_dir/ok.txt"
@@ -259,6 +260,7 @@ _reset_test_data ()
 	test_inline=
 	test_mode=
 	test_status=2
+	test_output=
 	test_diff=
 	test_ok_text=
 }
@@ -314,6 +316,13 @@ _run_test ()
 			eval "$test_inline" > "$test_ok_file"
 			test_diff=$(diff $diff_options "$test_ok_file" "$test_output_file")
 			test_status=$?
+		;;
+		lines)
+			test_output=$(sed -n '$=' "$test_output_file")
+			test -z "$test_output" && test_output=0
+			test "$test_output" -eq "$test_inline"
+			test_status=$?
+			test_diff="Expected $test_inline lines, got $test_output."
 		;;
 		file)
 			# Abort when ok file not found/readable
@@ -439,6 +448,10 @@ _process_test_file ()
 							test_inline=${test_inline#--file }
 							test_mode='file'
 						;;
+						'--lines '*)
+							test_inline=${test_inline#--lines }
+							test_mode='lines'
+						;;
 						'--eval '*)
 							test_inline=${test_inline#--eval }
 							test_mode='eval'
@@ -453,6 +466,16 @@ _process_test_file ()
 					esac
 
 					#_debug OK_TEXT "$test_inline"
+
+					# There must be a number in --lines
+					if test "$test_mode" = 'lines'
+					then
+						case "$test_inline" in
+							'' | *[!0-9]*)
+								_error "--lines requires a number. See line $line_number of $test_file"
+							;;
+						esac
+					fi
 
 					# An empty inline parameter is an error user must see
 					if test -z "$test_inline" && test "$test_mode" != 'text'
