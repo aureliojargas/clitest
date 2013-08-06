@@ -365,7 +365,7 @@ _run_test ()
 				_message "${color_red}$(_separator_line)${color_off}"
 			fi
 			_message "${color_red}[FAILED #$test_number] $test_command${color_off}"
-			_message "$test_diff" | sed '1,2 d'  # no +++/--- headers
+			_message "$test_diff" | sed '1 { /^--- / { N; /\n+++ /d; }; }'  # no ---/+++ headers
 			_message "${color_red}$(_separator_line)${color_off}"
 			separator_line_shown=1
 		fi
