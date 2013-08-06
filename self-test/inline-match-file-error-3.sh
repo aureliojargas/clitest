@@ -1,1 +1,1 @@
-$ echo "directory"  #→ --file /etc/
+$ echo "error: directory"  #→ --file /etc/

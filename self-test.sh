@@ -608,9 +608,9 @@ $ ./doctest.sh --no-color self-test/inline-match-eval-error-2.sh
 ./doctest.sh: eval: line 314: unexpected EOF while looking for matching `)'
 ./doctest.sh: eval: line 315: syntax error: unexpected end of file
 --------------------------------------------------------------------------------
-[FAILED #1] echo 'no contents'  
+[FAILED #1] echo 'error: syntax error'  
 @@ -0,0 +1 @@
-+no contents
++error: syntax error
 --------------------------------------------------------------------------------
 
 FAIL: The single test has failed.

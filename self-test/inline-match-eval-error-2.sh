@@ -1,2 +1,1 @@
-# Syntax error
-$ echo 'no contents'  #→ --eval $( 
+$ echo 'error: syntax error'  #→ --eval $( 
