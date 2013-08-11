@@ -630,9 +630,9 @@ $ ./doctest.sh self-test/inline-match-lines-error-4.sh
 doctest.sh: Error: --lines requires a number. See line 1 of self-test/inline-match-lines-error-4.sh
 $ ./doctest.sh self-test/inline-match-eval-error-1.sh
 doctest.sh: Error: missing inline output eval at line 1 of self-test/inline-match-eval-error-1.sh
-$ ./doctest.sh --no-color self-test/inline-match-eval-error-2.sh
-./doctest.sh: eval: line 316: unexpected EOF while looking for matching `)'
-./doctest.sh: eval: line 317: syntax error: unexpected end of file
+$ ./doctest.sh --no-color self-test/inline-match-eval-error-2.sh 2>&1 | sed 's/line [0-9][0-9]*/line N/'
+./doctest.sh: eval: line N: unexpected EOF while looking for matching `)'
+./doctest.sh: eval: line N: syntax error: unexpected end of file
 --------------------------------------------------------------------------------
 [FAILED #1] echo 'error: syntax error'  
 @@ -0,0 +1 @@
