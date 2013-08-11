@@ -584,7 +584,8 @@ umask 077 && mkdir "$temp_dir" || _error "cannot create temporary dir: $temp_dir
 # Some preparing command to run before all the tests?
 if test -n "$pre_command"
 then
-	eval "$pre_command"
+	eval "$pre_command" ||
+		_error "pre-flight command failed with status=$?: $pre_command"
 fi
 
 # For each input file in $@

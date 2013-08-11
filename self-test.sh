@@ -854,6 +854,8 @@ YOU WIN! PERFECT! All 100 tests have passed.
 $ ./doctest.sh --post-flight 'nr_total_errors=50' self-test/ok-50.sh
 
 EPIC FAIL! All 50 tests have failed.
+$ ./doctest.sh --pre-flight 'false' self-test/ok-1.sh
+doctest.sh: Error: pre-flight command failed with status=1: false
 $
 
 # Options terminator -- 
