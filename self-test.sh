@@ -83,13 +83,13 @@ $
 
 $ ./doctest.sh | sed -n '1p; $p'
 Usage: doctest.sh [options] <file ...>
-  -V, --version               Show program version and exit
+      --prompt STRING         Set prompt string (default: '$ ')
 $ ./doctest.sh -h | sed -n '1p; $p'
 Usage: doctest.sh [options] <file ...>
-  -V, --version               Show program version and exit
+      --prompt STRING         Set prompt string (default: '$ ')
 $ ./doctest.sh --help | sed -n '1p; $p'
 Usage: doctest.sh [options] <file ...>
-  -V, --version               Show program version and exit
+      --prompt STRING         Set prompt string (default: '$ ')
 $
 
 # Option --quiet and exit code

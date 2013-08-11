@@ -30,20 +30,22 @@ my_help="\
 Usage: $my_name [options] <file ...>
 
 Options:
-      --diff-options STRING   Customize options for diff (default: -u)
   -1, --first                 Stop execution upon first error
-      --inline-prefix STRING  Set inline output prefix (default: '#→ ')
   -l, --list                  List all the tests (no execution)
   -L, --list-run              List all the tests with OK/FAIL status
-      --no-color              Turn off colors in the program output
   -n, --number RANGE          Run specific tests, by number (1,2,4-7)
       --pre-flight COMMAND    Execute command before running the first test
-      --prefix STRING         Set command line prefix (default: none)
       --post-flight COMMAND   Execute command after running the last test
-      --prompt STRING         Set prompt string (default: '$ ')
   -q, --quiet                 Quiet operation, no output shown
   -v, --verbose               Show each test being executed
-  -V, --version               Show program version and exit"
+  -V, --version               Show program version and exit
+
+Customization options:
+      --diff-options STRING   Set options for the diff command (default: -u)
+      --inline-prefix STRING  Set inline output prefix (default: '#→ ')
+      --no-color              Turn off colors in the program output
+      --prefix STRING         Set command line prefix (default: none)
+      --prompt STRING         Set prompt string (default: '$ ')"
 
 # Customization (if needed), most may be altered by command line options
 prefix=''
