@@ -847,6 +847,15 @@ $ ./doctest.sh --no-color --verbose --prefix tab self-test/option-prefix-tab.sh
 OK! All 6 tests have passed.
 $
 
+# Options --pre-flight and --post-flight
+
+$ ./doctest.sh --pre-flight 'test_number=99; nr_total_tests=99' self-test/ok-1.sh
+YOU WIN! PERFECT! All 100 tests have passed.
+$ ./doctest.sh --post-flight 'nr_total_errors=50' self-test/ok-50.sh
+
+EPIC FAIL! All 50 tests have failed.
+$
+
 # Options terminator -- 
 
 $ ./doctest.sh -n 99 -- --quiet

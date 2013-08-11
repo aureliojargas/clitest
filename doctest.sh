@@ -37,7 +37,9 @@ Options:
   -L, --list-run              List all the tests with OK/FAIL status
       --no-color              Turn off colors in the program output
   -n, --number RANGE          Run specific tests, by number (1,2,4-7)
+      --pre-flight COMMAND    Execute command before running the first test
       --prefix STRING         Set command line prefix (default: none)
+      --post-flight COMMAND   Execute command after running the last test
       --prompt STRING         Set prompt string (default: '$ ')
   -q, --quiet                 Quiet operation, no output shown
   -v, --verbose               Show each test being executed
@@ -71,6 +73,8 @@ nr_file_tests=0       # count only executed (not skipped with -n) tests
 nr_file_errors=0
 files_stat_message=''
 original_dir=$(pwd)
+pre_command=
+post_command=
 range_user=
 range_data=
 range_failed=
@@ -102,7 +106,8 @@ do
 		-n|--number    ) shift; range_user="$1"; shift ;;
 		--no-color     ) shift; use_colors=0 ;;
   		--debug        ) shift; debug=1 ;;
-		--include      ) shift; . "$1" ''; shift ;;  # XXX dev temp option
+		--pre-flight   ) shift; pre_command="$1"; shift ;;
+		--post-flight  ) shift; post_command="$1"; shift ;;
 		--diff-options ) shift; diff_options="$1"; shift ;;
 		--inline-prefix) shift; inline_prefix="$1"; shift ;;
 		--prompt       ) shift; prompt="$1"; shift ;;
@@ -576,6 +581,12 @@ umask 077 && mkdir "$temp_dir" || _error "cannot create temporary dir: $temp_dir
 
 ### Real execution begins here
 
+# Some preparing command to run before all the tests?
+if test -n "$pre_command"
+then
+	eval "$pre_command"
+fi
+
 # For each input file in $@
 for test_file
 do
@@ -630,6 +641,12 @@ do
 done
 
 _clean_up
+
+# Some clean up command to run after all the tests?
+if test -n "$post_command"
+then
+	eval "$post_command"
+fi
 
 # List mode has no stats
 if test $list_mode -eq 1 || test $list_run -eq 1
