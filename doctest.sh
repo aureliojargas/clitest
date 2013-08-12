@@ -167,7 +167,7 @@ _separator_line ()
 {
 	printf "%${COLUMNS}s" ' ' | tr ' ' -
 }
-_list_line ()  # $1=ok|fail
+_list_test ()  # $1=ok|fail
 {
 	# Show the output lines for --list and --list-run
 	case "$1" in
@@ -288,7 +288,7 @@ _run_test ()
 	# List mode: just show the command and return (no execution)
 	if test $list_mode -eq 1
 	then
-		_list_line
+		_list_test
 		_reset_test_data
 		return 0
 	fi
@@ -373,7 +373,7 @@ _run_test ()
 		if test $list_run -eq 1
 		then
 			# List mode
-			_list_line fail
+			_list_test fail
 		else
 			# Normal mode: show FAILED message and the diff
 			if test $separator_line_shown -eq 0  # avoid dups
@@ -395,7 +395,7 @@ _run_test ()
 
 	# Test OK
 	else
-		test $list_run -eq 1 && _list_line ok
+		test $list_run -eq 1 && _list_test ok
 	fi
 
 	_reset_test_data
