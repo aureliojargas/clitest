@@ -167,9 +167,9 @@ _separator_line ()
 {
 	printf "%${COLUMNS}s" ' ' | tr ' ' -
 }
-_list_test ()  # $1=ok|fail
+_list_test ()  # $1=ok|fail|verbose
 {
-	# Show the output lines for --list and --list-run
+	# Show the output lines for --verbose, --list and --list-run
 	case "$1" in
 		ok)
 			# Green line or OK stamp (--list-run)
@@ -188,6 +188,10 @@ _list_test ()  # $1=ok|fail
 			else
 				_message "#${test_number}${tab}FAIL${tab}${test_command}"
 			fi
+		;;
+		verbose)
+			# Cyan line, no stamp (--verbose)
+			_message "${color_cyan}#${test_number}${tab}${test_command}${color_off}"
 		;;
 		*)
 			# Normal line, no color, no stamp (--list)
@@ -296,7 +300,7 @@ _run_test ()
 	# Verbose mode: show the command that will be tested
 	if test $verbose -eq 1
 	then
-		_message "${color_cyan}=======[$test_number] $test_command${color_off}"
+		_list_test verbose
 	fi
 
 	#_debug EVAL "$test_command"

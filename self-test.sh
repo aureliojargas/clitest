@@ -257,8 +257,8 @@ YOU WIN! All 50 tests have passed.
 $ ./doctest.sh --no-color self-test/ok-100.sh
 YOU WIN! PERFECT! All 100 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/ok-2.sh
-=======[1] echo ok
-=======[2] echo ok  
+#1	echo ok
+#2	echo ok  
 OK! All 2 tests have passed.
 $
 
@@ -292,21 +292,21 @@ Testing file self-test/ok-50.sh
 YOU WIN! PERFECT! All 163 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/ok-?.sh self-test/ok-10.sh
 Testing file self-test/ok-1.sh
-=======[1] echo ok
+#1	echo ok
 Testing file self-test/ok-2.sh
-=======[2] echo ok
-=======[3] echo ok  
+#2	echo ok
+#3	echo ok  
 Testing file self-test/ok-10.sh
-=======[4] echo 1 
-=======[5] echo 2 
-=======[6] echo 3 
-=======[7] echo 4 
-=======[8] echo 5 
-=======[9] echo 6 
-=======[10] echo 7 
-=======[11] echo 8 
-=======[12] echo 9 
-=======[13] echo 10 
+#4	echo 1 
+#5	echo 2 
+#6	echo 3 
+#7	echo 4 
+#8	echo 5 
+#9	echo 6 
+#10	echo 7 
+#11	echo 8 
+#12	echo 9 
+#13	echo 10 
 
 ================================================================================
   1 ok            self-test/ok-1.sh
@@ -352,9 +352,9 @@ Testing file self-test/error-2.sh
 FAIL: 3 of 6 tests have failed.
 $ ./doctest.sh --no-color --verbose self-test/ok-1.sh self-test/error-1.sh self-test/ok-2.sh self-test/error-2.sh
 Testing file self-test/ok-1.sh
-=======[1] echo ok
+#1	echo ok
 Testing file self-test/error-1.sh
-=======[2] echo ok
+#2	echo ok
 --------------------------------------------------------------------------------
 [FAILED #2] echo ok
 @@ -1 +1 @@
@@ -362,17 +362,17 @@ Testing file self-test/error-1.sh
 +ok
 --------------------------------------------------------------------------------
 Testing file self-test/ok-2.sh
-=======[3] echo ok
-=======[4] echo ok  
+#3	echo ok
+#4	echo ok  
 Testing file self-test/error-2.sh
-=======[5] echo ok
+#5	echo ok
 --------------------------------------------------------------------------------
 [FAILED #5] echo ok
 @@ -1 +1 @@
 -fail
 +ok
 --------------------------------------------------------------------------------
-=======[6] echo ok  
+#6	echo ok  
 --------------------------------------------------------------------------------
 [FAILED #6] echo ok  
 @@ -1 +1 @@
@@ -432,7 +432,7 @@ $ ./doctest.sh --no-color --first self-test/error-2.sh
 +ok
 --------------------------------------------------------------------------------
 $ ./doctest.sh --no-color --first --verbose self-test/error-2.sh
-=======[1] echo ok
+#1	echo ok
 --------------------------------------------------------------------------------
 [FAILED #1] echo ok
 @@ -1 +1 @@
@@ -440,14 +440,14 @@ $ ./doctest.sh --no-color --first --verbose self-test/error-2.sh
 +ok
 --------------------------------------------------------------------------------
 $ ./doctest.sh --no-color --verbose self-test/error-2.sh
-=======[1] echo ok
+#1	echo ok
 --------------------------------------------------------------------------------
 [FAILED #1] echo ok
 @@ -1 +1 @@
 -fail
 +ok
 --------------------------------------------------------------------------------
-=======[2] echo ok  
+#2	echo ok  
 --------------------------------------------------------------------------------
 [FAILED #2] echo ok  
 @@ -1 +1 @@
@@ -461,25 +461,25 @@ $
 # Inline output with #→
 
 $ ./doctest.sh --no-color --verbose self-test/inline.sh
-=======[1] echo 'one space' 
-=======[2] echo 'one tab'	
-=======[3] echo 'multi spaces'           
-=======[4] echo 'multi tabs'				
-=======[5] echo 'mixed'  	 		 	
-=======[6] echo ' leading space' 
-=======[7] echo '    leading spaces' 
-=======[8] printf '\tleading tab\n' 
-=======[9] printf '\t\tleading tabs\n' 
-=======[10] echo 'trailing space ' 
-=======[11] echo 'trailing spaces    ' 
-=======[12] printf 'trailing tab\t\n' 
-=======[13] printf 'trailing tabs\t\t\n' 
-=======[14] echo ' ' 
-=======[15] echo '    ' 
-=======[16] printf '\t\n' 
-=======[17] printf '\t\t\t\n' 
-=======[18] printf ' \t  \t\t   \n' 
-=======[19] echo "both inline and normal output"  
+#1	echo 'one space' 
+#2	echo 'one tab'	
+#3	echo 'multi spaces'           
+#4	echo 'multi tabs'				
+#5	echo 'mixed'  	 		 	
+#6	echo ' leading space' 
+#7	echo '    leading spaces' 
+#8	printf '\tleading tab\n' 
+#9	printf '\t\tleading tabs\n' 
+#10	echo 'trailing space ' 
+#11	echo 'trailing spaces    ' 
+#12	printf 'trailing tab\t\n' 
+#13	printf 'trailing tabs\t\t\n' 
+#14	echo ' ' 
+#15	echo '    ' 
+#16	printf '\t\n' 
+#17	printf '\t\t\t\n' 
+#18	printf ' \t  \t\t   \n' 
+#19	echo "both inline and normal output"  
 OK! All 19 tests have passed.
 $
 
@@ -663,32 +663,32 @@ OK! All 2 tests have passed.
 $ ./doctest.sh --no-color -n ,,,0,0-0,,, self-test/ok-2.sh
 OK! All 2 tests have passed.
 $ ./doctest.sh --no-color --verbose -n 1 self-test/ok-10.sh
-=======[1] echo 1 
+#1	echo 1 
 OK! The single test has passed.
 $ ./doctest.sh --no-color --verbose --number 1 self-test/ok-10.sh
-=======[1] echo 1 
+#1	echo 1 
 OK! The single test has passed.
 $ ./doctest.sh --no-color --verbose -n 0-1,1-0 self-test/ok-10.sh
-=======[1] echo 1 
+#1	echo 1 
 OK! The single test has passed.
 $ ./doctest.sh --no-color --verbose -n 1-1 self-test/ok-10.sh
-=======[1] echo 1 
+#1	echo 1 
 OK! The single test has passed.
 $ ./doctest.sh --no-color --verbose -n 1,1,1,0,1 self-test/ok-10.sh
-=======[1] echo 1 
+#1	echo 1 
 OK! The single test has passed.
 $ ./doctest.sh --no-color --verbose -n 10-20 self-test/ok-10.sh
-=======[10] echo 10 
+#10	echo 10 
 OK! The single test has passed.
 $ ./doctest.sh --no-color --verbose -n 3,2,1 self-test/ok-10.sh
-=======[1] echo 1 
-=======[2] echo 2 
-=======[3] echo 3 
+#1	echo 1 
+#2	echo 2 
+#3	echo 3 
 OK! All 3 tests have passed.
 $ ./doctest.sh --no-color --verbose -n 3-1 self-test/ok-10.sh
-=======[1] echo 1 
-=======[2] echo 2 
-=======[3] echo 3 
+#1	echo 1 
+#2	echo 2 
+#3	echo 3 
 OK! All 3 tests have passed.
 $ ./doctest.sh --no-color -n 1,5,13 self-test/ok-?.sh self-test/ok-10.sh
 Testing file self-test/ok-1.sh
@@ -759,14 +759,14 @@ $
 $ ./doctest.sh --no-color --verbose self-test/option-prompt.sh
 doctest.sh: Error: no test found in input file: self-test/option-prompt.sh
 $ ./doctest.sh --no-color --verbose --prompt 'prompt$ ' self-test/option-prompt.sh
-=======[1] echo "1"  
-=======[2] echo "2"
-=======[3] echo "3"
+#1	echo "1"  
+#2	echo "2"
+#3	echo "3"
 OK! All 3 tests have passed.
 $ ./doctest.sh --no-color --verbose --prompt '♥ ' self-test/option-prompt-unicode.sh
-=======[1] echo "1"  
-=======[2] echo "2"
-=======[3] echo "3"
+#1	echo "1"  
+#2	echo "2"
+#3	echo "3"
 OK! All 3 tests have passed.
 $
 
@@ -814,36 +814,36 @@ $
 # Option --prefix
 
 $ ./doctest.sh --no-color --verbose --prefix '    ' self-test/option-prefix.sh
-=======[1] echo "1"  
-=======[2] echo "2"
-=======[3] echo "3"
-=======[4] echo "4"
-=======[5] echo "5"  
-=======[6] echo; echo "6"; echo; echo "7"
+#1	echo "1"  
+#2	echo "2"
+#3	echo "3"
+#4	echo "4"
+#5	echo "5"  
+#6	echo; echo "6"; echo; echo "7"
 OK! All 6 tests have passed.
 $ ./doctest.sh --no-color --verbose --prefix 4 self-test/option-prefix.sh
-=======[1] echo "1"  
-=======[2] echo "2"
-=======[3] echo "3"
-=======[4] echo "4"
-=======[5] echo "5"  
-=======[6] echo; echo "6"; echo; echo "7"
+#1	echo "1"  
+#2	echo "2"
+#3	echo "3"
+#4	echo "4"
+#5	echo "5"  
+#6	echo; echo "6"; echo; echo "7"
 OK! All 6 tests have passed.
 $ ./doctest.sh --no-color --verbose --prefix '\t' self-test/option-prefix-tab.sh
-=======[1] echo "1"  
-=======[2] echo "2"
-=======[3] echo "3"
-=======[4] echo "4"
-=======[5] echo "5"  
-=======[6] echo; echo "6"; echo; echo "7"
+#1	echo "1"  
+#2	echo "2"
+#3	echo "3"
+#4	echo "4"
+#5	echo "5"  
+#6	echo; echo "6"; echo; echo "7"
 OK! All 6 tests have passed.
 $ ./doctest.sh --no-color --verbose --prefix tab self-test/option-prefix-tab.sh
-=======[1] echo "1"  
-=======[2] echo "2"
-=======[3] echo "3"
-=======[4] echo "4"
-=======[5] echo "5"  
-=======[6] echo; echo "6"; echo; echo "7"
+#1	echo "1"  
+#2	echo "2"
+#3	echo "3"
+#4	echo "4"
+#5	echo "5"  
+#6	echo; echo "6"; echo; echo "7"
 OK! All 6 tests have passed.
 $
 
@@ -879,31 +879,31 @@ OK! All 10 tests have passed.
 $ ./doctest.sh --no-color self-test/special-chars.sh
 YOU WIN! PERFECT! All 206 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/windows.sh
-=======[1] echo "a file with CRLF line ending"
-=======[2] echo "inline output"  
-=======[3] echo "inline regex"  
+#1	echo "a file with CRLF line ending"
+#2	echo "inline output"  
+#3	echo "inline regex"  
 OK! All 3 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/close-command.sh
-=======[1] echo 1
-=======[2] echo 2
-=======[3] echo 3
+#1	echo 1
+#2	echo 2
+#3	echo 3
 OK! All 3 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/multi-commands.sh
-=======[1] echo 1; echo 2; echo 3; echo 4; echo 5
-=======[2] (echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p
-=======[3] (echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p  
+#1	echo 1; echo 2; echo 3; echo 4; echo 5
+#2	(echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p
+#3	(echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p  
 OK! All 3 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/stdout-stderr.sh
-=======[1] echo "stdout"
-=======[2] echo "stdout" 2> /dev/null
-=======[3] echo "stderr" 1>&2
-=======[4] echo "stdout" > /dev/null
-=======[5] echo "stdout" 2> /dev/null 1>&2
-=======[6] cp XXnotfoundXX foo
-=======[7] cp XXnotfoundXX foo > /dev/null
-=======[8] cp XXnotfoundXX foo 2>&1
-=======[9] cp XXnotfoundXX foo 2> /dev/null
-=======[10] cp XXnotfoundXX foo > /dev/null 2>&1
+#1	echo "stdout"
+#2	echo "stdout" 2> /dev/null
+#3	echo "stderr" 1>&2
+#4	echo "stdout" > /dev/null
+#5	echo "stdout" 2> /dev/null 1>&2
+#6	cp XXnotfoundXX foo
+#7	cp XXnotfoundXX foo > /dev/null
+#8	cp XXnotfoundXX foo 2>&1
+#9	cp XXnotfoundXX foo 2> /dev/null
+#10	cp XXnotfoundXX foo > /dev/null 2>&1
 OK! All 10 tests have passed.
 $ ./doctest.sh --no-color self-test/cd.sh self-test/ok-2.sh
 Testing file self-test/cd.sh
@@ -916,17 +916,17 @@ Testing file self-test/ok-2.sh
 
 OK! All 3 tests have passed.
 $ ./doctest.sh --no-color --verbose self-test/no-nl-file-1.sh
-=======[1] printf '%s\n' 'a file with no \n at the last line'
+#1	printf '%s\n' 'a file with no \n at the last line'
 OK! The single test has passed.
 $ ./doctest.sh --no-color --verbose self-test/no-nl-file-2.sh
-=======[1] printf '%s\n' 'another file with no \n at the last line'
+#1	printf '%s\n' 'another file with no \n at the last line'
 OK! The single test has passed.
 $ ./doctest.sh --no-color --verbose self-test/no-nl-file-3.sh
-=======[1] printf '%s\n' 'oneliner, no \n'  
+#1	printf '%s\n' 'oneliner, no \n'  
 OK! The single test has passed.
 $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
-=======[1] printf 'ok\n'
-=======[2] printf 'error'
+#1	printf 'ok\n'
+#2	printf 'error'
 --------------------------------------------------------------------------------
 [FAILED #2] printf 'error'
 @@ -1 +1 @@
@@ -934,7 +934,7 @@ $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
 +error
 \ No newline at end of file
 --------------------------------------------------------------------------------
-=======[3] printf 'ok\nok\nerror'
+#3	printf 'ok\nok\nerror'
 --------------------------------------------------------------------------------
 [FAILED #3] printf 'ok\nok\nerror'
 @@ -1,3 +1,3 @@
@@ -944,8 +944,8 @@ $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
 +error
 \ No newline at end of file
 --------------------------------------------------------------------------------
-=======[4] printf 'ok\n'    
-=======[5] printf 'error'   
+#4	printf 'ok\n'    
+#5	printf 'error'   
 --------------------------------------------------------------------------------
 [FAILED #5] printf 'error'   
 @@ -1 +1 @@
@@ -953,7 +953,7 @@ $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
 +error
 \ No newline at end of file
 --------------------------------------------------------------------------------
-=======[6] printf 'ok'; echo   
+#6	printf 'ok'; echo   
 
 FAIL: 3 of 6 tests have failed.
 $
