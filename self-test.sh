@@ -87,8 +87,25 @@ Usage: doctest.sh [options] <file ...>
 $ ./doctest.sh -h | sed -n '1p; $p'
 Usage: doctest.sh [options] <file ...>
       --prompt STRING         Set prompt string (default: '$ ')
-$ ./doctest.sh --help | sed -n '1p; $p'
+$ ./doctest.sh --help
 Usage: doctest.sh [options] <file ...>
+
+Options:
+  -1, --first                 Stop execution upon first error
+  -l, --list                  List all the tests (no execution)
+  -L, --list-run              List all the tests with OK/FAIL status
+  -n, --number RANGE          Run specific tests, by number (1,2,4-7)
+      --pre-flight COMMAND    Execute command before running the first test
+      --post-flight COMMAND   Execute command after running the last test
+  -q, --quiet                 Quiet operation, no output shown
+  -v, --verbose               Show each test being executed
+  -V, --version               Show program version and exit
+
+Customization options:
+      --diff-options OPTIONS  Set options for the diff command (default: -u)
+      --inline-prefix PREFIX  Set inline output prefix (default: '#→ ')
+      --no-color              Turn off colors in the program output
+      --prefix PREFIX         Set command line prefix (default: '')
       --prompt STRING         Set prompt string (default: '$ ')
 $
 
