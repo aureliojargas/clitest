@@ -41,9 +41,9 @@ Options:
   -V, --version               Show program version and exit
 
 Customization options:
+      --color WHEN            Set when to use colors: always, never, auto
       --diff-options OPTIONS  Set options for the diff command (default: -u)
       --inline-prefix PREFIX  Set inline output prefix (default: '#→ ')
-      --no-color              Turn off colors in the program output
       --prefix PREFIX         Set command line prefix (default: '')
       --prompt STRING         Set prompt string (default: '$ ')"
 
@@ -52,6 +52,7 @@ prefix=''
 prompt='$ '
 inline_prefix='#→ '
 diff_options='-u'
+color_mode='auto'
 temp_dir="${TMPDIR:-/tmp}/doctest.$$"
 # Note: using temporary files for compatibility, since <(...) is not portable.
 
@@ -61,7 +62,7 @@ quiet=0
 verbose=0
 list_mode=0
 list_run=0
-use_colors=1
+use_colors=0
 stop_on_first_error=0
 separator_line_shown=0
 
@@ -101,22 +102,22 @@ nl='
 while test "${1#-}" != "$1"
 do
 	case "$1" in
-		-q|--quiet     ) shift; quiet=1 ;;
-		-v|--verbose   ) shift; verbose=1 ;;
-		-l|--list      ) shift; list_mode=1;;
-		-L|--list-run  ) shift; list_run=1;;
-		-1|--first     ) shift; stop_on_first_error=1 ;;
-		-n|--number    ) shift; range_user="$1"; shift ;;
-		--no-color     ) shift; use_colors=0 ;;
-  		--debug        ) shift; debug=1 ;;
-		--pre-flight   ) shift; pre_command="$1"; shift ;;
-		--post-flight  ) shift; post_command="$1"; shift ;;
-		--diff-options ) shift; diff_options="$1"; shift ;;
-		--inline-prefix) shift; inline_prefix="$1"; shift ;;
-		--prompt       ) shift; prompt="$1"; shift ;;
-		--prefix       ) shift; prefix="$1"; shift ;;
-		-V|--version   ) printf '%s\n' "$my_name $my_version"; exit 0 ;;
-		-h|--help      ) printf '%s\n' "$my_help"; exit 0 ;;
+		-q|--quiet      ) shift; quiet=1 ;;
+		-v|--verbose    ) shift; verbose=1 ;;
+		-l|--list       ) shift; list_mode=1;;
+		-L|--list-run   ) shift; list_run=1;;
+		-1|--first      ) shift; stop_on_first_error=1 ;;
+		-n|--number     ) shift; range_user="$1"; shift ;;
+		--color|--colour) shift; color_mode="$1"; shift ;;
+  		--debug         ) shift; debug=1 ;;
+		--pre-flight    ) shift; pre_command="$1"; shift ;;
+		--post-flight   ) shift; post_command="$1"; shift ;;
+		--diff-options  ) shift; diff_options="$1"; shift ;;
+		--inline-prefix ) shift; inline_prefix="$1"; shift ;;
+		--prompt        ) shift; prompt="$1"; shift ;;
+		--prefix        ) shift; prefix="$1"; shift ;;
+		-V|--version    ) printf '%s\n' "$my_name $my_version"; exit 0 ;;
+		-h|--help       ) printf '%s\n' "$my_help"; exit 0 ;;
 		--) shift; break ;;
 		*) break ;;
 	esac
@@ -557,6 +558,29 @@ case "$prefix" in
 	;;
 	*\\*)
 		prefix="$(printf %b "$prefix")"  # expand \t and others
+	;;
+esac
+
+# Will we use colors in the output?
+case "$color_mode" in
+	always | yes | y)
+		use_colors=1
+	;;
+	never | no | n)
+		use_colors=0
+	;;
+	auto | a)
+		# The auto mode will use colors if the output is a terminal
+		# Note: test -t is in POSIX
+		if test -t 1
+		then
+			use_colors=1
+		else
+			use_colors=0
+		fi
+	;;
+	*)
+		_error "invalid value '$color_mode' for --color. Use: auto, always or never."
 	;;
 esac
 
