@@ -171,7 +171,12 @@ OK! The single test has passed.
 $ ./doctest.sh --color no self-test/ok-1.sh
 OK! The single test has passed.
 $
-# Note: The default '--color auto' cannot be tested here.
+# Note: Inside this file, the output is not a terminal,
+#       so the default is no colored output.
+$ ./doctest.sh self-test/ok-1.sh
+OK! The single test has passed.
+$
+# Note: The real default '--color auto' cannot be tested here.
 #       Test it by hand at the command line.
 # $ ./doctest.sh self-test/ok-1.sh
 # [32mOK![m The single test has passed.
