@@ -41,10 +41,10 @@ Options:
   -V, --version               Show program version and exit
 
 Customization options:
-      --diff-options STRING   Set options for the diff command (default: -u)
-      --inline-prefix STRING  Set inline output prefix (default: '#→ ')
+      --diff-options OPTIONS  Set options for the diff command (default: -u)
+      --inline-prefix PREFIX  Set inline output prefix (default: '#→ ')
       --no-color              Turn off colors in the program output
-      --prefix STRING         Set command line prefix (default: none)
+      --prefix PREFIX         Set command line prefix (default: '')
       --prompt STRING         Set prompt string (default: '$ ')"
 
 # Customization (if needed), most may be altered by command line options
