@@ -175,23 +175,23 @@ _list_line ()  # $1=ok|fail
 			# Green line or OK stamp (--list-run)
 			if test $use_colors -eq 1
 			then
-				_message "${color_green}${test_number}${tab}${test_command}${color_off}"
+				_message "${color_green}#${test_number}${tab}${test_command}${color_off}"
 			else
-				_message "${test_number}${tab}OK${tab}${test_command}"
+				_message "#${test_number}${tab}OK${tab}${test_command}"
 			fi
 		;;
 		fail)
 			# Red line or FAIL stamp (--list-run)
 			if test $use_colors -eq 1
 			then
-				_message "${color_red}${test_number}${tab}${test_command}${color_off}"
+				_message "${color_red}#${test_number}${tab}${test_command}${color_off}"
 			else
-				_message "${test_number}${tab}FAIL${tab}${test_command}"
+				_message "#${test_number}${tab}FAIL${tab}${test_command}"
 			fi
 		;;
 		*)
 			# Normal line, no color, no stamp (--list)
-			_message "${test_number}${tab}${test_command}"
+			_message "#${test_number}${tab}${test_command}"
 		;;
 	esac
 }

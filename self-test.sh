@@ -146,104 +146,104 @@ $
 # Option --list
 
 $ ./doctest.sh -l self-test/no-nl-command.sh; echo $?
-1	printf 'ok\n'
-2	printf 'error'
-3	printf 'ok\nok\nerror'
-4	printf 'ok\n'    
-5	printf 'error'   
-6	printf 'ok'; echo   
+#1	printf 'ok\n'
+#2	printf 'error'
+#3	printf 'ok\nok\nerror'
+#4	printf 'ok\n'    
+#5	printf 'error'   
+#6	printf 'ok'; echo   
 0
 $ ./doctest.sh --list self-test/no-nl-command.sh
-1	printf 'ok\n'
-2	printf 'error'
-3	printf 'ok\nok\nerror'
-4	printf 'ok\n'    
-5	printf 'error'   
-6	printf 'ok'; echo   
+#1	printf 'ok\n'
+#2	printf 'error'
+#3	printf 'ok\nok\nerror'
+#4	printf 'ok\n'    
+#5	printf 'error'   
+#6	printf 'ok'; echo   
 $ ./doctest.sh --list self-test/no-nl-command.sh self-test/ok-1.sh; echo $?
 ---------------------------------------- self-test/no-nl-command.sh
-1	printf 'ok\n'
-2	printf 'error'
-3	printf 'ok\nok\nerror'
-4	printf 'ok\n'    
-5	printf 'error'   
-6	printf 'ok'; echo   
+#1	printf 'ok\n'
+#2	printf 'error'
+#3	printf 'ok\nok\nerror'
+#4	printf 'ok\n'    
+#5	printf 'error'   
+#6	printf 'ok'; echo   
 ---------------------------------------- self-test/ok-1.sh
-7	echo ok
+#7	echo ok
 0
 $
 
 # Option --list-run
 
 $ ./doctest.sh --list-run self-test/no-nl-command.sh; echo $?
-[32m1	printf 'ok\n'[m
-[31m2	printf 'error'[m
-[31m3	printf 'ok\nok\nerror'[m
-[32m4	printf 'ok\n'    [m
-[31m5	printf 'error'   [m
-[32m6	printf 'ok'; echo   [m
+[32m#1	printf 'ok\n'[m
+[31m#2	printf 'error'[m
+[31m#3	printf 'ok\nok\nerror'[m
+[32m#4	printf 'ok\n'    [m
+[31m#5	printf 'error'   [m
+[32m#6	printf 'ok'; echo   [m
 1
 $ ./doctest.sh --list-run --no-color self-test/no-nl-command.sh; echo $?
-1	OK	printf 'ok\n'
-2	FAIL	printf 'error'
-3	FAIL	printf 'ok\nok\nerror'
-4	OK	printf 'ok\n'    
-5	FAIL	printf 'error'   
-6	OK	printf 'ok'; echo   
+#1	OK	printf 'ok\n'
+#2	FAIL	printf 'error'
+#3	FAIL	printf 'ok\nok\nerror'
+#4	OK	printf 'ok\n'    
+#5	FAIL	printf 'error'   
+#6	OK	printf 'ok'; echo   
 1
 $ ./doctest.sh -L --no-color self-test/no-nl-command.sh
-1	OK	printf 'ok\n'
-2	FAIL	printf 'error'
-3	FAIL	printf 'ok\nok\nerror'
-4	OK	printf 'ok\n'    
-5	FAIL	printf 'error'   
-6	OK	printf 'ok'; echo   
+#1	OK	printf 'ok\n'
+#2	FAIL	printf 'error'
+#3	FAIL	printf 'ok\nok\nerror'
+#4	OK	printf 'ok\n'    
+#5	FAIL	printf 'error'   
+#6	OK	printf 'ok'; echo   
 $ ./doctest.sh -L --no-color self-test/no-nl-command.sh self-test/ok-1.sh; echo $?
 ---------------------------------------- self-test/no-nl-command.sh
-1	OK	printf 'ok\n'
-2	FAIL	printf 'error'
-3	FAIL	printf 'ok\nok\nerror'
-4	OK	printf 'ok\n'    
-5	FAIL	printf 'error'   
-6	OK	printf 'ok'; echo   
+#1	OK	printf 'ok\n'
+#2	FAIL	printf 'error'
+#3	FAIL	printf 'ok\nok\nerror'
+#4	OK	printf 'ok\n'    
+#5	FAIL	printf 'error'   
+#6	OK	printf 'ok'; echo   
 ---------------------------------------- self-test/ok-1.sh
-7	OK	echo ok
+#7	OK	echo ok
 1
 $ ./doctest.sh -L --no-color self-test/ok-1.sh; echo $?
-1	OK	echo ok
+#1	OK	echo ok
 0
 $
 
 # Option --number with --list and --list-run
 
 $ ./doctest.sh --no-color --list -n 3,5-7 self-test/ok-10.sh
-3	echo 3 
-5	echo 5 
-6	echo 6 
-7	echo 7 
+#3	echo 3 
+#5	echo 5 
+#6	echo 6 
+#7	echo 7 
 $ ./doctest.sh --no-color --list-run -n 3,5-7 self-test/ok-10.sh
-3	OK	echo 3 
-5	OK	echo 5 
-6	OK	echo 6 
-7	OK	echo 7 
+#3	OK	echo 3 
+#5	OK	echo 5 
+#6	OK	echo 6 
+#7	OK	echo 7 
 $ ./doctest.sh --no-color --list -n 1,3,5-7 self-test/ok-1.sh self-test/error-2.sh self-test/ok-10.sh
 ---------------------------------------- self-test/ok-1.sh
-1	echo ok
+#1	echo ok
 ---------------------------------------- self-test/error-2.sh
-3	echo ok  
+#3	echo ok  
 ---------------------------------------- self-test/ok-10.sh
-5	echo 2 
-6	echo 3 
-7	echo 4 
+#5	echo 2 
+#6	echo 3 
+#7	echo 4 
 $ ./doctest.sh --no-color --list-run -n 1,3,5-7 self-test/ok-1.sh self-test/error-2.sh self-test/ok-10.sh
 ---------------------------------------- self-test/ok-1.sh
-1	OK	echo ok
+#1	OK	echo ok
 ---------------------------------------- self-test/error-2.sh
-3	FAIL	echo ok  
+#3	FAIL	echo ok  
 ---------------------------------------- self-test/ok-10.sh
-5	OK	echo 2 
-6	OK	echo 3 
-7	OK	echo 4 
+#5	OK	echo 2 
+#6	OK	echo 3 
+#7	OK	echo 4 
 $
 
 # Single file, OK
@@ -486,124 +486,124 @@ $
 # Inline match modes
 
 $ ./doctest.sh --no-color --list-run self-test/inline-match-text.sh
-1	OK	echo 'abc'                    
-2	OK	echo 'abc'                    
-3	OK	printf '%s\n' '\t'            
-4	OK	printf '%s\n' '\n'            
-5	OK	echo '$PWD'                   
-6	OK	echo '$(date)'                
-7	OK	echo '$'                      
-8	OK	echo '>'                      
-9	OK	echo '?'                      
-10	OK	echo '!'                      
-11	OK	echo '*'                      
-12	OK	echo '['                      
-13	OK	echo '('                      
-14	OK	echo                          
-15	OK	echo "not inline output"      #→
-16	OK	echo '123456789'              
-17	OK	echo '1 3   7 9'              
-18	OK	echo '    5    '              
-19	OK	echo ' leading space'         
-20	OK	echo '    leading spaces'     
-21	OK	printf '\tleading tab\n'      
-22	OK	printf '\t\tleading tabs\n'   
-23	OK	echo 'trailing space '        
-24	OK	echo 'trailing spaces    '    
-25	OK	printf 'trailing tab\t\n'     
-26	OK	printf 'trailing tabs\t\t\n'  
-27	OK	echo ' '                      
-28	FAIL	echo '   '                    
-29	OK	printf '\t\n'                 
-30	OK	printf '\t\t\t\n'             
-31	OK	printf ' \t  \t\t   \n'       
-32	OK	printf 'ok\n'                 
-33	FAIL	printf 'fail'                 
-34	OK	printf 'ok'; echo             
-35	FAIL	echo 'fail'                   
-36	FAIL	echo 'fail'                   
-37	OK	echo ' ok'                    
-38	OK	echo '--text'                 
-39	OK	echo '--textual'              
-40	OK	echo '--text is cool'         
+#1	OK	echo 'abc'                    
+#2	OK	echo 'abc'                    
+#3	OK	printf '%s\n' '\t'            
+#4	OK	printf '%s\n' '\n'            
+#5	OK	echo '$PWD'                   
+#6	OK	echo '$(date)'                
+#7	OK	echo '$'                      
+#8	OK	echo '>'                      
+#9	OK	echo '?'                      
+#10	OK	echo '!'                      
+#11	OK	echo '*'                      
+#12	OK	echo '['                      
+#13	OK	echo '('                      
+#14	OK	echo                          
+#15	OK	echo "not inline output"      #→
+#16	OK	echo '123456789'              
+#17	OK	echo '1 3   7 9'              
+#18	OK	echo '    5    '              
+#19	OK	echo ' leading space'         
+#20	OK	echo '    leading spaces'     
+#21	OK	printf '\tleading tab\n'      
+#22	OK	printf '\t\tleading tabs\n'   
+#23	OK	echo 'trailing space '        
+#24	OK	echo 'trailing spaces    '    
+#25	OK	printf 'trailing tab\t\n'     
+#26	OK	printf 'trailing tabs\t\t\n'  
+#27	OK	echo ' '                      
+#28	FAIL	echo '   '                    
+#29	OK	printf '\t\n'                 
+#30	OK	printf '\t\t\t\n'             
+#31	OK	printf ' \t  \t\t   \n'       
+#32	OK	printf 'ok\n'                 
+#33	FAIL	printf 'fail'                 
+#34	OK	printf 'ok'; echo             
+#35	FAIL	echo 'fail'                   
+#36	FAIL	echo 'fail'                   
+#37	OK	echo ' ok'                    
+#38	OK	echo '--text'                 
+#39	OK	echo '--textual'              
+#40	OK	echo '--text is cool'         
 $ ./doctest.sh --no-color --list-run self-test/inline-match-eval.sh
-1	OK	folder=$(pwd)
-2	OK	echo $folder                  
-3	OK	var='abc'
-4	OK	echo abc                      
-5	OK	echo 4                        
-6	OK	today=$(date +%D)
-7	OK	echo "Today is $today"        
-8	OK	printf 'ok'                   
-9	OK	echo ' leading space'         
-10	OK	echo '    leading spaces'     
-11	OK	printf '\tleading tab\n'      
-12	OK	printf '\t\tleading tabs\n'   
-13	OK	echo 'trailing space '        
-14	OK	echo 'trailing spaces    '    
-15	OK	printf 'trailing tab\t\n'     
-16	OK	printf 'trailing tabs\t\t\n'  
-17	OK	echo ' '                      
-18	OK	echo '   '                    
-19	OK	printf '\t\n'                 
-20	OK	printf '\t\t\t\n'             
-21	OK	printf ' \t  \t\t   \n'       
-22	FAIL	echo 'fail'                   
-23	FAIL	echo 'fail'                   
-24	OK	echo '--eval'                 
-25	OK	echo '--evaluate'             
-26	OK	echo '--eval is evil'         
+#1	OK	folder=$(pwd)
+#2	OK	echo $folder                  
+#3	OK	var='abc'
+#4	OK	echo abc                      
+#5	OK	echo 4                        
+#6	OK	today=$(date +%D)
+#7	OK	echo "Today is $today"        
+#8	OK	printf 'ok'                   
+#9	OK	echo ' leading space'         
+#10	OK	echo '    leading spaces'     
+#11	OK	printf '\tleading tab\n'      
+#12	OK	printf '\t\tleading tabs\n'   
+#13	OK	echo 'trailing space '        
+#14	OK	echo 'trailing spaces    '    
+#15	OK	printf 'trailing tab\t\n'     
+#16	OK	printf 'trailing tabs\t\t\n'  
+#17	OK	echo ' '                      
+#18	OK	echo '   '                    
+#19	OK	printf '\t\n'                 
+#20	OK	printf '\t\t\t\n'             
+#21	OK	printf ' \t  \t\t   \n'       
+#22	FAIL	echo 'fail'                   
+#23	FAIL	echo 'fail'                   
+#24	OK	echo '--eval'                 
+#25	OK	echo '--evaluate'             
+#26	OK	echo '--eval is evil'         
 $ ./doctest.sh --no-color --list-run self-test/inline-match-regex.sh
-1	OK	echo 'abc123'                 
-2	OK	echo 'abc123'                 
-3	OK	echo 'abc123'                 
-4	OK	echo 'abc123'                 
-5	OK	echo 'abc123'                 
-6	OK	echo 'abc123'                 
-7	OK	echo 'abc123'                 
-8	OK	echo 'abc123'                 
-9	OK	echo 'abc 123'                
-10	OK	echo ' '                      
-11	OK	echo '    '                   
-12	OK	printf '\t\n'                 
-13	OK	printf '\t\t\t\n'             
-14	OK	printf ' \t  \t\t   \n'       
-15	OK	printf 'may\tfail'            
-16	FAIL	printf 'may\tfail'            
-17	OK	printf 'will\tmatch'          
-18	FAIL	printf 'will\nfail'           
-19	FAIL	printf 'will\nfail'           
-20	OK	printf '1\n2\n3\n4\nok\n'     
-21	OK	printf 'ok'                   
-22	OK	printf 'ok\n'                 
-23	FAIL	echo 'fail'                   
-24	FAIL	echo 'fail'                   
-25	OK	echo ' ok'                    
-26	OK	echo '--regex'                
-27	OK	echo '--regexpal'             
-28	OK	echo '--regex is cool'        
+#1	OK	echo 'abc123'                 
+#2	OK	echo 'abc123'                 
+#3	OK	echo 'abc123'                 
+#4	OK	echo 'abc123'                 
+#5	OK	echo 'abc123'                 
+#6	OK	echo 'abc123'                 
+#7	OK	echo 'abc123'                 
+#8	OK	echo 'abc123'                 
+#9	OK	echo 'abc 123'                
+#10	OK	echo ' '                      
+#11	OK	echo '    '                   
+#12	OK	printf '\t\n'                 
+#13	OK	printf '\t\t\t\n'             
+#14	OK	printf ' \t  \t\t   \n'       
+#15	OK	printf 'may\tfail'            
+#16	FAIL	printf 'may\tfail'            
+#17	OK	printf 'will\tmatch'          
+#18	FAIL	printf 'will\nfail'           
+#19	FAIL	printf 'will\nfail'           
+#20	OK	printf '1\n2\n3\n4\nok\n'     
+#21	OK	printf 'ok'                   
+#22	OK	printf 'ok\n'                 
+#23	FAIL	echo 'fail'                   
+#24	FAIL	echo 'fail'                   
+#25	OK	echo ' ok'                    
+#26	OK	echo '--regex'                
+#27	OK	echo '--regexpal'             
+#28	OK	echo '--regex is cool'        
 $ ./doctest.sh --no-color --list-run self-test/inline-match-file.sh
-1	OK	printf '$ echo ok\nok\n'      
-2	OK	echo 'ok' > /tmp/foo.txt
-3	OK	echo 'ok'                     
-4	FAIL	echo 'fail'                   
-5	FAIL	echo 'fail'                   
-6	OK	echo '--file'                 
-7	OK	echo '--filer'                
-8	OK	echo '--file is cool'         
+#1	OK	printf '$ echo ok\nok\n'      
+#2	OK	echo 'ok' > /tmp/foo.txt
+#3	OK	echo 'ok'                     
+#4	FAIL	echo 'fail'                   
+#5	FAIL	echo 'fail'                   
+#6	OK	echo '--file'                 
+#7	OK	echo '--filer'                
+#8	OK	echo '--file is cool'         
 $ ./doctest.sh --no-color --list-run self-test/inline-match-lines.sh
-1	OK	a=1                           
-2	OK	echo 'ok'                     
-3	OK	printf '1\n2\n3\n'            
-4	OK	printf 'no-nl'                
-5	OK	printf '1\n2\nno-nl'          
-6	FAIL	echo 'fail'                   
-7	FAIL	echo 'fail'                   
-8	FAIL	echo 'fail'                   
-9	FAIL	echo 'fail'                   
-10	OK	echo '--lines'                 
-11	OK	echo '--linesout'             
-12	OK	echo '--lines is cool'         
+#1	OK	a=1                           
+#2	OK	echo 'ok'                     
+#3	OK	printf '1\n2\n3\n'            
+#4	OK	printf 'no-nl'                
+#5	OK	printf '1\n2\nno-nl'          
+#6	FAIL	echo 'fail'                   
+#7	FAIL	echo 'fail'                   
+#8	FAIL	echo 'fail'                   
+#9	FAIL	echo 'fail'                   
+#10	OK	echo '--lines'                 
+#11	OK	echo '--linesout'             
+#12	OK	echo '--lines is cool'         
 $ doctest.sh --no-color --first self-test/inline-match-lines.sh
 --------------------------------------------------------------------------------
 [FAILED #6] echo 'fail'                   
