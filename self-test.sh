@@ -323,7 +323,7 @@ $ ./doctest.sh --no-color self-test/ok-1.sh self-test/error-1.sh self-test/ok-2.
 Testing file self-test/ok-1.sh
 Testing file self-test/error-1.sh
 --------------------------------------------------------------------------------
-[FAILED #2] echo ok
+[FAILED #2, line 1] echo ok
 @@ -1 +1 @@
 -fail
 +ok
@@ -331,12 +331,12 @@ Testing file self-test/error-1.sh
 Testing file self-test/ok-2.sh
 Testing file self-test/error-2.sh
 --------------------------------------------------------------------------------
-[FAILED #5] echo ok
+[FAILED #5, line 1] echo ok
 @@ -1 +1 @@
 -fail
 +ok
 --------------------------------------------------------------------------------
-[FAILED #6] echo ok  
+[FAILED #6, line 3] echo ok  
 @@ -1 +1 @@
 -fail
 +ok
@@ -356,7 +356,7 @@ Testing file self-test/ok-1.sh
 Testing file self-test/error-1.sh
 #2	echo ok
 --------------------------------------------------------------------------------
-[FAILED #2] echo ok
+[FAILED #2, line 1] echo ok
 @@ -1 +1 @@
 -fail
 +ok
@@ -367,14 +367,14 @@ Testing file self-test/ok-2.sh
 Testing file self-test/error-2.sh
 #5	echo ok
 --------------------------------------------------------------------------------
-[FAILED #5] echo ok
+[FAILED #5, line 1] echo ok
 @@ -1 +1 @@
 -fail
 +ok
 --------------------------------------------------------------------------------
 #6	echo ok  
 --------------------------------------------------------------------------------
-[FAILED #6] echo ok  
+[FAILED #6, line 3] echo ok  
 @@ -1 +1 @@
 -fail
 +ok
@@ -394,7 +394,7 @@ $
 
 $ ./doctest.sh --no-color self-test/error-1.sh
 --------------------------------------------------------------------------------
-[FAILED #1] echo ok
+[FAILED #1, line 1] echo ok
 @@ -1 +1 @@
 -fail
 +ok
@@ -403,12 +403,12 @@ $ ./doctest.sh --no-color self-test/error-1.sh
 FAIL: The single test has failed.
 $ ./doctest.sh --no-color self-test/error-2.sh
 --------------------------------------------------------------------------------
-[FAILED #1] echo ok
+[FAILED #1, line 1] echo ok
 @@ -1 +1 @@
 -fail
 +ok
 --------------------------------------------------------------------------------
-[FAILED #2] echo ok  
+[FAILED #2, line 3] echo ok  
 @@ -1 +1 @@
 -fail
 +ok
@@ -419,14 +419,14 @@ $ ./doctest.sh --no-color self-test/error-50.sh | tail -1
 EPIC FAIL! All 50 tests have failed.
 $ ./doctest.sh --no-color -1 self-test/error-2.sh
 --------------------------------------------------------------------------------
-[FAILED #1] echo ok
+[FAILED #1, line 1] echo ok
 @@ -1 +1 @@
 -fail
 +ok
 --------------------------------------------------------------------------------
 $ ./doctest.sh --no-color --first self-test/error-2.sh
 --------------------------------------------------------------------------------
-[FAILED #1] echo ok
+[FAILED #1, line 1] echo ok
 @@ -1 +1 @@
 -fail
 +ok
@@ -434,7 +434,7 @@ $ ./doctest.sh --no-color --first self-test/error-2.sh
 $ ./doctest.sh --no-color --first --verbose self-test/error-2.sh
 #1	echo ok
 --------------------------------------------------------------------------------
-[FAILED #1] echo ok
+[FAILED #1, line 1] echo ok
 @@ -1 +1 @@
 -fail
 +ok
@@ -442,14 +442,14 @@ $ ./doctest.sh --no-color --first --verbose self-test/error-2.sh
 $ ./doctest.sh --no-color --verbose self-test/error-2.sh
 #1	echo ok
 --------------------------------------------------------------------------------
-[FAILED #1] echo ok
+[FAILED #1, line 1] echo ok
 @@ -1 +1 @@
 -fail
 +ok
 --------------------------------------------------------------------------------
 #2	echo ok  
 --------------------------------------------------------------------------------
-[FAILED #2] echo ok  
+[FAILED #2, line 3] echo ok  
 @@ -1 +1 @@
 -fail
 +ok
@@ -606,7 +606,7 @@ $ ./doctest.sh --no-color --list-run self-test/inline-match-lines.sh
 #12	OK	echo '--lines is cool'         
 $ doctest.sh --no-color --first self-test/inline-match-lines.sh
 --------------------------------------------------------------------------------
-[FAILED #6] echo 'fail'                   
+[FAILED #6, line 16] echo 'fail'                   
 Expected 99 lines, got 1.
 --------------------------------------------------------------------------------
 $ ./doctest.sh self-test/inline-match-regex-error-1.sh
@@ -634,7 +634,7 @@ $ ./doctest.sh --no-color self-test/inline-match-eval-error-2.sh 2>&1 | sed 's/l
 ./doctest.sh: eval: line N: unexpected EOF while looking for matching `)'
 ./doctest.sh: eval: line N: syntax error: unexpected end of file
 --------------------------------------------------------------------------------
-[FAILED #1] echo 'error: syntax error'  
+[FAILED #1, line N] echo 'error: syntax error'  
 @@ -0,0 +1 @@
 +error: syntax error
 --------------------------------------------------------------------------------
@@ -707,7 +707,7 @@ Testing file self-test/ok-1.sh
 Testing file self-test/ok-2.sh
 Testing file self-test/error-2.sh
 --------------------------------------------------------------------------------
-[FAILED #5] echo ok  
+[FAILED #5, line 3] echo ok  
 @@ -1 +1 @@
 -fail
 +ok
@@ -738,12 +738,12 @@ $
 
 $ ./doctest.sh --no-color self-test/option-diff-options.sh
 --------------------------------------------------------------------------------
-[FAILED #1] echo "	diff -w to ignore spaces    "
+[FAILED #1, line 3] echo "	diff -w to ignore spaces    "
 @@ -1 +1 @@
 -diff -w    to ignore    spaces
 +	diff -w to ignore spaces    
 --------------------------------------------------------------------------------
-[FAILED #2] echo "	diff -w now inline    "  
+[FAILED #2, line 5] echo "	diff -w now inline    "  
 @@ -1 +1 @@
 -diff    -w    now    inline
 +	diff -w now inline    
@@ -774,15 +774,15 @@ $
 
 $ ./doctest.sh --no-color self-test/option-inline-prefix.sh
 --------------------------------------------------------------------------------
-[FAILED #1] echo "1 space" #==> 1 space
+[FAILED #1, line 3] echo "1 space" #==> 1 space
 @@ -0,0 +1 @@
 +1 space
 --------------------------------------------------------------------------------
-[FAILED #2] echo "8 spaces"        #==> 8 spaces
+[FAILED #2, line 4] echo "8 spaces"        #==> 8 spaces
 @@ -0,0 +1 @@
 +8 spaces
 --------------------------------------------------------------------------------
-[FAILED #3] echo "2 tabs"		#==> 2 tabs
+[FAILED #3, line 5] echo "2 tabs"		#==> 2 tabs
 @@ -0,0 +1 @@
 +2 tabs
 --------------------------------------------------------------------------------
@@ -790,17 +790,17 @@ $ ./doctest.sh --no-color self-test/option-inline-prefix.sh
 COMPLETE FAIL! All 3 tests have failed.
 $ ./doctest.sh --no-color --inline-prefix '#==>' self-test/option-inline-prefix.sh
 --------------------------------------------------------------------------------
-[FAILED #1] echo "1 space" 
+[FAILED #1, line 3] echo "1 space" 
 @@ -1 +1 @@
 - 1 space
 +1 space
 --------------------------------------------------------------------------------
-[FAILED #2] echo "8 spaces"        
+[FAILED #2, line 4] echo "8 spaces"        
 @@ -1 +1 @@
 - 8 spaces
 +8 spaces
 --------------------------------------------------------------------------------
-[FAILED #3] echo "2 tabs"		
+[FAILED #3, line 5] echo "2 tabs"		
 @@ -1 +1 @@
 - 2 tabs
 +2 tabs
@@ -928,7 +928,7 @@ $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
 #1	printf 'ok\n'
 #2	printf 'error'
 --------------------------------------------------------------------------------
-[FAILED #2] printf 'error'
+[FAILED #2, line 6] printf 'error'
 @@ -1 +1 @@
 -error
 +error
@@ -936,7 +936,7 @@ $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
 --------------------------------------------------------------------------------
 #3	printf 'ok\nok\nerror'
 --------------------------------------------------------------------------------
-[FAILED #3] printf 'ok\nok\nerror'
+[FAILED #3, line 8] printf 'ok\nok\nerror'
 @@ -1,3 +1,3 @@
  ok
  ok
@@ -947,7 +947,7 @@ $ ./doctest.sh --no-color --verbose self-test/no-nl-command.sh
 #4	printf 'ok\n'    
 #5	printf 'error'   
 --------------------------------------------------------------------------------
-[FAILED #5] printf 'error'   
+[FAILED #5, line 17] printf 'error'   
 @@ -1 +1 @@
 -error
 +error
@@ -962,7 +962,7 @@ $
 
 $ ./doctest.sh --first self-test/error-2.sh
 [31m--------------------------------------------------------------------------------[m
-[31m[FAILED #1] echo ok[m
+[31m[FAILED #1, line 1] echo ok[m
 @@ -1 +1 @@
 -fail
 +ok

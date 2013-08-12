@@ -66,8 +66,9 @@ stop_on_first_error=0
 separator_line_shown=0
 
 # Do not change these vars
-test_number=0
 line_number=0
+test_number=0
+test_line_number=0
 nr_files=0
 nr_total_tests=0      # count only executed (not skipped with -n) tests
 nr_total_errors=0
@@ -384,7 +385,7 @@ _run_test ()
 			then
 				_message "${color_red}$(_separator_line)${color_off}"
 			fi
-			_message "${color_red}[FAILED #$test_number] $test_command${color_off}"
+			_message "${color_red}[FAILED #$test_number, line $test_line_number] $test_command${color_off}"
 			_message "$test_diff" | sed '1 { /^--- / { N; /\n+++ /d; }; }'  # no ---/+++ headers
 			_message "${color_red}$(_separator_line)${color_off}"
 			separator_line_shown=1
@@ -410,6 +411,7 @@ _process_test_file ()
 	nr_file_tests=0
 	nr_file_errors=0
 	line_number=0
+	test_line_number=0
 
 	# Loop for each line of input file
 	# Note: changing IFS to avoid right-trimming of spaces/tabs
@@ -438,6 +440,9 @@ _process_test_file ()
 
 				# Remove the prompt
 				test_command="${input_line#$prefix$prompt}"
+
+				# Save the test's line number for future messages
+				test_line_number=$line_number
 
 				# This is a special test with inline output?
 				if printf '%s\n' "$test_command" | grep "$inline_prefix" > /dev/null
