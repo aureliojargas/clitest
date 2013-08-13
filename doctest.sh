@@ -684,6 +684,12 @@ then
 	eval "$post_command"
 fi
 
+# Range active, but no test matched :(
+if test $nr_total_tests -eq 0 && test -n "$run_range_data"
+then
+	_error "no test found for the specified number or range '$run_range'"
+fi
+
 # List mode has no stats
 if test $list_mode -eq 1 || test $list_run -eq 1
 then
@@ -693,12 +699,6 @@ then
 	else
 		exit 1
 	fi
-fi
-
-# Range active, but no test matched :(
-if test $nr_total_tests -eq 0 && test -n "$run_range_data"
-then
-	_error "no test found for the specified number or range '$run_range'"
 fi
 
 # Show stats

@@ -186,6 +186,8 @@ $
 
 # Option --list
 
+$ ./doctest.sh --list self-test/empty-file.sh
+doctest.sh: Error: no test found in input file: self-test/empty-file.sh
 $ ./doctest.sh -l self-test/no-nl-command.sh; echo $?
 #1	printf 'ok\n'
 #2	printf 'error'
@@ -216,6 +218,8 @@ $
 
 # Option --list-run
 
+$ ./doctest.sh --list-run self-test/empty-file.sh
+doctest.sh: Error: no test found in input file: self-test/empty-file.sh
 $ ./doctest.sh --list-run --color yes self-test/no-nl-command.sh; echo $?
 [32m#1	printf 'ok\n'[m
 [31m#2	printf 'error'[m
@@ -257,6 +261,10 @@ $
 
 # Option --number with --list and --list-run
 
+$ ./doctest.sh --list -n 99 self-test/ok-10.sh
+doctest.sh: Error: no test found for the specified number or range '99'
+$ ./doctest.sh --list-run -n 99 self-test/ok-10.sh
+doctest.sh: Error: no test found for the specified number or range '99'
 $ ./doctest.sh --list -n 3,5-7 self-test/ok-10.sh
 #3	echo 3 
 #5	echo 5 
