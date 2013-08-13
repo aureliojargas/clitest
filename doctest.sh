@@ -34,6 +34,7 @@ Options:
   -l, --list                  List all the tests (no execution)
   -L, --list-run              List all the tests with OK/FAIL status
   -n, --number RANGE          Run specific tests, by number (1,2,4-7)
+  -s, --skip RANGE            Skip specific tests, by number (1,2,4-7)
       --pre-flight COMMAND    Execute command before running the first test
       --post-flight COMMAND   Execute command after running the last test
   -q, --quiet                 Quiet operation, no output shown
@@ -78,6 +79,8 @@ pre_command=
 post_command=
 run_range=
 run_range_data=
+skip_range=
+skip_range_data=
 failed_range=
 line_number=0
 test_number=0
@@ -108,6 +111,7 @@ do
 		-L|--list-run   ) shift; list_run=1;;
 		-1|--first      ) shift; stop_on_first_error=1 ;;
 		-n|--number     ) shift; run_range="$1"; shift ;;
+		-s|--skip       ) shift; skip_range="$1"; shift ;;
 		--color|--colour) shift; color_mode="$1"; shift ;;
   		--debug         ) shift; debug=1 ;;
 		--pre-flight    ) shift; pre_command="$1"; shift ;;
@@ -281,8 +285,16 @@ _run_test ()
 {
 	test_number=$(($test_number + 1))
 
-	# Test range on: skip this test if it's not listed in $run_range_data
+	# Run range on: skip this test if it's not listed in $run_range_data
 	if test -n "$run_range_data" && test "$run_range_data" = "${run_range_data#*:$test_number:}"
+	then
+		_reset_test_data
+		return 0
+	fi
+
+	# Skip range on: skip this test if it's listed in $skip_range_data
+	# Note: --skip always wins over --number, regardless of order
+	if test -n "$skip_range_data" && test "$skip_range_data" != "${skip_range_data#*:$test_number:}"
 	then
 		_reset_test_data
 		return 0
@@ -610,6 +622,13 @@ then
 	_error "invalid argument for -n or --number: $run_range"
 fi
 
+# Parse and validate --skip option value, if informed
+skip_range_data=$(_parse_range "$skip_range")
+if test $? -ne 0
+then
+	_error "invalid argument for -s or --skip: $skip_range"
+fi
+
 # Create temp dir, protected from others
 umask 077 && mkdir "$temp_dir" || _error "cannot create temporary dir: $temp_dir"
 
@@ -658,7 +677,7 @@ do
 	_process_test_file
 
 	# Abort when no test found
-	if test $nr_file_tests -eq 0 && test -z "$run_range_data"
+	if test $nr_file_tests -eq 0 && test -z "$run_range_data" && test -z "$skip_range_data"
 	then
 		_error "no test found in input file: $test_file"
 	fi
@@ -685,9 +704,18 @@ then
 fi
 
 # Range active, but no test matched :(
-if test $nr_total_tests -eq 0 && test -n "$run_range_data"
+if test $nr_total_tests -eq 0
 then
-	_error "no test found for the specified number or range '$run_range'"
+	if test -n "$run_range_data" && test -n "$skip_range_data"
+	then
+		_error "no test found. The combination of -n and -s resulted in no tests."
+	elif test -n "$run_range_data"
+	then
+		_error "no test found for the specified number or range '$run_range'"
+	elif test -n "$skip_range_data"
+	then
+		_error "no test found. Maybe '--skip $skip_range' was too much?"
+	fi
 fi
 
 # List mode has no stats

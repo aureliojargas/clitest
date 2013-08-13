@@ -95,6 +95,7 @@ Options:
   -l, --list                  List all the tests (no execution)
   -L, --list-run              List all the tests with OK/FAIL status
   -n, --number RANGE          Run specific tests, by number (1,2,4-7)
+  -s, --skip RANGE            Skip specific tests, by number (1,2,4-7)
       --pre-flight COMMAND    Execute command before running the first test
       --post-flight COMMAND   Execute command after running the last test
   -q, --quiet                 Quiet operation, no output shown
@@ -259,12 +260,20 @@ $ ./doctest.sh -L self-test/ok-1.sh; echo $?
 0
 $
 
-# Option --number with --list and --list-run
+# Option --number and --skip combined with --list and --list-run
 
 $ ./doctest.sh --list -n 99 self-test/ok-10.sh
 doctest.sh: Error: no test found for the specified number or range '99'
 $ ./doctest.sh --list-run -n 99 self-test/ok-10.sh
 doctest.sh: Error: no test found for the specified number or range '99'
+$ ./doctest.sh --list -s 1-10 self-test/ok-10.sh
+doctest.sh: Error: no test found. Maybe '--skip 1-10' was too much?
+$ ./doctest.sh --list-run -s 1-10 self-test/ok-10.sh
+doctest.sh: Error: no test found. Maybe '--skip 1-10' was too much?
+$ ./doctest.sh --list -n 9 -s 9 self-test/ok-10.sh
+doctest.sh: Error: no test found. The combination of -n and -s resulted in no tests.
+$ ./doctest.sh --list-run -n 9 -s 9 self-test/ok-10.sh
+doctest.sh: Error: no test found. The combination of -n and -s resulted in no tests.
 $ ./doctest.sh --list -n 3,5-7 self-test/ok-10.sh
 #3	echo 3 
 #5	echo 5 
@@ -274,6 +283,14 @@ $ ./doctest.sh --list-run -n 3,5-7 self-test/ok-10.sh
 #3	OK	echo 3 
 #5	OK	echo 5 
 #6	OK	echo 6 
+#7	OK	echo 7 
+$ ./doctest.sh --list -n 3,5-7 -s 6 self-test/ok-10.sh
+#3	echo 3 
+#5	echo 5 
+#7	echo 7 
+$ ./doctest.sh --list-run -n 3,5-7 -s 6 self-test/ok-10.sh
+#3	OK	echo 3 
+#5	OK	echo 5 
 #7	OK	echo 7 
 $ ./doctest.sh --list -n 1,3,5-7 self-test/ok-1.sh self-test/error-2.sh self-test/ok-10.sh
 ---------------------------------------- self-test/ok-1.sh
@@ -292,6 +309,21 @@ $ ./doctest.sh --list-run -n 1,3,5-7 self-test/ok-1.sh self-test/error-2.sh self
 ---------------------------------------- self-test/ok-10.sh
 #5	OK	echo 2 
 #6	OK	echo 3 
+#7	OK	echo 4 
+$
+$ ./doctest.sh --list -n 1,3,5-7 -s 3,6 self-test/ok-1.sh self-test/error-2.sh self-test/ok-10.sh
+---------------------------------------- self-test/ok-1.sh
+#1	echo ok
+---------------------------------------- self-test/error-2.sh
+---------------------------------------- self-test/ok-10.sh
+#5	echo 2 
+#7	echo 4 
+$ ./doctest.sh --list-run -n 1,3,5-7 -s 3,6 self-test/ok-1.sh self-test/error-2.sh self-test/ok-10.sh
+---------------------------------------- self-test/ok-1.sh
+#1	OK	echo ok
+---------------------------------------- self-test/error-2.sh
+---------------------------------------- self-test/ok-10.sh
+#5	OK	echo 2 
 #7	OK	echo 4 
 $
 
@@ -739,10 +771,13 @@ $ ./doctest.sh --verbose -n 3-1 self-test/ok-10.sh
 #2	echo 2 
 #3	echo 3 
 OK! All 3 tests have passed.
-$ ./doctest.sh -n 1,5,13 self-test/ok-?.sh self-test/ok-10.sh
+$ ./doctest.sh --verbose -n 1,5,13 self-test/ok-?.sh self-test/ok-10.sh
 Testing file self-test/ok-1.sh
+#1	echo ok
 Testing file self-test/ok-2.sh
 Testing file self-test/ok-10.sh
+#5	echo 2 
+#13	echo 10 
 
 ================================================================================
   1 ok            self-test/ok-1.sh
@@ -751,10 +786,12 @@ Testing file self-test/ok-10.sh
 ================================================================================
 
 OK! All 3 tests have passed.
-$ ./doctest.sh -n 1,5 self-test/ok-[12].sh self-test/error-2.sh
+$ ./doctest.sh --verbose -n 1,5 self-test/ok-[12].sh self-test/error-2.sh
 Testing file self-test/ok-1.sh
+#1	echo ok
 Testing file self-test/ok-2.sh
 Testing file self-test/error-2.sh
+#5	echo ok  
 --------------------------------------------------------------------------------
 [FAILED #5, line 3] echo ok  
 @@ -1 +1 @@
@@ -769,8 +806,9 @@ Testing file self-test/error-2.sh
 ================================================================================
 
 FAIL: 1 of 2 tests have failed.
-$ ./doctest.sh -n 1 self-test/ok-[12].sh self-test/error-2.sh
+$ ./doctest.sh --verbose -n 1 self-test/ok-[12].sh self-test/error-2.sh
 Testing file self-test/ok-1.sh
+#1	echo ok
 Testing file self-test/ok-2.sh
 Testing file self-test/error-2.sh
 
@@ -782,6 +820,142 @@ Testing file self-test/error-2.sh
 
 OK! The single test has passed.
 $
+
+# Option -s, --skip
+
+$ ./doctest.sh -s - self-test/ok-2.sh
+doctest.sh: Error: invalid argument for -s or --skip: -
+$ ./doctest.sh -s -1 self-test/ok-2.sh
+doctest.sh: Error: invalid argument for -s or --skip: -1
+$ ./doctest.sh -s 1- self-test/ok-2.sh
+doctest.sh: Error: invalid argument for -s or --skip: 1-
+$ ./doctest.sh -s 1--2 self-test/ok-2.sh
+doctest.sh: Error: invalid argument for -s or --skip: 1--2
+$ ./doctest.sh -s 1-2-3 self-test/ok-2.sh
+doctest.sh: Error: invalid argument for -s or --skip: 1-2-3
+$ ./doctest.sh -s 99 self-test/ok-2.sh
+OK! All 2 tests have passed.
+$ ./doctest.sh -s '' self-test/ok-2.sh
+OK! All 2 tests have passed.
+$ ./doctest.sh -s 0 self-test/ok-2.sh
+OK! All 2 tests have passed.
+$ ./doctest.sh -s ,,,0,0-0,,, self-test/ok-2.sh
+OK! All 2 tests have passed.
+$ ./doctest.sh -s 1 self-test/ok-1.sh
+doctest.sh: Error: no test found. Maybe '--skip 1' was too much?
+$ ./doctest.sh --verbose -s 1 self-test/ok-2.sh
+#2	echo ok  
+OK! The single test has passed.
+$ ./doctest.sh --verbose --skip 1 self-test/ok-2.sh
+#2	echo ok  
+OK! The single test has passed.
+$ ./doctest.sh --verbose -s 0-1,1-0 self-test/ok-2.sh
+#2	echo ok  
+OK! The single test has passed.
+$ ./doctest.sh --verbose -s 1-1 self-test/ok-2.sh
+#2	echo ok  
+OK! The single test has passed.
+$ ./doctest.sh --verbose -s 1,1,1,0,1 self-test/ok-2.sh
+#2	echo ok  
+OK! The single test has passed.
+$ ./doctest.sh --verbose -s 2-10 self-test/ok-2.sh
+#1	echo ok
+OK! The single test has passed.
+$ ./doctest.sh --verbose -s 10,9,8,7,6,5,4 self-test/ok-10.sh
+#1	echo 1 
+#2	echo 2 
+#3	echo 3 
+OK! All 3 tests have passed.
+$ ./doctest.sh --verbose -s 10-4 self-test/ok-10.sh
+#1	echo 1 
+#2	echo 2 
+#3	echo 3 
+OK! All 3 tests have passed.
+$ ./doctest.sh --verbose -s 2,3,13 self-test/ok-?.sh self-test/ok-10.sh
+Testing file self-test/ok-1.sh
+#1	echo ok
+Testing file self-test/ok-2.sh
+Testing file self-test/ok-10.sh
+#4	echo 1 
+#5	echo 2 
+#6	echo 3 
+#7	echo 4 
+#8	echo 5 
+#9	echo 6 
+#10	echo 7 
+#11	echo 8 
+#12	echo 9 
+
+================================================================================
+  1 ok            self-test/ok-1.sh
+  0 ok            self-test/ok-2.sh
+  9 ok            self-test/ok-10.sh
+================================================================================
+
+OK! All 10 tests have passed.
+$ ./doctest.sh --verbose -s 2,3,4 self-test/ok-[12].sh self-test/error-2.sh
+Testing file self-test/ok-1.sh
+#1	echo ok
+Testing file self-test/ok-2.sh
+Testing file self-test/error-2.sh
+#5	echo ok  
+--------------------------------------------------------------------------------
+[FAILED #5, line 3] echo ok  
+@@ -1 +1 @@
+-fail
++ok
+--------------------------------------------------------------------------------
+
+================================================================================
+  1 ok            self-test/ok-1.sh
+  0 ok            self-test/ok-2.sh
+  0 ok,   1 fail  self-test/error-2.sh
+================================================================================
+
+FAIL: 1 of 2 tests have failed.
+$ ./doctest.sh --verbose -s 2-10 self-test/ok-[12].sh self-test/error-2.sh
+Testing file self-test/ok-1.sh
+#1	echo ok
+Testing file self-test/ok-2.sh
+Testing file self-test/error-2.sh
+
+================================================================================
+  1 ok            self-test/ok-1.sh
+  0 ok            self-test/ok-2.sh
+  0 ok            self-test/error-2.sh
+================================================================================
+
+OK! The single test has passed.
+$
+
+# Option --number comined with --skip
+
+$ ./doctest.sh -n 9 -s 9 self-test/ok-10.sh
+doctest.sh: Error: no test found. The combination of -n and -s resulted in no tests.
+$ ./doctest.sh -s 9 -n 9 self-test/ok-10.sh  # -s always wins
+doctest.sh: Error: no test found. The combination of -n and -s resulted in no tests.
+$ ./doctest.sh --verbose -n 3,5-7 -s 6 self-test/ok-10.sh
+#3	echo 3 
+#5	echo 5 
+#7	echo 7 
+OK! All 3 tests have passed.
+$ ./doctest.sh --verbose -n 1,3,5-7 -s 3,6 self-test/ok-1.sh self-test/error-2.sh self-test/ok-10.sh
+Testing file self-test/ok-1.sh
+#1	echo ok
+Testing file self-test/error-2.sh
+Testing file self-test/ok-10.sh
+#5	echo 2 
+#7	echo 4 
+
+================================================================================
+  1 ok            self-test/ok-1.sh
+  0 ok            self-test/error-2.sh
+  2 ok            self-test/ok-10.sh
+================================================================================
+
+OK! All 3 tests have passed.
+$
+
 
 # Option --diff-options
 
