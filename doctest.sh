@@ -81,7 +81,7 @@ pre_command=
 post_command=
 range_user=
 range_data=
-range_failed=
+failed_range=
 test_command=
 test_inline=
 test_mode=
@@ -373,7 +373,7 @@ _run_test ()
 	then
 		nr_file_errors=$(($nr_file_errors + 1))
 		nr_total_errors=$(($nr_total_errors + 1))
-		range_failed="$range_failed$test_number,"
+		failed_range="$failed_range$test_number,"
 
 		# Decide the message format
 		if test $list_run -eq 1
@@ -742,7 +742,7 @@ else
 	else
 		_message "${color_red}FAIL:${color_off} $nr_total_errors of $nr_total_tests tests have failed."
 	fi
-	test $test_file = 'self-test.sh' && _message "-n ${range_failed%,}"  # dev helper
+	test $test_file = 'self-test.sh' && _message "-n ${failed_range%,}"  # dev helper
 	exit 1
 fi
 # Note: Those messages are for FUN. When automating, check the exit code.
