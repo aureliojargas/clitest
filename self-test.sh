@@ -888,6 +888,138 @@ $ ./doctest.sh --verbose --prefix tab self-test/option-prefix-tab.sh
 OK! All 6 tests have passed.
 $
 
+# Option --prefix: glob gotchas
+
+$ ./doctest.sh --verbose --prefix '?' self-test/option-prefix-glob.sh
+#1	echo 'prefix ?'	
+#2	echo 'prefix ?'
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prefix '*' self-test/option-prefix-glob.sh
+#1	echo 'prefix *'	
+#2	echo 'prefix *'
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prefix '#' self-test/option-prefix-glob.sh
+#1	echo 'prefix #'	
+#2	echo 'prefix #'
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prefix '%' self-test/option-prefix-glob.sh
+#1	echo 'prefix %'	
+#2	echo 'prefix %'
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prefix '##' self-test/option-prefix-glob.sh
+#1	echo 'prefix ##'	
+#2	echo 'prefix ##'
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prefix '%%' self-test/option-prefix-glob.sh
+#1	echo 'prefix %%'	
+#2	echo 'prefix %%'
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prefix '#*' self-test/option-prefix-glob.sh
+#1	echo 'prefix #*'	
+#2	echo 'prefix #*'
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prefix '*#' self-test/option-prefix-glob.sh
+#1	echo 'prefix *#'	
+#2	echo 'prefix *#'
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prefix '%*' self-test/option-prefix-glob.sh
+#1	echo 'prefix %*'	
+#2	echo 'prefix %*'
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prefix '*%' self-test/option-prefix-glob.sh
+#1	echo 'prefix *%'	
+#2	echo 'prefix *%'
+OK! All 2 tests have passed.
+$
+
+# Option --prompt: glob gotchas (char + space)
+
+$ ./doctest.sh --verbose --prompt '? ' self-test/option-prompt-glob-space.sh
+#1	echo 'prompt ? '	
+#2	echo 'prompt ? '
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prompt '* ' self-test/option-prompt-glob-space.sh
+#1	echo 'prompt * '	
+#2	echo 'prompt * '
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prompt '# ' self-test/option-prompt-glob-space.sh
+#1	echo 'prompt # '	
+#2	echo 'prompt # '
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prompt '% ' self-test/option-prompt-glob-space.sh
+#1	echo 'prompt % '	
+#2	echo 'prompt % '
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prompt '## ' self-test/option-prompt-glob-space.sh
+#1	echo 'prompt ## '	
+#2	echo 'prompt ## '
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prompt '%% ' self-test/option-prompt-glob-space.sh
+#1	echo 'prompt %% '	
+#2	echo 'prompt %% '
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prompt '#* ' self-test/option-prompt-glob-space.sh
+#1	echo 'prompt #* '	
+#2	echo 'prompt #* '
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prompt '*# ' self-test/option-prompt-glob-space.sh
+#1	echo 'prompt *# '	
+#2	echo 'prompt *# '
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prompt '%* ' self-test/option-prompt-glob-space.sh
+#1	echo 'prompt %* '	
+#2	echo 'prompt %* '
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prompt '*% ' self-test/option-prompt-glob-space.sh
+#1	echo 'prompt *% '	
+#2	echo 'prompt *% '
+OK! All 2 tests have passed.
+$
+
+# Option --prompt: glob gotchas (chars only)
+
+$ ./doctest.sh --verbose --prompt '?' self-test/option-prompt-glob-1.sh
+#1	echo 'prompt ?'	
+#2	echo 'prompt ?'
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prompt '*' self-test/option-prompt-glob-1.sh
+#1	echo 'prompt *'	
+#2	echo 'prompt *'
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prompt '#' self-test/option-prompt-glob-1.sh
+#1	echo 'prompt #'	
+#2	echo 'prompt #'
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prompt '%' self-test/option-prompt-glob-1.sh
+#1	echo 'prompt %'	
+#2	echo 'prompt %'
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prompt '##' self-test/option-prompt-glob-2.sh
+#1	echo 'prompt ##'	
+#2	echo 'prompt ##'
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prompt '%%' self-test/option-prompt-glob-2.sh
+#1	echo 'prompt %%'	
+#2	echo 'prompt %%'
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prompt '#*' self-test/option-prompt-glob-2.sh
+#1	echo 'prompt #*'	
+#2	echo 'prompt #*'
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prompt '*#' self-test/option-prompt-glob-2.sh
+#1	echo 'prompt *#'	
+#2	echo 'prompt *#'
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prompt '%*' self-test/option-prompt-glob-2.sh
+#1	echo 'prompt %*'	
+#2	echo 'prompt %*'
+OK! All 2 tests have passed.
+$ ./doctest.sh --verbose --prompt '*%' self-test/option-prompt-glob-2.sh
+#1	echo 'prompt *%'	
+#2	echo 'prompt *%'
+OK! All 2 tests have passed.
+$
+
 # Options --pre-flight and --post-flight
 
 $ ./doctest.sh --pre-flight 'test_number=99; nr_total_tests=99' self-test/ok-1.sh

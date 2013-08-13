@@ -440,7 +440,7 @@ _process_test_file ()
 				test -n "$test_command" && _run_test
 
 				# Remove the prompt
-				test_command="${input_line#$prefix$prompt}"
+				test_command="${input_line#"$prefix$prompt"}"
 
 				# Save the test's line number for future messages
 				test_line_number=$line_number
@@ -449,8 +449,8 @@ _process_test_file ()
 				if printf '%s\n' "$test_command" | grep "$inline_prefix" > /dev/null
 				then
 					# Separate command from inline output
-					test_command="${test_command%$inline_prefix*}"
-					test_inline="${input_line##*$inline_prefix}"
+					test_command="${test_command%"$inline_prefix"*}"
+					test_inline="${input_line##*"$inline_prefix"}"
 
 					#_debug NEW_CMD "$test_command"
 					#_debug OK_INLINE "$test_inline"
@@ -518,7 +518,7 @@ _process_test_file ()
 				test -n "$test_command" || continue
 
 				# Required prefix is missing: we just left a command block
-				if test -n "$prefix" && test "${input_line#$prefix}" = "$input_line"
+				if test -n "$prefix" && test "${input_line#"$prefix"}" = "$input_line"
 				then
 					#_debug BLOCK_OUT "$input_line"
 
@@ -528,9 +528,9 @@ _process_test_file ()
 				fi
 
 				# This line is a test output, save it (without prefix)
-				test_ok_text="$test_ok_text${input_line#$prefix}$nl"
+				test_ok_text="$test_ok_text${input_line#"$prefix"}$nl"
 
-				#_debug OK_TEXT "${input_line#$prefix}"
+				#_debug OK_TEXT "${input_line#"$prefix"}"
 			;;
 		esac
 	done < "$temp_file"
