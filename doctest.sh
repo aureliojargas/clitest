@@ -77,7 +77,7 @@ original_dir=$(pwd)
 pre_command=
 post_command=
 run_range=
-range_data=
+run_range_data=
 failed_range=
 line_number=0
 test_number=0
@@ -201,11 +201,11 @@ _list_test ()  # $1=ok|fail|verbose
 		;;
 	esac
 }
-_parse_range ()
+_parse_range ()  # $1=range
 {
-	# Parse -n, --number ranges and save results to $range_data
+	# Parse numeric ranges and output them in an expanded format
 	#
-	#     Supported formats            Parsed
+	#     Supported formats             Expanded
 	#     ------------------------------------------------------
 	#     Single:  1                    :1:
 	#     List:    1,3,4,7              :1:3:4:7:
@@ -215,7 +215,7 @@ _parse_range ()
 	#     Reverse ranges and repeated/unordered numbers are ok.
 	#     Later we will just grep for :number: in each test.
 
-	case "$range_user" in
+	case "$1" in
 		# No range, nothing to do
 		0 | '')
 			return 0
@@ -235,7 +235,7 @@ _parse_range ()
 	range_data=':'  # :1:2:4:7:
 
 	# Loop each component: a number or a range
-	for part in $(echo "$range_user" | tr , ' ')
+	for part in $(echo "$1" | tr , ' ')
 	do
 		# If there's an hyphen, it's a range
 		case "$part" in
@@ -264,7 +264,7 @@ _parse_range ()
 		test $part != 0 && range_data=$range_data$part:
 	done
 
-	test $range_data = ':' && range_data=
+	test $range_data != ':' && echo $range_data
 	return 0
 }
 _reset_test_data ()
@@ -281,8 +281,8 @@ _run_test ()
 {
 	test_number=$(($test_number + 1))
 
-	# Test range on: skip this test if it's not listed in $range_data
-	if test -n "$range_data" && test "$range_data" = "${range_data#*:$test_number:}"
+	# Test range on: skip this test if it's not listed in $run_range_data
+	if test -n "$run_range_data" && test "$run_range_data" = "${run_range_data#*:$test_number:}"
 	then
 		_reset_test_data
 		return 0
@@ -604,8 +604,8 @@ fi
 : ${COLUMNS:=50}
 
 # Parse and validate --number option value, if informed
-_parse_range
-if test $? -eq 1
+run_range_data=$(_parse_range "$run_range")
+if test $? -ne 0
 then
 	_error "invalid argument for -n or --number: $run_range"
 fi
@@ -658,7 +658,7 @@ do
 	_process_test_file
 
 	# Abort when no test found
-	if test $nr_file_tests -eq 0 && test -z "$range_data"
+	if test $nr_file_tests -eq 0 && test -z "$run_range_data"
 	then
 		_error "no test found in input file: $test_file"
 	fi
@@ -696,7 +696,7 @@ then
 fi
 
 # Range active, but no test matched :(
-if test $nr_total_tests -eq 0 && test -n "$range_data"
+if test $nr_total_tests -eq 0 && test -n "$run_range_data"
 then
 	_error "no test found for the specified number or range '$run_range'"
 fi
