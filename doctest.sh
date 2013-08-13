@@ -67,9 +67,6 @@ stop_on_first_error=0
 separator_line_shown=0
 
 # Do not change these vars
-line_number=0
-test_number=0
-test_line_number=0
 nr_files=0
 nr_total_tests=0      # count only executed (not skipped with -n) tests
 nr_total_errors=0
@@ -82,6 +79,9 @@ post_command=
 range_user=
 range_data=
 failed_range=
+line_number=0
+test_number=0
+test_line_number=0
 test_command=
 test_inline=
 test_mode=
