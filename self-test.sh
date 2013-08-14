@@ -1206,7 +1206,7 @@ $
 
 $ ./doctest.sh --pre-flight 'test_number=99; nr_total_tests=99' self-test/ok-1.sh
 YOU WIN! PERFECT! All 100 tests have passed.
-$ ./doctest.sh --post-flight 'nr_total_errors=50' self-test/ok-50.sh
+$ ./doctest.sh --post-flight 'nr_total_fails=50' self-test/ok-50.sh
 
 EPIC FAIL! All 50 tests have failed.
 $ ./doctest.sh --pre-flight 'false' self-test/ok-1.sh

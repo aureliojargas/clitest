@@ -64,15 +64,15 @@ verbose=0
 list_mode=0
 list_run=0
 use_colors=0
-stop_on_first_error=0
+stop_on_first_fail=0
 separator_line_shown=0
 
 # Do not change these vars
 nr_files=0
 nr_total_tests=0      # count only executed (not skipped with -n) tests
-nr_total_errors=0
+nr_total_fails=0
 nr_file_tests=0       # count only executed (not skipped with -n) tests
-nr_file_errors=0
+nr_file_fails=0
 files_stat_message=''
 original_dir=$(pwd)
 pre_command=
@@ -109,7 +109,7 @@ do
 		-v|--verbose    ) shift; verbose=1 ;;
 		-l|--list       ) shift; list_mode=1;;
 		-L|--list-run   ) shift; list_run=1;;
-		-1|--first      ) shift; stop_on_first_error=1 ;;
+		-1|--first      ) shift; stop_on_first_fail=1 ;;
 		-n|--number     ) shift; run_range="$1"; shift ;;
 		-s|--skip       ) shift; skip_range="$1"; shift ;;
 		--color|--colour) shift; color_mode="$1"; shift ;;
@@ -383,8 +383,8 @@ _run_test ()
 	# Test failed :(
 	if test $test_status -ne 0
 	then
-		nr_file_errors=$(($nr_file_errors + 1))
-		nr_total_errors=$(($nr_total_errors + 1))
+		nr_file_fails=$(($nr_file_fails + 1))
+		nr_total_fails=$(($nr_total_fails + 1))
 		failed_range="$failed_range$test_number,"
 
 		# Decide the message format
@@ -405,7 +405,7 @@ _run_test ()
 		fi
 
 		# Should I abort now?
-		if test $stop_on_first_error -eq 1
+		if test $stop_on_first_fail -eq 1
 		then
 			_clean_up
 			exit 1
@@ -422,7 +422,7 @@ _process_test_file ()
 {
 	# Reset counters
 	nr_file_tests=0
-	nr_file_errors=0
+	nr_file_fails=0
 	line_number=0
 	test_line_number=0
 
@@ -683,12 +683,12 @@ do
 	fi
 
 	# Compose file stats message
-	nr_file_ok=$(($nr_file_tests - $nr_file_errors))
-	if test $nr_file_errors -eq 0
+	nr_file_ok=$(($nr_file_tests - $nr_file_fails))
+	if test $nr_file_fails -eq 0
 	then
 		msg=$(printf '%3d ok            %s' $nr_file_ok "$test_file")
 	else
-		msg=$(printf '%3d ok, %3d fail  %s' $nr_file_ok $nr_file_errors "$test_file")
+		msg=$(printf '%3d ok, %3d fail  %s' $nr_file_ok $nr_file_fails "$test_file")
 	fi
 
 	# Append file stats to global holder
@@ -721,7 +721,7 @@ fi
 # List mode has no stats
 if test $list_mode -eq 1 || test $list_run -eq 1
 then
-	if test $nr_total_errors -eq 0
+	if test $nr_total_fails -eq 0
 	then
 		exit 0
 	else
@@ -740,7 +740,7 @@ then
 fi
 
 # The final message: WIN or FAIL?
-if test $nr_total_errors -eq 0
+if test $nr_total_fails -eq 0
 then
 	if test $nr_total_tests -eq 1
 	then
@@ -756,19 +756,19 @@ then
 	fi
 	exit 0
 else
-	test $nr_files -eq 1 && _message  # separate from previous error message
+	test $nr_files -eq 1 && _message  # separate from previous FAILED message
 
 	if test $nr_total_tests -eq 1
 	then
 		_message "${color_red}FAIL:${color_off} The single test has failed."
-	elif test $nr_total_errors -eq $nr_total_tests && test $nr_total_errors -lt 50
+	elif test $nr_total_fails -eq $nr_total_tests && test $nr_total_fails -lt 50
 	then
 		_message "${color_red}COMPLETE FAIL!${color_off} All $nr_total_tests tests have failed."
-	elif test $nr_total_errors -eq $nr_total_tests
+	elif test $nr_total_fails -eq $nr_total_tests
 	then
 		_message "${color_red}EPIC FAIL!${color_off} All $nr_total_tests tests have failed."
 	else
-		_message "${color_red}FAIL:${color_off} $nr_total_errors of $nr_total_tests tests have failed."
+		_message "${color_red}FAIL:${color_off} $nr_total_fails of $nr_total_tests tests have failed."
 	fi
 	test $test_file = 'self-test.sh' && _message "-n ${failed_range%,}"  # dev helper
 	exit 1
