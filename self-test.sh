@@ -471,7 +471,53 @@ Testing file self-test/fail-2.sh
 FAIL: 3 of 6 tests have failed.
 $
 
-# Errors
+# Fail messages
+
+$ ./doctest.sh self-test/fail-messages.sh
+--------------------------------------------------------------------------------
+[FAILED #1, line 3] echo fail  
+@@ -1 +1 @@
+-ok
++fail
+--------------------------------------------------------------------------------
+[FAILED #2, line 4] echo fail  
+@@ -1 +1 @@
+-ok
++fail
+--------------------------------------------------------------------------------
+[FAILED #3, line 8] echo fail
+@@ -1 +1 @@
+-ok
++fail
+--------------------------------------------------------------------------------
+[FAILED #4, line 10] echo fail
+@@ -1,3 +1 @@
+-ok 1
+-ok 2
+-ok 3
++fail
+--------------------------------------------------------------------------------
+[FAILED #5, line 18] echo fail  
+@@ -1,5 +1 @@
+-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+-Proin euismod blandit pharetra.
+-Vestibulum eu neque eget lorem gravida commodo a cursus massa.
+-Fusce sit amet lorem sem.
+-Donec eu quam leo.
++fail
+--------------------------------------------------------------------------------
+[FAILED #6, line 22] echo fail  
+Expected 9 lines, got 1.
+--------------------------------------------------------------------------------
+[FAILED #7, line 26] echo fail  
+egrep '^[0-9]+$' failed in:
+fail
+--------------------------------------------------------------------------------
+
+COMPLETE FAIL! All 7 tests have failed.
+$
+
+# Fails
 
 $ ./doctest.sh self-test/fail-1.sh
 --------------------------------------------------------------------------------
