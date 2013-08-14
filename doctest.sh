@@ -30,7 +30,7 @@ my_help="\
 Usage: $my_name [options] <file ...>
 
 Options:
-  -1, --first                 Stop execution upon first error
+  -1, --first                 Stop execution upon first failed test
   -l, --list                  List all the tests (no execution)
   -L, --list-run              List all the tests with OK/FAIL status
   -n, --number RANGE          Run specific tests, by number (1,2,4-7)
