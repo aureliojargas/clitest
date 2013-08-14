@@ -118,20 +118,20 @@ $ ./doctest.sh --quiet self-test/ok-2.sh; echo $?
 0
 $ ./doctest.sh --quiet self-test/ok-2.sh self-test/ok-2.sh; echo $?
 0
-$ ./doctest.sh --quiet self-test/error-2.sh; echo $?
+$ ./doctest.sh --quiet self-test/fail-2.sh; echo $?
 1
-$ ./doctest.sh --quiet self-test/error-2.sh self-test/error-2.sh; echo $?
+$ ./doctest.sh --quiet self-test/fail-2.sh self-test/fail-2.sh; echo $?
 1
-$ ./doctest.sh --quiet self-test/ok-2.sh self-test/error-2.sh; echo $?
+$ ./doctest.sh --quiet self-test/ok-2.sh self-test/fail-2.sh; echo $?
 1
 $
 
 # Option --quiet also silences --verbose
 
 $ ./doctest.sh --quiet --verbose self-test/ok-2.sh
-$ ./doctest.sh --quiet --verbose self-test/error-2.sh
+$ ./doctest.sh --quiet --verbose self-test/fail-2.sh
 $ ./doctest.sh --quiet --verbose self-test/ok-2.sh self-test/ok-2.sh
-$ ./doctest.sh --quiet --verbose self-test/ok-2.sh self-test/error-2.sh
+$ ./doctest.sh --quiet --verbose self-test/ok-2.sh self-test/fail-2.sh
 $
 
 # Option --quiet has no effect in error messages
@@ -292,36 +292,36 @@ $ ./doctest.sh --list-run -n 3,5-7 -s 6 self-test/ok-10.sh
 #3	OK	echo 3 
 #5	OK	echo 5 
 #7	OK	echo 7 
-$ ./doctest.sh --list -n 1,3,5-7 self-test/ok-1.sh self-test/error-2.sh self-test/ok-10.sh
+$ ./doctest.sh --list -n 1,3,5-7 self-test/ok-1.sh self-test/fail-2.sh self-test/ok-10.sh
 ---------------------------------------- self-test/ok-1.sh
 #1	echo ok
----------------------------------------- self-test/error-2.sh
+---------------------------------------- self-test/fail-2.sh
 #3	echo ok  
 ---------------------------------------- self-test/ok-10.sh
 #5	echo 2 
 #6	echo 3 
 #7	echo 4 
-$ ./doctest.sh --list-run -n 1,3,5-7 self-test/ok-1.sh self-test/error-2.sh self-test/ok-10.sh
+$ ./doctest.sh --list-run -n 1,3,5-7 self-test/ok-1.sh self-test/fail-2.sh self-test/ok-10.sh
 ---------------------------------------- self-test/ok-1.sh
 #1	OK	echo ok
----------------------------------------- self-test/error-2.sh
+---------------------------------------- self-test/fail-2.sh
 #3	FAIL	echo ok  
 ---------------------------------------- self-test/ok-10.sh
 #5	OK	echo 2 
 #6	OK	echo 3 
 #7	OK	echo 4 
 $
-$ ./doctest.sh --list -n 1,3,5-7 -s 3,6 self-test/ok-1.sh self-test/error-2.sh self-test/ok-10.sh
+$ ./doctest.sh --list -n 1,3,5-7 -s 3,6 self-test/ok-1.sh self-test/fail-2.sh self-test/ok-10.sh
 ---------------------------------------- self-test/ok-1.sh
 #1	echo ok
----------------------------------------- self-test/error-2.sh
+---------------------------------------- self-test/fail-2.sh
 ---------------------------------------- self-test/ok-10.sh
 #5	echo 2 
 #7	echo 4 
-$ ./doctest.sh --list-run -n 1,3,5-7 -s 3,6 self-test/ok-1.sh self-test/error-2.sh self-test/ok-10.sh
+$ ./doctest.sh --list-run -n 1,3,5-7 -s 3,6 self-test/ok-1.sh self-test/fail-2.sh self-test/ok-10.sh
 ---------------------------------------- self-test/ok-1.sh
 #1	OK	echo ok
----------------------------------------- self-test/error-2.sh
+---------------------------------------- self-test/fail-2.sh
 ---------------------------------------- self-test/ok-10.sh
 #5	OK	echo 2 
 #7	OK	echo 4 
@@ -400,9 +400,9 @@ $
 
 # Multifile, OK and error
 
-$ ./doctest.sh self-test/ok-1.sh self-test/error-1.sh self-test/ok-2.sh self-test/error-2.sh
+$ ./doctest.sh self-test/ok-1.sh self-test/fail-1.sh self-test/ok-2.sh self-test/fail-2.sh
 Testing file self-test/ok-1.sh
-Testing file self-test/error-1.sh
+Testing file self-test/fail-1.sh
 --------------------------------------------------------------------------------
 [FAILED #2, line 1] echo ok
 @@ -1 +1 @@
@@ -410,7 +410,7 @@ Testing file self-test/error-1.sh
 +ok
 --------------------------------------------------------------------------------
 Testing file self-test/ok-2.sh
-Testing file self-test/error-2.sh
+Testing file self-test/fail-2.sh
 --------------------------------------------------------------------------------
 [FAILED #5, line 1] echo ok
 @@ -1 +1 @@
@@ -425,16 +425,16 @@ Testing file self-test/error-2.sh
 
 ================================================================================
   1 ok            self-test/ok-1.sh
-  0 ok,   1 fail  self-test/error-1.sh
+  0 ok,   1 fail  self-test/fail-1.sh
   2 ok            self-test/ok-2.sh
-  0 ok,   2 fail  self-test/error-2.sh
+  0 ok,   2 fail  self-test/fail-2.sh
 ================================================================================
 
 FAIL: 3 of 6 tests have failed.
-$ ./doctest.sh --verbose self-test/ok-1.sh self-test/error-1.sh self-test/ok-2.sh self-test/error-2.sh
+$ ./doctest.sh --verbose self-test/ok-1.sh self-test/fail-1.sh self-test/ok-2.sh self-test/fail-2.sh
 Testing file self-test/ok-1.sh
 #1	echo ok
-Testing file self-test/error-1.sh
+Testing file self-test/fail-1.sh
 #2	echo ok
 --------------------------------------------------------------------------------
 [FAILED #2, line 1] echo ok
@@ -445,7 +445,7 @@ Testing file self-test/error-1.sh
 Testing file self-test/ok-2.sh
 #3	echo ok
 #4	echo ok  
-Testing file self-test/error-2.sh
+Testing file self-test/fail-2.sh
 #5	echo ok
 --------------------------------------------------------------------------------
 [FAILED #5, line 1] echo ok
@@ -463,9 +463,9 @@ Testing file self-test/error-2.sh
 
 ================================================================================
   1 ok            self-test/ok-1.sh
-  0 ok,   1 fail  self-test/error-1.sh
+  0 ok,   1 fail  self-test/fail-1.sh
   2 ok            self-test/ok-2.sh
-  0 ok,   2 fail  self-test/error-2.sh
+  0 ok,   2 fail  self-test/fail-2.sh
 ================================================================================
 
 FAIL: 3 of 6 tests have failed.
@@ -473,7 +473,7 @@ $
 
 # Errors
 
-$ ./doctest.sh self-test/error-1.sh
+$ ./doctest.sh self-test/fail-1.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
 @@ -1 +1 @@
@@ -482,7 +482,7 @@ $ ./doctest.sh self-test/error-1.sh
 --------------------------------------------------------------------------------
 
 FAIL: The single test has failed.
-$ ./doctest.sh self-test/error-2.sh
+$ ./doctest.sh self-test/fail-2.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
 @@ -1 +1 @@
@@ -496,23 +496,23 @@ $ ./doctest.sh self-test/error-2.sh
 --------------------------------------------------------------------------------
 
 COMPLETE FAIL! All 2 tests have failed.
-$ ./doctest.sh self-test/error-50.sh | tail -1
+$ ./doctest.sh self-test/fail-50.sh | tail -1
 EPIC FAIL! All 50 tests have failed.
-$ ./doctest.sh -1 self-test/error-2.sh
+$ ./doctest.sh -1 self-test/fail-2.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
 @@ -1 +1 @@
 -fail
 +ok
 --------------------------------------------------------------------------------
-$ ./doctest.sh --first self-test/error-2.sh
+$ ./doctest.sh --first self-test/fail-2.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
 @@ -1 +1 @@
 -fail
 +ok
 --------------------------------------------------------------------------------
-$ ./doctest.sh --first --verbose self-test/error-2.sh
+$ ./doctest.sh --first --verbose self-test/fail-2.sh
 #1	echo ok
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
@@ -520,7 +520,7 @@ $ ./doctest.sh --first --verbose self-test/error-2.sh
 -fail
 +ok
 --------------------------------------------------------------------------------
-$ ./doctest.sh --verbose self-test/error-2.sh
+$ ./doctest.sh --verbose self-test/fail-2.sh
 #1	echo ok
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
@@ -786,11 +786,11 @@ Testing file self-test/ok-10.sh
 ================================================================================
 
 OK! All 3 tests have passed.
-$ ./doctest.sh --verbose -n 1,5 self-test/ok-[12].sh self-test/error-2.sh
+$ ./doctest.sh --verbose -n 1,5 self-test/ok-[12].sh self-test/fail-2.sh
 Testing file self-test/ok-1.sh
 #1	echo ok
 Testing file self-test/ok-2.sh
-Testing file self-test/error-2.sh
+Testing file self-test/fail-2.sh
 #5	echo ok  
 --------------------------------------------------------------------------------
 [FAILED #5, line 3] echo ok  
@@ -802,20 +802,20 @@ Testing file self-test/error-2.sh
 ================================================================================
   1 ok            self-test/ok-1.sh
   0 ok            self-test/ok-2.sh
-  0 ok,   1 fail  self-test/error-2.sh
+  0 ok,   1 fail  self-test/fail-2.sh
 ================================================================================
 
 FAIL: 1 of 2 tests have failed.
-$ ./doctest.sh --verbose -n 1 self-test/ok-[12].sh self-test/error-2.sh
+$ ./doctest.sh --verbose -n 1 self-test/ok-[12].sh self-test/fail-2.sh
 Testing file self-test/ok-1.sh
 #1	echo ok
 Testing file self-test/ok-2.sh
-Testing file self-test/error-2.sh
+Testing file self-test/fail-2.sh
 
 ================================================================================
   1 ok            self-test/ok-1.sh
   0 ok            self-test/ok-2.sh
-  0 ok            self-test/error-2.sh
+  0 ok            self-test/fail-2.sh
 ================================================================================
 
 OK! The single test has passed.
@@ -893,11 +893,11 @@ Testing file self-test/ok-10.sh
 ================================================================================
 
 OK! All 10 tests have passed.
-$ ./doctest.sh --verbose -s 2,3,4 self-test/ok-[12].sh self-test/error-2.sh
+$ ./doctest.sh --verbose -s 2,3,4 self-test/ok-[12].sh self-test/fail-2.sh
 Testing file self-test/ok-1.sh
 #1	echo ok
 Testing file self-test/ok-2.sh
-Testing file self-test/error-2.sh
+Testing file self-test/fail-2.sh
 #5	echo ok  
 --------------------------------------------------------------------------------
 [FAILED #5, line 3] echo ok  
@@ -909,20 +909,20 @@ Testing file self-test/error-2.sh
 ================================================================================
   1 ok            self-test/ok-1.sh
   0 ok            self-test/ok-2.sh
-  0 ok,   1 fail  self-test/error-2.sh
+  0 ok,   1 fail  self-test/fail-2.sh
 ================================================================================
 
 FAIL: 1 of 2 tests have failed.
-$ ./doctest.sh --verbose -s 2-10 self-test/ok-[12].sh self-test/error-2.sh
+$ ./doctest.sh --verbose -s 2-10 self-test/ok-[12].sh self-test/fail-2.sh
 Testing file self-test/ok-1.sh
 #1	echo ok
 Testing file self-test/ok-2.sh
-Testing file self-test/error-2.sh
+Testing file self-test/fail-2.sh
 
 ================================================================================
   1 ok            self-test/ok-1.sh
   0 ok            self-test/ok-2.sh
-  0 ok            self-test/error-2.sh
+  0 ok            self-test/fail-2.sh
 ================================================================================
 
 OK! The single test has passed.
@@ -939,17 +939,17 @@ $ ./doctest.sh --verbose -n 3,5-7 -s 6 self-test/ok-10.sh
 #5	echo 5 
 #7	echo 7 
 OK! All 3 tests have passed.
-$ ./doctest.sh --verbose -n 1,3,5-7 -s 3,6 self-test/ok-1.sh self-test/error-2.sh self-test/ok-10.sh
+$ ./doctest.sh --verbose -n 1,3,5-7 -s 3,6 self-test/ok-1.sh self-test/fail-2.sh self-test/ok-10.sh
 Testing file self-test/ok-1.sh
 #1	echo ok
-Testing file self-test/error-2.sh
+Testing file self-test/fail-2.sh
 Testing file self-test/ok-10.sh
 #5	echo 2 
 #7	echo 4 
 
 ================================================================================
   1 ok            self-test/ok-1.sh
-  0 ok            self-test/error-2.sh
+  0 ok            self-test/fail-2.sh
   2 ok            self-test/ok-10.sh
 ================================================================================
 
@@ -1315,7 +1315,7 @@ $
 
 # And now, the colored output tests
 
-$ ./doctest.sh --color yes --first self-test/error-2.sh
+$ ./doctest.sh --color yes --first self-test/fail-2.sh
 [31m--------------------------------------------------------------------------------[m
 [31m[FAILED #1, line 1] echo ok[m
 @@ -1 +1 @@
