@@ -191,26 +191,26 @@ $ ./doctest.sh --list self-test/empty-file.sh
 doctest.sh: Error: no test found in input file: self-test/empty-file.sh
 $ ./doctest.sh -l self-test/no-nl-command.sh; echo $?
 #1	printf 'ok\n'
-#2	printf 'error'
-#3	printf 'ok\nok\nerror'
+#2	printf 'fail'
+#3	printf 'ok\nok\nfail'
 #4	printf 'ok\n'    
-#5	printf 'error'   
+#5	printf 'fail'    
 #6	printf 'ok'; echo   
 0
 $ ./doctest.sh --list self-test/no-nl-command.sh
 #1	printf 'ok\n'
-#2	printf 'error'
-#3	printf 'ok\nok\nerror'
+#2	printf 'fail'
+#3	printf 'ok\nok\nfail'
 #4	printf 'ok\n'    
-#5	printf 'error'   
+#5	printf 'fail'    
 #6	printf 'ok'; echo   
 $ ./doctest.sh --list self-test/no-nl-command.sh self-test/ok-1.sh; echo $?
 ---------------------------------------- self-test/no-nl-command.sh
 #1	printf 'ok\n'
-#2	printf 'error'
-#3	printf 'ok\nok\nerror'
+#2	printf 'fail'
+#3	printf 'ok\nok\nfail'
 #4	printf 'ok\n'    
-#5	printf 'error'   
+#5	printf 'fail'    
 #6	printf 'ok'; echo   
 ---------------------------------------- self-test/ok-1.sh
 #7	echo ok
@@ -223,34 +223,34 @@ $ ./doctest.sh --list-run self-test/empty-file.sh
 doctest.sh: Error: no test found in input file: self-test/empty-file.sh
 $ ./doctest.sh --list-run --color yes self-test/no-nl-command.sh; echo $?
 [32m#1	printf 'ok\n'[m
-[31m#2	printf 'error'[m
-[31m#3	printf 'ok\nok\nerror'[m
+[31m#2	printf 'fail'[m
+[31m#3	printf 'ok\nok\nfail'[m
 [32m#4	printf 'ok\n'    [m
-[31m#5	printf 'error'   [m
+[31m#5	printf 'fail'    [m
 [32m#6	printf 'ok'; echo   [m
 1
 $ ./doctest.sh --list-run self-test/no-nl-command.sh; echo $?
 #1	OK	printf 'ok\n'
-#2	FAIL	printf 'error'
-#3	FAIL	printf 'ok\nok\nerror'
+#2	FAIL	printf 'fail'
+#3	FAIL	printf 'ok\nok\nfail'
 #4	OK	printf 'ok\n'    
-#5	FAIL	printf 'error'   
+#5	FAIL	printf 'fail'    
 #6	OK	printf 'ok'; echo   
 1
 $ ./doctest.sh -L self-test/no-nl-command.sh
 #1	OK	printf 'ok\n'
-#2	FAIL	printf 'error'
-#3	FAIL	printf 'ok\nok\nerror'
+#2	FAIL	printf 'fail'
+#3	FAIL	printf 'ok\nok\nfail'
 #4	OK	printf 'ok\n'    
-#5	FAIL	printf 'error'   
+#5	FAIL	printf 'fail'    
 #6	OK	printf 'ok'; echo   
 $ ./doctest.sh -L self-test/no-nl-command.sh self-test/ok-1.sh; echo $?
 ---------------------------------------- self-test/no-nl-command.sh
 #1	OK	printf 'ok\n'
-#2	FAIL	printf 'error'
-#3	FAIL	printf 'ok\nok\nerror'
+#2	FAIL	printf 'fail'
+#3	FAIL	printf 'ok\nok\nfail'
 #4	OK	printf 'ok\n'    
-#5	FAIL	printf 'error'   
+#5	FAIL	printf 'fail'    
 #6	OK	printf 'ok'; echo   
 ---------------------------------------- self-test/ok-1.sh
 #7	OK	echo ok
@@ -398,7 +398,7 @@ Testing file self-test/ok-10.sh
 OK! All 13 tests have passed.
 $
 
-# Multifile, OK and error
+# Multifile, OK and fail
 
 $ ./doctest.sh self-test/ok-1.sh self-test/fail-1.sh self-test/ok-2.sh self-test/fail-2.sh
 Testing file self-test/ok-1.sh
@@ -1281,31 +1281,31 @@ $ ./doctest.sh --verbose self-test/no-nl-file-3.sh
 OK! The single test has passed.
 $ ./doctest.sh --verbose self-test/no-nl-command.sh
 #1	printf 'ok\n'
-#2	printf 'error'
+#2	printf 'fail'
 --------------------------------------------------------------------------------
-[FAILED #2, line 6] printf 'error'
+[FAILED #2, line 6] printf 'fail'
 @@ -1 +1 @@
--error
-+error
+-fail
++fail
 \ No newline at end of file
 --------------------------------------------------------------------------------
-#3	printf 'ok\nok\nerror'
+#3	printf 'ok\nok\nfail'
 --------------------------------------------------------------------------------
-[FAILED #3, line 8] printf 'ok\nok\nerror'
+[FAILED #3, line 8] printf 'ok\nok\nfail'
 @@ -1,3 +1,3 @@
  ok
  ok
--error
-+error
+-fail
++fail
 \ No newline at end of file
 --------------------------------------------------------------------------------
 #4	printf 'ok\n'    
-#5	printf 'error'   
+#5	printf 'fail'    
 --------------------------------------------------------------------------------
-[FAILED #5, line 17] printf 'error'   
+[FAILED #5, line 17] printf 'fail'    
 @@ -1 +1 @@
--error
-+error
+-fail
++fail
 \ No newline at end of file
 --------------------------------------------------------------------------------
 #6	printf 'ok'; echo   

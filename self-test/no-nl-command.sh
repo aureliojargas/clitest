@@ -3,18 +3,18 @@
 
 $ printf 'ok\n'
 ok
-$ printf 'error'
-error
-$ printf 'ok\nok\nerror'
+$ printf 'fail'
+fail
+$ printf 'ok\nok\nfail'
 ok
 ok
-error
+fail
 $
 
 # The same applies for inline output.
 
 $ printf 'ok\n'    #→ ok
-$ printf 'error'   #→ error
+$ printf 'fail'    #→ fail
 
 # An easy workaround is to add an empty 'echo' at the end:
 
