@@ -367,7 +367,7 @@ _run_test ()
 			if test $test_status -eq 1
 			then
 				printf %s "$test_inline" > "$test_ok_file"
-				test_diff=$(diff $diff_options "$test_ok_file" "$test_output_file")
+				test_diff="egrep '$test_inline' failed in:$nl$(cat "$test_output_file")"
 
 			# Regex errors are common and user must take action to fix them
 			elif test $test_status -eq 2
