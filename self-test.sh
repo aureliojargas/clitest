@@ -163,6 +163,8 @@ $
 
 # Option --color
 
+$ ./doctest.sh --color foo self-test/ok-1.sh
+doctest.sh: Error: invalid value 'foo' for --color. Use: auto, always or never.
 $ ./doctest.sh --color always self-test/ok-1.sh
 [32mOK:[m 1 of 1 tests passed
 $ ./doctest.sh --color yes self-test/ok-1.sh
