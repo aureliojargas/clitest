@@ -260,6 +260,16 @@ $ ./doctest.sh -L self-test/ok-1.sh; echo $?
 0
 $
 
+# Option --verbose is not effective in --list and --list-run
+
+$ ./doctest.sh --verbose --list self-test/ok-2.sh
+#1	echo ok
+#2	echo ok  
+$ ./doctest.sh --verbose --list-run self-test/ok-2.sh
+#1	OK	echo ok
+#2	OK	echo ok  
+$
+
 # Option --test and --skip combined with --list and --list-run
 
 $ ./doctest.sh --list -t 99 self-test/ok-10.sh

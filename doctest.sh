@@ -327,7 +327,7 @@ tt_run_test ()
 	fi
 
 	# Verbose mode: show the command that will be tested
-	if test $tt_verbose -eq 1
+	if test $tt_verbose -eq 1 && test $tt_list_run -eq 0
 	then
 		tt_list_test verbose
 	fi
