@@ -38,8 +38,6 @@ tt_prompt='$ '
 tt_inline_prefix='#→ '
 tt_diff_options='-u'
 tt_color_mode='auto'
-tt_temp_dir="${TMPDIR:-/tmp}/doctest.$$"
-# Note: using temporary files for compatibility, since <(...) is not portable.
 
 tt_my_help="\
 Usage: $tt_my_name [options] <file ...>
@@ -62,6 +60,12 @@ Customization options:
       --inline-prefix PREFIX  Set inline output prefix (default: '$tt_inline_prefix')
       --prefix PREFIX         Set command line prefix (default: '$tt_prefix')
       --prompt STRING         Set prompt string (default: '$tt_prompt')"
+
+# Temporary files (using files because <(...) is not portable)
+tt_temp_dir="${TMPDIR:-/tmp}/doctest.$$"
+tt_temp_file="$tt_temp_dir/temp.txt"
+tt_test_ok_file="$tt_temp_dir/ok.txt"
+tt_test_output_file="$tt_temp_dir/output.txt"
 
 # Flags (0=off, 1=on), some may be altered by command line options
 tt_debug=0
@@ -103,9 +107,6 @@ tt_test_status=2
 tt_test_output=
 tt_test_diff=
 tt_test_ok_text=
-tt_test_ok_file="$tt_temp_dir/ok.txt"
-tt_test_output_file="$tt_temp_dir/output.txt"
-tt_temp_file="$tt_temp_dir/temp.txt"
 
 # Special useful chars
 tt_tab='	'
