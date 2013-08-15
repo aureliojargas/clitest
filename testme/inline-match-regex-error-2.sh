@@ -1,4 +1,4 @@
-$ echo "error: malformed regex"  #→ --regex (
+$ echo "error: malformed regex"  #→ --egrep (
 
 
 # Some grep errors:

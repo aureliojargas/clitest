@@ -21,9 +21,9 @@ $ echo fail  #→ --file testme/lorem-ipsum.txt
 
 $ echo fail  #→ --lines 9
 
-# inline --regex
+# inline --egrep
 
-$ echo fail  #→ --regex ^[0-9]+$
+$ echo fail  #→ --egrep ^[0-9]+$
 
 # inline --perl
 

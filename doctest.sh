@@ -374,7 +374,7 @@ tt_run_test ()
 			tt_test_diff=$(diff $tt_diff_options "$tt_test_inline" "$tt_test_output_file")
 			tt_test_status=$?
 		;;
-		regex)
+		egrep)
 			egrep "$tt_test_inline" "$tt_test_output_file" > /dev/null
 			tt_test_status=$?
 
@@ -386,7 +386,7 @@ tt_run_test ()
 			# Regex errors are common and user must take action to fix them
 			elif test $tt_test_status -eq 2
 			then
-				tt_error "egrep: check your inline regex at line $tt_line_number of $tt_test_file"
+				tt_error "check your inline egrep regex at line $tt_line_number of $tt_test_file"
 			fi
 		;;
 		perl)
@@ -506,9 +506,9 @@ tt_process_test_file ()
 
 					# Maybe the OK text has options?
 					case "$tt_test_inline" in
-						'--regex '*)
-							tt_test_inline=${tt_test_inline#--regex }
-							tt_test_mode='regex'
+						'--egrep '*)
+							tt_test_inline=${tt_test_inline#--egrep }
+							tt_test_mode='egrep'
 						;;
 						'--perl '*)
 							tt_test_inline=${tt_test_inline#--perl }
