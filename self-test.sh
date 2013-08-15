@@ -72,7 +72,7 @@ $
 
 # Option --version
 
-$ v="$(grep ^my_version= ./doctest.sh | cut -d = -f 2 | tr -d \')"
+$ v="$(grep ^tt_my_version= ./doctest.sh | cut -d = -f 2 | tr -d \')"
 $ ./doctest.sh -V | grep "^doctest.sh ${v}$" > /dev/null; echo $?
 0
 $ ./doctest.sh --version | grep "^doctest.sh ${v}$" > /dev/null; echo $?
@@ -1238,9 +1238,9 @@ $
 
 # Options --pre-flight and --post-flight
 
-$ ./doctest.sh --pre-flight 'test_number=99; nr_total_tests=99' self-test/ok-1.sh
+$ ./doctest.sh --pre-flight 'tt_test_number=99; tt_nr_total_tests=99' self-test/ok-1.sh
 OK: 100 of 100 tests passed
-$ ./doctest.sh --post-flight 'nr_total_fails=50' self-test/ok-50.sh
+$ ./doctest.sh --post-flight 'tt_nr_total_fails=50' self-test/ok-50.sh
 
 FAIL: 50 of 50 tests failed
 $ ./doctest.sh --pre-flight 'false' self-test/ok-1.sh

@@ -18,6 +18,10 @@
 #   You can change to another dir normally using 'cd' inside the test file.
 #   All the tests are executed in the same shell, using eval. Test data
 #   such as variables and working directory will persist between tests.
+#
+# Namespace:
+#   All variables and functions in this script are prefixed by 'tt_' to
+#   avoid clashing with test's variables, functions, aliases and commands.
 
 
 # Unfortunately, I cannot force POSIX.
@@ -25,10 +29,10 @@
 #test -n "$BASH_VERSION" && set -o posix  # Force Bash into POSIX mode
 #export POSIXLY_CORRECT=1     # Force system utilities into POSIX mode
 
-my_name="$(basename "$0")"
-my_version='dev'
-my_help="\
-Usage: $my_name [options] <file ...>
+tt_my_name="$(basename "$0")"
+tt_my_version='dev'
+tt_my_help="\
+Usage: $tt_my_name [options] <file ...>
 
 Options:
   -1, --first                 Stop execution upon first failed test
@@ -50,166 +54,168 @@ Customization options:
       --prompt STRING         Set prompt string (default: '$ ')"
 
 # Customization (if needed), most may be altered by command line options
-prefix=''
-prompt='$ '
-inline_prefix='#→ '
-diff_options='-u'
-color_mode='auto'
-temp_dir="${TMPDIR:-/tmp}/doctest.$$"
+tt_prefix=''
+tt_prompt='$ '
+tt_inline_prefix='#→ '
+tt_diff_options='-u'
+tt_color_mode='auto'
+tt_temp_dir="${TMPDIR:-/tmp}/doctest.$$"
 # Note: using temporary files for compatibility, since <(...) is not portable.
 
 # Flags (0=off, 1=on), some may be altered by command line options
-debug=0
-quiet=0
-verbose=0
-list_mode=0
-list_run=0
-use_colors=0
-stop_on_first_fail=0
-separator_line_shown=0
+tt_debug=0
+tt_quiet=0
+tt_verbose=0
+tt_list_mode=0
+tt_list_run=0
+tt_use_colors=0
+tt_stop_on_first_fail=0
+tt_separator_line_shown=0
 
 # Do not change these vars
-nr_files=0
-nr_total_tests=0
-nr_total_fails=0
-nr_total_skips=0
-nr_file_tests=0
-nr_file_fails=0
-nr_file_skips=0
-nr_file_ok=0
-files_stats=
-original_dir=$(pwd)
-pre_command=
-post_command=
-run_range=
-run_range_data=
-skip_range=
-skip_range_data=
-failed_range=
-line_number=0
-test_number=0
-test_line_number=0
-test_command=
-test_inline=
-test_mode=
-test_status=2
-test_output=
-test_diff=
-test_ok_text=
-test_ok_file="$temp_dir/ok.txt"
-test_output_file="$temp_dir/output.txt"
-temp_file="$temp_dir/temp.txt"
+tt_nr_files=0
+tt_nr_total_tests=0
+tt_nr_total_fails=0
+tt_nr_total_skips=0
+tt_nr_file_tests=0
+tt_nr_file_fails=0
+tt_nr_file_skips=0
+tt_nr_file_ok=0
+tt_files_stats=
+tt_original_dir=$(pwd)
+tt_pre_command=
+tt_post_command=
+tt_run_range=
+tt_run_range_data=
+tt_skip_range=
+tt_skip_range_data=
+tt_failed_range=
+tt_test_file=
+tt_input_line=
+tt_line_number=0
+tt_test_number=0
+tt_test_line_number=0
+tt_test_command=
+tt_test_inline=
+tt_test_mode=
+tt_test_status=2
+tt_test_output=
+tt_test_diff=
+tt_test_ok_text=
+tt_test_ok_file="$tt_temp_dir/ok.txt"
+tt_test_output_file="$tt_temp_dir/output.txt"
+tt_temp_file="$tt_temp_dir/temp.txt"
 
 # Special useful chars
-tab='	'
-nl='
+tt_tab='	'
+tt_nl='
 '
 
 # Handle command line options
 while test "${1#-}" != "$1"
 do
 	case "$1" in
-		-q|--quiet      ) shift; quiet=1 ;;
-		-v|--verbose    ) shift; verbose=1 ;;
-		-l|--list       ) shift; list_mode=1;;
-		-L|--list-run   ) shift; list_run=1;;
-		-1|--first      ) shift; stop_on_first_fail=1 ;;
-		-n|--number     ) shift; run_range="$1"; shift ;;
-		-s|--skip       ) shift; skip_range="$1"; shift ;;
-		--color|--colour) shift; color_mode="$1"; shift ;;
-  		--debug         ) shift; debug=1 ;;
-		--pre-flight    ) shift; pre_command="$1"; shift ;;
-		--post-flight   ) shift; post_command="$1"; shift ;;
-		--diff-options  ) shift; diff_options="$1"; shift ;;
-		--inline-prefix ) shift; inline_prefix="$1"; shift ;;
-		--prompt        ) shift; prompt="$1"; shift ;;
-		--prefix        ) shift; prefix="$1"; shift ;;
-		-V|--version    ) printf '%s\n' "$my_name $my_version"; exit 0 ;;
-		-h|--help       ) printf '%s\n' "$my_help"; exit 0 ;;
+		-q|--quiet      ) shift; tt_quiet=1 ;;
+		-v|--verbose    ) shift; tt_verbose=1 ;;
+		-l|--list       ) shift; tt_list_mode=1;;
+		-L|--list-run   ) shift; tt_list_run=1;;
+		-1|--first      ) shift; tt_stop_on_first_fail=1 ;;
+		-n|--number     ) shift; tt_run_range="$1"; shift ;;
+		-s|--skip       ) shift; tt_skip_range="$1"; shift ;;
+		--color|--colour) shift; tt_color_mode="$1"; shift ;;
+  		--debug         ) shift; tt_debug=1 ;;
+		--pre-flight    ) shift; tt_pre_command="$1"; shift ;;
+		--post-flight   ) shift; tt_post_command="$1"; shift ;;
+		--diff-options  ) shift; tt_diff_options="$1"; shift ;;
+		--inline-prefix ) shift; tt_inline_prefix="$1"; shift ;;
+		--prompt        ) shift; tt_prompt="$1"; shift ;;
+		--prefix        ) shift; tt_prefix="$1"; shift ;;
+		-V|--version    ) printf '%s\n' "$tt_my_name $tt_my_version"; exit 0 ;;
+		-h|--help       ) printf '%s\n' "$tt_my_help"; exit 0 ;;
 		--) shift; break ;;
 		*) break ;;
 	esac
 done
 
 # Command line options consumed, now it's just the files
-nr_files=$#
+tt_nr_files=$#
 
 # No files? Show help.
-if test $nr_files -eq 0
+if test $tt_nr_files -eq 0
 then
-	printf '%s\n' "$my_help"
+	printf '%s\n' "$tt_my_help"
 	exit 0
 fi
 
 ### Utilities, prefixed by _ to avoid overwriting command names
 
-_clean_up ()
+tt_clean_up ()
 {
-	rm -rf "$temp_dir"
+	rm -rf "$tt_temp_dir"
 }
-_message ()
+tt_message ()
 {
-	test $quiet -eq 1 && return 0
+	test $tt_quiet -eq 1 && return 0
 	printf '%s\n' "$*"
-	separator_line_shown=0
+	tt_separator_line_shown=0
 }
-_error ()
+tt_error ()
 {
-	printf '%s\n' "$my_name: Error: $1" >&2
-	_clean_up
+	printf '%s\n' "$tt_my_name: Error: $1" >&2
+	tt_clean_up
 	exit 2
 }
-_debug ()  # $1=id, $2=contents
+tt_debug ()  # $1=id, $2=contents
 {
-	test $debug -ne 1 && return 0
+	test $tt_debug -ne 1 && return 0
 	if test INPUT_LINE = "$1"
 	then
 		# Original input line is all blue
-		printf "${color_blue}[%10s: %s]${color_off}\n" "$1" "$2"
+		printf "${tt_color_blue}[%10s: %s]${tt_color_off}\n" "$1" "$2"
 	else
 		# Highlight tabs and #→
-		printf "${color_blue}[%10s:${color_off} %s${color_blue}]${color_off}\n" "$1" "$2" |
-			sed "/LINE_CMD:/ s/$inline_prefix/${color_red}&${color_off}/g" |
-			sed "s/$tab/${color_green}<tab>${color_off}/g"
+		printf "${tt_color_blue}[%10s:${tt_color_off} %s${tt_color_blue}]${tt_color_off}\n" "$1" "$2" |
+			sed "/LINE_CMD:/ s/$tt_inline_prefix/${tt_color_red}&${tt_color_off}/g" |
+			sed "s/$tt_tab/${tt_color_green}<tab>${tt_color_off}/g"
 	fi
 }
-_separator_line ()
+tt_separator_line ()
 {
 	printf "%${COLUMNS}s" ' ' | tr ' ' -
 }
-_list_test ()  # $1=ok|fail|verbose
+tt_list_test ()  # $1=ok|fail|verbose
 {
 	# Show the output lines for --verbose, --list and --list-run
 	case "$1" in
 		ok)
 			# Green line or OK stamp (--list-run)
-			if test $use_colors -eq 1
+			if test $tt_use_colors -eq 1
 			then
-				_message "${color_green}#${test_number}${tab}${test_command}${color_off}"
+				tt_message "${tt_color_green}#${tt_test_number}${tt_tab}${tt_test_command}${tt_color_off}"
 			else
-				_message "#${test_number}${tab}OK${tab}${test_command}"
+				tt_message "#${tt_test_number}${tt_tab}OK${tt_tab}${tt_test_command}"
 			fi
 		;;
 		fail)
 			# Red line or FAIL stamp (--list-run)
-			if test $use_colors -eq 1
+			if test $tt_use_colors -eq 1
 			then
-				_message "${color_red}#${test_number}${tab}${test_command}${color_off}"
+				tt_message "${tt_color_red}#${tt_test_number}${tt_tab}${tt_test_command}${tt_color_off}"
 			else
-				_message "#${test_number}${tab}FAIL${tab}${test_command}"
+				tt_message "#${tt_test_number}${tt_tab}FAIL${tt_tab}${tt_test_command}"
 			fi
 		;;
 		verbose)
 			# Cyan line, no stamp (--verbose)
-			_message "${color_cyan}#${test_number}${tab}${test_command}${color_off}"
+			tt_message "${tt_color_cyan}#${tt_test_number}${tt_tab}${tt_test_command}${tt_color_off}"
 		;;
 		*)
 			# Normal line, no color, no stamp (--list)
-			_message "#${test_number}${tab}${test_command}"
+			tt_message "#${tt_test_number}${tt_tab}${tt_test_command}"
 		;;
 	esac
 }
-_parse_range ()  # $1=range
+tt_parse_range ()  # $1=range
 {
 	# Parse numeric ranges and output them in an expanded format
 	#
@@ -236,384 +242,384 @@ _parse_range ()  # $1=range
 
 	# OK, all valid chars in range, let's parse them
 
-	part=
-	n1=
-	n2=
-	operation=
-	range_data=':'  # :1:2:4:7:
+	tt_part=
+	tt_n1=
+	tt_n2=
+	tt_operation=
+	tt_range_data=':'  # :1:2:4:7:
 
 	# Loop each component: a number or a range
-	for part in $(echo "$1" | tr , ' ')
+	for tt_part in $(echo "$1" | tr , ' ')
 	do
 		# If there's an hyphen, it's a range
-		case "$part" in
+		case "$tt_part" in
 			*-*)
 				# Error: Invalid range format, must be: number-number
-				echo "$part" | grep '^[0-9][0-9]*-[0-9][0-9]*$' > /dev/null || return 1
+				echo "$tt_part" | grep '^[0-9][0-9]*-[0-9][0-9]*$' > /dev/null || return 1
 
-				n1=${part%-*}
-				n2=${part#*-}
+				tt_n1=${tt_part%-*}
+				tt_n2=${tt_part#*-}
 
-				operation='+'
-				test $n1 -gt $n2 && operation='-'
+				tt_operation='+'
+				test $tt_n1 -gt $tt_n2 && tt_operation='-'
 
 				# Expand the range (1-4 => 1:2:3:4)
-				part=$n1:
-				while test $n1 -ne $n2
+				tt_part=$tt_n1:
+				while test $tt_n1 -ne $tt_n2
 				do
-					n1=$(($n1 $operation 1))
-					part=$part$n1:
+					tt_n1=$(($tt_n1 $tt_operation 1))
+					tt_part=$tt_part$tt_n1:
 				done
-				part=${part%:}
+				tt_part=${tt_part%:}
 			;;
 		esac
 
 		# Append the number or expanded range to the holder
-		test $part != 0 && range_data=$range_data$part:
+		test $tt_part != 0 && tt_range_data=$tt_range_data$tt_part:
 	done
 
-	test $range_data != ':' && echo $range_data
+	test $tt_range_data != ':' && echo $tt_range_data
 	return 0
 }
-_reset_test_data ()
+tt_reset_test_data ()
 {
-	test_command=
-	test_inline=
-	test_mode=
-	test_status=2
-	test_output=
-	test_diff=
-	test_ok_text=
+	tt_test_command=
+	tt_test_inline=
+	tt_test_mode=
+	tt_test_status=2
+	tt_test_output=
+	tt_test_diff=
+	tt_test_ok_text=
 }
-_run_test ()
+tt_run_test ()
 {
-	test_number=$(($test_number + 1))
-	nr_total_tests=$(($nr_total_tests + 1))
-	nr_file_tests=$(($nr_file_tests + 1))
+	tt_test_number=$(($tt_test_number + 1))
+	tt_nr_total_tests=$(($tt_nr_total_tests + 1))
+	tt_nr_file_tests=$(($tt_nr_file_tests + 1))
 
-	# Run range on: skip this test if it's not listed in $run_range_data
-	if test -n "$run_range_data" && test "$run_range_data" = "${run_range_data#*:$test_number:}"
+	# Run range on: skip this test if it's not listed in $tt_run_range_data
+	if test -n "$tt_run_range_data" && test "$tt_run_range_data" = "${tt_run_range_data#*:$tt_test_number:}"
 	then
-		nr_total_skips=$(($nr_total_skips + 1))
-		nr_file_skips=$(($nr_file_skips + 1))
-		_reset_test_data
+		tt_nr_total_skips=$(($tt_nr_total_skips + 1))
+		tt_nr_file_skips=$(($tt_nr_file_skips + 1))
+		tt_reset_test_data
 		return 0
 	fi
 
-	# Skip range on: skip this test if it's listed in $skip_range_data
+	# Skip range on: skip this test if it's listed in $tt_skip_range_data
 	# Note: --skip always wins over --number, regardless of order
-	if test -n "$skip_range_data" && test "$skip_range_data" != "${skip_range_data#*:$test_number:}"
+	if test -n "$tt_skip_range_data" && test "$tt_skip_range_data" != "${tt_skip_range_data#*:$tt_test_number:}"
 	then
-		nr_total_skips=$(($nr_total_skips + 1))
-		nr_file_skips=$(($nr_file_skips + 1))
-		_reset_test_data
+		tt_nr_total_skips=$(($tt_nr_total_skips + 1))
+		tt_nr_file_skips=$(($tt_nr_file_skips + 1))
+		tt_reset_test_data
 		return 0
 	fi
 
 	# List mode: just show the command and return (no execution)
-	if test $list_mode -eq 1
+	if test $tt_list_mode -eq 1
 	then
-		_list_test
-		_reset_test_data
+		tt_list_test
+		tt_reset_test_data
 		return 0
 	fi
 
 	# Verbose mode: show the command that will be tested
-	if test $verbose -eq 1
+	if test $tt_verbose -eq 1
 	then
-		_list_test verbose
+		tt_list_test verbose
 	fi
 
-	#_debug EVAL "$test_command"
+	#tt_debug EVAL "$tt_test_command"
 
 	# Execute the test command, saving output (STDOUT and STDERR)
-	eval "$test_command" > "$test_output_file" 2>&1
+	eval "$tt_test_command" > "$tt_test_output_file" 2>&1
 
-	#_debug OUTPUT "$(cat "$test_output_file")"
+	#tt_debug OUTPUT "$(cat "$tt_test_output_file")"
 
 	# The command output matches the expected output?
-	case $test_mode in
+	case $tt_test_mode in
 		output)
-			printf %s "$test_ok_text" > "$test_ok_file"
-			test_diff=$(diff $diff_options "$test_ok_file" "$test_output_file")
-			test_status=$?
+			printf %s "$tt_test_ok_text" > "$tt_test_ok_file"
+			tt_test_diff=$(diff $tt_diff_options "$tt_test_ok_file" "$tt_test_output_file")
+			tt_test_status=$?
 		;;
 		text)
 			# Inline OK text represents a full line, with \n
-			printf '%s\n' "$test_inline" > "$test_ok_file"
-			test_diff=$(diff $diff_options "$test_ok_file" "$test_output_file")
-			test_status=$?
+			printf '%s\n' "$tt_test_inline" > "$tt_test_ok_file"
+			tt_test_diff=$(diff $tt_diff_options "$tt_test_ok_file" "$tt_test_output_file")
+			tt_test_status=$?
 		;;
 		eval)
-			eval "$test_inline" > "$test_ok_file"
-			test_diff=$(diff $diff_options "$test_ok_file" "$test_output_file")
-			test_status=$?
+			eval "$tt_test_inline" > "$tt_test_ok_file"
+			tt_test_diff=$(diff $tt_diff_options "$tt_test_ok_file" "$tt_test_output_file")
+			tt_test_status=$?
 		;;
 		lines)
-			test_output=$(sed -n '$=' "$test_output_file")
-			test -z "$test_output" && test_output=0
-			test "$test_output" -eq "$test_inline"
-			test_status=$?
-			test_diff="Expected $test_inline lines, got $test_output."
+			tt_test_output=$(sed -n '$=' "$tt_test_output_file")
+			test -z "$tt_test_output" && tt_test_output=0
+			test "$tt_test_output" -eq "$tt_test_inline"
+			tt_test_status=$?
+			tt_test_diff="Expected $tt_test_inline lines, got $tt_test_output."
 		;;
 		file)
 			# Abort when ok file not found/readable
-			if test ! -f "$test_inline" || test ! -r "$test_inline"
+			if test ! -f "$tt_test_inline" || test ! -r "$tt_test_inline"
 			then
-				_error "cannot read inline output file '$test_inline', from line $line_number of $test_file"
+				tt_error "cannot read inline output file '$tt_test_inline', from line $tt_line_number of $tt_test_file"
 			fi
 
-			test_diff=$(diff $diff_options "$test_inline" "$test_output_file")
-			test_status=$?
+			tt_test_diff=$(diff $tt_diff_options "$tt_test_inline" "$tt_test_output_file")
+			tt_test_status=$?
 		;;
 		regex)
-			egrep "$test_inline" "$test_output_file" > /dev/null
-			test_status=$?
+			egrep "$tt_test_inline" "$tt_test_output_file" > /dev/null
+			tt_test_status=$?
 
 			# Failed, now we need a real file to make the diff
-			if test $test_status -eq 1
+			if test $tt_test_status -eq 1
 			then
-				printf %s "$test_inline" > "$test_ok_file"
-				test_diff="egrep '$test_inline' failed in:$nl$(cat "$test_output_file")"
+				printf %s "$tt_test_inline" > "$tt_test_ok_file"
+				tt_test_diff="egrep '$tt_test_inline' failed in:$tt_nl$(cat "$tt_test_output_file")"
 
 			# Regex errors are common and user must take action to fix them
-			elif test $test_status -eq 2
+			elif test $tt_test_status -eq 2
 			then
-				_error "egrep: check your inline regex at line $line_number of $test_file"
+				tt_error "egrep: check your inline regex at line $tt_line_number of $tt_test_file"
 			fi
 		;;
 		*)
-			_error "unknown test mode '$test_mode'"
+			tt_error "unknown test mode '$tt_test_mode'"
 		;;
 	esac
 
 	# Test failed :(
-	if test $test_status -ne 0
+	if test $tt_test_status -ne 0
 	then
-		nr_file_fails=$(($nr_file_fails + 1))
-		nr_total_fails=$(($nr_total_fails + 1))
-		failed_range="$failed_range$test_number,"
+		tt_nr_file_fails=$(($tt_nr_file_fails + 1))
+		tt_nr_total_fails=$(($tt_nr_total_fails + 1))
+		tt_failed_range="$tt_failed_range$tt_test_number,"
 
 		# Decide the message format
-		if test $list_run -eq 1
+		if test $tt_list_run -eq 1
 		then
 			# List mode
-			_list_test fail
+			tt_list_test fail
 		else
 			# Normal mode: show FAILED message and the diff
-			if test $separator_line_shown -eq 0  # avoid dups
+			if test $tt_separator_line_shown -eq 0  # avoid dups
 			then
-				_message "${color_red}$(_separator_line)${color_off}"
+				tt_message "${tt_color_red}$(tt_separator_line)${tt_color_off}"
 			fi
-			_message "${color_red}[FAILED #$test_number, line $test_line_number] $test_command${color_off}"
-			_message "$test_diff" | sed '1 { /^--- / { N; /\n+++ /d; }; }'  # no ---/+++ headers
-			_message "${color_red}$(_separator_line)${color_off}"
-			separator_line_shown=1
+			tt_message "${tt_color_red}[FAILED #$tt_test_number, line $tt_test_line_number] $tt_test_command${tt_color_off}"
+			tt_message "$tt_test_diff" | sed '1 { /^--- / { N; /\n+++ /d; }; }'  # no ---/+++ headers
+			tt_message "${tt_color_red}$(tt_separator_line)${tt_color_off}"
+			tt_separator_line_shown=1
 		fi
 
 		# Should I abort now?
-		if test $stop_on_first_fail -eq 1
+		if test $tt_stop_on_first_fail -eq 1
 		then
-			_clean_up
+			tt_clean_up
 			exit 1
 		fi
 
 	# Test OK
 	else
-		test $list_run -eq 1 && _list_test ok
+		test $tt_list_run -eq 1 && tt_list_test ok
 	fi
 
-	_reset_test_data
+	tt_reset_test_data
 }
-_process_test_file ()
+tt_process_test_file ()
 {
 	# Reset counters
-	nr_file_tests=0
-	nr_file_fails=0
-	nr_file_skips=0
-	line_number=0
-	test_line_number=0
+	tt_nr_file_tests=0
+	tt_nr_file_fails=0
+	tt_nr_file_skips=0
+	tt_line_number=0
+	tt_test_line_number=0
 
 	# Loop for each line of input file
 	# Note: changing IFS to avoid right-trimming of spaces/tabs
 	# Note: read -r to preserve the backslashes
-	while IFS='' read -r input_line || test -n "$input_line"
+	while IFS='' read -r tt_input_line || test -n "$tt_input_line"
 	do
-		line_number=$(($line_number + 1))
-		#_debug INPUT_LINE "$input_line"
+		tt_line_number=$(($tt_line_number + 1))
+		#tt_debug INPUT_LINE "$tt_input_line"
 
-		case "$input_line" in
+		case "$tt_input_line" in
 
 			# Prompt alone: closes previous command line (if any)
-			"$prefix$prompt" | "$prefix${prompt% }" | "$prefix$prompt ")
-				#_debug 'LINE_$' "$input_line"
+			"$tt_prefix$tt_prompt" | "$tt_prefix${tt_prompt% }" | "$tt_prefix$tt_prompt ")
+				#tt_debug 'LINE_$' "$tt_input_line"
 
 				# Run pending tests
-				test -n "$test_command" && _run_test
+				test -n "$tt_test_command" && tt_run_test
 			;;
 
 			# This line is a command line to be tested
-			"$prefix$prompt"*)
-				#_debug LINE_CMD "$input_line"
+			"$tt_prefix$tt_prompt"*)
+				#tt_debug LINE_CMD "$tt_input_line"
 
 				# Run pending tests
-				test -n "$test_command" && _run_test
+				test -n "$tt_test_command" && tt_run_test
 
 				# Remove the prompt
-				test_command="${input_line#"$prefix$prompt"}"
+				tt_test_command="${tt_input_line#"$tt_prefix$tt_prompt"}"
 
 				# Save the test's line number for future messages
-				test_line_number=$line_number
+				tt_test_line_number=$tt_line_number
 
 				# This is a special test with inline output?
-				if printf '%s\n' "$test_command" | grep "$inline_prefix" > /dev/null
+				if printf '%s\n' "$tt_test_command" | grep "$tt_inline_prefix" > /dev/null
 				then
 					# Separate command from inline output
-					test_command="${test_command%"$inline_prefix"*}"
-					test_inline="${input_line##*"$inline_prefix"}"
+					tt_test_command="${tt_test_command%"$tt_inline_prefix"*}"
+					tt_test_inline="${tt_input_line##*"$tt_inline_prefix"}"
 
-					#_debug NEW_CMD "$test_command"
-					#_debug OK_INLINE "$test_inline"
+					#tt_debug NEW_CMD "$tt_test_command"
+					#tt_debug OK_INLINE "$tt_test_inline"
 
 					# Maybe the OK text has options?
-					case "$test_inline" in
+					case "$tt_test_inline" in
 						'--regex '*)
-							test_inline=${test_inline#--regex }
-							test_mode='regex'
+							tt_test_inline=${tt_test_inline#--regex }
+							tt_test_mode='regex'
 						;;
 						'--file '*)
-							test_inline=${test_inline#--file }
-							test_mode='file'
+							tt_test_inline=${tt_test_inline#--file }
+							tt_test_mode='file'
 						;;
 						'--lines '*)
-							test_inline=${test_inline#--lines }
-							test_mode='lines'
+							tt_test_inline=${tt_test_inline#--lines }
+							tt_test_mode='lines'
 						;;
 						'--eval '*)
-							test_inline=${test_inline#--eval }
-							test_mode='eval'
+							tt_test_inline=${tt_test_inline#--eval }
+							tt_test_mode='eval'
 						;;
 						'--text '*)
-							test_inline=${test_inline#--text }
-							test_mode='text'
+							tt_test_inline=${tt_test_inline#--text }
+							tt_test_mode='text'
 						;;
 						*)
-							test_mode='text'
+							tt_test_mode='text'
 						;;
 					esac
 
-					#_debug OK_TEXT "$test_inline"
+					#tt_debug OK_TEXT "$tt_test_inline"
 
 					# There must be a number in --lines
-					if test "$test_mode" = 'lines'
+					if test "$tt_test_mode" = 'lines'
 					then
-						case "$test_inline" in
+						case "$tt_test_inline" in
 							'' | *[!0-9]*)
-								_error "--lines requires a number. See line $line_number of $test_file"
+								tt_error "--lines requires a number. See line $tt_line_number of $tt_test_file"
 							;;
 						esac
 					fi
 
 					# An empty inline parameter is an error user must see
-					if test -z "$test_inline" && test "$test_mode" != 'text'
+					if test -z "$tt_test_inline" && test "$tt_test_mode" != 'text'
 					then
-						_error "missing inline output $test_mode at line $line_number of $test_file"
+						tt_error "missing inline output $tt_test_mode at line $tt_line_number of $tt_test_file"
 					fi
 
 					# Since we already have the command and the output, run test
-					_run_test
+					tt_run_test
 				else
 					# It's a normal command line, output begins in next line
-					test_mode='output'
+					tt_test_mode='output'
 
-					#_debug NEW_CMD "$test_command"
+					#tt_debug NEW_CMD "$tt_test_command"
 				fi
 			;;
 
 			# Test output, blank line or comment
 			*)
-				#_debug 'LINE_*' "$input_line"
+				#tt_debug 'LINE_*' "$tt_input_line"
 
 				# Ignore this line if there's no pending test
-				test -n "$test_command" || continue
+				test -n "$tt_test_command" || continue
 
 				# Required prefix is missing: we just left a command block
-				if test -n "$prefix" && test "${input_line#"$prefix"}" = "$input_line"
+				if test -n "$tt_prefix" && test "${tt_input_line#"$tt_prefix"}" = "$tt_input_line"
 				then
-					#_debug BLOCK_OUT "$input_line"
+					#tt_debug BLOCK_OUT "$tt_input_line"
 
 					# Run the pending test and we're done in this line
-					_run_test
+					tt_run_test
 					continue
 				fi
 
 				# This line is a test output, save it (without prefix)
-				test_ok_text="$test_ok_text${input_line#"$prefix"}$nl"
+				tt_test_ok_text="$tt_test_ok_text${tt_input_line#"$tt_prefix"}$tt_nl"
 
-				#_debug OK_TEXT "${input_line#"$prefix"}"
+				#tt_debug OK_TEXT "${tt_input_line#"$tt_prefix"}"
 			;;
 		esac
-	done < "$temp_file"
+	done < "$tt_temp_file"
 
-	#_debug LOOP_OUT "\$test_command=$test_command"
+	#tt_debug LOOP_OUT "\$tt_test_command=$tt_test_command"
 
 	# Run pending tests
-	test -n "$test_command" && _run_test
+	test -n "$tt_test_command" && tt_run_test
 }
 
 
 ### Init process
 
 # Handy shortcuts for prefixes
-case "$prefix" in
+case "$tt_prefix" in
 	tab)
-		prefix="$tab"
+		tt_prefix="$tt_tab"
 	;;
 	0)
-		prefix=''
+		tt_prefix=''
 	;;
 	[1-9] | [1-9][0-9])  # 1-99
 		# convert number to spaces: 2 => '  '
-		prefix=$(printf "%${prefix}s" ' ')
+		tt_prefix=$(printf "%${tt_prefix}s" ' ')
 	;;
 	*\\*)
-		prefix="$(printf %b "$prefix")"  # expand \t and others
+		tt_prefix="$(printf %b "$tt_prefix")"  # expand \t and others
 	;;
 esac
 
 # Will we use colors in the output?
-case "$color_mode" in
+case "$tt_color_mode" in
 	always | yes | y)
-		use_colors=1
+		tt_use_colors=1
 	;;
 	never | no | n)
-		use_colors=0
+		tt_use_colors=0
 	;;
 	auto | a)
 		# The auto mode will use colors if the output is a terminal
 		# Note: test -t is in POSIX
 		if test -t 1
 		then
-			use_colors=1
+			tt_use_colors=1
 		else
-			use_colors=0
+			tt_use_colors=0
 		fi
 	;;
 	*)
-		_error "invalid value '$color_mode' for --color. Use: auto, always or never."
+		tt_error "invalid value '$tt_color_mode' for --color. Use: auto, always or never."
 	;;
 esac
 
 # Set colors
 # Remember: colors must be readable in dark and light backgrounds
 # Tweak the numbers after [ to adjust the colors
-if test $use_colors -eq 1
+if test $tt_use_colors -eq 1
 then
-	color_red=$(  printf '\033[31m')  # fail
-	color_green=$(printf '\033[32m')  # ok
-	color_blue=$( printf '\033[34m')  # debug
-	color_cyan=$( printf '\033[36m')  # verbose
-	color_off=$(  printf '\033[m')
+	tt_color_red=$(  printf '\033[31m')  # fail
+	tt_color_green=$(printf '\033[32m')  # ok
+	tt_color_blue=$( printf '\033[34m')  # debug
+	tt_color_cyan=$( printf '\033[36m')  # verbose
+	tt_color_off=$(  printf '\033[m')
 fi
 
 # Find the terminal width
@@ -624,106 +630,108 @@ fi
 : ${COLUMNS:=50}
 
 # Parse and validate --number option value, if informed
-run_range_data=$(_parse_range "$run_range")
+tt_run_range_data=$(tt_parse_range "$tt_run_range")
 if test $? -ne 0
 then
-	_error "invalid argument for -n or --number: $run_range"
+	tt_error "invalid argument for -n or --number: $tt_run_range"
 fi
 
 # Parse and validate --skip option value, if informed
-skip_range_data=$(_parse_range "$skip_range")
+tt_skip_range_data=$(tt_parse_range "$tt_skip_range")
 if test $? -ne 0
 then
-	_error "invalid argument for -s or --skip: $skip_range"
+	tt_error "invalid argument for -s or --skip: $tt_skip_range"
 fi
 
 # Create temp dir, protected from others
-umask 077 && mkdir "$temp_dir" || _error "cannot create temporary dir: $temp_dir"
+umask 077 && mkdir "$tt_temp_dir" || tt_error "cannot create temporary dir: $tt_temp_dir"
 
 
 ### Real execution begins here
 
 # Some preparing command to run before all the tests?
-if test -n "$pre_command"
+if test -n "$tt_pre_command"
 then
-	eval "$pre_command" ||
-		_error "pre-flight command failed with status=$?: $pre_command"
+	eval "$tt_pre_command" ||
+		tt_error "pre-flight command failed with status=$?: $tt_pre_command"
 fi
 
 # For each input file in $@
-for test_file
+for tt_test_file
 do
 	# Some tests may "cd" to another dir, we need to get back
 	# to preserve the relative paths of the input files
-	cd "$original_dir"
+	cd "$tt_original_dir"
 
 	# Abort when test file not found/readable
-	if test ! -f "$test_file" || test ! -r "$test_file"
+	if test ! -f "$tt_test_file" || test ! -r "$tt_test_file"
 	then
-		_error "cannot read input file: $test_file"
+		tt_error "cannot read input file: $tt_test_file"
 	fi
 
 	# In multifile mode, identify the current file
-	if test $nr_files -gt 1
+	if test $tt_nr_files -gt 1
 	then
-		if test $list_mode -ne 1 && test $list_run -ne 1
+		if test $tt_list_mode -ne 1 && test $tt_list_run -ne 1
 		then
 			# Normal mode, show a message
-			_message "Testing file $test_file"
+			tt_message "Testing file $tt_test_file"
 		else
 			# List mode, show ------ and the filename
-			_message $(_separator_line | cut -c 1-40) $test_file
+			tt_message $(tt_separator_line | cut -c 1-40) $tt_test_file
 		fi
 	fi
 
 	# Convert Windows files (CRLF) to the Unix format (LF)
 	# Note: the temporary file is required, because doing "sed | while" opens
 	#       a subshell and global vars won't be updated outside the loop.
-	sed "s/$(printf '\r')$//" "$test_file" > "$temp_file"
+	sed "s/$(printf '\r')$//" "$tt_test_file" > "$tt_temp_file"
 
 	# The magic happens here
-	_process_test_file
+	tt_process_test_file
 
 	# Abort when no test found
-	if test $nr_file_tests -eq 0 && test -z "$run_range_data" && test -z "$skip_range_data"
+	if test $tt_nr_file_tests -eq 0 && test -z "$tt_run_range_data" && test -z "$tt_skip_range_data"
 	then
-		_error "no test found in input file: $test_file"
+		tt_error "no test found in input file: $tt_test_file"
 	fi
 
 	# Save file stats
-	nr_file_ok=$(($nr_file_tests - $nr_file_fails - $nr_file_skips))
-	files_stats="$files_stats$nr_file_ok $nr_file_fails $nr_file_skips$nl"
+	tt_nr_file_ok=$(($tt_nr_file_tests - $tt_nr_file_fails - $tt_nr_file_skips))
+	tt_files_stats="$tt_files_stats$tt_nr_file_ok $tt_nr_file_fails $tt_nr_file_skips$tt_nl"
 done
 
-_clean_up
+tt_clean_up
 
 # Some clean up command to run after all the tests?
-if test -n "$post_command"
+if test -n "$tt_post_command"
 then
-	eval "$post_command"
+	eval "$tt_post_command"
 fi
 
-### From this point, it's safe to use non-prefixed global vars
+#-----------------------------------------------------------------------
+# From this point, it's safe to use non-prefixed global vars
+#-----------------------------------------------------------------------
 
 # Range active, but no test matched :(
-if test $nr_total_tests -eq $nr_total_skips
+if test $tt_nr_total_tests -eq $tt_nr_total_skips
 then
-	if test -n "$run_range_data" && test -n "$skip_range_data"
+	if test -n "$tt_run_range_data" && test -n "$tt_skip_range_data"
 	then
-		_error "no test found. The combination of -n and -s resulted in no tests."
-	elif test -n "$run_range_data"
+		tt_error "no test found. The combination of -n and -s resulted in no tests."
+	elif test -n "$tt_run_range_data"
 	then
-		_error "no test found for the specified number or range '$run_range'"
-	elif test -n "$skip_range_data"
+		tt_error "no test found for the specified number or range '$tt_run_range'"
+	elif test -n "$tt_skip_range_data"
 	then
-		_error "no test found. Maybe '--skip $skip_range' was too much?"
+		tt_error "no test found. Maybe '--skip $tt_skip_range' was too much?"
 	fi
 fi
 
 # List mode has no stats
-if test $list_mode -eq 1 || test $list_run -eq 1
+if test $tt_list_mode -eq 1 || test $tt_list_run -eq 1
 then
-	if test $nr_total_fails -eq 0
+	if test $tt_nr_total_fails -eq 0
 	then
 		exit 0
 	else
@@ -733,17 +741,17 @@ fi
 
 ### Show stats
 # Data:
-#   $files_stats -> "100 0 23 \n 12 34 0"
+#   $tt_files_stats -> "100 0 23 \n 12 34 0"
 #   $@ -> foo.sh bar.sh
 # Output:
 # ====    OK  FAIL  SKIP
 # ====   100     0    23  foo.sh
 # ====    12    34     0  bar.sh
-if test $nr_files -gt 1 && test $quiet -ne 1
+if test $tt_nr_files -gt 1 && test $tt_quiet -ne 1
 then
 	echo
 	printf '==== %5s %5s %5s\n' OK FAIL SKIP
-	printf %s "$files_stats" | while read ok fail skip
+	printf %s "$tt_files_stats" | while read ok fail skip
 	do
 		printf '==== %5s %5s %5s    %s\n' $ok $fail $skip "$1"
 		shift
@@ -757,22 +765,22 @@ fi
 # FAIL: 123 of 123 tests failed
 # FAIL: 100 of 123 tests failed (23 skipped)
 skips=
-if test $nr_total_skips -gt 0
+if test $tt_nr_total_skips -gt 0
 then
-	skips=" ($nr_total_skips skipped)"
+	skips=" ($tt_nr_total_skips skipped)"
 fi
-if test $nr_total_fails -eq 0
+if test $tt_nr_total_fails -eq 0
 then
-	stamp="${color_green}OK:${color_off}"
-	stats="$(($nr_total_tests - $nr_total_skips)) of $nr_total_tests tests passed"
-	_message "$stamp $stats$skips"
+	stamp="${tt_color_green}OK:${tt_color_off}"
+	stats="$(($tt_nr_total_tests - $tt_nr_total_skips)) of $tt_nr_total_tests tests passed"
+	tt_message "$stamp $stats$skips"
 	exit 0
 else
-	test $nr_files -eq 1 && _message  # separate from previous FAILED message
+	test $tt_nr_files -eq 1 && tt_message  # separate from previous FAILED message
 
-	stamp="${color_red}FAIL:${color_off}"
-	stats="$nr_total_fails of $nr_total_tests tests failed"
-	_message "$stamp $stats$skips"
-	test $test_file = 'self-test.sh' && _message "-n ${failed_range%,}"  # XXX dev helper, remove before release
+	stamp="${tt_color_red}FAIL:${tt_color_off}"
+	stats="$tt_nr_total_fails of $tt_nr_total_tests tests failed"
+	tt_message "$stamp $stats$skips"
+	test $tt_test_file = 'self-test.sh' && tt_message "-n ${tt_failed_range%,}"  # XXX dev helper, remove before release
 	exit 1
 fi
