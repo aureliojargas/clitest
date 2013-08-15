@@ -350,8 +350,8 @@ Testing file self-test/ok-2.sh
 Testing file self-test/ok-2.sh
 
 ====    OK  FAIL  SKIP
-====     2     0     0    self-test/ok-2.sh
-====     2     0     0    self-test/ok-2.sh
+====     2     -     -    self-test/ok-2.sh
+====     2     -     -    self-test/ok-2.sh
 
 OK: 4 of 4 tests passed
 $ ./doctest.sh self-test/ok-[0-9]*.sh
@@ -362,11 +362,11 @@ Testing file self-test/ok-2.sh
 Testing file self-test/ok-50.sh
 
 ====    OK  FAIL  SKIP
-====     1     0     0    self-test/ok-1.sh
-====    10     0     0    self-test/ok-10.sh
-====   100     0     0    self-test/ok-100.sh
-====     2     0     0    self-test/ok-2.sh
-====    50     0     0    self-test/ok-50.sh
+====     1     -     -    self-test/ok-1.sh
+====    10     -     -    self-test/ok-10.sh
+====   100     -     -    self-test/ok-100.sh
+====     2     -     -    self-test/ok-2.sh
+====    50     -     -    self-test/ok-50.sh
 
 OK: 163 of 163 tests passed
 $ ./doctest.sh --verbose self-test/ok-?.sh self-test/ok-10.sh
@@ -388,9 +388,9 @@ Testing file self-test/ok-10.sh
 #13	echo 10 
 
 ====    OK  FAIL  SKIP
-====     1     0     0    self-test/ok-1.sh
-====     2     0     0    self-test/ok-2.sh
-====    10     0     0    self-test/ok-10.sh
+====     1     -     -    self-test/ok-1.sh
+====     2     -     -    self-test/ok-2.sh
+====    10     -     -    self-test/ok-10.sh
 
 OK: 13 of 13 tests passed
 $
@@ -421,10 +421,10 @@ Testing file self-test/fail-2.sh
 --------------------------------------------------------------------------------
 
 ====    OK  FAIL  SKIP
-====     1     0     0    self-test/ok-1.sh
-====     0     1     0    self-test/fail-1.sh
-====     2     0     0    self-test/ok-2.sh
-====     0     2     0    self-test/fail-2.sh
+====     1     -     -    self-test/ok-1.sh
+====     -     1     -    self-test/fail-1.sh
+====     2     -     -    self-test/ok-2.sh
+====     -     2     -    self-test/fail-2.sh
 
 FAIL: 3 of 6 tests failed
 $ ./doctest.sh --verbose self-test/ok-1.sh self-test/fail-1.sh self-test/ok-2.sh self-test/fail-2.sh
@@ -458,10 +458,10 @@ Testing file self-test/fail-2.sh
 --------------------------------------------------------------------------------
 
 ====    OK  FAIL  SKIP
-====     1     0     0    self-test/ok-1.sh
-====     0     1     0    self-test/fail-1.sh
-====     2     0     0    self-test/ok-2.sh
-====     0     2     0    self-test/fail-2.sh
+====     1     -     -    self-test/ok-1.sh
+====     -     1     -    self-test/fail-1.sh
+====     2     -     -    self-test/ok-2.sh
+====     -     2     -    self-test/fail-2.sh
 
 FAIL: 3 of 6 tests failed
 $
@@ -821,9 +821,9 @@ Testing file self-test/ok-10.sh
 #13	echo 10 
 
 ====    OK  FAIL  SKIP
-====     1     0     0    self-test/ok-1.sh
-====     0     0     2    self-test/ok-2.sh
-====     2     0     8    self-test/ok-10.sh
+====     1     -     -    self-test/ok-1.sh
+====     -     -     2    self-test/ok-2.sh
+====     2     -     8    self-test/ok-10.sh
 
 OK: 3 of 13 tests passed (10 skipped)
 $ ./doctest.sh --verbose -n 1,5 self-test/ok-[12].sh self-test/fail-2.sh
@@ -840,9 +840,9 @@ Testing file self-test/fail-2.sh
 --------------------------------------------------------------------------------
 
 ====    OK  FAIL  SKIP
-====     1     0     0    self-test/ok-1.sh
-====     0     0     2    self-test/ok-2.sh
-====     0     1     1    self-test/fail-2.sh
+====     1     -     -    self-test/ok-1.sh
+====     -     -     2    self-test/ok-2.sh
+====     -     1     1    self-test/fail-2.sh
 
 FAIL: 1 of 5 tests failed (3 skipped)
 $ ./doctest.sh --verbose -n 1 self-test/ok-[12].sh self-test/fail-2.sh
@@ -852,9 +852,9 @@ Testing file self-test/ok-2.sh
 Testing file self-test/fail-2.sh
 
 ====    OK  FAIL  SKIP
-====     1     0     0    self-test/ok-1.sh
-====     0     0     2    self-test/ok-2.sh
-====     0     0     2    self-test/fail-2.sh
+====     1     -     -    self-test/ok-1.sh
+====     -     -     2    self-test/ok-2.sh
+====     -     -     2    self-test/fail-2.sh
 
 OK: 1 of 5 tests passed (4 skipped)
 $
@@ -925,9 +925,9 @@ Testing file self-test/ok-10.sh
 #12	echo 9 
 
 ====    OK  FAIL  SKIP
-====     1     0     0    self-test/ok-1.sh
-====     0     0     2    self-test/ok-2.sh
-====     9     0     1    self-test/ok-10.sh
+====     1     -     -    self-test/ok-1.sh
+====     -     -     2    self-test/ok-2.sh
+====     9     -     1    self-test/ok-10.sh
 
 OK: 10 of 13 tests passed (3 skipped)
 $ ./doctest.sh --verbose -s 2,3,4 self-test/ok-[12].sh self-test/fail-2.sh
@@ -944,9 +944,9 @@ Testing file self-test/fail-2.sh
 --------------------------------------------------------------------------------
 
 ====    OK  FAIL  SKIP
-====     1     0     0    self-test/ok-1.sh
-====     0     0     2    self-test/ok-2.sh
-====     0     1     1    self-test/fail-2.sh
+====     1     -     -    self-test/ok-1.sh
+====     -     -     2    self-test/ok-2.sh
+====     -     1     1    self-test/fail-2.sh
 
 FAIL: 1 of 5 tests failed (3 skipped)
 $ ./doctest.sh --verbose -s 2-10 self-test/ok-[12].sh self-test/fail-2.sh
@@ -956,9 +956,9 @@ Testing file self-test/ok-2.sh
 Testing file self-test/fail-2.sh
 
 ====    OK  FAIL  SKIP
-====     1     0     0    self-test/ok-1.sh
-====     0     0     2    self-test/ok-2.sh
-====     0     0     2    self-test/fail-2.sh
+====     1     -     -    self-test/ok-1.sh
+====     -     -     2    self-test/ok-2.sh
+====     -     -     2    self-test/fail-2.sh
 
 OK: 1 of 5 tests passed (4 skipped)
 $
@@ -983,9 +983,9 @@ Testing file self-test/ok-10.sh
 #7	echo 4 
 
 ====    OK  FAIL  SKIP
-====     1     0     0    self-test/ok-1.sh
-====     0     0     2    self-test/fail-2.sh
-====     2     0     8    self-test/ok-10.sh
+====     1     -     -    self-test/ok-1.sh
+====     -     -     2    self-test/fail-2.sh
+====     2     -     8    self-test/ok-10.sh
 
 OK: 3 of 13 tests passed (10 skipped)
 $
@@ -1299,8 +1299,8 @@ Testing file self-test/cd.sh
 Testing file self-test/ok-2.sh
 
 ====    OK  FAIL  SKIP
-====     1     0     0    self-test/cd.sh
-====     2     0     0    self-test/ok-2.sh
+====     1     -     -    self-test/cd.sh
+====     2     -     -    self-test/ok-2.sh
 
 OK: 3 of 3 tests passed
 $ ./doctest.sh --verbose self-test/no-nl-file-1.sh

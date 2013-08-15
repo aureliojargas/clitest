@@ -746,7 +746,7 @@ then
 	do
 		printf '==== %5s %5s %5s    %s\n' $ok $fail $skip "$1"
 		shift
-	done
+	done | sed 's/     0/     -/g'  # hide zeros
 	echo
 fi
 
