@@ -38,7 +38,7 @@ Options:
   -1, --first                 Stop execution upon first failed test
   -l, --list                  List all the tests (no execution)
   -L, --list-run              List all the tests with OK/FAIL status
-  -n, --number RANGE          Run specific tests, by number (1,2,4-7)
+  -t, --test RANGE            Run specific tests, by number (1,2,4-7)
   -s, --skip RANGE            Skip specific tests, by number (1,2,4-7)
       --pre-flight COMMAND    Execute command before running the first test
       --post-flight COMMAND   Execute command after running the last test
@@ -120,7 +120,7 @@ do
 		-l|--list       ) shift; tt_list_mode=1;;
 		-L|--list-run   ) shift; tt_list_run=1;;
 		-1|--first      ) shift; tt_stop_on_first_fail=1 ;;
-		-n|--number     ) shift; tt_run_range="$1"; shift ;;
+		-t|--test       ) shift; tt_run_range="$1"; shift ;;
 		-s|--skip       ) shift; tt_skip_range="$1"; shift ;;
 		--color|--colour) shift; tt_color_mode="$1"; shift ;;
   		--debug         ) shift; tt_debug=1 ;;
@@ -307,7 +307,7 @@ tt_run_test ()
 	fi
 
 	# Skip range on: skip this test if it's listed in $tt_skip_range_data
-	# Note: --skip always wins over --number, regardless of order
+	# Note: --skip always wins over --test, regardless of order
 	if test -n "$tt_skip_range_data" && test "$tt_skip_range_data" != "${tt_skip_range_data#*:$tt_test_number:}"
 	then
 		tt_nr_total_skips=$(($tt_nr_total_skips + 1))
@@ -629,11 +629,11 @@ fi
 : ${COLUMNS:=$(tput cols 2> /dev/null)}
 : ${COLUMNS:=50}
 
-# Parse and validate --number option value, if informed
+# Parse and validate --test option value, if informed
 tt_run_range_data=$(tt_parse_range "$tt_run_range")
 if test $? -ne 0
 then
-	tt_error "invalid argument for -n or --number: $tt_run_range"
+	tt_error "invalid argument for -t or --test: $tt_run_range"
 fi
 
 # Parse and validate --skip option value, if informed
@@ -718,7 +718,7 @@ if test $tt_nr_total_tests -eq $tt_nr_total_skips
 then
 	if test -n "$tt_run_range_data" && test -n "$tt_skip_range_data"
 	then
-		tt_error "no test found. The combination of -n and -s resulted in no tests."
+		tt_error "no test found. The combination of -t and -s resulted in no tests."
 	elif test -n "$tt_run_range_data"
 	then
 		tt_error "no test found for the specified number or range '$tt_run_range'"
@@ -781,6 +781,6 @@ else
 	stamp="${tt_color_red}FAIL:${tt_color_off}"
 	stats="$tt_nr_total_fails of $tt_nr_total_tests tests failed"
 	tt_message "$stamp $stats$skips"
-	test $tt_test_file = 'self-test.sh' && tt_message "-n ${tt_failed_range%,}"  # XXX dev helper, remove before release
+	test $tt_test_file = 'self-test.sh' && tt_message "-t ${tt_failed_range%,}"  # XXX dev helper, remove before release
 	exit 1
 fi
