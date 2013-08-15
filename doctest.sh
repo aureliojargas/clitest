@@ -393,16 +393,23 @@ tt_run_test ()
 			perl -0777 -ne "exit(!/$tt_test_inline/)" "$tt_test_output_file"
 			tt_test_status=$?
 
-			# Test failed: the regex not matched
-			if test $tt_test_status -eq 1
-			then
-				tt_test_diff="Perl regex '$tt_test_inline' not matched in:$tt_nl$(cat "$tt_test_output_file")"
-
-			# Regex errors are common and user must take action to fix them
-			elif test $tt_test_status -gt 1
-			then
-				tt_error "check your inline Perl regex at line $tt_line_number of $tt_test_file"
-			fi
+			case $tt_test_status in
+				0)   # Test matched, nothing to do
+					:
+				;;
+				1)   # Test failed: the regex not matched
+					tt_test_diff="Perl regex '$tt_test_inline' not matched in:$tt_nl$(cat "$tt_test_output_file")"
+				;;
+				127) # Perl not found :(
+					tt_error "Perl not found. It's needed by --perl at line $tt_line_number of $tt_test_file"
+				;;
+				255) # Regex syntax errors are common and user must take action to fix them
+					tt_error "check your inline Perl regex at line $tt_line_number of $tt_test_file"
+				;;
+				*)
+					tt_error "unknown error when running Perl for --perl at line $tt_line_number of $tt_test_file"
+				;;
+			esac
 		;;
 		*)
 			tt_error "unknown test mode '$tt_test_mode'"
