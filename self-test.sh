@@ -164,18 +164,18 @@ $
 # Option --color
 
 $ ./doctest.sh --color always self-test/ok-1.sh
-[32mOK![m The single test has passed.
+[32mOK:[m 1 of 1 tests passed
 $ ./doctest.sh --color yes self-test/ok-1.sh
-[32mOK![m The single test has passed.
+[32mOK:[m 1 of 1 tests passed
 $ ./doctest.sh --color never self-test/ok-1.sh
-OK! The single test has passed.
+OK: 1 of 1 tests passed
 $ ./doctest.sh --color no self-test/ok-1.sh
-OK! The single test has passed.
+OK: 1 of 1 tests passed
 $
 # Note: Inside this file, the output is not a terminal,
 #       so the default is no colored output.
 $ ./doctest.sh self-test/ok-1.sh
-OK! The single test has passed.
+OK: 1 of 1 tests passed
 $
 # Note: The real default '--color auto' cannot be tested here.
 #       Test it by hand at the command line.
@@ -330,17 +330,17 @@ $
 # Single file, OK
 
 $ ./doctest.sh self-test/ok-1.sh
-OK! The single test has passed.
+OK: 1 of 1 tests passed
 $ ./doctest.sh self-test/ok-2.sh
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh self-test/ok-50.sh
-YOU WIN! All 50 tests have passed.
+OK: 50 of 50 tests passed
 $ ./doctest.sh self-test/ok-100.sh
-YOU WIN! PERFECT! All 100 tests have passed.
+OK: 100 of 100 tests passed
 $ ./doctest.sh --verbose self-test/ok-2.sh
 #1	echo ok
 #2	echo ok  
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $
 
 # Multifile, all OK
@@ -349,12 +349,11 @@ $ ./doctest.sh self-test/ok-2.sh self-test/ok-2.sh
 Testing file self-test/ok-2.sh
 Testing file self-test/ok-2.sh
 
-================================================================================
-  2 ok            self-test/ok-2.sh
-  2 ok            self-test/ok-2.sh
-================================================================================
+====    OK  FAIL  SKIP
+====     2     0     0    self-test/ok-2.sh
+====     2     0     0    self-test/ok-2.sh
 
-OK! All 4 tests have passed.
+OK: 4 of 4 tests passed
 $ ./doctest.sh self-test/ok-[0-9]*.sh
 Testing file self-test/ok-1.sh
 Testing file self-test/ok-10.sh
@@ -362,15 +361,14 @@ Testing file self-test/ok-100.sh
 Testing file self-test/ok-2.sh
 Testing file self-test/ok-50.sh
 
-================================================================================
-  1 ok            self-test/ok-1.sh
- 10 ok            self-test/ok-10.sh
-100 ok            self-test/ok-100.sh
-  2 ok            self-test/ok-2.sh
- 50 ok            self-test/ok-50.sh
-================================================================================
+====    OK  FAIL  SKIP
+====     1     0     0    self-test/ok-1.sh
+====    10     0     0    self-test/ok-10.sh
+====   100     0     0    self-test/ok-100.sh
+====     2     0     0    self-test/ok-2.sh
+====    50     0     0    self-test/ok-50.sh
 
-YOU WIN! PERFECT! All 163 tests have passed.
+OK: 163 of 163 tests passed
 $ ./doctest.sh --verbose self-test/ok-?.sh self-test/ok-10.sh
 Testing file self-test/ok-1.sh
 #1	echo ok
@@ -389,13 +387,12 @@ Testing file self-test/ok-10.sh
 #12	echo 9 
 #13	echo 10 
 
-================================================================================
-  1 ok            self-test/ok-1.sh
-  2 ok            self-test/ok-2.sh
- 10 ok            self-test/ok-10.sh
-================================================================================
+====    OK  FAIL  SKIP
+====     1     0     0    self-test/ok-1.sh
+====     2     0     0    self-test/ok-2.sh
+====    10     0     0    self-test/ok-10.sh
 
-OK! All 13 tests have passed.
+OK: 13 of 13 tests passed
 $
 
 # Multifile, OK and fail
@@ -423,14 +420,13 @@ Testing file self-test/fail-2.sh
 +ok
 --------------------------------------------------------------------------------
 
-================================================================================
-  1 ok            self-test/ok-1.sh
-  0 ok,   1 fail  self-test/fail-1.sh
-  2 ok            self-test/ok-2.sh
-  0 ok,   2 fail  self-test/fail-2.sh
-================================================================================
+====    OK  FAIL  SKIP
+====     1     0     0    self-test/ok-1.sh
+====     0     1     0    self-test/fail-1.sh
+====     2     0     0    self-test/ok-2.sh
+====     0     2     0    self-test/fail-2.sh
 
-FAIL: 3 of 6 tests have failed.
+FAIL: 3 of 6 tests failed
 $ ./doctest.sh --verbose self-test/ok-1.sh self-test/fail-1.sh self-test/ok-2.sh self-test/fail-2.sh
 Testing file self-test/ok-1.sh
 #1	echo ok
@@ -461,14 +457,13 @@ Testing file self-test/fail-2.sh
 +ok
 --------------------------------------------------------------------------------
 
-================================================================================
-  1 ok            self-test/ok-1.sh
-  0 ok,   1 fail  self-test/fail-1.sh
-  2 ok            self-test/ok-2.sh
-  0 ok,   2 fail  self-test/fail-2.sh
-================================================================================
+====    OK  FAIL  SKIP
+====     1     0     0    self-test/ok-1.sh
+====     0     1     0    self-test/fail-1.sh
+====     2     0     0    self-test/ok-2.sh
+====     0     2     0    self-test/fail-2.sh
 
-FAIL: 3 of 6 tests have failed.
+FAIL: 3 of 6 tests failed
 $
 
 # Fail messages
@@ -514,7 +509,7 @@ egrep '^[0-9]+$' failed in:
 fail
 --------------------------------------------------------------------------------
 
-COMPLETE FAIL! All 7 tests have failed.
+FAIL: 7 of 7 tests failed
 $
 
 # Fails
@@ -527,7 +522,7 @@ $ ./doctest.sh self-test/fail-1.sh
 +ok
 --------------------------------------------------------------------------------
 
-FAIL: The single test has failed.
+FAIL: 1 of 1 tests failed
 $ ./doctest.sh self-test/fail-2.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
@@ -541,9 +536,9 @@ $ ./doctest.sh self-test/fail-2.sh
 +ok
 --------------------------------------------------------------------------------
 
-COMPLETE FAIL! All 2 tests have failed.
+FAIL: 2 of 2 tests failed
 $ ./doctest.sh self-test/fail-50.sh | tail -1
-EPIC FAIL! All 50 tests have failed.
+FAIL: 50 of 50 tests failed
 $ ./doctest.sh -1 self-test/fail-2.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
@@ -582,7 +577,7 @@ $ ./doctest.sh --verbose self-test/fail-2.sh
 +ok
 --------------------------------------------------------------------------------
 
-COMPLETE FAIL! All 2 tests have failed.
+FAIL: 2 of 2 tests failed
 $
 
 # Inline output with #→
@@ -607,7 +602,7 @@ $ ./doctest.sh --verbose self-test/inline.sh
 #17	printf '\t\t\t\n' 
 #18	printf ' \t  \t\t   \n' 
 #19	echo "both inline and normal output"  
-OK! All 19 tests have passed.
+OK: 19 of 19 tests passed
 $
 
 # Inline match modes
@@ -766,7 +761,7 @@ $ ./doctest.sh self-test/inline-match-eval-error-2.sh 2>&1 | sed 's/line [0-9][0
 +error: syntax error
 --------------------------------------------------------------------------------
 
-FAIL: The single test has failed.
+FAIL: 1 of 1 tests failed
 $
 
 # Option -n, --number
@@ -784,39 +779,39 @@ doctest.sh: Error: invalid argument for -n or --number: 1-2-3
 $ ./doctest.sh -n 99 self-test/ok-2.sh
 doctest.sh: Error: no test found for the specified number or range '99'
 $ ./doctest.sh -n '' self-test/ok-2.sh
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh -n 0 self-test/ok-2.sh
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh -n ,,,0,0-0,,, self-test/ok-2.sh
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose -n 1 self-test/ok-10.sh
 #1	echo 1 
-OK! The single test has passed.
+OK: 1 of 10 tests passed (9 skipped)
 $ ./doctest.sh --verbose --number 1 self-test/ok-10.sh
 #1	echo 1 
-OK! The single test has passed.
+OK: 1 of 10 tests passed (9 skipped)
 $ ./doctest.sh --verbose -n 0-1,1-0 self-test/ok-10.sh
 #1	echo 1 
-OK! The single test has passed.
+OK: 1 of 10 tests passed (9 skipped)
 $ ./doctest.sh --verbose -n 1-1 self-test/ok-10.sh
 #1	echo 1 
-OK! The single test has passed.
+OK: 1 of 10 tests passed (9 skipped)
 $ ./doctest.sh --verbose -n 1,1,1,0,1 self-test/ok-10.sh
 #1	echo 1 
-OK! The single test has passed.
+OK: 1 of 10 tests passed (9 skipped)
 $ ./doctest.sh --verbose -n 10-20 self-test/ok-10.sh
 #10	echo 10 
-OK! The single test has passed.
+OK: 1 of 10 tests passed (9 skipped)
 $ ./doctest.sh --verbose -n 3,2,1 self-test/ok-10.sh
 #1	echo 1 
 #2	echo 2 
 #3	echo 3 
-OK! All 3 tests have passed.
+OK: 3 of 10 tests passed (7 skipped)
 $ ./doctest.sh --verbose -n 3-1 self-test/ok-10.sh
 #1	echo 1 
 #2	echo 2 
 #3	echo 3 
-OK! All 3 tests have passed.
+OK: 3 of 10 tests passed (7 skipped)
 $ ./doctest.sh --verbose -n 1,5,13 self-test/ok-?.sh self-test/ok-10.sh
 Testing file self-test/ok-1.sh
 #1	echo ok
@@ -825,13 +820,12 @@ Testing file self-test/ok-10.sh
 #5	echo 2 
 #13	echo 10 
 
-================================================================================
-  1 ok            self-test/ok-1.sh
-  0 ok            self-test/ok-2.sh
-  2 ok            self-test/ok-10.sh
-================================================================================
+====    OK  FAIL  SKIP
+====     1     0     0    self-test/ok-1.sh
+====     0     0     2    self-test/ok-2.sh
+====     2     0     8    self-test/ok-10.sh
 
-OK! All 3 tests have passed.
+OK: 3 of 13 tests passed (10 skipped)
 $ ./doctest.sh --verbose -n 1,5 self-test/ok-[12].sh self-test/fail-2.sh
 Testing file self-test/ok-1.sh
 #1	echo ok
@@ -845,26 +839,24 @@ Testing file self-test/fail-2.sh
 +ok
 --------------------------------------------------------------------------------
 
-================================================================================
-  1 ok            self-test/ok-1.sh
-  0 ok            self-test/ok-2.sh
-  0 ok,   1 fail  self-test/fail-2.sh
-================================================================================
+====    OK  FAIL  SKIP
+====     1     0     0    self-test/ok-1.sh
+====     0     0     2    self-test/ok-2.sh
+====     0     1     1    self-test/fail-2.sh
 
-FAIL: 1 of 2 tests have failed.
+FAIL: 1 of 5 tests failed (3 skipped)
 $ ./doctest.sh --verbose -n 1 self-test/ok-[12].sh self-test/fail-2.sh
 Testing file self-test/ok-1.sh
 #1	echo ok
 Testing file self-test/ok-2.sh
 Testing file self-test/fail-2.sh
 
-================================================================================
-  1 ok            self-test/ok-1.sh
-  0 ok            self-test/ok-2.sh
-  0 ok            self-test/fail-2.sh
-================================================================================
+====    OK  FAIL  SKIP
+====     1     0     0    self-test/ok-1.sh
+====     0     0     2    self-test/ok-2.sh
+====     0     0     2    self-test/fail-2.sh
 
-OK! The single test has passed.
+OK: 1 of 5 tests passed (4 skipped)
 $
 
 # Option -s, --skip
@@ -880,43 +872,43 @@ doctest.sh: Error: invalid argument for -s or --skip: 1--2
 $ ./doctest.sh -s 1-2-3 self-test/ok-2.sh
 doctest.sh: Error: invalid argument for -s or --skip: 1-2-3
 $ ./doctest.sh -s 99 self-test/ok-2.sh
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh -s '' self-test/ok-2.sh
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh -s 0 self-test/ok-2.sh
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh -s ,,,0,0-0,,, self-test/ok-2.sh
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh -s 1 self-test/ok-1.sh
 doctest.sh: Error: no test found. Maybe '--skip 1' was too much?
 $ ./doctest.sh --verbose -s 1 self-test/ok-2.sh
 #2	echo ok  
-OK! The single test has passed.
+OK: 1 of 2 tests passed (1 skipped)
 $ ./doctest.sh --verbose --skip 1 self-test/ok-2.sh
 #2	echo ok  
-OK! The single test has passed.
+OK: 1 of 2 tests passed (1 skipped)
 $ ./doctest.sh --verbose -s 0-1,1-0 self-test/ok-2.sh
 #2	echo ok  
-OK! The single test has passed.
+OK: 1 of 2 tests passed (1 skipped)
 $ ./doctest.sh --verbose -s 1-1 self-test/ok-2.sh
 #2	echo ok  
-OK! The single test has passed.
+OK: 1 of 2 tests passed (1 skipped)
 $ ./doctest.sh --verbose -s 1,1,1,0,1 self-test/ok-2.sh
 #2	echo ok  
-OK! The single test has passed.
+OK: 1 of 2 tests passed (1 skipped)
 $ ./doctest.sh --verbose -s 2-10 self-test/ok-2.sh
 #1	echo ok
-OK! The single test has passed.
+OK: 1 of 2 tests passed (1 skipped)
 $ ./doctest.sh --verbose -s 10,9,8,7,6,5,4 self-test/ok-10.sh
 #1	echo 1 
 #2	echo 2 
 #3	echo 3 
-OK! All 3 tests have passed.
+OK: 3 of 10 tests passed (7 skipped)
 $ ./doctest.sh --verbose -s 10-4 self-test/ok-10.sh
 #1	echo 1 
 #2	echo 2 
 #3	echo 3 
-OK! All 3 tests have passed.
+OK: 3 of 10 tests passed (7 skipped)
 $ ./doctest.sh --verbose -s 2,3,13 self-test/ok-?.sh self-test/ok-10.sh
 Testing file self-test/ok-1.sh
 #1	echo ok
@@ -932,13 +924,12 @@ Testing file self-test/ok-10.sh
 #11	echo 8 
 #12	echo 9 
 
-================================================================================
-  1 ok            self-test/ok-1.sh
-  0 ok            self-test/ok-2.sh
-  9 ok            self-test/ok-10.sh
-================================================================================
+====    OK  FAIL  SKIP
+====     1     0     0    self-test/ok-1.sh
+====     0     0     2    self-test/ok-2.sh
+====     9     0     1    self-test/ok-10.sh
 
-OK! All 10 tests have passed.
+OK: 10 of 13 tests passed (3 skipped)
 $ ./doctest.sh --verbose -s 2,3,4 self-test/ok-[12].sh self-test/fail-2.sh
 Testing file self-test/ok-1.sh
 #1	echo ok
@@ -952,26 +943,24 @@ Testing file self-test/fail-2.sh
 +ok
 --------------------------------------------------------------------------------
 
-================================================================================
-  1 ok            self-test/ok-1.sh
-  0 ok            self-test/ok-2.sh
-  0 ok,   1 fail  self-test/fail-2.sh
-================================================================================
+====    OK  FAIL  SKIP
+====     1     0     0    self-test/ok-1.sh
+====     0     0     2    self-test/ok-2.sh
+====     0     1     1    self-test/fail-2.sh
 
-FAIL: 1 of 2 tests have failed.
+FAIL: 1 of 5 tests failed (3 skipped)
 $ ./doctest.sh --verbose -s 2-10 self-test/ok-[12].sh self-test/fail-2.sh
 Testing file self-test/ok-1.sh
 #1	echo ok
 Testing file self-test/ok-2.sh
 Testing file self-test/fail-2.sh
 
-================================================================================
-  1 ok            self-test/ok-1.sh
-  0 ok            self-test/ok-2.sh
-  0 ok            self-test/fail-2.sh
-================================================================================
+====    OK  FAIL  SKIP
+====     1     0     0    self-test/ok-1.sh
+====     0     0     2    self-test/ok-2.sh
+====     0     0     2    self-test/fail-2.sh
 
-OK! The single test has passed.
+OK: 1 of 5 tests passed (4 skipped)
 $
 
 # Option --number comined with --skip
@@ -984,7 +973,7 @@ $ ./doctest.sh --verbose -n 3,5-7 -s 6 self-test/ok-10.sh
 #3	echo 3 
 #5	echo 5 
 #7	echo 7 
-OK! All 3 tests have passed.
+OK: 3 of 10 tests passed (7 skipped)
 $ ./doctest.sh --verbose -n 1,3,5-7 -s 3,6 self-test/ok-1.sh self-test/fail-2.sh self-test/ok-10.sh
 Testing file self-test/ok-1.sh
 #1	echo ok
@@ -993,13 +982,12 @@ Testing file self-test/ok-10.sh
 #5	echo 2 
 #7	echo 4 
 
-================================================================================
-  1 ok            self-test/ok-1.sh
-  0 ok            self-test/fail-2.sh
-  2 ok            self-test/ok-10.sh
-================================================================================
+====    OK  FAIL  SKIP
+====     1     0     0    self-test/ok-1.sh
+====     0     0     2    self-test/fail-2.sh
+====     2     0     8    self-test/ok-10.sh
 
-OK! All 3 tests have passed.
+OK: 3 of 13 tests passed (10 skipped)
 $
 
 
@@ -1018,9 +1006,9 @@ $ ./doctest.sh self-test/option-diff-options.sh
 +	diff -w now inline    
 --------------------------------------------------------------------------------
 
-COMPLETE FAIL! All 2 tests have failed.
+FAIL: 2 of 2 tests failed
 $ ./doctest.sh --diff-options '-u -w' self-test/option-diff-options.sh
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $
 
 # Option --prompt
@@ -1031,12 +1019,12 @@ $ ./doctest.sh --verbose --prompt 'prompt$ ' self-test/option-prompt.sh
 #1	echo "1"  
 #2	echo "2"
 #3	echo "3"
-OK! All 3 tests have passed.
+OK: 3 of 3 tests passed
 $ ./doctest.sh --verbose --prompt '♥ ' self-test/option-prompt-unicode.sh
 #1	echo "1"  
 #2	echo "2"
 #3	echo "3"
-OK! All 3 tests have passed.
+OK: 3 of 3 tests passed
 $
 
 # Option --inline-prefix
@@ -1056,7 +1044,7 @@ $ ./doctest.sh self-test/option-inline-prefix.sh
 +2 tabs
 --------------------------------------------------------------------------------
 
-COMPLETE FAIL! All 3 tests have failed.
+FAIL: 3 of 3 tests failed
 $ ./doctest.sh --inline-prefix '#==>' self-test/option-inline-prefix.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 3] echo "1 space" 
@@ -1075,9 +1063,9 @@ $ ./doctest.sh --inline-prefix '#==>' self-test/option-inline-prefix.sh
 +2 tabs
 --------------------------------------------------------------------------------
 
-COMPLETE FAIL! All 3 tests have failed.
+FAIL: 3 of 3 tests failed
 $ ./doctest.sh --inline-prefix '#==> ' self-test/option-inline-prefix.sh
-OK! All 3 tests have passed.
+OK: 3 of 3 tests passed
 $
 
 # Option --prefix
@@ -1089,7 +1077,7 @@ $ ./doctest.sh --verbose --prefix '    ' self-test/option-prefix.sh
 #4	echo "4"
 #5	echo "5"  
 #6	echo; echo "6"; echo; echo "7"
-OK! All 6 tests have passed.
+OK: 6 of 6 tests passed
 $ ./doctest.sh --verbose --prefix 4 self-test/option-prefix.sh
 #1	echo "1"  
 #2	echo "2"
@@ -1097,7 +1085,7 @@ $ ./doctest.sh --verbose --prefix 4 self-test/option-prefix.sh
 #4	echo "4"
 #5	echo "5"  
 #6	echo; echo "6"; echo; echo "7"
-OK! All 6 tests have passed.
+OK: 6 of 6 tests passed
 $ ./doctest.sh --verbose --prefix '\t' self-test/option-prefix-tab.sh
 #1	echo "1"  
 #2	echo "2"
@@ -1105,7 +1093,7 @@ $ ./doctest.sh --verbose --prefix '\t' self-test/option-prefix-tab.sh
 #4	echo "4"
 #5	echo "5"  
 #6	echo; echo "6"; echo; echo "7"
-OK! All 6 tests have passed.
+OK: 6 of 6 tests passed
 $ ./doctest.sh --verbose --prefix tab self-test/option-prefix-tab.sh
 #1	echo "1"  
 #2	echo "2"
@@ -1113,7 +1101,7 @@ $ ./doctest.sh --verbose --prefix tab self-test/option-prefix-tab.sh
 #4	echo "4"
 #5	echo "5"  
 #6	echo; echo "6"; echo; echo "7"
-OK! All 6 tests have passed.
+OK: 6 of 6 tests passed
 $
 
 # Option --prefix: glob gotchas
@@ -1121,43 +1109,43 @@ $
 $ ./doctest.sh --verbose --prefix '?' self-test/option-prefix-glob.sh
 #1	echo 'prefix ?'	
 #2	echo 'prefix ?'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prefix '*' self-test/option-prefix-glob.sh
 #1	echo 'prefix *'	
 #2	echo 'prefix *'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prefix '#' self-test/option-prefix-glob.sh
 #1	echo 'prefix #'	
 #2	echo 'prefix #'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prefix '%' self-test/option-prefix-glob.sh
 #1	echo 'prefix %'	
 #2	echo 'prefix %'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prefix '##' self-test/option-prefix-glob.sh
 #1	echo 'prefix ##'	
 #2	echo 'prefix ##'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prefix '%%' self-test/option-prefix-glob.sh
 #1	echo 'prefix %%'	
 #2	echo 'prefix %%'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prefix '#*' self-test/option-prefix-glob.sh
 #1	echo 'prefix #*'	
 #2	echo 'prefix #*'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prefix '*#' self-test/option-prefix-glob.sh
 #1	echo 'prefix *#'	
 #2	echo 'prefix *#'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prefix '%*' self-test/option-prefix-glob.sh
 #1	echo 'prefix %*'	
 #2	echo 'prefix %*'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prefix '*%' self-test/option-prefix-glob.sh
 #1	echo 'prefix *%'	
 #2	echo 'prefix *%'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $
 
 # Option --prompt: glob gotchas (char + space)
@@ -1165,43 +1153,43 @@ $
 $ ./doctest.sh --verbose --prompt '? ' self-test/option-prompt-glob-space.sh
 #1	echo 'prompt ? '	
 #2	echo 'prompt ? '
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prompt '* ' self-test/option-prompt-glob-space.sh
 #1	echo 'prompt * '	
 #2	echo 'prompt * '
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prompt '# ' self-test/option-prompt-glob-space.sh
 #1	echo 'prompt # '	
 #2	echo 'prompt # '
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prompt '% ' self-test/option-prompt-glob-space.sh
 #1	echo 'prompt % '	
 #2	echo 'prompt % '
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prompt '## ' self-test/option-prompt-glob-space.sh
 #1	echo 'prompt ## '	
 #2	echo 'prompt ## '
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prompt '%% ' self-test/option-prompt-glob-space.sh
 #1	echo 'prompt %% '	
 #2	echo 'prompt %% '
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prompt '#* ' self-test/option-prompt-glob-space.sh
 #1	echo 'prompt #* '	
 #2	echo 'prompt #* '
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prompt '*# ' self-test/option-prompt-glob-space.sh
 #1	echo 'prompt *# '	
 #2	echo 'prompt *# '
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prompt '%* ' self-test/option-prompt-glob-space.sh
 #1	echo 'prompt %* '	
 #2	echo 'prompt %* '
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prompt '*% ' self-test/option-prompt-glob-space.sh
 #1	echo 'prompt *% '	
 #2	echo 'prompt *% '
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $
 
 # Option --prompt: glob gotchas (chars only)
@@ -1209,52 +1197,52 @@ $
 $ ./doctest.sh --verbose --prompt '?' self-test/option-prompt-glob-1.sh
 #1	echo 'prompt ?'	
 #2	echo 'prompt ?'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prompt '*' self-test/option-prompt-glob-1.sh
 #1	echo 'prompt *'	
 #2	echo 'prompt *'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prompt '#' self-test/option-prompt-glob-1.sh
 #1	echo 'prompt #'	
 #2	echo 'prompt #'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prompt '%' self-test/option-prompt-glob-1.sh
 #1	echo 'prompt %'	
 #2	echo 'prompt %'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prompt '##' self-test/option-prompt-glob-2.sh
 #1	echo 'prompt ##'	
 #2	echo 'prompt ##'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prompt '%%' self-test/option-prompt-glob-2.sh
 #1	echo 'prompt %%'	
 #2	echo 'prompt %%'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prompt '#*' self-test/option-prompt-glob-2.sh
 #1	echo 'prompt #*'	
 #2	echo 'prompt #*'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prompt '*#' self-test/option-prompt-glob-2.sh
 #1	echo 'prompt *#'	
 #2	echo 'prompt *#'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prompt '%*' self-test/option-prompt-glob-2.sh
 #1	echo 'prompt %*'	
 #2	echo 'prompt %*'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh --verbose --prompt '*%' self-test/option-prompt-glob-2.sh
 #1	echo 'prompt *%'	
 #2	echo 'prompt *%'
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $
 
 # Options --pre-flight and --post-flight
 
 $ ./doctest.sh --pre-flight 'test_number=99; nr_total_tests=99' self-test/ok-1.sh
-YOU WIN! PERFECT! All 100 tests have passed.
+OK: 100 of 100 tests passed
 $ ./doctest.sh --post-flight 'nr_total_fails=50' self-test/ok-50.sh
 
-EPIC FAIL! All 50 tests have failed.
+FAIL: 50 of 50 tests failed
 $ ./doctest.sh --pre-flight 'false' self-test/ok-1.sh
 doctest.sh: Error: pre-flight command failed with status=1: false
 $
@@ -1274,26 +1262,26 @@ $
 # Gotchas
 
 $ ./doctest.sh self-test/exit-code.sh
-OK! All 2 tests have passed.
+OK: 2 of 2 tests passed
 $ ./doctest.sh self-test/blank-output.sh
-OK! All 10 tests have passed.
+OK: 10 of 10 tests passed
 $ ./doctest.sh self-test/special-chars.sh
-YOU WIN! PERFECT! All 206 tests have passed.
+OK: 206 of 206 tests passed
 $ ./doctest.sh --verbose self-test/windows.sh
 #1	echo "a file with CRLF line ending"
 #2	echo "inline output"  
 #3	echo "inline regex"  
-OK! All 3 tests have passed.
+OK: 3 of 3 tests passed
 $ ./doctest.sh --verbose self-test/close-command.sh
 #1	echo 1
 #2	echo 2
 #3	echo 3
-OK! All 3 tests have passed.
+OK: 3 of 3 tests passed
 $ ./doctest.sh --verbose self-test/multi-commands.sh
 #1	echo 1; echo 2; echo 3; echo 4; echo 5
 #2	(echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p
 #3	(echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p  
-OK! All 3 tests have passed.
+OK: 3 of 3 tests passed
 $ ./doctest.sh --verbose self-test/stdout-stderr.sh
 #1	echo "stdout"
 #2	echo "stdout" 2> /dev/null
@@ -1305,26 +1293,25 @@ $ ./doctest.sh --verbose self-test/stdout-stderr.sh
 #8	cp XXnotfoundXX foo 2>&1
 #9	cp XXnotfoundXX foo 2> /dev/null
 #10	cp XXnotfoundXX foo > /dev/null 2>&1
-OK! All 10 tests have passed.
+OK: 10 of 10 tests passed
 $ ./doctest.sh self-test/cd.sh self-test/ok-2.sh
 Testing file self-test/cd.sh
 Testing file self-test/ok-2.sh
 
-================================================================================
-  1 ok            self-test/cd.sh
-  2 ok            self-test/ok-2.sh
-================================================================================
+====    OK  FAIL  SKIP
+====     1     0     0    self-test/cd.sh
+====     2     0     0    self-test/ok-2.sh
 
-OK! All 3 tests have passed.
+OK: 3 of 3 tests passed
 $ ./doctest.sh --verbose self-test/no-nl-file-1.sh
 #1	printf '%s\n' 'a file with no \n at the last line'
-OK! The single test has passed.
+OK: 1 of 1 tests passed
 $ ./doctest.sh --verbose self-test/no-nl-file-2.sh
 #1	printf '%s\n' 'another file with no \n at the last line'
-OK! The single test has passed.
+OK: 1 of 1 tests passed
 $ ./doctest.sh --verbose self-test/no-nl-file-3.sh
 #1	printf '%s\n' 'oneliner, no \n'  
-OK! The single test has passed.
+OK: 1 of 1 tests passed
 $ ./doctest.sh --verbose self-test/no-nl-command.sh
 #1	printf 'ok\n'
 #2	printf 'fail'
@@ -1356,7 +1343,7 @@ $ ./doctest.sh --verbose self-test/no-nl-command.sh
 --------------------------------------------------------------------------------
 #6	printf 'ok'; echo   
 
-FAIL: 3 of 6 tests have failed.
+FAIL: 3 of 6 tests failed
 $
 
 # And now, the colored output tests

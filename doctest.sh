@@ -69,11 +69,14 @@ separator_line_shown=0
 
 # Do not change these vars
 nr_files=0
-nr_total_tests=0      # count only executed (not skipped with -n) tests
+nr_total_tests=0
 nr_total_fails=0
-nr_file_tests=0       # count only executed (not skipped with -n) tests
+nr_total_skips=0
+nr_file_tests=0
 nr_file_fails=0
-files_stat_message=''
+nr_file_skips=0
+nr_file_ok=0
+files_stats=
 original_dir=$(pwd)
 pre_command=
 post_command=
@@ -284,10 +287,14 @@ _reset_test_data ()
 _run_test ()
 {
 	test_number=$(($test_number + 1))
+	nr_total_tests=$(($nr_total_tests + 1))
+	nr_file_tests=$(($nr_file_tests + 1))
 
 	# Run range on: skip this test if it's not listed in $run_range_data
 	if test -n "$run_range_data" && test "$run_range_data" = "${run_range_data#*:$test_number:}"
 	then
+		nr_total_skips=$(($nr_total_skips + 1))
+		nr_file_skips=$(($nr_file_skips + 1))
 		_reset_test_data
 		return 0
 	fi
@@ -296,12 +303,11 @@ _run_test ()
 	# Note: --skip always wins over --number, regardless of order
 	if test -n "$skip_range_data" && test "$skip_range_data" != "${skip_range_data#*:$test_number:}"
 	then
+		nr_total_skips=$(($nr_total_skips + 1))
+		nr_file_skips=$(($nr_file_skips + 1))
 		_reset_test_data
 		return 0
 	fi
-
-	nr_total_tests=$(($nr_total_tests + 1))
-	nr_file_tests=$(($nr_file_tests + 1))
 
 	# List mode: just show the command and return (no execution)
 	if test $list_mode -eq 1
@@ -423,6 +429,7 @@ _process_test_file ()
 	# Reset counters
 	nr_file_tests=0
 	nr_file_fails=0
+	nr_file_skips=0
 	line_number=0
 	test_line_number=0
 
@@ -682,17 +689,9 @@ do
 		_error "no test found in input file: $test_file"
 	fi
 
-	# Compose file stats message
-	nr_file_ok=$(($nr_file_tests - $nr_file_fails))
-	if test $nr_file_fails -eq 0
-	then
-		msg=$(printf '%3d ok            %s' $nr_file_ok "$test_file")
-	else
-		msg=$(printf '%3d ok, %3d fail  %s' $nr_file_ok $nr_file_fails "$test_file")
-	fi
-
-	# Append file stats to global holder
-	files_stat_message=$(printf '%s\n%s' "$files_stat_message" "$msg")
+	# Save file stats
+	nr_file_ok=$(($nr_file_tests - $nr_file_fails - $nr_file_skips))
+	files_stats="$files_stats$nr_file_ok $nr_file_fails $nr_file_skips$nl"
 done
 
 _clean_up
@@ -703,8 +702,10 @@ then
 	eval "$post_command"
 fi
 
+### From this point, it's safe to use non-prefixed global vars
+
 # Range active, but no test matched :(
-if test $nr_total_tests -eq 0
+if test $nr_total_tests -eq $nr_total_skips
 then
 	if test -n "$run_range_data" && test -n "$skip_range_data"
 	then
@@ -729,49 +730,48 @@ then
 	fi
 fi
 
-# Show stats
-if test $nr_files -gt 1
+### Show stats
+# Data:
+#   $files_stats -> "100 0 23 \n 12 34 0"
+#   $@ -> foo.sh bar.sh
+# Output:
+# ====    OK  FAIL  SKIP
+# ====   100     0    23  foo.sh
+# ====    12    34     0  bar.sh
+if test $nr_files -gt 1 && test $quiet -ne 1
 then
-	_message
-	_message $(_separator_line | tr - =)
-	_message "${files_stat_message#?}"  # remove \n at start
-	_message $(_separator_line | tr - =)
-	_message
+	echo
+	printf '==== %5s %5s %5s\n' OK FAIL SKIP
+	printf %s "$files_stats" | while read ok fail skip
+	do
+		printf '==== %5s %5s %5s    %s\n' $ok $fail $skip "$1"
+		shift
+	done
+	echo
 fi
 
-# The final message: WIN or FAIL?
+### The final message: OK or FAIL?
+# OK: 123 of 123 tests passed
+# OK: 100 of 123 tests passed (23 skipped)
+# FAIL: 123 of 123 tests failed
+# FAIL: 100 of 123 tests failed (23 skipped)
+skips=
+if test $nr_total_skips -gt 0
+then
+	skips=" ($nr_total_skips skipped)"
+fi
 if test $nr_total_fails -eq 0
 then
-	if test $nr_total_tests -eq 1
-	then
-		_message "${color_green}OK!${color_off} The single test has passed."
-	elif test $nr_total_tests -lt 50
-	then
-		_message "${color_green}OK!${color_off} All $nr_total_tests tests have passed."
-	elif test $nr_total_tests -lt 100
-	then
-		_message "${color_green}YOU WIN!${color_off} All $nr_total_tests tests have passed."
-	else
-		_message "${color_green}YOU WIN! PERFECT!${color_off} All $nr_total_tests tests have passed."
-	fi
+	stamp="${color_green}OK:${color_off}"
+	stats="$(($nr_total_tests - $nr_total_skips)) of $nr_total_tests tests passed"
+	_message "$stamp $stats$skips"
 	exit 0
 else
 	test $nr_files -eq 1 && _message  # separate from previous FAILED message
 
-	if test $nr_total_tests -eq 1
-	then
-		_message "${color_red}FAIL:${color_off} The single test has failed."
-	elif test $nr_total_fails -eq $nr_total_tests && test $nr_total_fails -lt 50
-	then
-		_message "${color_red}COMPLETE FAIL!${color_off} All $nr_total_tests tests have failed."
-	elif test $nr_total_fails -eq $nr_total_tests
-	then
-		_message "${color_red}EPIC FAIL!${color_off} All $nr_total_tests tests have failed."
-	else
-		_message "${color_red}FAIL:${color_off} $nr_total_fails of $nr_total_tests tests have failed."
-	fi
-	test $test_file = 'self-test.sh' && _message "-n ${failed_range%,}"  # dev helper
+	stamp="${color_red}FAIL:${color_off}"
+	stats="$nr_total_fails of $nr_total_tests tests failed"
+	_message "$stamp $stats$skips"
+	test $test_file = 'self-test.sh' && _message "-n ${failed_range%,}"  # XXX dev helper, remove before release
 	exit 1
 fi
-# Note: Those messages are for FUN. When automating, check the exit code.
-
