@@ -104,7 +104,7 @@ Options:
 
 Customization options:
       --color WHEN            Set when to use colors: always, never, auto
-      --diff-options OPTIONS  Set options for the diff command (default: -u)
+      --diff-options OPTIONS  Set diff command options (default: '-u')
       --inline-prefix PREFIX  Set inline output prefix (default: '#→ ')
       --prefix PREFIX         Set command line prefix (default: '')
       --prompt STRING         Set prompt string (default: '$ ')

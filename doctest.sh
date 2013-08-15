@@ -31,6 +31,16 @@
 
 tt_my_name="$(basename "$0")"
 tt_my_version='dev'
+
+# Customization (if needed), most may be altered by command line options
+tt_prefix=''
+tt_prompt='$ '
+tt_inline_prefix='#→ '
+tt_diff_options='-u'
+tt_color_mode='auto'
+tt_temp_dir="${TMPDIR:-/tmp}/doctest.$$"
+# Note: using temporary files for compatibility, since <(...) is not portable.
+
 tt_my_help="\
 Usage: $tt_my_name [options] <file ...>
 
@@ -48,19 +58,10 @@ Options:
 
 Customization options:
       --color WHEN            Set when to use colors: always, never, auto
-      --diff-options OPTIONS  Set options for the diff command (default: -u)
-      --inline-prefix PREFIX  Set inline output prefix (default: '#→ ')
-      --prefix PREFIX         Set command line prefix (default: '')
-      --prompt STRING         Set prompt string (default: '$ ')"
-
-# Customization (if needed), most may be altered by command line options
-tt_prefix=''
-tt_prompt='$ '
-tt_inline_prefix='#→ '
-tt_diff_options='-u'
-tt_color_mode='auto'
-tt_temp_dir="${TMPDIR:-/tmp}/doctest.$$"
-# Note: using temporary files for compatibility, since <(...) is not portable.
+      --diff-options OPTIONS  Set diff command options (default: '$tt_diff_options')
+      --inline-prefix PREFIX  Set inline output prefix (default: '$tt_inline_prefix')
+      --prefix PREFIX         Set command line prefix (default: '$tt_prefix')
+      --prompt STRING         Set prompt string (default: '$tt_prompt')"
 
 # Flags (0=off, 1=on), some may be altered by command line options
 tt_debug=0
