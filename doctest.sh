@@ -378,10 +378,9 @@ tt_run_test ()
 			egrep "$tt_test_inline" "$tt_test_output_file" > /dev/null
 			tt_test_status=$?
 
-			# Failed, now we need a real file to make the diff
+			# Test failed: the regex not matched
 			if test $tt_test_status -eq 1
 			then
-				printf %s "$tt_test_inline" > "$tt_test_ok_file"
 				tt_test_diff="egrep '$tt_test_inline' failed in:$tt_nl$(cat "$tt_test_output_file")"
 
 			# Regex errors are common and user must take action to fix them
