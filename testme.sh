@@ -524,8 +524,12 @@ fail
 Perl regex '^[0-9]+$' not matched in:
 fail
 --------------------------------------------------------------------------------
+[FAILED #9, line 34] echo fail  
+Perl regex '^[0-9]+$' not matched in:
+fail
+--------------------------------------------------------------------------------
 
-FAIL: 8 of 8 tests failed
+FAIL: 9 of 9 tests failed
 $
 
 # Fails

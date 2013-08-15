@@ -29,3 +29,7 @@ $ echo fail  #→ --egrep ^[0-9]+$
 
 $ echo fail  #→ --perl ^[0-9]+$
 
+# inline --regex
+
+$ echo fail  #→ --regex ^[0-9]+$
+

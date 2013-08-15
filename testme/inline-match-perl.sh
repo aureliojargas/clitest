@@ -1,5 +1,6 @@
 # Inline matching method: --perl
 # Matches a Perl-style regular expression in the command output
+# You can also use the friendlier alias: --regex
 #
 # In fact, it's a real Perl match: perl -0777 -ne 'exit(!/regex/)'
 # If Perl matched, we have a successful test.

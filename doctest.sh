@@ -389,7 +389,7 @@ tt_run_test ()
 				tt_error "check your inline egrep regex at line $tt_line_number of $tt_test_file"
 			fi
 		;;
-		perl)
+		perl | regex)
 			perl -0777 -ne "exit(!/$tt_test_inline/)" "$tt_test_output_file"
 			tt_test_status=$?
 
@@ -401,13 +401,13 @@ tt_run_test ()
 					tt_test_diff="Perl regex '$tt_test_inline' not matched in:$tt_nl$(cat "$tt_test_output_file")"
 				;;
 				127) # Perl not found :(
-					tt_error "Perl not found. It's needed by --perl at line $tt_line_number of $tt_test_file"
+					tt_error "Perl not found. It's needed by --$tt_test_mode at line $tt_line_number of $tt_test_file"
 				;;
 				255) # Regex syntax errors are common and user must take action to fix them
-					tt_error "check your inline Perl regex at line $tt_line_number of $tt_test_file"
+					tt_error "check your inline Perl regex at line $tt_line_number of $tt_test_file (unescaped / maybe?)"
 				;;
 				*)
-					tt_error "unknown error when running Perl for --perl at line $tt_line_number of $tt_test_file"
+					tt_error "unknown error when running Perl for --$tt_test_mode at line $tt_line_number of $tt_test_file"
 				;;
 			esac
 		;;
@@ -509,6 +509,10 @@ tt_process_test_file ()
 						'--egrep '*)
 							tt_test_inline=${tt_test_inline#--egrep }
 							tt_test_mode='egrep'
+						;;
+						'--regex '*)  # alias to --perl
+							tt_test_inline=${tt_test_inline#--regex }
+							tt_test_mode='regex'
 						;;
 						'--perl '*)
 							tt_test_inline=${tt_test_inline#--perl }
