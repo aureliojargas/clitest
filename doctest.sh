@@ -4,14 +4,20 @@
 # License: MIT
 # by Aurelio Jargas (http://aurelio.net), since 2013-07-24
 #
+# POSIX shell script:
+#   This script was coded to be compatible with POSIX shells.
+#   Tested in Bash 3.2, dash 0.5.5.1, ksh 93u 2011-02-08.
+#
 # Exit codes:
 #   0  All tests passed, or normal operation (--help, --list, ...)
 #   1  One or more tests have failed
 #   2  An error occurred (file not found, invalid range, ...)
 #
-# POSIX shell script:
-#   This script was coded to be compatible with POSIX shells.
-#   Tested in Bash 3.2, dash 0.5.5.1, ksh 93u 2011-02-08.
+# Test environment:
+#   By default, the tests will run in the current working directory ($PWD).
+#   You can change to another dir normally using 'cd' inside the test file.
+#   All the tests are executed in the same shell, using eval. Test data
+#   such as variables and working directory will persist between tests.
 
 
 # Unfortunately, I cannot force POSIX.
