@@ -691,7 +691,7 @@ $ ./doctest.sh --list-run testme/inline-match-eval.sh
 #24	OK	echo '--eval'                 
 #25	OK	echo '--evaluate'             
 #26	OK	echo '--eval is evil'         
-$ ./doctest.sh --list-run testme/inline-match-regex.sh
+$ ./doctest.sh --list-run testme/inline-match-egrep.sh
 #1	OK	echo 'abc123'                 
 #2	OK	echo 'abc123'                 
 #3	OK	echo 'abc123'                 
@@ -782,11 +782,11 @@ $ doctest.sh --first testme/inline-match-lines.sh
 [FAILED #6, line 16] echo 'fail'                   
 Expected 99 lines, got 1.
 --------------------------------------------------------------------------------
-$ ./doctest.sh testme/inline-match-regex-error-1.sh
-doctest.sh: Error: empty --egrep at line 1 of testme/inline-match-regex-error-1.sh
-$ ./doctest.sh testme/inline-match-regex-error-2.sh 2>&1 | sed 's/^egrep: .*/egrep: ERROR_MSG/'
+$ ./doctest.sh testme/inline-match-egrep-error-1.sh
+doctest.sh: Error: empty --egrep at line 1 of testme/inline-match-egrep-error-1.sh
+$ ./doctest.sh testme/inline-match-egrep-error-2.sh 2>&1 | sed 's/^egrep: .*/egrep: ERROR_MSG/'
 egrep: ERROR_MSG
-doctest.sh: Error: check your inline egrep regex at line 1 of testme/inline-match-regex-error-2.sh
+doctest.sh: Error: check your inline egrep regex at line 1 of testme/inline-match-egrep-error-2.sh
 $ ./doctest.sh testme/inline-match-perl-error-1.sh
 doctest.sh: Error: empty --perl at line 1 of testme/inline-match-perl-error-1.sh
 $ ./doctest.sh testme/inline-match-perl-error-2.sh
