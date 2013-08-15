@@ -1,12 +1,15 @@
 #!/bin/sh
 # doctest.sh - Automatic tests for shell script command lines
-#              https://github.com/aureliojargas/doctest.sh
+#
+# Author:  Aurelio Jargas (http://aurelio.net)
+# Created: 2013-07-24
 # License: MIT
-# by Aurelio Jargas (http://aurelio.net), since 2013-07-24
+# GitHub:  https://github.com/aureliojargas/doctest.sh
 #
 # POSIX shell script:
 #   This script was coded to be compatible with POSIX shells.
 #   Tested in Bash 3.2, dash 0.5.5.1, ksh 93u 2011-02-08.
+#   Note: Can't set -o posix nor POSIXLY_CORRECT: test env must be intact.
 #
 # Exit codes:
 #   0  All tests passed, or normal operation (--help, --list, ...)
@@ -23,22 +26,18 @@
 #   All variables and functions in this script are prefixed by 'tt_' to
 #   avoid clashing with test's variables, functions, aliases and commands.
 
-
-# Unfortunately, I cannot force POSIX.
-# The test environment must remain intact.
-#test -n "$BASH_VERSION" && set -o posix  # Force Bash into POSIX mode
-#export POSIXLY_CORRECT=1     # Force system utilities into POSIX mode
-
 tt_my_name="$(basename "$0")"
 tt_my_version='dev'
 
-# Customization (if needed), most may be altered by command line options
+# Customization (if needed, edit here or use the command line options)
 tt_prefix=''
 tt_prompt='$ '
-tt_inline_prefix='#→ '
+tt_inline_prefix='#→ '    # Problem with Unicode? Use '#=> ' or '### '
 tt_diff_options='-u'
-tt_color_mode='auto'
+tt_color_mode='auto'      # auto, always, never
+# End of customization
 
+# --help message, keep it simple, short and informative
 tt_my_help="\
 Usage: $tt_my_name [options] <file ...>
 
@@ -67,7 +66,7 @@ tt_temp_file="$tt_temp_dir/temp.txt"
 tt_test_ok_file="$tt_temp_dir/ok.txt"
 tt_test_output_file="$tt_temp_dir/output.txt"
 
-# Flags (0=off, 1=on), some may be altered by command line options
+# Flags (0=off, 1=on), most can be altered by command line options
 tt_debug=0
 tt_quiet=0
 tt_verbose=0
@@ -77,7 +76,7 @@ tt_use_colors=0
 tt_stop_on_first_fail=0
 tt_separator_line_shown=0
 
-# Do not change these vars
+# Globals (all variables are globals, for better portability)
 tt_nr_files=0
 tt_nr_total_tests=0
 tt_nr_total_fails=0
@@ -108,7 +107,7 @@ tt_test_output=
 tt_test_diff=
 tt_test_ok_text=
 
-# Special useful chars
+# Special handy chars
 tt_tab='	'
 tt_nl='
 '
@@ -149,7 +148,8 @@ then
 	exit 0
 fi
 
-### Utilities, prefixed by _ to avoid overwriting command names
+
+### Utilities
 
 tt_clean_up ()
 {
@@ -175,7 +175,7 @@ tt_debug ()  # $1=id, $2=contents
 		# Original input line is all blue
 		printf "${tt_color_blue}[%10s: %s]${tt_color_off}\n" "$1" "$2"
 	else
-		# Highlight tabs and #→
+		# Highlight tabs and inline prefix
 		printf "${tt_color_blue}[%10s:${tt_color_off} %s${tt_color_blue}]${tt_color_off}\n" "$1" "$2" |
 			sed "/LINE_CMD:/ s/$tt_inline_prefix/${tt_color_red}&${tt_color_off}/g" |
 			sed "s/$tt_tab/${tt_color_green}<tab>${tt_color_off}/g"
@@ -614,7 +614,7 @@ esac
 
 # Set colors
 # Remember: colors must be readable in dark and light backgrounds
-# Tweak the numbers after [ to adjust the colors
+# Customization: tweak the numbers after [ to adjust the colors
 if test $tt_use_colors -eq 1
 then
 	tt_color_red=$(  printf '\033[31m')  # fail
@@ -626,7 +626,7 @@ fi
 
 # Find the terminal width
 # The COLUMNS env var is set by Bash (must be exported in ~/.bashrc).
-# In other shells, try to use tput cols (not POSIX).
+# In other shells, try to use 'tput cols' (not POSIX).
 # If not, defaults to 50 columns, a conservative amount.
 : ${COLUMNS:=$(tput cols 2> /dev/null)}
 : ${COLUMNS:=50}
@@ -661,7 +661,7 @@ fi
 # For each input file in $@
 for tt_test_file
 do
-	# Some tests may "cd" to another dir, we need to get back
+	# Some tests may 'cd' to another dir, we need to get back
 	# to preserve the relative paths of the input files
 	cd "$tt_original_dir"
 
@@ -692,7 +692,7 @@ do
 	# The magic happens here
 	tt_process_test_file
 
-	# Abort when no test found
+	# Abort when no test found (and no active range with --test or --skip)
 	if test $tt_nr_file_tests -eq 0 && test -z "$tt_run_range_data" && test -z "$tt_skip_range_data"
 	then
 		tt_error "no test found in input file: $tt_test_file"
@@ -712,7 +712,7 @@ then
 fi
 
 #-----------------------------------------------------------------------
-# From this point, it's safe to use non-prefixed global vars
+# From this point on, it's safe to use non-prefixed global vars
 #-----------------------------------------------------------------------
 
 # Range active, but no test matched :(
@@ -741,14 +741,14 @@ then
 	fi
 fi
 
-### Show stats
-# Data:
-#   $tt_files_stats -> "100 0 23 \n 12 34 0"
-#   $@ -> foo.sh bar.sh
-# Output:
-# ====    OK  FAIL  SKIP
-# ====   100     0    23  foo.sh
-# ====    12    34     0  bar.sh
+# Show stats
+#   Data:
+#     $tt_files_stats -> "100 0 23 \n 12 34 0"
+#     $@ -> foo.sh bar.sh
+#   Output:
+#     ====    OK  FAIL  SKIP
+#     ====   100     0    23  foo.sh
+#     ====    12    34     0  bar.sh
 if test $tt_nr_files -gt 1 && test $tt_quiet -ne 1
 then
 	echo
@@ -761,11 +761,11 @@ then
 	echo
 fi
 
-### The final message: OK or FAIL?
-# OK: 123 of 123 tests passed
-# OK: 100 of 123 tests passed (23 skipped)
-# FAIL: 123 of 123 tests failed
-# FAIL: 100 of 123 tests failed (23 skipped)
+# The final message: OK or FAIL?
+#   OK: 123 of 123 tests passed
+#   OK: 100 of 123 tests passed (23 skipped)
+#   FAIL: 123 of 123 tests failed
+#   FAIL: 100 of 123 tests failed (23 skipped)
 skips=
 if test $tt_nr_total_skips -gt 0
 then
