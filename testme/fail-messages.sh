@@ -25,3 +25,7 @@ $ echo fail  #→ --lines 9
 
 $ echo fail  #→ --regex ^[0-9]+$
 
+# inline --perl
+
+$ echo fail  #→ --perl ^[0-9]+$
+

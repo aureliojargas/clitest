@@ -389,6 +389,21 @@ tt_run_test ()
 				tt_error "egrep: check your inline regex at line $tt_line_number of $tt_test_file"
 			fi
 		;;
+		perl)
+			perl -0777 -ne "exit(!/$tt_test_inline/)" "$tt_test_output_file"
+			tt_test_status=$?
+
+			# Test failed: the regex not matched
+			if test $tt_test_status -eq 1
+			then
+				tt_test_diff="Perl regex '$tt_test_inline' not matched in:$tt_nl$(cat "$tt_test_output_file")"
+
+			# Regex errors are common and user must take action to fix them
+			elif test $tt_test_status -gt 1
+			then
+				tt_error "check your inline Perl regex at line $tt_line_number of $tt_test_file"
+			fi
+		;;
 		*)
 			tt_error "unknown test mode '$tt_test_mode'"
 		;;
@@ -488,6 +503,10 @@ tt_process_test_file ()
 							tt_test_inline=${tt_test_inline#--regex }
 							tt_test_mode='regex'
 						;;
+						'--perl '*)
+							tt_test_inline=${tt_test_inline#--perl }
+							tt_test_mode='perl'
+						;;
 						'--file '*)
 							tt_test_inline=${tt_test_inline#--file }
 							tt_test_mode='file'
@@ -524,7 +543,7 @@ tt_process_test_file ()
 					# An empty inline parameter is an error user must see
 					if test -z "$tt_test_inline" && test "$tt_test_mode" != 'text'
 					then
-						tt_error "missing inline output $tt_test_mode at line $tt_line_number of $tt_test_file"
+						tt_error "empty --$tt_test_mode at line $tt_line_number of $tt_test_file"
 					fi
 
 					# Since we already have the command and the output, run test

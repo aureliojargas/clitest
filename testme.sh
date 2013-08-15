@@ -520,8 +520,12 @@ Expected 9 lines, got 1.
 egrep '^[0-9]+$' failed in:
 fail
 --------------------------------------------------------------------------------
+[FAILED #8, line 30] echo fail  
+Perl regex '^[0-9]+$' not matched in:
+fail
+--------------------------------------------------------------------------------
 
-FAIL: 7 of 7 tests failed
+FAIL: 8 of 8 tests failed
 $
 
 # Fails
@@ -716,6 +720,41 @@ $ ./doctest.sh --list-run testme/inline-match-regex.sh
 #26	OK	echo '--regex'                
 #27	OK	echo '--regexpal'             
 #28	OK	echo '--regex is cool'        
+$ ./doctest.sh --list-run testme/inline-match-perl.sh
+#1	OK	echo 'abc123'                 
+#2	OK	echo 'abc123'                 
+#3	OK	echo 'abc123'                 
+#4	OK	echo 'abc123'                 
+#5	OK	echo 'abc123'                 
+#6	OK	echo 'abc123'                 
+#7	OK	echo 'abc123'                 
+#8	OK	echo 'abc123'                 
+#9	OK	echo 'abc 123'                
+#10	OK	echo ' '                      
+#11	OK	echo '    '                   
+#12	OK	printf '\t\n'                 
+#13	OK	printf '\t\t\t\n'             
+#14	OK	printf ' \t  \t\t   \n'       
+#15	OK	echo '01/01/2013'             
+#16	OK	printf 'will\tmatch'          
+#17	OK	printf 'will\tmatch'          
+#18	OK	printf 'will\tmatch'          
+#19	FAIL	printf 'will\nfail'           
+#20	OK	printf 'will\nmatch'          
+#21	FAIL	printf 'will\nfail'           
+#22	OK	printf 'will\nmatch'          
+#23	FAIL	printf 'will\nfail'           
+#24	OK	printf 'will\nmatch'          
+#25	OK	printf 'ok'                   
+#26	OK	printf 'ok\n'                 
+#27	OK	printf '1\n2\n3\n'            
+#28	OK	printf '1\n2\n3\n'            
+#29	FAIL	echo 'fail'                   
+#30	FAIL	echo 'fail'                   
+#31	OK	echo ' ok'                    
+#32	OK	echo '--perl'                 
+#33	OK	echo '--perlism'              
+#34	OK	echo '--perl is cool'         
 $ ./doctest.sh --list-run testme/inline-match-file.sh
 #1	OK	printf '$ echo ok\nok\n'      
 #2	OK	echo 'ok' > /tmp/foo.txt
@@ -744,12 +783,17 @@ $ doctest.sh --first testme/inline-match-lines.sh
 Expected 99 lines, got 1.
 --------------------------------------------------------------------------------
 $ ./doctest.sh testme/inline-match-regex-error-1.sh
-doctest.sh: Error: missing inline output regex at line 1 of testme/inline-match-regex-error-1.sh
+doctest.sh: Error: empty --regex at line 1 of testme/inline-match-regex-error-1.sh
 $ ./doctest.sh testme/inline-match-regex-error-2.sh 2>&1 | sed 's/^egrep: .*/egrep: ERROR_MSG/'
 egrep: ERROR_MSG
 doctest.sh: Error: egrep: check your inline regex at line 1 of testme/inline-match-regex-error-2.sh
+$ ./doctest.sh testme/inline-match-perl-error-1.sh
+doctest.sh: Error: empty --perl at line 1 of testme/inline-match-perl-error-1.sh
+$ ./doctest.sh testme/inline-match-perl-error-2.sh
+Unmatched ( in regex; marked by <-- HERE in m/( <-- HERE / at -e line 1.
+doctest.sh: Error: check your inline Perl regex at line 1 of testme/inline-match-perl-error-2.sh
 $ ./doctest.sh testme/inline-match-file-error-1.sh
-doctest.sh: Error: missing inline output file at line 1 of testme/inline-match-file-error-1.sh
+doctest.sh: Error: empty --file at line 1 of testme/inline-match-file-error-1.sh
 $ ./doctest.sh testme/inline-match-file-error-2.sh
 doctest.sh: Error: cannot read inline output file 'XXnotfoundXX', from line 1 of testme/inline-match-file-error-2.sh
 $ ./doctest.sh testme/inline-match-file-error-3.sh
@@ -763,7 +807,7 @@ doctest.sh: Error: --lines requires a number. See line 1 of testme/inline-match-
 $ ./doctest.sh testme/inline-match-lines-error-4.sh
 doctest.sh: Error: --lines requires a number. See line 1 of testme/inline-match-lines-error-4.sh
 $ ./doctest.sh testme/inline-match-eval-error-1.sh
-doctest.sh: Error: missing inline output eval at line 1 of testme/inline-match-eval-error-1.sh
+doctest.sh: Error: empty --eval at line 1 of testme/inline-match-eval-error-1.sh
 $ ./doctest.sh testme/inline-match-eval-error-2.sh 2>&1 | sed 's/line [0-9][0-9]*/line N/'
 ./doctest.sh: eval: line N: unexpected EOF while looking for matching `)'
 ./doctest.sh: eval: line N: syntax error: unexpected end of file
