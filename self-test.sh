@@ -103,7 +103,7 @@ Options:
   -V, --version               Show program version and exit
 
 Customization options:
-      --color WHEN            Set when to use colors: always, never, auto
+      --color WHEN            Set when to use colors: auto, always, never
       --diff-options OPTIONS  Set diff command options (default: '-u')
       --inline-prefix PREFIX  Set inline output prefix (default: '#→ ')
       --prefix PREFIX         Set command line prefix (default: '')

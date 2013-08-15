@@ -54,7 +54,7 @@ Options:
   -V, --version               Show program version and exit
 
 Customization options:
-      --color WHEN            Set when to use colors: always, never, auto
+      --color WHEN            Set when to use colors: auto, always, never
       --diff-options OPTIONS  Set diff command options (default: '$tt_diff_options')
       --inline-prefix PREFIX  Set inline output prefix (default: '$tt_inline_prefix')
       --prefix PREFIX         Set command line prefix (default: '$tt_prefix')
