@@ -782,16 +782,16 @@ fi
 #     $tt_files_stats -> "100 0 23 \n 12 34 0"
 #     $@ -> foo.sh bar.sh
 #   Output:
-#     ====    OK  FAIL  SKIP
-#     ====   100     0    23  foo.sh
-#     ====    12    34     0  bar.sh
+#          ok  fail  skip
+#         100     0    23  foo.sh
+#          12    34     0  bar.sh
 if test $tt_nr_files -gt 1 && test $tt_quiet -ne 1
 then
 	echo
-	printf '==== %5s %5s %5s\n' OK FAIL SKIP
+	printf '  %5s %5s %5s\n' ok fail skip
 	printf %s "$tt_files_stats" | while read ok fail skip
 	do
-		printf '==== %5s %5s %5s    %s\n' $ok $fail $skip "$1"
+		printf '  %5s %5s %5s    %s\n' $ok $fail $skip "$1"
 		shift
 	done | sed 's/     0/     -/g'  # hide zeros
 	echo

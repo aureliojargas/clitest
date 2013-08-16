@@ -361,9 +361,9 @@ $ ./doctest.sh testme/ok-2.sh testme/ok-2.sh
 Testing file testme/ok-2.sh
 Testing file testme/ok-2.sh
 
-====    OK  FAIL  SKIP
-====     2     -     -    testme/ok-2.sh
-====     2     -     -    testme/ok-2.sh
+     ok  fail  skip
+      2     -     -    testme/ok-2.sh
+      2     -     -    testme/ok-2.sh
 
 OK: 4 of 4 tests passed
 $ ./doctest.sh testme/ok-[0-9]*.sh
@@ -373,12 +373,12 @@ Testing file testme/ok-100.sh
 Testing file testme/ok-2.sh
 Testing file testme/ok-50.sh
 
-====    OK  FAIL  SKIP
-====     1     -     -    testme/ok-1.sh
-====    10     -     -    testme/ok-10.sh
-====   100     -     -    testme/ok-100.sh
-====     2     -     -    testme/ok-2.sh
-====    50     -     -    testme/ok-50.sh
+     ok  fail  skip
+      1     -     -    testme/ok-1.sh
+     10     -     -    testme/ok-10.sh
+    100     -     -    testme/ok-100.sh
+      2     -     -    testme/ok-2.sh
+     50     -     -    testme/ok-50.sh
 
 OK: 163 of 163 tests passed
 $ ./doctest.sh --verbose testme/ok-?.sh testme/ok-10.sh
@@ -399,10 +399,10 @@ Testing file testme/ok-10.sh
 #12	echo 9 
 #13	echo 10 
 
-====    OK  FAIL  SKIP
-====     1     -     -    testme/ok-1.sh
-====     2     -     -    testme/ok-2.sh
-====    10     -     -    testme/ok-10.sh
+     ok  fail  skip
+      1     -     -    testme/ok-1.sh
+      2     -     -    testme/ok-2.sh
+     10     -     -    testme/ok-10.sh
 
 OK: 13 of 13 tests passed
 $
@@ -432,11 +432,11 @@ Testing file testme/fail-2.sh
 +ok
 --------------------------------------------------------------------------------
 
-====    OK  FAIL  SKIP
-====     1     -     -    testme/ok-1.sh
-====     -     1     -    testme/fail-1.sh
-====     2     -     -    testme/ok-2.sh
-====     -     2     -    testme/fail-2.sh
+     ok  fail  skip
+      1     -     -    testme/ok-1.sh
+      -     1     -    testme/fail-1.sh
+      2     -     -    testme/ok-2.sh
+      -     2     -    testme/fail-2.sh
 
 FAIL: 3 of 6 tests failed
 $ ./doctest.sh --verbose testme/ok-1.sh testme/fail-1.sh testme/ok-2.sh testme/fail-2.sh
@@ -469,11 +469,11 @@ Testing file testme/fail-2.sh
 +ok
 --------------------------------------------------------------------------------
 
-====    OK  FAIL  SKIP
-====     1     -     -    testme/ok-1.sh
-====     -     1     -    testme/fail-1.sh
-====     2     -     -    testme/ok-2.sh
-====     -     2     -    testme/fail-2.sh
+     ok  fail  skip
+      1     -     -    testme/ok-1.sh
+      -     1     -    testme/fail-1.sh
+      2     -     -    testme/ok-2.sh
+      -     2     -    testme/fail-2.sh
 
 FAIL: 3 of 6 tests failed
 $
@@ -881,10 +881,10 @@ Testing file testme/ok-10.sh
 #5	echo 2 
 #13	echo 10 
 
-====    OK  FAIL  SKIP
-====     1     -     -    testme/ok-1.sh
-====     -     -     2    testme/ok-2.sh
-====     2     -     8    testme/ok-10.sh
+     ok  fail  skip
+      1     -     -    testme/ok-1.sh
+      -     -     2    testme/ok-2.sh
+      2     -     8    testme/ok-10.sh
 
 OK: 3 of 13 tests passed (10 skipped)
 $ ./doctest.sh --verbose -t 1,5 testme/ok-[12].sh testme/fail-2.sh
@@ -900,10 +900,10 @@ Testing file testme/fail-2.sh
 +ok
 --------------------------------------------------------------------------------
 
-====    OK  FAIL  SKIP
-====     1     -     -    testme/ok-1.sh
-====     -     -     2    testme/ok-2.sh
-====     -     1     1    testme/fail-2.sh
+     ok  fail  skip
+      1     -     -    testme/ok-1.sh
+      -     -     2    testme/ok-2.sh
+      -     1     1    testme/fail-2.sh
 
 FAIL: 1 of 5 tests failed (3 skipped)
 $ ./doctest.sh --verbose -t 1 testme/ok-[12].sh testme/fail-2.sh
@@ -912,10 +912,10 @@ Testing file testme/ok-1.sh
 Testing file testme/ok-2.sh
 Testing file testme/fail-2.sh
 
-====    OK  FAIL  SKIP
-====     1     -     -    testme/ok-1.sh
-====     -     -     2    testme/ok-2.sh
-====     -     -     2    testme/fail-2.sh
+     ok  fail  skip
+      1     -     -    testme/ok-1.sh
+      -     -     2    testme/ok-2.sh
+      -     -     2    testme/fail-2.sh
 
 OK: 1 of 5 tests passed (4 skipped)
 $
@@ -985,10 +985,10 @@ Testing file testme/ok-10.sh
 #11	echo 8 
 #12	echo 9 
 
-====    OK  FAIL  SKIP
-====     1     -     -    testme/ok-1.sh
-====     -     -     2    testme/ok-2.sh
-====     9     -     1    testme/ok-10.sh
+     ok  fail  skip
+      1     -     -    testme/ok-1.sh
+      -     -     2    testme/ok-2.sh
+      9     -     1    testme/ok-10.sh
 
 OK: 10 of 13 tests passed (3 skipped)
 $ ./doctest.sh --verbose -s 2,3,4 testme/ok-[12].sh testme/fail-2.sh
@@ -1004,10 +1004,10 @@ Testing file testme/fail-2.sh
 +ok
 --------------------------------------------------------------------------------
 
-====    OK  FAIL  SKIP
-====     1     -     -    testme/ok-1.sh
-====     -     -     2    testme/ok-2.sh
-====     -     1     1    testme/fail-2.sh
+     ok  fail  skip
+      1     -     -    testme/ok-1.sh
+      -     -     2    testme/ok-2.sh
+      -     1     1    testme/fail-2.sh
 
 FAIL: 1 of 5 tests failed (3 skipped)
 $ ./doctest.sh --verbose -s 2-10 testme/ok-[12].sh testme/fail-2.sh
@@ -1016,10 +1016,10 @@ Testing file testme/ok-1.sh
 Testing file testme/ok-2.sh
 Testing file testme/fail-2.sh
 
-====    OK  FAIL  SKIP
-====     1     -     -    testme/ok-1.sh
-====     -     -     2    testme/ok-2.sh
-====     -     -     2    testme/fail-2.sh
+     ok  fail  skip
+      1     -     -    testme/ok-1.sh
+      -     -     2    testme/ok-2.sh
+      -     -     2    testme/fail-2.sh
 
 OK: 1 of 5 tests passed (4 skipped)
 $
@@ -1043,10 +1043,10 @@ Testing file testme/ok-10.sh
 #5	echo 2 
 #7	echo 4 
 
-====    OK  FAIL  SKIP
-====     1     -     -    testme/ok-1.sh
-====     -     -     2    testme/fail-2.sh
-====     2     -     8    testme/ok-10.sh
+     ok  fail  skip
+      1     -     -    testme/ok-1.sh
+      -     -     2    testme/fail-2.sh
+      2     -     8    testme/ok-10.sh
 
 OK: 3 of 13 tests passed (10 skipped)
 $
@@ -1359,9 +1359,9 @@ $ ./doctest.sh testme/cd.sh testme/ok-2.sh
 Testing file testme/cd.sh
 Testing file testme/ok-2.sh
 
-====    OK  FAIL  SKIP
-====     1     -     -    testme/cd.sh
-====     2     -     -    testme/ok-2.sh
+     ok  fail  skip
+      1     -     -    testme/cd.sh
+      2     -     -    testme/ok-2.sh
 
 OK: 3 of 3 tests passed
 $ ./doctest.sh --verbose testme/no-nl-file-1.sh
