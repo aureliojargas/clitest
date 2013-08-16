@@ -1,4 +1,4 @@
 .DS_Store
 /other/
-/examples/
-
+/examples/*.md
+/examples/*.sh
