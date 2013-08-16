@@ -390,7 +390,14 @@ tt_run_test ()
 			fi
 		;;
 		perl | regex)
-			perl -0777 -ne "exit(!/$tt_test_inline/)" "$tt_test_output_file"
+			# Escape regex delimiter (if any) inside the regex: ' => \'
+			if test "$tt_test_inline" != "${tt_test_inline#*\'}"
+			then
+				tt_test_inline=$(printf %s "$tt_test_inline" | sed "s/'/\\\\'/g")
+			fi
+
+			# Note: -0777 to get the full file contents as a single string
+			perl -0777 -ne "exit(!m'$tt_test_inline')" "$tt_test_output_file"
 			tt_test_status=$?
 
 			case $tt_test_status in
@@ -404,7 +411,7 @@ tt_run_test ()
 					tt_error "Perl not found. It's needed by --$tt_test_mode at line $tt_line_number of $tt_test_file"
 				;;
 				255) # Regex syntax errors are common and user must take action to fix them
-					tt_error "check your inline Perl regex at line $tt_line_number of $tt_test_file (unescaped / maybe?)"
+					tt_error "check your inline Perl regex at line $tt_line_number of $tt_test_file"
 				;;
 				*)
 					tt_error "unknown error when running Perl for --$tt_test_mode at line $tt_line_number of $tt_test_file"

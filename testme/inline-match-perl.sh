@@ -2,13 +2,13 @@
 # Matches a Perl-style regular expression in the command output
 # You can also use the friendlier alias: --regex
 #
-# In fact, it's a real Perl match: perl -0777 -ne 'exit(!/regex/)'
+# In fact, it's a real Perl match: perl -0777 -ne "exit(!m'regex')"
 # If Perl matched, we have a successful test.
 # All the test output lines are matched as a single string.
 # No modifiers are used by default, inform yours if needed: (?ims)
-#
-# Test your regexes with Perl at the command line before adding
-# tests using them.
+# You don't need to escape the ' delimiter, the script will do it for you.
+# Just write your regex not worrying about delimiters.
+
 
 # Use anchors ^ and $ to match the full output text
 
@@ -36,9 +36,10 @@ $ printf '\t\n'                 #→ --perl ^	$
 $ printf '\t\t\t\n'             #→ --perl ^			$
 $ printf ' \t  \t\t   \n'       #→ --perl ^ 	  		   $
 
-# You need to escape the / char, since it's the regex delimiter in Perl
+# You don't need to escape any delimiters, escapes are handled by the script
 
-$ echo '01/01/2013'             #→ --perl ^..\/..\/....$
+$ echo '01/01/2013'             #→ --perl ^../../....$
+$ echo "won't fail"             #→ --perl ^won't \w+$
 
 # To match a tab, you can use \t or a literal tab
 
