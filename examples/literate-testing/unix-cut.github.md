@@ -61,4 +61,4 @@ $ echo "$txt" | cut -c 4-          #→ defghij
 cut is cool, isn't it?
 
 > Note: To automatically test all the 14 shell commands in this
-> article, just run: `../../doctest.sh unix-cut.github.md`
+> article, just run: `../../cltest unix-cut.github.md`

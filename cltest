@@ -1,10 +1,10 @@
 #!/bin/sh
-# doctest.sh - Automatic tests for shell script command lines
+# cltest - Automatic tests for shell script command lines
 #
 # Author:  Aurelio Jargas (http://aurelio.net)
 # Created: 2013-07-24
 # License: MIT
-# GitHub:  https://github.com/aureliojargas/doctest.sh
+# GitHub:  https://github.com/aureliojargas/cltest
 #
 # POSIX shell script:
 #   This script was coded to be compatible with POSIX shells.
@@ -61,7 +61,7 @@ Customization options:
       --prompt STRING         Set prompt string (default: '$tt_prompt')"
 
 # Temporary files (using files because <(...) is not portable)
-tt_temp_dir="${TMPDIR:-/tmp}/doctest.$$"
+tt_temp_dir="${TMPDIR:-/tmp}/cltest.$$"
 tt_temp_file="$tt_temp_dir/temp.txt"
 tt_test_ok_file="$tt_temp_dir/ok.txt"
 tt_test_output_file="$tt_temp_dir/output.txt"

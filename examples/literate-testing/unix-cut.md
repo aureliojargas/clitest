@@ -44,4 +44,4 @@ series of commands and check their output at the right side:
 cut is cool, isn't it?
 
 > Note: To automatically test all the 14 shell commands in this
-> article, just run: `../../doctest.sh --prefix 4 unix-cut.md`
+> article, just run: `../../cltest --prefix 4 unix-cut.md`
