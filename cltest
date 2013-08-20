@@ -1,5 +1,5 @@
 #!/bin/sh
-# cltest - Automatic tests for shell script command lines
+# cltest - Tester for Unix command lines
 #
 # Author:  Aurelio Jargas (http://aurelio.net)
 # Created: 2013-07-24
