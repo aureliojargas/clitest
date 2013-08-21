@@ -27,7 +27,7 @@
 #   avoid clashing with test's variables, functions, aliases and commands.
 
 tt_my_name="$(basename "$0")"
-tt_my_version='dev'
+tt_my_version='pre-1.0'
 
 # Customization (if needed, edit here or use the command line options)
 tt_prefix=''
