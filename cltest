@@ -154,7 +154,7 @@ tt_clean_up ()
 }
 tt_message ()
 {
-	test $tt_output_mode = 'quiet' && return 0
+	test "$tt_output_mode" = 'quiet' && return 0
 	printf '%s\n' "$*"
 	tt_separator_line_shown=0
 }
@@ -312,7 +312,7 @@ tt_run_test ()
 	fi
 
 	# List mode: just show the command and return (no execution)
-	if test $tt_output_mode = 'list'
+	if test "$tt_output_mode" = 'list'
 	then
 		tt_list_test
 		tt_reset_test_data
@@ -320,7 +320,7 @@ tt_run_test ()
 	fi
 
 	# Verbose mode: show the command that will be tested
-	if test $tt_output_mode = 'normal'
+	if test "$tt_output_mode" = 'normal'
 	then
 		tt_list_test
 	fi
@@ -424,7 +424,7 @@ tt_run_test ()
 		tt_failed_range="$tt_failed_range$tt_test_number,"
 
 		# Decide the message format
-		if test $tt_output_mode = 'list-run'
+		if test "$tt_output_mode" = 'list-run'
 		then
 			# List mode
 			tt_list_test fail
@@ -449,7 +449,7 @@ tt_run_test ()
 
 	# Test OK
 	else
-		test $tt_output_mode = 'list-run' && tt_list_test ok
+		test "$tt_output_mode" = 'list-run' && tt_list_test ok
 	fi
 
 	tt_reset_test_data
@@ -703,7 +703,7 @@ do
 	# In multifile mode, identify the current file
 	if test $tt_nr_files -gt 1
 	then
-		if test $tt_output_mode = 'list' || test $tt_output_mode = 'list-run'
+		if test "$tt_output_mode" = 'list' || test "$tt_output_mode" = 'list-run'
 		then
 			# List mode, show ------ and the filename
 			tt_message $(tt_separator_line | cut -c 1-40) $tt_test_file
@@ -760,7 +760,7 @@ then
 fi
 
 # List mode has no stats
-if test $tt_output_mode = 'list' || test $tt_output_mode = 'list-run'
+if test "$tt_output_mode" = 'list' || test "$tt_output_mode" = 'list-run'
 then
 	if test $tt_nr_total_fails -eq 0
 	then
@@ -778,7 +778,7 @@ fi
 #          ok  fail  skip
 #         100     0    23  foo.sh
 #          12    34     0  bar.sh
-if test $tt_nr_files -gt 1 && test $tt_output_mode != 'quiet'
+if test $tt_nr_files -gt 1 && test "$tt_output_mode" != 'quiet'
 then
 	echo
 	printf '  %5s %5s %5s\n' ok fail skip
