@@ -182,10 +182,14 @@ tt_separator_line ()
 {
 	printf "%${COLUMNS}s" ' ' | tr ' ' -
 }
-tt_list_test ()  # $1=[ok|fail]
+tt_list_test ()  # $1=normal|list|ok|fail
 {
 	# Show the test command in normal mode, --list and --list-run
 	case "$1" in
+		normal | list)
+			# Normal line, no color, no stamp (--list)
+			tt_message "#${tt_test_number}${tt_tab}${tt_test_command}"
+		;;
 		ok)
 			# Green line or OK stamp (--list-run)
 			if test $tt_use_colors -eq 1
@@ -203,10 +207,6 @@ tt_list_test ()  # $1=[ok|fail]
 			else
 				tt_message "#${tt_test_number}${tt_tab}FAIL${tt_tab}${tt_test_command}"
 			fi
-		;;
-		*)
-			# Normal line, no color, no stamp (--list)
-			tt_message "#${tt_test_number}${tt_tab}${tt_test_command}"
 		;;
 	esac
 }
@@ -312,15 +312,15 @@ tt_run_test ()
 	fi
 
 	case "$tt_output_mode" in
-		list)
-			# List mode: just show the command and return (no execution)
-			tt_list_test
-			tt_reset_test_data
-			return 0
-		;;
 		normal)
 			# Normal mode: show the command that will be tested
-			tt_list_test
+			tt_list_test normal
+		;;
+		list)
+			# List mode: just show the command and return (no execution)
+			tt_list_test list
+			tt_reset_test_data
+			return 0
 		;;
 	esac
 
