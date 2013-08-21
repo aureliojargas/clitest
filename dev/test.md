@@ -288,6 +288,22 @@ $ ./cltest -L dev/test/ok-1.sh; echo $?
 $
 ```
 
+## Options --quiet, --list and --list-run are mutually exclusive
+
+* Only one can be active, the others must be off.
+* The last informed will be the one used.
+
+```
+$ ./cltest --list --quiet dev/test/ok-1.sh
+$ ./cltest --list-run --quiet dev/test/ok-1.sh
+$ ./cltest --list --list-run --quiet dev/test/ok-1.sh
+$ ./cltest --quiet --list-run --list dev/test/ok-1.sh
+#1	echo ok
+$ ./cltest --quiet --list --list-run dev/test/ok-1.sh
+#1	OK	echo ok
+$
+```
+
 ## Option --test and --skip combined with --list and --list-run
 
 ```
