@@ -28,7 +28,7 @@ $
 Use `cltest` to run these commands and check their output:
 
 ```
-$ cltest --verbose examples/intro.txt
+$ cltest examples/intro.txt
 #1	echo "Hello World"
 #2	cd /tmp
 #3	pwd
@@ -68,6 +68,12 @@ Just paste your shell session inside a text file and you have a ready-to-use tes
 
 ```
 $ cltest examples/cut.txt
+#1	echo "one:two:three:four:five:six" | cut -d : -f 1
+#2	echo "one:two:three:four:five:six" | cut -d : -f 4
+#3	echo "one:two:three:four:five:six" | cut -d : -f 1,4
+#4	echo "one:two:three:four:five:six" | cut -d : -f 4,1
+#5	echo "one:two:three:four:five:six" | cut -d : -f 1-4
+#6	echo "one:two:three:four:five:six" | cut -d : -f 4-
 OK: 6 of 6 tests passed
 $
 ```
@@ -119,7 +125,7 @@ cut is cool, isn't it?
 It's easy to convert it to a readable HTML document with your favorite Markdown program. It's also easy to test this file directly with `cltest`, you just need to inform that the command lines are prefixed by a tab:
 
 ```
-$ cltest --prefix tab --verbose examples/cut.md
+$ cltest --prefix tab examples/cut.md
 #1	echo "one:two:three:four:five:six" | cut -d : -f 1
 #2	echo "one:two:three:four:five:six" | cut -d : -f 4
 #3	echo "one:two:three:four:five:six" | cut -d : -f 1,4
@@ -204,7 +210,6 @@ Options:
       --pre-flight COMMAND    Execute command before running the first test
       --post-flight COMMAND   Execute command after running the last test
   -q, --quiet                 Quiet operation, no output shown
-  -v, --verbose               Show each test being executed
   -V, --version               Show program version and exit
 
 Customization options:

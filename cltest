@@ -50,7 +50,6 @@ Options:
       --pre-flight COMMAND    Execute command before running the first test
       --post-flight COMMAND   Execute command after running the last test
   -q, --quiet                 Quiet operation, no output shown
-  -v, --verbose               Show each test being executed
   -V, --version               Show program version and exit
 
 Customization options:
@@ -68,7 +67,6 @@ tt_test_output_file="$tt_temp_dir/output.txt"
 
 # Flags (0=off, 1=on), most can be altered by command line options
 tt_debug=0
-tt_verbose=0
 tt_use_colors=0
 tt_stop_on_first_fail=0
 tt_separator_line_shown=0
@@ -117,7 +115,6 @@ while test "${1#-}" != "$1"
 do
 	case "$1" in
 		-q|--quiet      ) shift; tt_output_mode='quiet' ;;
-		-v|--verbose    ) shift; tt_output_mode='normal'; tt_verbose=1 ;;
 		-l|--list       ) shift; tt_output_mode='list' ;;
 		-L|--list-run   ) shift; tt_output_mode='list-run' ;;
 		-1|--first      ) shift; tt_stop_on_first_fail=1 ;;
@@ -185,9 +182,9 @@ tt_separator_line ()
 {
 	printf "%${COLUMNS}s" ' ' | tr ' ' -
 }
-tt_list_test ()  # $1=ok|fail|verbose
+tt_list_test ()  # $1=[ok|fail]
 {
-	# Show the output lines for --verbose, --list and --list-run
+	# Show the test command in normal mode, --list and --list-run
 	case "$1" in
 		ok)
 			# Green line or OK stamp (--list-run)
@@ -206,10 +203,6 @@ tt_list_test ()  # $1=ok|fail|verbose
 			else
 				tt_message "#${tt_test_number}${tt_tab}FAIL${tt_tab}${tt_test_command}"
 			fi
-		;;
-		verbose)
-			# No color, no stamp (--verbose)
-			tt_message "#${tt_test_number}${tt_tab}${tt_test_command}"
 		;;
 		*)
 			# Normal line, no color, no stamp (--list)
@@ -327,9 +320,9 @@ tt_run_test ()
 	fi
 
 	# Verbose mode: show the command that will be tested
-	if test $tt_output_mode = 'normal' && test $tt_verbose -eq 1
+	if test $tt_output_mode = 'normal'
 	then
-		tt_list_test verbose
+		tt_list_test
 	fi
 
 	#tt_debug EVAL "$tt_test_command"
@@ -656,7 +649,7 @@ then
 	tt_color_red=$(  printf '\033[31m')  # fail
 	tt_color_green=$(printf '\033[32m')  # ok
 	tt_color_blue=$( printf '\033[34m')  # debug
-	tt_color_cyan=$( printf '\033[36m')  # verbose
+	#tt_color_cyan=$( printf '\033[36m') # not used
 	tt_color_off=$(  printf '\033[m')
 fi
 
