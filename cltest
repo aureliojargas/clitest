@@ -49,6 +49,7 @@ Options:
   -s, --skip RANGE            Skip specific tests, by number (1,2,4-7)
       --pre-flight COMMAND    Execute command before running the first test
       --post-flight COMMAND   Execute command after running the last test
+      --dots                  Short output, show a dot for each test
   -q, --quiet                 Quiet operation, no output shown
   -V, --version               Show program version and exit
 
@@ -72,7 +73,7 @@ tt_stop_on_first_fail=0
 tt_separator_line_shown=0
 
 # The output mode values are mutually exclusive
-tt_output_mode='normal'    # normal, quiet, list, list-run
+tt_output_mode='normal'    # normal, quiet, list, list-run, dots
 
 # Globals (all variables are globals, for better portability)
 tt_nr_files=0
@@ -104,6 +105,7 @@ tt_test_status=2
 tt_test_output=
 tt_test_diff=
 tt_test_ok_text=
+tt_missing_nl=0
 
 # Special handy chars
 tt_tab='	'
@@ -122,6 +124,7 @@ do
 		-s|--skip       ) shift; tt_skip_range="$1"; shift ;;
 		--color|--colour) shift; tt_color_mode="$1"; shift ;;
 		--debug         ) shift; tt_debug=1 ;;
+		--dots          ) shift; tt_output_mode='dots' ;;
 		--pre-flight    ) shift; tt_pre_command="$1"; shift ;;
 		--post-flight   ) shift; tt_post_command="$1"; shift ;;
 		--diff-options  ) shift; tt_diff_options="$1"; shift ;;
@@ -155,11 +158,21 @@ tt_clean_up ()
 tt_message ()
 {
 	test "$tt_output_mode" = 'quiet' && return 0
+	test $tt_missing_nl -eq 1 && echo
 	printf '%s\n' "$*"
 	tt_separator_line_shown=0
+	tt_missing_nl=0
+}
+tt_message_part ()  # no line break
+{
+	test "$tt_output_mode" = 'quiet' && return 0
+	printf '%s' "$*"
+	tt_separator_line_shown=0
+	tt_missing_nl=1
 }
 tt_error ()
 {
+	test $tt_missing_nl -eq 1 && echo
 	printf '%s\n' "$tt_my_name: Error: $1" >&2
 	tt_clean_up
 	exit 2
@@ -315,6 +328,10 @@ tt_run_test ()
 		normal)
 			# Normal mode: show the command that will be tested
 			tt_list_test normal
+		;;
+		dots)
+			# Dot mode: show a dot for each command
+			tt_message_part '.'
 		;;
 		list)
 			# List mode: just show the command and return (no execution)
@@ -702,14 +719,19 @@ do
 	# In multifile mode, identify the current file
 	if test $tt_nr_files -gt 1
 	then
-		if test "$tt_output_mode" = 'list' || test "$tt_output_mode" = 'list-run'
-		then
-			# List mode, show ------ and the filename
-			tt_message $(tt_separator_line | cut -c 1-40) $tt_test_file
-		else
-			# Normal mode, show a message
-			tt_message "Testing file $tt_test_file"
-		fi
+		case "$tt_output_mode" in
+			normal)
+				tt_message "Testing file $tt_test_file"
+			;;
+			dots)
+				test $tt_missing_nl -eq 1 && echo
+				tt_message_part "Testing file $tt_test_file "
+			;;
+			list | list-run)
+				# List mode, show ------ and the filename
+				tt_message $(tt_separator_line | cut -c 1-40) $tt_test_file
+			;;
+		esac
 	fi
 
 	# Convert Windows files (CRLF) to the Unix format (LF)
@@ -729,6 +751,10 @@ do
 	# Save file stats
 	tt_nr_file_ok=$(($tt_nr_file_tests - $tt_nr_file_fails - $tt_nr_file_skips))
 	tt_files_stats="$tt_files_stats$tt_nr_file_ok $tt_nr_file_fails $tt_nr_file_skips$tt_nl"
+
+	# Dots mode: any missing new line?
+	# Note: had to force tt_missing_nl=0, even when it's done in tt_message :/
+	test $tt_missing_nl -eq 1 && tt_missing_nl=0 && tt_message
 done
 
 tt_clean_up

@@ -115,6 +115,7 @@ Options:
   -s, --skip RANGE            Skip specific tests, by number (1,2,4-7)
       --pre-flight COMMAND    Execute command before running the first test
       --post-flight COMMAND   Execute command after running the last test
+      --dots                  Short output, show a dot for each test
   -q, --quiet                 Quiet operation, no output shown
   -V, --version               Show program version and exit
 
@@ -288,7 +289,117 @@ $ ./cltest -L dev/test/ok-1.sh; echo $?
 $
 ```
 
-## Options --quiet, --list and --list-run are mutually exclusive
+## Option --dots
+
+```
+$ ./cltest --dots dev/test/ok-1.sh
+.
+OK: 1 of 1 tests passed
+$ ./cltest --dots dev/test/ok-2.sh
+..
+OK: 2 of 2 tests passed
+$ ./cltest --dots dev/test/ok-50.sh
+..................................................
+OK: 50 of 50 tests passed
+$ ./cltest --dots dev/test/fail-1.sh
+.
+--------------------------------------------------------------------------------
+[FAILED #1, line 1] echo ok
+@@ -1 +1 @@
+-fail
++ok
+--------------------------------------------------------------------------------
+
+FAIL: 1 of 1 tests failed
+$ ./cltest --dots dev/test/ok-1.sh dev/test/ok-2.sh dev/test/ok-10.sh
+Testing file dev/test/ok-1.sh .
+Testing file dev/test/ok-2.sh ..
+Testing file dev/test/ok-10.sh ..........
+
+     ok  fail  skip
+      1     -     -    dev/test/ok-1.sh
+      2     -     -    dev/test/ok-2.sh
+     10     -     -    dev/test/ok-10.sh
+
+OK: 13 of 13 tests passed
+$ ./cltest --dots dev/test/ok-1.sh dev/test/fail-1.sh
+Testing file dev/test/ok-1.sh .
+Testing file dev/test/fail-1.sh .
+--------------------------------------------------------------------------------
+[FAILED #2, line 1] echo ok
+@@ -1 +1 @@
+-fail
++ok
+--------------------------------------------------------------------------------
+
+     ok  fail  skip
+      1     -     -    dev/test/ok-1.sh
+      -     1     -    dev/test/fail-1.sh
+
+FAIL: 1 of 2 tests failed
+$ ./cltest --dots dev/test/fail-1.sh dev/test/ok-1.sh
+Testing file dev/test/fail-1.sh .
+--------------------------------------------------------------------------------
+[FAILED #1, line 1] echo ok
+@@ -1 +1 @@
+-fail
++ok
+--------------------------------------------------------------------------------
+Testing file dev/test/ok-1.sh .
+
+     ok  fail  skip
+      -     1     -    dev/test/fail-1.sh
+      1     -     -    dev/test/ok-1.sh
+
+FAIL: 1 of 2 tests failed
+$
+```
+
+### Option --dots and skipped tests
+
+Since skipped tests affect the output (show nothing), it's worth
+testing if the line break issues won't appear.
+
+```
+$ ./cltest --dots --skip 1 dev/test/ok-2.sh
+.
+OK: 1 of 2 tests passed (1 skipped)
+$ ./cltest --dots --skip 2 dev/test/ok-2.sh
+.
+OK: 1 of 2 tests passed (1 skipped)
+$ ./cltest --dots --skip 1 dev/test/fail-2.sh
+.
+--------------------------------------------------------------------------------
+[FAILED #2, line 3] echo ok  
+@@ -1 +1 @@
+-fail
++ok
+--------------------------------------------------------------------------------
+
+FAIL: 1 of 2 tests failed (1 skipped)
+$ ./cltest --dots --skip 2 dev/test/fail-2.sh
+.
+--------------------------------------------------------------------------------
+[FAILED #1, line 1] echo ok
+@@ -1 +1 @@
+-fail
++ok
+--------------------------------------------------------------------------------
+
+FAIL: 1 of 2 tests failed (1 skipped)
+$
+```
+
+Error messages appear with no leading blank line?
+
+```
+$ ./cltest --dots --skip 1,2 dev/test/ok-2.sh
+cltest: Error: no test found. Maybe '--skip 1,2' was too much?
+$
+```
+
+
+## Options --quiet, --dots, --list and --list-run are mutually exclusive
 
 * Only one can be active, the others must be off.
 * The last informed will be the one used.
@@ -296,11 +407,15 @@ $
 ```
 $ ./cltest --list --quiet dev/test/ok-1.sh
 $ ./cltest --list-run --quiet dev/test/ok-1.sh
-$ ./cltest --list --list-run --quiet dev/test/ok-1.sh
-$ ./cltest --quiet --list-run --list dev/test/ok-1.sh
+$ ./cltest --dots --quiet dev/test/ok-1.sh
+$ ./cltest --list --list-run --dots --quiet dev/test/ok-1.sh
+$ ./cltest --quiet --dots --list-run --list dev/test/ok-1.sh
 #1	echo ok
-$ ./cltest --quiet --list --list-run dev/test/ok-1.sh
+$ ./cltest --quiet --dots --list --list-run dev/test/ok-1.sh
 #1	OK	echo ok
+$ ./cltest --quiet --list --list-run --dots dev/test/ok-1.sh
+.
+OK: 1 of 1 tests passed
 $
 ```
 
