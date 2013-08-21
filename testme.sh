@@ -1,30 +1,37 @@
-###
-### This is the test file for the cltest program.
-### Yes, the program can test itself!
-###
-### This file runs all the files inside the testme folder and
-### checks the results. The command line options are also tested.
-###
-### Usage: ./cltest testme.sh
-###
+#  Test suite for cltest
 
-# Make sure we're on the same folder as cltest, since all the
-# file paths here are relative, not absolute.
+This is the test file for the `cltest` program. Yes, the program can test itself!
 
+This file runs all the files inside the `testme` folder and checks the results. The command line options are also tested.
+
+    Usage: ./cltest testme.md
+
+
+## Preparing
+
+Make sure we're on the same folder as `cltest`, since all the file paths here are relative, not absolute.
+
+```
 $ test -f ./cltest; echo $?
 0
 $ test -d ./testme/; echo $?
 0
 $
+```
 
-# Set a default terminal width of 80 columns (used by separator lines) 
+Set a default terminal width of 80 columns. It's used by separator lines.
 
+```
 $ COLUMNS=80
 $ export COLUMNS
 $
+```
 
-# Variables are persistent between tests?
+Ok. Now the real tests begins.
 
+## Variables are persistent between tests?
+
+```
 $ echo $COLUMNS
 80
 $ not_exported=1
@@ -32,9 +39,11 @@ $ echo $not_exported
 1
 $ echo $not_exported  #→ 1
 $ echo $not_exported  #→ --regex ^1$
+```
 
-# Check the temporary dir creation
+## Check the temporary dir creation
 
+```
 $ TMPDIR___SAVE="$TMPDIR"
 $ TMPDIR=/XXnotfoundXX
 $ export TMPDIR
@@ -43,9 +52,11 @@ mkdir: /XXnotfoundXX: No such file or directory
 cltest: Error: cannot create temporary dir: /XXnotfoundXX/cltest.NNN
 $ TMPDIR="$TMPDIR___SAVE"
 $
+```
 
-# I/O, file reading  (message and exit code)
+## I/O, file reading  (message and exit code)
 
+```
 $ ./cltest XXnotfoundXX.sh; echo $?
 cltest: Error: cannot read input file: XXnotfoundXX.sh
 2
@@ -56,9 +67,11 @@ cltest: Error: cannot read input file: ./
 $ ./cltest /etc
 cltest: Error: cannot read input file: /etc
 $
+```
 
-# No test found (message and exit code)
+## No test found (message and exit code)
 
+```
 $ ./cltest testme/no-test-found.sh; echo $?
 cltest: Error: no test found in input file: testme/no-test-found.sh
 2
@@ -69,18 +82,22 @@ cltest: Error: no test found in input file: testme/empty-prompt-file.sh
 $ ./cltest testme/empty-prompts-file.sh
 cltest: Error: no test found in input file: testme/empty-prompts-file.sh
 $
+```
 
-# Option --version
+## Option --version
 
+```
 $ v="$(grep ^tt_my_version= ./cltest | cut -d = -f 2 | tr -d \')"
 $ ./cltest -V | grep "^cltest ${v}$" > /dev/null; echo $?
 0
 $ ./cltest --version | grep "^cltest ${v}$" > /dev/null; echo $?
 0
 $
+```
 
-# Option --help
+## Option --help
 
+```
 $ ./cltest | sed -n '1p; $p'
 Usage: cltest [options] <file ...>
       --prompt STRING         Set prompt string (default: '$ ')
@@ -109,9 +126,11 @@ Customization options:
       --prefix PREFIX         Set command line prefix (default: '')
       --prompt STRING         Set prompt string (default: '$ ')
 $
+```
 
-# Option --quiet and exit code
+## Option --quiet and exit code
 
+```
 $ ./cltest -q testme/ok-2.sh; echo $?
 0
 $ ./cltest --quiet testme/ok-2.sh; echo $?
@@ -125,23 +144,29 @@ $ ./cltest --quiet testme/fail-2.sh testme/fail-2.sh; echo $?
 $ ./cltest --quiet testme/ok-2.sh testme/fail-2.sh; echo $?
 1
 $
+```
 
-# Option --quiet also silences --verbose
+## Option --quiet also silences --verbose
 
+```
 $ ./cltest --quiet --verbose testme/ok-2.sh
 $ ./cltest --quiet --verbose testme/fail-2.sh
 $ ./cltest --quiet --verbose testme/ok-2.sh testme/ok-2.sh
 $ ./cltest --quiet --verbose testme/ok-2.sh testme/fail-2.sh
 $
+```
 
-# Option --quiet has no effect in error messages
+## Option --quiet has no effect in error messages
 
+```
 $ ./cltest --quiet /etc
 cltest: Error: cannot read input file: /etc
 $
+```
 
-# # Option --quiet has no effect in --debug
-# 
+## Option --quiet has no effect in --debug
+
+```
 # $ ./cltest --quiet --debug testme/ok-2.sh
 # [INPUT_LINE: $ echo ok]
 # [  LINE_CMD: $ echo ok]
@@ -160,9 +185,11 @@ $
 # [    OUTPUT: ok]
 # [  LOOP_OUT: $test_command=]
 # $
+```
 
-# Option --color
+## Option --color
 
+```
 $ ./cltest --color foo testme/ok-1.sh
 cltest: Error: invalid value 'foo' for --color. Use: auto, always or never.
 $ ./cltest --color always testme/ok-1.sh
@@ -174,21 +201,23 @@ OK: 1 of 1 tests passed
 $ ./cltest --color no testme/ok-1.sh
 OK: 1 of 1 tests passed
 $
-# Note: Inside this file, the output is not a terminal,
-#       so the default is no colored output.
+## Note: Inside this file, the output is not a terminal,
+##       so the default is no colored output.
 $ ./cltest testme/ok-1.sh
 OK: 1 of 1 tests passed
 $
-# Note: The real default '--color auto' cannot be tested here.
-#       Test it by hand at the command line.
-# $ ./cltest testme/ok-1.sh
-# [32mOK![m The single test has passed.
-# $ ./cltest --color auto testme/ok-1.sh
-# [32mOK![m The single test has passed.
-# $
+## Note: The real default '--color auto' cannot be tested here.
+##       Test it by hand at the command line.
+## $ ./cltest testme/ok-1.sh
+## [32mOK![m The single test has passed.
+## $ ./cltest --color auto testme/ok-1.sh
+## [32mOK![m The single test has passed.
+## $
+```
 
-# Option --list
+## Option --list
 
+```
 $ ./cltest --list testme/empty-file.sh
 cltest: Error: no test found in input file: testme/empty-file.sh
 $ ./cltest -l testme/no-nl-command.sh; echo $?
@@ -218,9 +247,11 @@ $ ./cltest --list testme/no-nl-command.sh testme/ok-1.sh; echo $?
 #7	echo ok
 0
 $
+```
 
-# Option --list-run
+## Option --list-run
 
+```
 $ ./cltest --list-run testme/empty-file.sh
 cltest: Error: no test found in input file: testme/empty-file.sh
 $ ./cltest --list-run --color yes testme/no-nl-command.sh; echo $?
@@ -261,9 +292,11 @@ $ ./cltest -L testme/ok-1.sh; echo $?
 #1	OK	echo ok
 0
 $
+```
 
-# Option --verbose is not effective in --list and --list-run
+## Option --verbose is not effective in --list and --list-run
 
+```
 $ ./cltest --verbose --list testme/ok-2.sh
 #1	echo ok
 #2	echo ok  
@@ -271,9 +304,11 @@ $ ./cltest --verbose --list-run testme/ok-2.sh
 #1	OK	echo ok
 #2	OK	echo ok  
 $
+```
 
-# Option --test and --skip combined with --list and --list-run
+## Option --test and --skip combined with --list and --list-run
 
+```
 $ ./cltest --list -t 99 testme/ok-10.sh
 cltest: Error: no test found for the specified number or range '99'
 $ ./cltest --list-run -t 99 testme/ok-10.sh
@@ -338,9 +373,11 @@ $ ./cltest --list-run -t 1,3,5-7 -s 3,6 testme/ok-1.sh testme/fail-2.sh testme/o
 #5	OK	echo 2 
 #7	OK	echo 4 
 $
+```
 
-# Single file, OK
+## Single file, OK
 
+```
 $ ./cltest testme/ok-1.sh
 OK: 1 of 1 tests passed
 $ ./cltest testme/ok-2.sh
@@ -354,9 +391,11 @@ $ ./cltest --verbose testme/ok-2.sh
 #2	echo ok  
 OK: 2 of 2 tests passed
 $
+```
 
-# Multifile, all OK
+## Multifile, all OK
 
+```
 $ ./cltest testme/ok-2.sh testme/ok-2.sh
 Testing file testme/ok-2.sh
 Testing file testme/ok-2.sh
@@ -406,9 +445,11 @@ Testing file testme/ok-10.sh
 
 OK: 13 of 13 tests passed
 $
+```
 
-# Multifile, OK and fail
+## Multifile, OK and fail
 
+```
 $ ./cltest testme/ok-1.sh testme/fail-1.sh testme/ok-2.sh testme/fail-2.sh
 Testing file testme/ok-1.sh
 Testing file testme/fail-1.sh
@@ -477,9 +518,11 @@ Testing file testme/fail-2.sh
 
 FAIL: 3 of 6 tests failed
 $
+```
 
-# Fail messages
+## Fail messages
 
+```
 $ ./cltest testme/fail-messages.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 3] echo fail  
@@ -531,9 +574,11 @@ fail
 
 FAIL: 9 of 9 tests failed
 $
+```
 
-# Fails
+## Fails
 
+```
 $ ./cltest testme/fail-1.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
@@ -599,9 +644,11 @@ $ ./cltest --verbose testme/fail-2.sh
 
 FAIL: 2 of 2 tests failed
 $
+```
 
-# Inline output with #→
+## Inline output with #→
 
+```
 $ ./cltest --verbose testme/inline.sh
 #1	echo 'one space' 
 #2	echo 'one tab'	
@@ -624,9 +671,11 @@ $ ./cltest --verbose testme/inline.sh
 #19	echo "both inline and normal output"  
 OK: 19 of 19 tests passed
 $
+```
 
-# Inline match modes
+## Inline match modes
 
+```
 $ ./cltest --list-run testme/inline-match-text.sh
 #1	OK	echo 'abc'                    
 #2	OK	echo 'abc'                    
@@ -824,9 +873,11 @@ $ ./cltest testme/inline-match-eval-error-2.sh 2>&1 | sed 's/line [0-9][0-9]*/li
 
 FAIL: 1 of 1 tests failed
 $
+```
 
-# Option -t, --test
+## Option -t, --test
 
+```
 $ ./cltest -t - testme/ok-2.sh
 cltest: Error: invalid argument for -t or --test: -
 $ ./cltest -t -1 testme/ok-2.sh
@@ -919,9 +970,11 @@ Testing file testme/fail-2.sh
 
 OK: 1 of 5 tests passed (4 skipped)
 $
+```
 
-# Option -s, --skip
+## Option -s, --skip
 
+```
 $ ./cltest -s - testme/ok-2.sh
 cltest: Error: invalid argument for -s or --skip: -
 $ ./cltest -s -1 testme/ok-2.sh
@@ -1023,9 +1076,11 @@ Testing file testme/fail-2.sh
 
 OK: 1 of 5 tests passed (4 skipped)
 $
+```
 
-# Option --test comined with --skip
+## Option --test combined with --skip
 
+```
 $ ./cltest -t 9 -s 9 testme/ok-10.sh
 cltest: Error: no test found. The combination of -t and -s resulted in no tests.
 $ ./cltest -s 9 -t 9 testme/ok-10.sh  # -s always wins
@@ -1051,9 +1106,11 @@ Testing file testme/ok-10.sh
 OK: 3 of 13 tests passed (10 skipped)
 $
 
+```
 
-# Option --diff-options
+## Option --diff-options
 
+```
 $ ./cltest testme/option-diff-options.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 3] echo "	diff -w to ignore spaces    "
@@ -1071,9 +1128,11 @@ FAIL: 2 of 2 tests failed
 $ ./cltest --diff-options '-u -w' testme/option-diff-options.sh
 OK: 2 of 2 tests passed
 $
+```
 
-# Option --prompt
+## Option --prompt
 
+```
 $ ./cltest --verbose testme/option-prompt.sh
 cltest: Error: no test found in input file: testme/option-prompt.sh
 $ ./cltest --verbose --prompt 'prompt$ ' testme/option-prompt.sh
@@ -1087,9 +1146,11 @@ $ ./cltest --verbose --prompt '♥ ' testme/option-prompt-unicode.sh
 #3	echo "3"
 OK: 3 of 3 tests passed
 $
+```
 
-# Option --inline-prefix
+## Option --inline-prefix
 
+```
 $ ./cltest testme/option-inline-prefix.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 3] echo "1 space" #==> 1 space
@@ -1128,9 +1189,11 @@ FAIL: 3 of 3 tests failed
 $ ./cltest --inline-prefix '#==> ' testme/option-inline-prefix.sh
 OK: 3 of 3 tests passed
 $
+```
 
-# Option --prefix
+## Option --prefix
 
+```
 $ ./cltest --verbose --prefix '    ' testme/option-prefix.sh
 #1	echo "1"  
 #2	echo "2"
@@ -1164,9 +1227,11 @@ $ ./cltest --verbose --prefix tab testme/option-prefix-tab.sh
 #6	echo; echo "6"; echo; echo "7"
 OK: 6 of 6 tests passed
 $
+```
 
-# Option --prefix: glob gotchas
+## Option --prefix: glob gotchas
 
+```
 $ ./cltest --verbose --prefix '?' testme/option-prefix-glob.sh
 #1	echo 'prefix ?'	
 #2	echo 'prefix ?'
@@ -1208,9 +1273,11 @@ $ ./cltest --verbose --prefix '*%' testme/option-prefix-glob.sh
 #2	echo 'prefix *%'
 OK: 2 of 2 tests passed
 $
+```
 
-# Option --prompt: glob gotchas (char + space)
+## Option --prompt: glob gotchas (char + space)
 
+```
 $ ./cltest --verbose --prompt '? ' testme/option-prompt-glob-space.sh
 #1	echo 'prompt ? '	
 #2	echo 'prompt ? '
@@ -1252,9 +1319,11 @@ $ ./cltest --verbose --prompt '*% ' testme/option-prompt-glob-space.sh
 #2	echo 'prompt *% '
 OK: 2 of 2 tests passed
 $
+```
 
-# Option --prompt: glob gotchas (chars only)
+## Option --prompt: glob gotchas (chars only)
 
+```
 $ ./cltest --verbose --prompt '?' testme/option-prompt-glob-1.sh
 #1	echo 'prompt ?'	
 #2	echo 'prompt ?'
@@ -1296,9 +1365,11 @@ $ ./cltest --verbose --prompt '*%' testme/option-prompt-glob-2.sh
 #2	echo 'prompt *%'
 OK: 2 of 2 tests passed
 $
+```
 
-# Options --pre-flight and --post-flight
+## Options --pre-flight and --post-flight
 
+```
 $ ./cltest --pre-flight 'tt_test_number=99; tt_nr_total_tests=99' testme/ok-1.sh
 OK: 100 of 100 tests passed
 $ ./cltest --post-flight 'tt_nr_total_fails=50' testme/ok-50.sh
@@ -1307,21 +1378,27 @@ FAIL: 50 of 50 tests failed
 $ ./cltest --pre-flight 'false' testme/ok-1.sh
 cltest: Error: pre-flight command failed with status=1: false
 $
+```
 
-# Options terminator -- 
+## Options terminator -- 
 
+```
 $ ./cltest -t 99 -- --quiet
 cltest: Error: cannot read input file: --quiet
 $
+```
 
-# File - meaning STDIN (no support for now)
+## File - meaning STDIN (no support for now)
 
+```
 $ cat testme/ok-1.sh | ./cltest -
 cltest: Error: cannot read input file: -
 $
+```
 
-# Gotchas
+## Gotchas
 
+```
 $ ./cltest testme/exit-code.sh
 OK: 2 of 2 tests passed
 $ ./cltest testme/blank-output.sh
@@ -1406,9 +1483,11 @@ $ ./cltest --verbose testme/no-nl-command.sh
 
 FAIL: 3 of 6 tests failed
 $
+```
 
-# And now, the colored output tests
+## And now, the colored output tests
 
+```
 $ ./cltest --color yes --first testme/fail-2.sh
 [31m--------------------------------------------------------------------------------[m
 [31m[FAILED #1, line 1] echo ok[m
@@ -1416,3 +1495,5 @@ $ ./cltest --color yes --first testme/fail-2.sh
 -fail
 +ok
 [31m--------------------------------------------------------------------------------[m
+$
+```
