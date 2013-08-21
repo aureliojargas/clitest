@@ -1,0 +1,35 @@
+$ url="http://txt2tags.googlecode.com/files/txt2tags-2.6.tgz"
+$ cd /tmp
+$ curl -O -s -S "$url"                  # download
+$ du -h txt2tags-2.6.tgz                # verify size
+532K	txt2tags-2.6.tgz
+$ tar tzf txt2tags-2.6.tgz | wc -l      # verify number of files
+     545
+$ tar xzf txt2tags-2.6.tgz              # extract
+$ cd txt2tags-2.6
+$ ls -1F                                # list contents
+COPYING
+ChangeLog
+README
+doc/
+extras/
+po/
+samples/
+test/
+txt2tags*
+$ ./txt2tags -V                         # test execution
+txt2tags version 2.6 <http://txt2tags.org>
+$ cp -v txt2tags ~/bin/                 # install to user folder
+txt2tags -> /Users/aurelio/bin/txt2tags
+$ ~/bin/txt2tags --help | head          # final test
+
+Usage: txt2tags [OPTIONS] [infile.t2t ...]
+
+      --targets       print a list of all the available targets and exit
+  -t, --target=TYPE   set target document type. currently supported:
+                      adoc, art, creole, dbk, doku, gwiki, html, lout, man,
+                      mgp, moin, pm6, pmw, sgml, tex, txt, wiki, xhtml
+  -i, --infile=FILE   set FILE as the input file name ('-' for STDIN)
+  -o, --outfile=FILE  set FILE as the output file name ('-' for STDOUT)
+      --encoding=ENC  set target file encoding (utf-8, iso-8859-1, etc)
+$
