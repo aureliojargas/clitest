@@ -1,0 +1,13 @@
+$ echo "one:two:three:four:five:six" | cut -d : -f 1
+one
+$ echo "one:two:three:four:five:six" | cut -d : -f 4
+four
+$ echo "one:two:three:four:five:six" | cut -d : -f 1,4
+one:four
+$ echo "one:two:three:four:five:six" | cut -d : -f 4,1
+one:four
+$ echo "one:two:three:four:five:six" | cut -d : -f 1-4
+one:two:three:four
+$ echo "one:two:three:four:five:six" | cut -d : -f 4-
+four:five:six
+$
