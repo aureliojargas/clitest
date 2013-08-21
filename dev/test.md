@@ -164,7 +164,7 @@ cltest: Error: cannot read input file: /etc
 $
 ```
 
-## Option --quiet has no effect in --debug
+## Option --quiet has no effect in --debug (disabled)
 
 ```
 # $ ./cltest --quiet --debug dev/test/ok-2.sh
