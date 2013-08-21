@@ -819,6 +819,6 @@ else
 	stamp="${tt_color_red}FAIL:${tt_color_off}"
 	stats="$tt_nr_total_fails of $tt_nr_total_tests tests failed"
 	tt_message "$stamp $stats$skips"
-	test $tt_test_file = 'dev/test.sh' && tt_message "-t ${tt_failed_range%,}"  # XXX dev helper, remove before release
+	test $tt_test_file = 'dev/test.md' && tt_message "-t ${tt_failed_range%,}"  # XXX dev helper, remove before release
 	exit 1
 fi
