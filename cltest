@@ -50,7 +50,6 @@ Options:
       --pre-flight COMMAND    Execute command before running the first test
       --post-flight COMMAND   Execute command after running the last test
   -q, --quiet                 Quiet operation, no output shown
-  -v, --verbose               Show each test being executed
   -V, --version               Show program version and exit
 
 Customization options:
@@ -68,13 +67,12 @@ tt_test_output_file="$tt_temp_dir/output.txt"
 
 # Flags (0=off, 1=on), most can be altered by command line options
 tt_debug=0
-tt_quiet=0
-tt_verbose=0
-tt_list_mode=0
-tt_list_run=0
 tt_use_colors=0
 tt_stop_on_first_fail=0
 tt_separator_line_shown=0
+
+# The output mode values are mutually exclusive
+tt_output_mode='normal'    # normal, quiet, list, list-run
 
 # Globals (all variables are globals, for better portability)
 tt_nr_files=0
@@ -116,10 +114,9 @@ tt_nl='
 while test "${1#-}" != "$1"
 do
 	case "$1" in
-		-q|--quiet      ) shift; tt_quiet=1 ;;
-		-v|--verbose    ) shift; tt_verbose=1 ;;
-		-l|--list       ) shift; tt_list_mode=1;;
-		-L|--list-run   ) shift; tt_list_run=1;;
+		-q|--quiet      ) shift; tt_output_mode='quiet' ;;
+		-l|--list       ) shift; tt_output_mode='list' ;;
+		-L|--list-run   ) shift; tt_output_mode='list-run' ;;
 		-1|--first      ) shift; tt_stop_on_first_fail=1 ;;
 		-t|--test       ) shift; tt_run_range="$1"; shift ;;
 		-s|--skip       ) shift; tt_skip_range="$1"; shift ;;
@@ -157,7 +154,7 @@ tt_clean_up ()
 }
 tt_message ()
 {
-	test $tt_quiet -eq 1 && return 0
+	test "$tt_output_mode" = 'quiet' && return 0
 	printf '%s\n' "$*"
 	tt_separator_line_shown=0
 }
@@ -185,9 +182,9 @@ tt_separator_line ()
 {
 	printf "%${COLUMNS}s" ' ' | tr ' ' -
 }
-tt_list_test ()  # $1=ok|fail|verbose
+tt_list_test ()  # $1=[ok|fail]
 {
-	# Show the output lines for --verbose, --list and --list-run
+	# Show the test command in normal mode, --list and --list-run
 	case "$1" in
 		ok)
 			# Green line or OK stamp (--list-run)
@@ -206,10 +203,6 @@ tt_list_test ()  # $1=ok|fail|verbose
 			else
 				tt_message "#${tt_test_number}${tt_tab}FAIL${tt_tab}${tt_test_command}"
 			fi
-		;;
-		verbose)
-			# No color, no stamp (--verbose)
-			tt_message "#${tt_test_number}${tt_tab}${tt_test_command}"
 		;;
 		*)
 			# Normal line, no color, no stamp (--list)
@@ -318,19 +311,18 @@ tt_run_test ()
 		return 0
 	fi
 
-	# List mode: just show the command and return (no execution)
-	if test $tt_list_mode -eq 1
-	then
-		tt_list_test
-		tt_reset_test_data
-		return 0
-	fi
-
-	# Verbose mode: show the command that will be tested
-	if test $tt_verbose -eq 1 && test $tt_list_run -eq 0
-	then
-		tt_list_test verbose
-	fi
+	case "$tt_output_mode" in
+		list)
+			# List mode: just show the command and return (no execution)
+			tt_list_test
+			tt_reset_test_data
+			return 0
+		;;
+		normal)
+			# Normal mode: show the command that will be tested
+			tt_list_test
+		;;
+	esac
 
 	#tt_debug EVAL "$tt_test_command"
 
@@ -431,7 +423,7 @@ tt_run_test ()
 		tt_failed_range="$tt_failed_range$tt_test_number,"
 
 		# Decide the message format
-		if test $tt_list_run -eq 1
+		if test "$tt_output_mode" = 'list-run'
 		then
 			# List mode
 			tt_list_test fail
@@ -456,7 +448,7 @@ tt_run_test ()
 
 	# Test OK
 	else
-		test $tt_list_run -eq 1 && tt_list_test ok
+		test "$tt_output_mode" = 'list-run' && tt_list_test ok
 	fi
 
 	tt_reset_test_data
@@ -656,7 +648,7 @@ then
 	tt_color_red=$(  printf '\033[31m')  # fail
 	tt_color_green=$(printf '\033[32m')  # ok
 	tt_color_blue=$( printf '\033[34m')  # debug
-	tt_color_cyan=$( printf '\033[36m')  # verbose
+	#tt_color_cyan=$( printf '\033[36m') # not used
 	tt_color_off=$(  printf '\033[m')
 fi
 
@@ -710,13 +702,13 @@ do
 	# In multifile mode, identify the current file
 	if test $tt_nr_files -gt 1
 	then
-		if test $tt_list_mode -ne 1 && test $tt_list_run -ne 1
+		if test "$tt_output_mode" = 'list' || test "$tt_output_mode" = 'list-run'
 		then
-			# Normal mode, show a message
-			tt_message "Testing file $tt_test_file"
-		else
 			# List mode, show ------ and the filename
 			tt_message $(tt_separator_line | cut -c 1-40) $tt_test_file
+		else
+			# Normal mode, show a message
+			tt_message "Testing file $tt_test_file"
 		fi
 	fi
 
@@ -767,7 +759,7 @@ then
 fi
 
 # List mode has no stats
-if test $tt_list_mode -eq 1 || test $tt_list_run -eq 1
+if test "$tt_output_mode" = 'list' || test "$tt_output_mode" = 'list-run'
 then
 	if test $tt_nr_total_fails -eq 0
 	then
@@ -785,7 +777,7 @@ fi
 #          ok  fail  skip
 #         100     0    23  foo.sh
 #          12    34     0  bar.sh
-if test $tt_nr_files -gt 1 && test $tt_quiet -ne 1
+if test $tt_nr_files -gt 1 && test "$tt_output_mode" != 'quiet'
 then
 	echo
 	printf '  %5s %5s %5s\n' ok fail skip
@@ -819,6 +811,6 @@ else
 	stamp="${tt_color_red}FAIL:${tt_color_off}"
 	stats="$tt_nr_total_fails of $tt_nr_total_tests tests failed"
 	tt_message "$stamp $stats$skips"
-	test $tt_test_file = 'dev/test.sh' && tt_message "-t ${tt_failed_range%,}"  # XXX dev helper, remove before release
+	test $tt_test_file = 'dev/test.md' && tt_message "-t ${tt_failed_range%,}"  # XXX dev helper, remove before release
 	exit 1
 fi
