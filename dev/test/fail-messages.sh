@@ -15,7 +15,7 @@ $
 
 # inline --file
 
-$ echo fail  #→ --file testme/lorem-ipsum.txt
+$ echo fail  #→ --file dev/test/lorem-ipsum.txt
 
 # inline --lines
 

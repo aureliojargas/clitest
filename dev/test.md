@@ -2,9 +2,9 @@
 
 This is the test file for the `cltest` program. Yes, the program can test itself!
 
-This file runs all the files inside the `testme` folder and checks the results. The command line options are also tested.
+This file runs all the files inside the `dev/test` folder and checks the results. The command line options are also tested.
 
-    Usage: ./cltest testme.md
+    Usage: ./cltest dev/test.md
 
 
 ## Preparing
@@ -14,7 +14,7 @@ Make sure we're on the same folder as `cltest`, since all the file paths here ar
 ```
 $ test -f ./cltest; echo $?
 0
-$ test -d ./testme/; echo $?
+$ test -d ./dev/test/; echo $?
 0
 $
 ```
@@ -47,7 +47,7 @@ $ echo $not_exported  #→ --regex ^1$
 $ TMPDIR___SAVE="$TMPDIR"
 $ TMPDIR=/XXnotfoundXX
 $ export TMPDIR
-$ ./cltest testme/ok-1.sh 2>&1 | sed 's/cltest\.[0-9]*$/cltest.NNN/'
+$ ./cltest dev/test/ok-1.sh 2>&1 | sed 's/cltest\.[0-9]*$/cltest.NNN/'
 mkdir: /XXnotfoundXX: No such file or directory
 cltest: Error: cannot create temporary dir: /XXnotfoundXX/cltest.NNN
 $ TMPDIR="$TMPDIR___SAVE"
@@ -72,15 +72,15 @@ $
 ## No test found (message and exit code)
 
 ```
-$ ./cltest testme/no-test-found.sh; echo $?
-cltest: Error: no test found in input file: testme/no-test-found.sh
+$ ./cltest dev/test/no-test-found.sh; echo $?
+cltest: Error: no test found in input file: dev/test/no-test-found.sh
 2
-$ ./cltest testme/empty-file.sh
-cltest: Error: no test found in input file: testme/empty-file.sh
-$ ./cltest testme/empty-prompt-file.sh
-cltest: Error: no test found in input file: testme/empty-prompt-file.sh
-$ ./cltest testme/empty-prompts-file.sh
-cltest: Error: no test found in input file: testme/empty-prompts-file.sh
+$ ./cltest dev/test/empty-file.sh
+cltest: Error: no test found in input file: dev/test/empty-file.sh
+$ ./cltest dev/test/empty-prompt-file.sh
+cltest: Error: no test found in input file: dev/test/empty-prompt-file.sh
+$ ./cltest dev/test/empty-prompts-file.sh
+cltest: Error: no test found in input file: dev/test/empty-prompts-file.sh
 $
 ```
 
@@ -131,17 +131,17 @@ $
 ## Option --quiet and exit code
 
 ```
-$ ./cltest -q testme/ok-2.sh; echo $?
+$ ./cltest -q dev/test/ok-2.sh; echo $?
 0
-$ ./cltest --quiet testme/ok-2.sh; echo $?
+$ ./cltest --quiet dev/test/ok-2.sh; echo $?
 0
-$ ./cltest --quiet testme/ok-2.sh testme/ok-2.sh; echo $?
+$ ./cltest --quiet dev/test/ok-2.sh dev/test/ok-2.sh; echo $?
 0
-$ ./cltest --quiet testme/fail-2.sh; echo $?
+$ ./cltest --quiet dev/test/fail-2.sh; echo $?
 1
-$ ./cltest --quiet testme/fail-2.sh testme/fail-2.sh; echo $?
+$ ./cltest --quiet dev/test/fail-2.sh dev/test/fail-2.sh; echo $?
 1
-$ ./cltest --quiet testme/ok-2.sh testme/fail-2.sh; echo $?
+$ ./cltest --quiet dev/test/ok-2.sh dev/test/fail-2.sh; echo $?
 1
 $
 ```
@@ -149,10 +149,10 @@ $
 ## Option --quiet also silences --verbose
 
 ```
-$ ./cltest --quiet --verbose testme/ok-2.sh
-$ ./cltest --quiet --verbose testme/fail-2.sh
-$ ./cltest --quiet --verbose testme/ok-2.sh testme/ok-2.sh
-$ ./cltest --quiet --verbose testme/ok-2.sh testme/fail-2.sh
+$ ./cltest --quiet --verbose dev/test/ok-2.sh
+$ ./cltest --quiet --verbose dev/test/fail-2.sh
+$ ./cltest --quiet --verbose dev/test/ok-2.sh dev/test/ok-2.sh
+$ ./cltest --quiet --verbose dev/test/ok-2.sh dev/test/fail-2.sh
 $
 ```
 
@@ -167,7 +167,7 @@ $
 ## Option --quiet has no effect in --debug
 
 ```
-# $ ./cltest --quiet --debug testme/ok-2.sh
+# $ ./cltest --quiet --debug dev/test/ok-2.sh
 # [INPUT_LINE: $ echo ok]
 # [  LINE_CMD: $ echo ok]
 # [   NEW_CMD: echo ok]
@@ -190,27 +190,27 @@ $
 ## Option --color
 
 ```
-$ ./cltest --color foo testme/ok-1.sh
+$ ./cltest --color foo dev/test/ok-1.sh
 cltest: Error: invalid value 'foo' for --color. Use: auto, always or never.
-$ ./cltest --color always testme/ok-1.sh
+$ ./cltest --color always dev/test/ok-1.sh
 [32mOK:[m 1 of 1 tests passed
-$ ./cltest --color yes testme/ok-1.sh
+$ ./cltest --color yes dev/test/ok-1.sh
 [32mOK:[m 1 of 1 tests passed
-$ ./cltest --color never testme/ok-1.sh
+$ ./cltest --color never dev/test/ok-1.sh
 OK: 1 of 1 tests passed
-$ ./cltest --color no testme/ok-1.sh
+$ ./cltest --color no dev/test/ok-1.sh
 OK: 1 of 1 tests passed
 $
 ## Note: Inside this file, the output is not a terminal,
 ##       so the default is no colored output.
-$ ./cltest testme/ok-1.sh
+$ ./cltest dev/test/ok-1.sh
 OK: 1 of 1 tests passed
 $
 ## Note: The real default '--color auto' cannot be tested here.
 ##       Test it by hand at the command line.
-## $ ./cltest testme/ok-1.sh
+## $ ./cltest dev/test/ok-1.sh
 ## [32mOK![m The single test has passed.
-## $ ./cltest --color auto testme/ok-1.sh
+## $ ./cltest --color auto dev/test/ok-1.sh
 ## [32mOK![m The single test has passed.
 ## $
 ```
@@ -218,9 +218,9 @@ $
 ## Option --list
 
 ```
-$ ./cltest --list testme/empty-file.sh
-cltest: Error: no test found in input file: testme/empty-file.sh
-$ ./cltest -l testme/no-nl-command.sh; echo $?
+$ ./cltest --list dev/test/empty-file.sh
+cltest: Error: no test found in input file: dev/test/empty-file.sh
+$ ./cltest -l dev/test/no-nl-command.sh; echo $?
 #1	printf 'ok\n'
 #2	printf 'fail'
 #3	printf 'ok\nok\nfail'
@@ -228,22 +228,22 @@ $ ./cltest -l testme/no-nl-command.sh; echo $?
 #5	printf 'fail'    
 #6	printf 'ok'; echo   
 0
-$ ./cltest --list testme/no-nl-command.sh
+$ ./cltest --list dev/test/no-nl-command.sh
 #1	printf 'ok\n'
 #2	printf 'fail'
 #3	printf 'ok\nok\nfail'
 #4	printf 'ok\n'    
 #5	printf 'fail'    
 #6	printf 'ok'; echo   
-$ ./cltest --list testme/no-nl-command.sh testme/ok-1.sh; echo $?
----------------------------------------- testme/no-nl-command.sh
+$ ./cltest --list dev/test/no-nl-command.sh dev/test/ok-1.sh; echo $?
+---------------------------------------- dev/test/no-nl-command.sh
 #1	printf 'ok\n'
 #2	printf 'fail'
 #3	printf 'ok\nok\nfail'
 #4	printf 'ok\n'    
 #5	printf 'fail'    
 #6	printf 'ok'; echo   
----------------------------------------- testme/ok-1.sh
+---------------------------------------- dev/test/ok-1.sh
 #7	echo ok
 0
 $
@@ -252,9 +252,9 @@ $
 ## Option --list-run
 
 ```
-$ ./cltest --list-run testme/empty-file.sh
-cltest: Error: no test found in input file: testme/empty-file.sh
-$ ./cltest --list-run --color yes testme/no-nl-command.sh; echo $?
+$ ./cltest --list-run dev/test/empty-file.sh
+cltest: Error: no test found in input file: dev/test/empty-file.sh
+$ ./cltest --list-run --color yes dev/test/no-nl-command.sh; echo $?
 [32m#1	printf 'ok\n'[m
 [31m#2	printf 'fail'[m
 [31m#3	printf 'ok\nok\nfail'[m
@@ -262,7 +262,7 @@ $ ./cltest --list-run --color yes testme/no-nl-command.sh; echo $?
 [31m#5	printf 'fail'    [m
 [32m#6	printf 'ok'; echo   [m
 1
-$ ./cltest --list-run testme/no-nl-command.sh; echo $?
+$ ./cltest --list-run dev/test/no-nl-command.sh; echo $?
 #1	OK	printf 'ok\n'
 #2	FAIL	printf 'fail'
 #3	FAIL	printf 'ok\nok\nfail'
@@ -270,25 +270,25 @@ $ ./cltest --list-run testme/no-nl-command.sh; echo $?
 #5	FAIL	printf 'fail'    
 #6	OK	printf 'ok'; echo   
 1
-$ ./cltest -L testme/no-nl-command.sh
+$ ./cltest -L dev/test/no-nl-command.sh
 #1	OK	printf 'ok\n'
 #2	FAIL	printf 'fail'
 #3	FAIL	printf 'ok\nok\nfail'
 #4	OK	printf 'ok\n'    
 #5	FAIL	printf 'fail'    
 #6	OK	printf 'ok'; echo   
-$ ./cltest -L testme/no-nl-command.sh testme/ok-1.sh; echo $?
----------------------------------------- testme/no-nl-command.sh
+$ ./cltest -L dev/test/no-nl-command.sh dev/test/ok-1.sh; echo $?
+---------------------------------------- dev/test/no-nl-command.sh
 #1	OK	printf 'ok\n'
 #2	FAIL	printf 'fail'
 #3	FAIL	printf 'ok\nok\nfail'
 #4	OK	printf 'ok\n'    
 #5	FAIL	printf 'fail'    
 #6	OK	printf 'ok'; echo   
----------------------------------------- testme/ok-1.sh
+---------------------------------------- dev/test/ok-1.sh
 #7	OK	echo ok
 1
-$ ./cltest -L testme/ok-1.sh; echo $?
+$ ./cltest -L dev/test/ok-1.sh; echo $?
 #1	OK	echo ok
 0
 $
@@ -297,10 +297,10 @@ $
 ## Option --verbose is not effective in --list and --list-run
 
 ```
-$ ./cltest --verbose --list testme/ok-2.sh
+$ ./cltest --verbose --list dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
-$ ./cltest --verbose --list-run testme/ok-2.sh
+$ ./cltest --verbose --list-run dev/test/ok-2.sh
 #1	OK	echo ok
 #2	OK	echo ok  
 $
@@ -309,67 +309,67 @@ $
 ## Option --test and --skip combined with --list and --list-run
 
 ```
-$ ./cltest --list -t 99 testme/ok-10.sh
+$ ./cltest --list -t 99 dev/test/ok-10.sh
 cltest: Error: no test found for the specified number or range '99'
-$ ./cltest --list-run -t 99 testme/ok-10.sh
+$ ./cltest --list-run -t 99 dev/test/ok-10.sh
 cltest: Error: no test found for the specified number or range '99'
-$ ./cltest --list -s 1-10 testme/ok-10.sh
+$ ./cltest --list -s 1-10 dev/test/ok-10.sh
 cltest: Error: no test found. Maybe '--skip 1-10' was too much?
-$ ./cltest --list-run -s 1-10 testme/ok-10.sh
+$ ./cltest --list-run -s 1-10 dev/test/ok-10.sh
 cltest: Error: no test found. Maybe '--skip 1-10' was too much?
-$ ./cltest --list -t 9 -s 9 testme/ok-10.sh
+$ ./cltest --list -t 9 -s 9 dev/test/ok-10.sh
 cltest: Error: no test found. The combination of -t and -s resulted in no tests.
-$ ./cltest --list-run -t 9 -s 9 testme/ok-10.sh
+$ ./cltest --list-run -t 9 -s 9 dev/test/ok-10.sh
 cltest: Error: no test found. The combination of -t and -s resulted in no tests.
-$ ./cltest --list -t 3,5-7 testme/ok-10.sh
+$ ./cltest --list -t 3,5-7 dev/test/ok-10.sh
 #3	echo 3 
 #5	echo 5 
 #6	echo 6 
 #7	echo 7 
-$ ./cltest --list-run -t 3,5-7 testme/ok-10.sh
+$ ./cltest --list-run -t 3,5-7 dev/test/ok-10.sh
 #3	OK	echo 3 
 #5	OK	echo 5 
 #6	OK	echo 6 
 #7	OK	echo 7 
-$ ./cltest --list -t 3,5-7 -s 6 testme/ok-10.sh
+$ ./cltest --list -t 3,5-7 -s 6 dev/test/ok-10.sh
 #3	echo 3 
 #5	echo 5 
 #7	echo 7 
-$ ./cltest --list-run -t 3,5-7 -s 6 testme/ok-10.sh
+$ ./cltest --list-run -t 3,5-7 -s 6 dev/test/ok-10.sh
 #3	OK	echo 3 
 #5	OK	echo 5 
 #7	OK	echo 7 
-$ ./cltest --list -t 1,3,5-7 testme/ok-1.sh testme/fail-2.sh testme/ok-10.sh
----------------------------------------- testme/ok-1.sh
+$ ./cltest --list -t 1,3,5-7 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.sh
+---------------------------------------- dev/test/ok-1.sh
 #1	echo ok
----------------------------------------- testme/fail-2.sh
+---------------------------------------- dev/test/fail-2.sh
 #3	echo ok  
----------------------------------------- testme/ok-10.sh
+---------------------------------------- dev/test/ok-10.sh
 #5	echo 2 
 #6	echo 3 
 #7	echo 4 
-$ ./cltest --list-run -t 1,3,5-7 testme/ok-1.sh testme/fail-2.sh testme/ok-10.sh
----------------------------------------- testme/ok-1.sh
+$ ./cltest --list-run -t 1,3,5-7 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.sh
+---------------------------------------- dev/test/ok-1.sh
 #1	OK	echo ok
----------------------------------------- testme/fail-2.sh
+---------------------------------------- dev/test/fail-2.sh
 #3	FAIL	echo ok  
----------------------------------------- testme/ok-10.sh
+---------------------------------------- dev/test/ok-10.sh
 #5	OK	echo 2 
 #6	OK	echo 3 
 #7	OK	echo 4 
 $
-$ ./cltest --list -t 1,3,5-7 -s 3,6 testme/ok-1.sh testme/fail-2.sh testme/ok-10.sh
----------------------------------------- testme/ok-1.sh
+$ ./cltest --list -t 1,3,5-7 -s 3,6 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.sh
+---------------------------------------- dev/test/ok-1.sh
 #1	echo ok
----------------------------------------- testme/fail-2.sh
----------------------------------------- testme/ok-10.sh
+---------------------------------------- dev/test/fail-2.sh
+---------------------------------------- dev/test/ok-10.sh
 #5	echo 2 
 #7	echo 4 
-$ ./cltest --list-run -t 1,3,5-7 -s 3,6 testme/ok-1.sh testme/fail-2.sh testme/ok-10.sh
----------------------------------------- testme/ok-1.sh
+$ ./cltest --list-run -t 1,3,5-7 -s 3,6 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.sh
+---------------------------------------- dev/test/ok-1.sh
 #1	OK	echo ok
----------------------------------------- testme/fail-2.sh
----------------------------------------- testme/ok-10.sh
+---------------------------------------- dev/test/fail-2.sh
+---------------------------------------- dev/test/ok-10.sh
 #5	OK	echo 2 
 #7	OK	echo 4 
 $
@@ -378,15 +378,15 @@ $
 ## Single file, OK
 
 ```
-$ ./cltest testme/ok-1.sh
+$ ./cltest dev/test/ok-1.sh
 OK: 1 of 1 tests passed
-$ ./cltest testme/ok-2.sh
+$ ./cltest dev/test/ok-2.sh
 OK: 2 of 2 tests passed
-$ ./cltest testme/ok-50.sh
+$ ./cltest dev/test/ok-50.sh
 OK: 50 of 50 tests passed
-$ ./cltest testme/ok-100.sh
+$ ./cltest dev/test/ok-100.sh
 OK: 100 of 100 tests passed
-$ ./cltest --verbose testme/ok-2.sh
+$ ./cltest --verbose dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
 OK: 2 of 2 tests passed
@@ -396,37 +396,37 @@ $
 ## Multifile, all OK
 
 ```
-$ ./cltest testme/ok-2.sh testme/ok-2.sh
-Testing file testme/ok-2.sh
-Testing file testme/ok-2.sh
+$ ./cltest dev/test/ok-2.sh dev/test/ok-2.sh
+Testing file dev/test/ok-2.sh
+Testing file dev/test/ok-2.sh
 
      ok  fail  skip
-      2     -     -    testme/ok-2.sh
-      2     -     -    testme/ok-2.sh
+      2     -     -    dev/test/ok-2.sh
+      2     -     -    dev/test/ok-2.sh
 
 OK: 4 of 4 tests passed
-$ ./cltest testme/ok-[0-9]*.sh
-Testing file testme/ok-1.sh
-Testing file testme/ok-10.sh
-Testing file testme/ok-100.sh
-Testing file testme/ok-2.sh
-Testing file testme/ok-50.sh
+$ ./cltest dev/test/ok-[0-9]*.sh
+Testing file dev/test/ok-1.sh
+Testing file dev/test/ok-10.sh
+Testing file dev/test/ok-100.sh
+Testing file dev/test/ok-2.sh
+Testing file dev/test/ok-50.sh
 
      ok  fail  skip
-      1     -     -    testme/ok-1.sh
-     10     -     -    testme/ok-10.sh
-    100     -     -    testme/ok-100.sh
-      2     -     -    testme/ok-2.sh
-     50     -     -    testme/ok-50.sh
+      1     -     -    dev/test/ok-1.sh
+     10     -     -    dev/test/ok-10.sh
+    100     -     -    dev/test/ok-100.sh
+      2     -     -    dev/test/ok-2.sh
+     50     -     -    dev/test/ok-50.sh
 
 OK: 163 of 163 tests passed
-$ ./cltest --verbose testme/ok-?.sh testme/ok-10.sh
-Testing file testme/ok-1.sh
+$ ./cltest --verbose dev/test/ok-?.sh dev/test/ok-10.sh
+Testing file dev/test/ok-1.sh
 #1	echo ok
-Testing file testme/ok-2.sh
+Testing file dev/test/ok-2.sh
 #2	echo ok
 #3	echo ok  
-Testing file testme/ok-10.sh
+Testing file dev/test/ok-10.sh
 #4	echo 1 
 #5	echo 2 
 #6	echo 3 
@@ -439,9 +439,9 @@ Testing file testme/ok-10.sh
 #13	echo 10 
 
      ok  fail  skip
-      1     -     -    testme/ok-1.sh
-      2     -     -    testme/ok-2.sh
-     10     -     -    testme/ok-10.sh
+      1     -     -    dev/test/ok-1.sh
+      2     -     -    dev/test/ok-2.sh
+     10     -     -    dev/test/ok-10.sh
 
 OK: 13 of 13 tests passed
 $
@@ -450,17 +450,17 @@ $
 ## Multifile, OK and fail
 
 ```
-$ ./cltest testme/ok-1.sh testme/fail-1.sh testme/ok-2.sh testme/fail-2.sh
-Testing file testme/ok-1.sh
-Testing file testme/fail-1.sh
+$ ./cltest dev/test/ok-1.sh dev/test/fail-1.sh dev/test/ok-2.sh dev/test/fail-2.sh
+Testing file dev/test/ok-1.sh
+Testing file dev/test/fail-1.sh
 --------------------------------------------------------------------------------
 [FAILED #2, line 1] echo ok
 @@ -1 +1 @@
 -fail
 +ok
 --------------------------------------------------------------------------------
-Testing file testme/ok-2.sh
-Testing file testme/fail-2.sh
+Testing file dev/test/ok-2.sh
+Testing file dev/test/fail-2.sh
 --------------------------------------------------------------------------------
 [FAILED #5, line 1] echo ok
 @@ -1 +1 @@
@@ -474,16 +474,16 @@ Testing file testme/fail-2.sh
 --------------------------------------------------------------------------------
 
      ok  fail  skip
-      1     -     -    testme/ok-1.sh
-      -     1     -    testme/fail-1.sh
-      2     -     -    testme/ok-2.sh
-      -     2     -    testme/fail-2.sh
+      1     -     -    dev/test/ok-1.sh
+      -     1     -    dev/test/fail-1.sh
+      2     -     -    dev/test/ok-2.sh
+      -     2     -    dev/test/fail-2.sh
 
 FAIL: 3 of 6 tests failed
-$ ./cltest --verbose testme/ok-1.sh testme/fail-1.sh testme/ok-2.sh testme/fail-2.sh
-Testing file testme/ok-1.sh
+$ ./cltest --verbose dev/test/ok-1.sh dev/test/fail-1.sh dev/test/ok-2.sh dev/test/fail-2.sh
+Testing file dev/test/ok-1.sh
 #1	echo ok
-Testing file testme/fail-1.sh
+Testing file dev/test/fail-1.sh
 #2	echo ok
 --------------------------------------------------------------------------------
 [FAILED #2, line 1] echo ok
@@ -491,10 +491,10 @@ Testing file testme/fail-1.sh
 -fail
 +ok
 --------------------------------------------------------------------------------
-Testing file testme/ok-2.sh
+Testing file dev/test/ok-2.sh
 #3	echo ok
 #4	echo ok  
-Testing file testme/fail-2.sh
+Testing file dev/test/fail-2.sh
 #5	echo ok
 --------------------------------------------------------------------------------
 [FAILED #5, line 1] echo ok
@@ -511,10 +511,10 @@ Testing file testme/fail-2.sh
 --------------------------------------------------------------------------------
 
      ok  fail  skip
-      1     -     -    testme/ok-1.sh
-      -     1     -    testme/fail-1.sh
-      2     -     -    testme/ok-2.sh
-      -     2     -    testme/fail-2.sh
+      1     -     -    dev/test/ok-1.sh
+      -     1     -    dev/test/fail-1.sh
+      2     -     -    dev/test/ok-2.sh
+      -     2     -    dev/test/fail-2.sh
 
 FAIL: 3 of 6 tests failed
 $
@@ -523,7 +523,7 @@ $
 ## Fail messages
 
 ```
-$ ./cltest testme/fail-messages.sh
+$ ./cltest dev/test/fail-messages.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 3] echo fail  
 @@ -1 +1 @@
@@ -579,7 +579,7 @@ $
 ## Fails
 
 ```
-$ ./cltest testme/fail-1.sh
+$ ./cltest dev/test/fail-1.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
 @@ -1 +1 @@
@@ -588,7 +588,7 @@ $ ./cltest testme/fail-1.sh
 --------------------------------------------------------------------------------
 
 FAIL: 1 of 1 tests failed
-$ ./cltest testme/fail-2.sh
+$ ./cltest dev/test/fail-2.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
 @@ -1 +1 @@
@@ -602,23 +602,23 @@ $ ./cltest testme/fail-2.sh
 --------------------------------------------------------------------------------
 
 FAIL: 2 of 2 tests failed
-$ ./cltest testme/fail-50.sh | tail -1
+$ ./cltest dev/test/fail-50.sh | tail -1
 FAIL: 50 of 50 tests failed
-$ ./cltest -1 testme/fail-2.sh
+$ ./cltest -1 dev/test/fail-2.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
 @@ -1 +1 @@
 -fail
 +ok
 --------------------------------------------------------------------------------
-$ ./cltest --first testme/fail-2.sh
+$ ./cltest --first dev/test/fail-2.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
 @@ -1 +1 @@
 -fail
 +ok
 --------------------------------------------------------------------------------
-$ ./cltest --first --verbose testme/fail-2.sh
+$ ./cltest --first --verbose dev/test/fail-2.sh
 #1	echo ok
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
@@ -626,7 +626,7 @@ $ ./cltest --first --verbose testme/fail-2.sh
 -fail
 +ok
 --------------------------------------------------------------------------------
-$ ./cltest --verbose testme/fail-2.sh
+$ ./cltest --verbose dev/test/fail-2.sh
 #1	echo ok
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
@@ -649,7 +649,7 @@ $
 ## Inline output with #→
 
 ```
-$ ./cltest --verbose testme/inline.sh
+$ ./cltest --verbose dev/test/inline.sh
 #1	echo 'one space' 
 #2	echo 'one tab'	
 #3	echo 'multi spaces'           
@@ -676,7 +676,7 @@ $
 ## Inline match modes
 
 ```
-$ ./cltest --list-run testme/inline-match-text.sh
+$ ./cltest --list-run dev/test/inline-match-text.sh
 #1	OK	echo 'abc'                    
 #2	OK	echo 'abc'                    
 #3	OK	printf '%s\n' '\t'            
@@ -717,7 +717,7 @@ $ ./cltest --list-run testme/inline-match-text.sh
 #38	OK	echo '--text'                 
 #39	OK	echo '--textual'              
 #40	OK	echo '--text is cool'         
-$ ./cltest --list-run testme/inline-match-eval.sh
+$ ./cltest --list-run dev/test/inline-match-eval.sh
 #1	OK	folder=$(pwd)
 #2	OK	echo $folder                  
 #3	OK	var='abc'
@@ -744,7 +744,7 @@ $ ./cltest --list-run testme/inline-match-eval.sh
 #24	OK	echo '--eval'                 
 #25	OK	echo '--evaluate'             
 #26	OK	echo '--eval is evil'         
-$ ./cltest --list-run testme/inline-match-egrep.sh
+$ ./cltest --list-run dev/test/inline-match-egrep.sh
 #1	OK	echo 'abc123'                 
 #2	OK	echo 'abc123'                 
 #3	OK	echo 'abc123'                 
@@ -773,7 +773,7 @@ $ ./cltest --list-run testme/inline-match-egrep.sh
 #26	OK	echo '--egrep'                
 #27	OK	echo '--egreppal'             
 #28	OK	echo '--egrep is cool'        
-$ ./cltest --list-run testme/inline-match-perl.sh
+$ ./cltest --list-run dev/test/inline-match-perl.sh
 #1	OK	echo 'abc123'                 
 #2	OK	echo 'abc123'                 
 #3	OK	echo 'abc123'                 
@@ -809,7 +809,7 @@ $ ./cltest --list-run testme/inline-match-perl.sh
 #33	OK	echo '--perl'                 
 #34	OK	echo '--perlism'              
 #35	OK	echo '--perl is cool'         
-$ ./cltest --list-run testme/inline-match-file.sh
+$ ./cltest --list-run dev/test/inline-match-file.sh
 #1	OK	printf '$ echo ok\nok\n'      
 #2	OK	echo 'ok' > /tmp/foo.txt
 #3	OK	echo 'ok'                     
@@ -818,7 +818,7 @@ $ ./cltest --list-run testme/inline-match-file.sh
 #6	OK	echo '--file'                 
 #7	OK	echo '--filer'                
 #8	OK	echo '--file is cool'         
-$ ./cltest --list-run testme/inline-match-lines.sh
+$ ./cltest --list-run dev/test/inline-match-lines.sh
 #1	OK	a=1                           
 #2	OK	echo 'ok'                     
 #3	OK	printf '1\n2\n3\n'            
@@ -831,38 +831,38 @@ $ ./cltest --list-run testme/inline-match-lines.sh
 #10	OK	echo '--lines'                 
 #11	OK	echo '--linesout'             
 #12	OK	echo '--lines is cool'         
-$ ./cltest --first testme/inline-match-lines.sh
+$ ./cltest --first dev/test/inline-match-lines.sh
 --------------------------------------------------------------------------------
 [FAILED #6, line 16] echo 'fail'                   
 Expected 99 lines, got 1.
 --------------------------------------------------------------------------------
-$ ./cltest testme/inline-match-egrep-error-1.sh
-cltest: Error: empty --egrep at line 1 of testme/inline-match-egrep-error-1.sh
-$ ./cltest testme/inline-match-egrep-error-2.sh 2>&1 | sed 's/^egrep: .*/egrep: ERROR_MSG/'
+$ ./cltest dev/test/inline-match-egrep-error-1.sh
+cltest: Error: empty --egrep at line 1 of dev/test/inline-match-egrep-error-1.sh
+$ ./cltest dev/test/inline-match-egrep-error-2.sh 2>&1 | sed 's/^egrep: .*/egrep: ERROR_MSG/'
 egrep: ERROR_MSG
-cltest: Error: check your inline egrep regex at line 1 of testme/inline-match-egrep-error-2.sh
-$ ./cltest testme/inline-match-perl-error-1.sh
-cltest: Error: empty --perl at line 1 of testme/inline-match-perl-error-1.sh
-$ ./cltest testme/inline-match-perl-error-2.sh
+cltest: Error: check your inline egrep regex at line 1 of dev/test/inline-match-egrep-error-2.sh
+$ ./cltest dev/test/inline-match-perl-error-1.sh
+cltest: Error: empty --perl at line 1 of dev/test/inline-match-perl-error-1.sh
+$ ./cltest dev/test/inline-match-perl-error-2.sh
 Unmatched ( in regex; marked by <-- HERE in m/( <-- HERE / at -e line 1.
-cltest: Error: check your inline Perl regex at line 1 of testme/inline-match-perl-error-2.sh
-$ ./cltest testme/inline-match-file-error-1.sh
-cltest: Error: empty --file at line 1 of testme/inline-match-file-error-1.sh
-$ ./cltest testme/inline-match-file-error-2.sh
-cltest: Error: cannot read inline output file 'XXnotfoundXX', from line 1 of testme/inline-match-file-error-2.sh
-$ ./cltest testme/inline-match-file-error-3.sh
-cltest: Error: cannot read inline output file '/etc/', from line 1 of testme/inline-match-file-error-3.sh
-$ ./cltest testme/inline-match-lines-error-1.sh
-cltest: Error: --lines requires a number. See line 1 of testme/inline-match-lines-error-1.sh
-$ ./cltest testme/inline-match-lines-error-2.sh
-cltest: Error: --lines requires a number. See line 1 of testme/inline-match-lines-error-2.sh
-$ ./cltest testme/inline-match-lines-error-3.sh
-cltest: Error: --lines requires a number. See line 1 of testme/inline-match-lines-error-3.sh
-$ ./cltest testme/inline-match-lines-error-4.sh
-cltest: Error: --lines requires a number. See line 1 of testme/inline-match-lines-error-4.sh
-$ ./cltest testme/inline-match-eval-error-1.sh
-cltest: Error: empty --eval at line 1 of testme/inline-match-eval-error-1.sh
-$ ./cltest testme/inline-match-eval-error-2.sh 2>&1 | sed 's/line [0-9][0-9]*/line N/'
+cltest: Error: check your inline Perl regex at line 1 of dev/test/inline-match-perl-error-2.sh
+$ ./cltest dev/test/inline-match-file-error-1.sh
+cltest: Error: empty --file at line 1 of dev/test/inline-match-file-error-1.sh
+$ ./cltest dev/test/inline-match-file-error-2.sh
+cltest: Error: cannot read inline output file 'XXnotfoundXX', from line 1 of dev/test/inline-match-file-error-2.sh
+$ ./cltest dev/test/inline-match-file-error-3.sh
+cltest: Error: cannot read inline output file '/etc/', from line 1 of dev/test/inline-match-file-error-3.sh
+$ ./cltest dev/test/inline-match-lines-error-1.sh
+cltest: Error: --lines requires a number. See line 1 of dev/test/inline-match-lines-error-1.sh
+$ ./cltest dev/test/inline-match-lines-error-2.sh
+cltest: Error: --lines requires a number. See line 1 of dev/test/inline-match-lines-error-2.sh
+$ ./cltest dev/test/inline-match-lines-error-3.sh
+cltest: Error: --lines requires a number. See line 1 of dev/test/inline-match-lines-error-3.sh
+$ ./cltest dev/test/inline-match-lines-error-4.sh
+cltest: Error: --lines requires a number. See line 1 of dev/test/inline-match-lines-error-4.sh
+$ ./cltest dev/test/inline-match-eval-error-1.sh
+cltest: Error: empty --eval at line 1 of dev/test/inline-match-eval-error-1.sh
+$ ./cltest dev/test/inline-match-eval-error-2.sh 2>&1 | sed 's/line [0-9][0-9]*/line N/'
 ./cltest: eval: line N: unexpected EOF while looking for matching `)'
 ./cltest: eval: line N: syntax error: unexpected end of file
 --------------------------------------------------------------------------------
@@ -878,71 +878,71 @@ $
 ## Option -t, --test
 
 ```
-$ ./cltest -t - testme/ok-2.sh
+$ ./cltest -t - dev/test/ok-2.sh
 cltest: Error: invalid argument for -t or --test: -
-$ ./cltest -t -1 testme/ok-2.sh
+$ ./cltest -t -1 dev/test/ok-2.sh
 cltest: Error: invalid argument for -t or --test: -1
-$ ./cltest -t 1- testme/ok-2.sh
+$ ./cltest -t 1- dev/test/ok-2.sh
 cltest: Error: invalid argument for -t or --test: 1-
-$ ./cltest -t 1--2 testme/ok-2.sh
+$ ./cltest -t 1--2 dev/test/ok-2.sh
 cltest: Error: invalid argument for -t or --test: 1--2
-$ ./cltest -t 1-2-3 testme/ok-2.sh
+$ ./cltest -t 1-2-3 dev/test/ok-2.sh
 cltest: Error: invalid argument for -t or --test: 1-2-3
-$ ./cltest -t 99 testme/ok-2.sh
+$ ./cltest -t 99 dev/test/ok-2.sh
 cltest: Error: no test found for the specified number or range '99'
-$ ./cltest -t '' testme/ok-2.sh
+$ ./cltest -t '' dev/test/ok-2.sh
 OK: 2 of 2 tests passed
-$ ./cltest -t 0 testme/ok-2.sh
+$ ./cltest -t 0 dev/test/ok-2.sh
 OK: 2 of 2 tests passed
-$ ./cltest -t ,,,0,0-0,,, testme/ok-2.sh
+$ ./cltest -t ,,,0,0-0,,, dev/test/ok-2.sh
 OK: 2 of 2 tests passed
-$ ./cltest --verbose -t 1 testme/ok-10.sh
+$ ./cltest --verbose -t 1 dev/test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
-$ ./cltest --verbose --test 1 testme/ok-10.sh
+$ ./cltest --verbose --test 1 dev/test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
-$ ./cltest --verbose -t 0-1,1-0 testme/ok-10.sh
+$ ./cltest --verbose -t 0-1,1-0 dev/test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
-$ ./cltest --verbose -t 1-1 testme/ok-10.sh
+$ ./cltest --verbose -t 1-1 dev/test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
-$ ./cltest --verbose -t 1,1,1,0,1 testme/ok-10.sh
+$ ./cltest --verbose -t 1,1,1,0,1 dev/test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
-$ ./cltest --verbose -t 10-20 testme/ok-10.sh
+$ ./cltest --verbose -t 10-20 dev/test/ok-10.sh
 #10	echo 10 
 OK: 1 of 10 tests passed (9 skipped)
-$ ./cltest --verbose -t 3,2,1 testme/ok-10.sh
+$ ./cltest --verbose -t 3,2,1 dev/test/ok-10.sh
 #1	echo 1 
 #2	echo 2 
 #3	echo 3 
 OK: 3 of 10 tests passed (7 skipped)
-$ ./cltest --verbose -t 3-1 testme/ok-10.sh
+$ ./cltest --verbose -t 3-1 dev/test/ok-10.sh
 #1	echo 1 
 #2	echo 2 
 #3	echo 3 
 OK: 3 of 10 tests passed (7 skipped)
-$ ./cltest --verbose -t 1,5,13 testme/ok-?.sh testme/ok-10.sh
-Testing file testme/ok-1.sh
+$ ./cltest --verbose -t 1,5,13 dev/test/ok-?.sh dev/test/ok-10.sh
+Testing file dev/test/ok-1.sh
 #1	echo ok
-Testing file testme/ok-2.sh
-Testing file testme/ok-10.sh
+Testing file dev/test/ok-2.sh
+Testing file dev/test/ok-10.sh
 #5	echo 2 
 #13	echo 10 
 
      ok  fail  skip
-      1     -     -    testme/ok-1.sh
-      -     -     2    testme/ok-2.sh
-      2     -     8    testme/ok-10.sh
+      1     -     -    dev/test/ok-1.sh
+      -     -     2    dev/test/ok-2.sh
+      2     -     8    dev/test/ok-10.sh
 
 OK: 3 of 13 tests passed (10 skipped)
-$ ./cltest --verbose -t 1,5 testme/ok-[12].sh testme/fail-2.sh
-Testing file testme/ok-1.sh
+$ ./cltest --verbose -t 1,5 dev/test/ok-[12].sh dev/test/fail-2.sh
+Testing file dev/test/ok-1.sh
 #1	echo ok
-Testing file testme/ok-2.sh
-Testing file testme/fail-2.sh
+Testing file dev/test/ok-2.sh
+Testing file dev/test/fail-2.sh
 #5	echo ok  
 --------------------------------------------------------------------------------
 [FAILED #5, line 3] echo ok  
@@ -952,21 +952,21 @@ Testing file testme/fail-2.sh
 --------------------------------------------------------------------------------
 
      ok  fail  skip
-      1     -     -    testme/ok-1.sh
-      -     -     2    testme/ok-2.sh
-      -     1     1    testme/fail-2.sh
+      1     -     -    dev/test/ok-1.sh
+      -     -     2    dev/test/ok-2.sh
+      -     1     1    dev/test/fail-2.sh
 
 FAIL: 1 of 5 tests failed (3 skipped)
-$ ./cltest --verbose -t 1 testme/ok-[12].sh testme/fail-2.sh
-Testing file testme/ok-1.sh
+$ ./cltest --verbose -t 1 dev/test/ok-[12].sh dev/test/fail-2.sh
+Testing file dev/test/ok-1.sh
 #1	echo ok
-Testing file testme/ok-2.sh
-Testing file testme/fail-2.sh
+Testing file dev/test/ok-2.sh
+Testing file dev/test/fail-2.sh
 
      ok  fail  skip
-      1     -     -    testme/ok-1.sh
-      -     -     2    testme/ok-2.sh
-      -     -     2    testme/fail-2.sh
+      1     -     -    dev/test/ok-1.sh
+      -     -     2    dev/test/ok-2.sh
+      -     -     2    dev/test/fail-2.sh
 
 OK: 1 of 5 tests passed (4 skipped)
 $
@@ -975,59 +975,59 @@ $
 ## Option -s, --skip
 
 ```
-$ ./cltest -s - testme/ok-2.sh
+$ ./cltest -s - dev/test/ok-2.sh
 cltest: Error: invalid argument for -s or --skip: -
-$ ./cltest -s -1 testme/ok-2.sh
+$ ./cltest -s -1 dev/test/ok-2.sh
 cltest: Error: invalid argument for -s or --skip: -1
-$ ./cltest -s 1- testme/ok-2.sh
+$ ./cltest -s 1- dev/test/ok-2.sh
 cltest: Error: invalid argument for -s or --skip: 1-
-$ ./cltest -s 1--2 testme/ok-2.sh
+$ ./cltest -s 1--2 dev/test/ok-2.sh
 cltest: Error: invalid argument for -s or --skip: 1--2
-$ ./cltest -s 1-2-3 testme/ok-2.sh
+$ ./cltest -s 1-2-3 dev/test/ok-2.sh
 cltest: Error: invalid argument for -s or --skip: 1-2-3
-$ ./cltest -s 99 testme/ok-2.sh
+$ ./cltest -s 99 dev/test/ok-2.sh
 OK: 2 of 2 tests passed
-$ ./cltest -s '' testme/ok-2.sh
+$ ./cltest -s '' dev/test/ok-2.sh
 OK: 2 of 2 tests passed
-$ ./cltest -s 0 testme/ok-2.sh
+$ ./cltest -s 0 dev/test/ok-2.sh
 OK: 2 of 2 tests passed
-$ ./cltest -s ,,,0,0-0,,, testme/ok-2.sh
+$ ./cltest -s ,,,0,0-0,,, dev/test/ok-2.sh
 OK: 2 of 2 tests passed
-$ ./cltest -s 1 testme/ok-1.sh
+$ ./cltest -s 1 dev/test/ok-1.sh
 cltest: Error: no test found. Maybe '--skip 1' was too much?
-$ ./cltest --verbose -s 1 testme/ok-2.sh
+$ ./cltest --verbose -s 1 dev/test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
-$ ./cltest --verbose --skip 1 testme/ok-2.sh
+$ ./cltest --verbose --skip 1 dev/test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
-$ ./cltest --verbose -s 0-1,1-0 testme/ok-2.sh
+$ ./cltest --verbose -s 0-1,1-0 dev/test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
-$ ./cltest --verbose -s 1-1 testme/ok-2.sh
+$ ./cltest --verbose -s 1-1 dev/test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
-$ ./cltest --verbose -s 1,1,1,0,1 testme/ok-2.sh
+$ ./cltest --verbose -s 1,1,1,0,1 dev/test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
-$ ./cltest --verbose -s 2-10 testme/ok-2.sh
+$ ./cltest --verbose -s 2-10 dev/test/ok-2.sh
 #1	echo ok
 OK: 1 of 2 tests passed (1 skipped)
-$ ./cltest --verbose -s 10,9,8,7,6,5,4 testme/ok-10.sh
+$ ./cltest --verbose -s 10,9,8,7,6,5,4 dev/test/ok-10.sh
 #1	echo 1 
 #2	echo 2 
 #3	echo 3 
 OK: 3 of 10 tests passed (7 skipped)
-$ ./cltest --verbose -s 10-4 testme/ok-10.sh
+$ ./cltest --verbose -s 10-4 dev/test/ok-10.sh
 #1	echo 1 
 #2	echo 2 
 #3	echo 3 
 OK: 3 of 10 tests passed (7 skipped)
-$ ./cltest --verbose -s 2,3,13 testme/ok-?.sh testme/ok-10.sh
-Testing file testme/ok-1.sh
+$ ./cltest --verbose -s 2,3,13 dev/test/ok-?.sh dev/test/ok-10.sh
+Testing file dev/test/ok-1.sh
 #1	echo ok
-Testing file testme/ok-2.sh
-Testing file testme/ok-10.sh
+Testing file dev/test/ok-2.sh
+Testing file dev/test/ok-10.sh
 #4	echo 1 
 #5	echo 2 
 #6	echo 3 
@@ -1039,16 +1039,16 @@ Testing file testme/ok-10.sh
 #12	echo 9 
 
      ok  fail  skip
-      1     -     -    testme/ok-1.sh
-      -     -     2    testme/ok-2.sh
-      9     -     1    testme/ok-10.sh
+      1     -     -    dev/test/ok-1.sh
+      -     -     2    dev/test/ok-2.sh
+      9     -     1    dev/test/ok-10.sh
 
 OK: 10 of 13 tests passed (3 skipped)
-$ ./cltest --verbose -s 2,3,4 testme/ok-[12].sh testme/fail-2.sh
-Testing file testme/ok-1.sh
+$ ./cltest --verbose -s 2,3,4 dev/test/ok-[12].sh dev/test/fail-2.sh
+Testing file dev/test/ok-1.sh
 #1	echo ok
-Testing file testme/ok-2.sh
-Testing file testme/fail-2.sh
+Testing file dev/test/ok-2.sh
+Testing file dev/test/fail-2.sh
 #5	echo ok  
 --------------------------------------------------------------------------------
 [FAILED #5, line 3] echo ok  
@@ -1058,21 +1058,21 @@ Testing file testme/fail-2.sh
 --------------------------------------------------------------------------------
 
      ok  fail  skip
-      1     -     -    testme/ok-1.sh
-      -     -     2    testme/ok-2.sh
-      -     1     1    testme/fail-2.sh
+      1     -     -    dev/test/ok-1.sh
+      -     -     2    dev/test/ok-2.sh
+      -     1     1    dev/test/fail-2.sh
 
 FAIL: 1 of 5 tests failed (3 skipped)
-$ ./cltest --verbose -s 2-10 testme/ok-[12].sh testme/fail-2.sh
-Testing file testme/ok-1.sh
+$ ./cltest --verbose -s 2-10 dev/test/ok-[12].sh dev/test/fail-2.sh
+Testing file dev/test/ok-1.sh
 #1	echo ok
-Testing file testme/ok-2.sh
-Testing file testme/fail-2.sh
+Testing file dev/test/ok-2.sh
+Testing file dev/test/fail-2.sh
 
      ok  fail  skip
-      1     -     -    testme/ok-1.sh
-      -     -     2    testme/ok-2.sh
-      -     -     2    testme/fail-2.sh
+      1     -     -    dev/test/ok-1.sh
+      -     -     2    dev/test/ok-2.sh
+      -     -     2    dev/test/fail-2.sh
 
 OK: 1 of 5 tests passed (4 skipped)
 $
@@ -1081,27 +1081,27 @@ $
 ## Option --test combined with --skip
 
 ```
-$ ./cltest -t 9 -s 9 testme/ok-10.sh
+$ ./cltest -t 9 -s 9 dev/test/ok-10.sh
 cltest: Error: no test found. The combination of -t and -s resulted in no tests.
-$ ./cltest -s 9 -t 9 testme/ok-10.sh  # -s always wins
+$ ./cltest -s 9 -t 9 dev/test/ok-10.sh  # -s always wins
 cltest: Error: no test found. The combination of -t and -s resulted in no tests.
-$ ./cltest --verbose -t 3,5-7 -s 6 testme/ok-10.sh
+$ ./cltest --verbose -t 3,5-7 -s 6 dev/test/ok-10.sh
 #3	echo 3 
 #5	echo 5 
 #7	echo 7 
 OK: 3 of 10 tests passed (7 skipped)
-$ ./cltest --verbose -t 1,3,5-7 -s 3,6 testme/ok-1.sh testme/fail-2.sh testme/ok-10.sh
-Testing file testme/ok-1.sh
+$ ./cltest --verbose -t 1,3,5-7 -s 3,6 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.sh
+Testing file dev/test/ok-1.sh
 #1	echo ok
-Testing file testme/fail-2.sh
-Testing file testme/ok-10.sh
+Testing file dev/test/fail-2.sh
+Testing file dev/test/ok-10.sh
 #5	echo 2 
 #7	echo 4 
 
      ok  fail  skip
-      1     -     -    testme/ok-1.sh
-      -     -     2    testme/fail-2.sh
-      2     -     8    testme/ok-10.sh
+      1     -     -    dev/test/ok-1.sh
+      -     -     2    dev/test/fail-2.sh
+      2     -     8    dev/test/ok-10.sh
 
 OK: 3 of 13 tests passed (10 skipped)
 $
@@ -1111,7 +1111,7 @@ $
 ## Option --diff-options
 
 ```
-$ ./cltest testme/option-diff-options.sh
+$ ./cltest dev/test/option-diff-options.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 3] echo "	diff -w to ignore spaces    "
 @@ -1 +1 @@
@@ -1125,7 +1125,7 @@ $ ./cltest testme/option-diff-options.sh
 --------------------------------------------------------------------------------
 
 FAIL: 2 of 2 tests failed
-$ ./cltest --diff-options '-u -w' testme/option-diff-options.sh
+$ ./cltest --diff-options '-u -w' dev/test/option-diff-options.sh
 OK: 2 of 2 tests passed
 $
 ```
@@ -1133,14 +1133,14 @@ $
 ## Option --prompt
 
 ```
-$ ./cltest --verbose testme/option-prompt.sh
-cltest: Error: no test found in input file: testme/option-prompt.sh
-$ ./cltest --verbose --prompt 'prompt$ ' testme/option-prompt.sh
+$ ./cltest --verbose dev/test/option-prompt.sh
+cltest: Error: no test found in input file: dev/test/option-prompt.sh
+$ ./cltest --verbose --prompt 'prompt$ ' dev/test/option-prompt.sh
 #1	echo "1"  
 #2	echo "2"
 #3	echo "3"
 OK: 3 of 3 tests passed
-$ ./cltest --verbose --prompt '♥ ' testme/option-prompt-unicode.sh
+$ ./cltest --verbose --prompt '♥ ' dev/test/option-prompt-unicode.sh
 #1	echo "1"  
 #2	echo "2"
 #3	echo "3"
@@ -1151,7 +1151,7 @@ $
 ## Option --inline-prefix
 
 ```
-$ ./cltest testme/option-inline-prefix.sh
+$ ./cltest dev/test/option-inline-prefix.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 3] echo "1 space" #==> 1 space
 @@ -0,0 +1 @@
@@ -1167,7 +1167,7 @@ $ ./cltest testme/option-inline-prefix.sh
 --------------------------------------------------------------------------------
 
 FAIL: 3 of 3 tests failed
-$ ./cltest --inline-prefix '#==>' testme/option-inline-prefix.sh
+$ ./cltest --inline-prefix '#==>' dev/test/option-inline-prefix.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 3] echo "1 space" 
 @@ -1 +1 @@
@@ -1186,7 +1186,7 @@ $ ./cltest --inline-prefix '#==>' testme/option-inline-prefix.sh
 --------------------------------------------------------------------------------
 
 FAIL: 3 of 3 tests failed
-$ ./cltest --inline-prefix '#==> ' testme/option-inline-prefix.sh
+$ ./cltest --inline-prefix '#==> ' dev/test/option-inline-prefix.sh
 OK: 3 of 3 tests passed
 $
 ```
@@ -1194,7 +1194,7 @@ $
 ## Option --prefix
 
 ```
-$ ./cltest --verbose --prefix '    ' testme/option-prefix.sh
+$ ./cltest --verbose --prefix '    ' dev/test/option-prefix.sh
 #1	echo "1"  
 #2	echo "2"
 #3	echo "3"
@@ -1202,7 +1202,7 @@ $ ./cltest --verbose --prefix '    ' testme/option-prefix.sh
 #5	echo "5"  
 #6	echo; echo "6"; echo; echo "7"
 OK: 6 of 6 tests passed
-$ ./cltest --verbose --prefix 4 testme/option-prefix.sh
+$ ./cltest --verbose --prefix 4 dev/test/option-prefix.sh
 #1	echo "1"  
 #2	echo "2"
 #3	echo "3"
@@ -1210,7 +1210,7 @@ $ ./cltest --verbose --prefix 4 testme/option-prefix.sh
 #5	echo "5"  
 #6	echo; echo "6"; echo; echo "7"
 OK: 6 of 6 tests passed
-$ ./cltest --verbose --prefix '\t' testme/option-prefix-tab.sh
+$ ./cltest --verbose --prefix '\t' dev/test/option-prefix-tab.sh
 #1	echo "1"  
 #2	echo "2"
 #3	echo "3"
@@ -1218,7 +1218,7 @@ $ ./cltest --verbose --prefix '\t' testme/option-prefix-tab.sh
 #5	echo "5"  
 #6	echo; echo "6"; echo; echo "7"
 OK: 6 of 6 tests passed
-$ ./cltest --verbose --prefix tab testme/option-prefix-tab.sh
+$ ./cltest --verbose --prefix tab dev/test/option-prefix-tab.sh
 #1	echo "1"  
 #2	echo "2"
 #3	echo "3"
@@ -1232,43 +1232,43 @@ $
 ## Option --prefix: glob gotchas
 
 ```
-$ ./cltest --verbose --prefix '?' testme/option-prefix-glob.sh
+$ ./cltest --verbose --prefix '?' dev/test/option-prefix-glob.sh
 #1	echo 'prefix ?'	
 #2	echo 'prefix ?'
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prefix '*' testme/option-prefix-glob.sh
+$ ./cltest --verbose --prefix '*' dev/test/option-prefix-glob.sh
 #1	echo 'prefix *'	
 #2	echo 'prefix *'
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prefix '#' testme/option-prefix-glob.sh
+$ ./cltest --verbose --prefix '#' dev/test/option-prefix-glob.sh
 #1	echo 'prefix #'	
 #2	echo 'prefix #'
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prefix '%' testme/option-prefix-glob.sh
+$ ./cltest --verbose --prefix '%' dev/test/option-prefix-glob.sh
 #1	echo 'prefix %'	
 #2	echo 'prefix %'
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prefix '##' testme/option-prefix-glob.sh
+$ ./cltest --verbose --prefix '##' dev/test/option-prefix-glob.sh
 #1	echo 'prefix ##'	
 #2	echo 'prefix ##'
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prefix '%%' testme/option-prefix-glob.sh
+$ ./cltest --verbose --prefix '%%' dev/test/option-prefix-glob.sh
 #1	echo 'prefix %%'	
 #2	echo 'prefix %%'
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prefix '#*' testme/option-prefix-glob.sh
+$ ./cltest --verbose --prefix '#*' dev/test/option-prefix-glob.sh
 #1	echo 'prefix #*'	
 #2	echo 'prefix #*'
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prefix '*#' testme/option-prefix-glob.sh
+$ ./cltest --verbose --prefix '*#' dev/test/option-prefix-glob.sh
 #1	echo 'prefix *#'	
 #2	echo 'prefix *#'
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prefix '%*' testme/option-prefix-glob.sh
+$ ./cltest --verbose --prefix '%*' dev/test/option-prefix-glob.sh
 #1	echo 'prefix %*'	
 #2	echo 'prefix %*'
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prefix '*%' testme/option-prefix-glob.sh
+$ ./cltest --verbose --prefix '*%' dev/test/option-prefix-glob.sh
 #1	echo 'prefix *%'	
 #2	echo 'prefix *%'
 OK: 2 of 2 tests passed
@@ -1278,43 +1278,43 @@ $
 ## Option --prompt: glob gotchas (char + space)
 
 ```
-$ ./cltest --verbose --prompt '? ' testme/option-prompt-glob-space.sh
+$ ./cltest --verbose --prompt '? ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt ? '	
 #2	echo 'prompt ? '
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prompt '* ' testme/option-prompt-glob-space.sh
+$ ./cltest --verbose --prompt '* ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt * '	
 #2	echo 'prompt * '
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prompt '# ' testme/option-prompt-glob-space.sh
+$ ./cltest --verbose --prompt '# ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt # '	
 #2	echo 'prompt # '
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prompt '% ' testme/option-prompt-glob-space.sh
+$ ./cltest --verbose --prompt '% ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt % '	
 #2	echo 'prompt % '
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prompt '## ' testme/option-prompt-glob-space.sh
+$ ./cltest --verbose --prompt '## ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt ## '	
 #2	echo 'prompt ## '
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prompt '%% ' testme/option-prompt-glob-space.sh
+$ ./cltest --verbose --prompt '%% ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt %% '	
 #2	echo 'prompt %% '
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prompt '#* ' testme/option-prompt-glob-space.sh
+$ ./cltest --verbose --prompt '#* ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt #* '	
 #2	echo 'prompt #* '
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prompt '*# ' testme/option-prompt-glob-space.sh
+$ ./cltest --verbose --prompt '*# ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt *# '	
 #2	echo 'prompt *# '
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prompt '%* ' testme/option-prompt-glob-space.sh
+$ ./cltest --verbose --prompt '%* ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt %* '	
 #2	echo 'prompt %* '
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prompt '*% ' testme/option-prompt-glob-space.sh
+$ ./cltest --verbose --prompt '*% ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt *% '	
 #2	echo 'prompt *% '
 OK: 2 of 2 tests passed
@@ -1324,43 +1324,43 @@ $
 ## Option --prompt: glob gotchas (chars only)
 
 ```
-$ ./cltest --verbose --prompt '?' testme/option-prompt-glob-1.sh
+$ ./cltest --verbose --prompt '?' dev/test/option-prompt-glob-1.sh
 #1	echo 'prompt ?'	
 #2	echo 'prompt ?'
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prompt '*' testme/option-prompt-glob-1.sh
+$ ./cltest --verbose --prompt '*' dev/test/option-prompt-glob-1.sh
 #1	echo 'prompt *'	
 #2	echo 'prompt *'
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prompt '#' testme/option-prompt-glob-1.sh
+$ ./cltest --verbose --prompt '#' dev/test/option-prompt-glob-1.sh
 #1	echo 'prompt #'	
 #2	echo 'prompt #'
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prompt '%' testme/option-prompt-glob-1.sh
+$ ./cltest --verbose --prompt '%' dev/test/option-prompt-glob-1.sh
 #1	echo 'prompt %'	
 #2	echo 'prompt %'
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prompt '##' testme/option-prompt-glob-2.sh
+$ ./cltest --verbose --prompt '##' dev/test/option-prompt-glob-2.sh
 #1	echo 'prompt ##'	
 #2	echo 'prompt ##'
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prompt '%%' testme/option-prompt-glob-2.sh
+$ ./cltest --verbose --prompt '%%' dev/test/option-prompt-glob-2.sh
 #1	echo 'prompt %%'	
 #2	echo 'prompt %%'
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prompt '#*' testme/option-prompt-glob-2.sh
+$ ./cltest --verbose --prompt '#*' dev/test/option-prompt-glob-2.sh
 #1	echo 'prompt #*'	
 #2	echo 'prompt #*'
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prompt '*#' testme/option-prompt-glob-2.sh
+$ ./cltest --verbose --prompt '*#' dev/test/option-prompt-glob-2.sh
 #1	echo 'prompt *#'	
 #2	echo 'prompt *#'
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prompt '%*' testme/option-prompt-glob-2.sh
+$ ./cltest --verbose --prompt '%*' dev/test/option-prompt-glob-2.sh
 #1	echo 'prompt %*'	
 #2	echo 'prompt %*'
 OK: 2 of 2 tests passed
-$ ./cltest --verbose --prompt '*%' testme/option-prompt-glob-2.sh
+$ ./cltest --verbose --prompt '*%' dev/test/option-prompt-glob-2.sh
 #1	echo 'prompt *%'	
 #2	echo 'prompt *%'
 OK: 2 of 2 tests passed
@@ -1370,12 +1370,12 @@ $
 ## Options --pre-flight and --post-flight
 
 ```
-$ ./cltest --pre-flight 'tt_test_number=99; tt_nr_total_tests=99' testme/ok-1.sh
+$ ./cltest --pre-flight 'tt_test_number=99; tt_nr_total_tests=99' dev/test/ok-1.sh
 OK: 100 of 100 tests passed
-$ ./cltest --post-flight 'tt_nr_total_fails=50' testme/ok-50.sh
+$ ./cltest --post-flight 'tt_nr_total_fails=50' dev/test/ok-50.sh
 
 FAIL: 50 of 50 tests failed
-$ ./cltest --pre-flight 'false' testme/ok-1.sh
+$ ./cltest --pre-flight 'false' dev/test/ok-1.sh
 cltest: Error: pre-flight command failed with status=1: false
 $
 ```
@@ -1391,7 +1391,7 @@ $
 ## File - meaning STDIN (no support for now)
 
 ```
-$ cat testme/ok-1.sh | ./cltest -
+$ cat dev/test/ok-1.sh | ./cltest -
 cltest: Error: cannot read input file: -
 $
 ```
@@ -1399,28 +1399,28 @@ $
 ## Gotchas
 
 ```
-$ ./cltest testme/exit-code.sh
+$ ./cltest dev/test/exit-code.sh
 OK: 2 of 2 tests passed
-$ ./cltest testme/blank-output.sh
+$ ./cltest dev/test/blank-output.sh
 OK: 10 of 10 tests passed
-$ ./cltest testme/special-chars.sh
+$ ./cltest dev/test/special-chars.sh
 OK: 206 of 206 tests passed
-$ ./cltest --verbose testme/windows.sh
+$ ./cltest --verbose dev/test/windows.sh
 #1	echo "a file with CRLF line ending"
 #2	echo "inline output"  
 #3	echo "inline regex"  
 OK: 3 of 3 tests passed
-$ ./cltest --verbose testme/close-command.sh
+$ ./cltest --verbose dev/test/close-command.sh
 #1	echo 1
 #2	echo 2
 #3	echo 3
 OK: 3 of 3 tests passed
-$ ./cltest --verbose testme/multi-commands.sh
+$ ./cltest --verbose dev/test/multi-commands.sh
 #1	echo 1; echo 2; echo 3; echo 4; echo 5
 #2	(echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p
 #3	(echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p  
 OK: 3 of 3 tests passed
-$ ./cltest --verbose testme/stdout-stderr.sh
+$ ./cltest --verbose dev/test/stdout-stderr.sh
 #1	echo "stdout"
 #2	echo "stdout" 2> /dev/null
 #3	echo "stderr" 1>&2
@@ -1432,25 +1432,25 @@ $ ./cltest --verbose testme/stdout-stderr.sh
 #9	cp XXnotfoundXX foo 2> /dev/null
 #10	cp XXnotfoundXX foo > /dev/null 2>&1
 OK: 10 of 10 tests passed
-$ ./cltest testme/cd.sh testme/ok-2.sh
-Testing file testme/cd.sh
-Testing file testme/ok-2.sh
+$ ./cltest dev/test/cd.sh dev/test/ok-2.sh
+Testing file dev/test/cd.sh
+Testing file dev/test/ok-2.sh
 
      ok  fail  skip
-      1     -     -    testme/cd.sh
-      2     -     -    testme/ok-2.sh
+      1     -     -    dev/test/cd.sh
+      2     -     -    dev/test/ok-2.sh
 
 OK: 3 of 3 tests passed
-$ ./cltest --verbose testme/no-nl-file-1.sh
+$ ./cltest --verbose dev/test/no-nl-file-1.sh
 #1	printf '%s\n' 'a file with no \n at the last line'
 OK: 1 of 1 tests passed
-$ ./cltest --verbose testme/no-nl-file-2.sh
+$ ./cltest --verbose dev/test/no-nl-file-2.sh
 #1	printf '%s\n' 'another file with no \n at the last line'
 OK: 1 of 1 tests passed
-$ ./cltest --verbose testme/no-nl-file-3.sh
+$ ./cltest --verbose dev/test/no-nl-file-3.sh
 #1	printf '%s\n' 'oneliner, no \n'  
 OK: 1 of 1 tests passed
-$ ./cltest --verbose testme/no-nl-command.sh
+$ ./cltest --verbose dev/test/no-nl-command.sh
 #1	printf 'ok\n'
 #2	printf 'fail'
 --------------------------------------------------------------------------------
@@ -1488,7 +1488,7 @@ $
 ## And now, the colored output tests
 
 ```
-$ ./cltest --color yes --first testme/fail-2.sh
+$ ./cltest --color yes --first dev/test/fail-2.sh
 [31m--------------------------------------------------------------------------------[m
 [31m[FAILED #1, line 1] echo ok[m
 @@ -1 +1 @@
