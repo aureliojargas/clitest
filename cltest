@@ -311,19 +311,18 @@ tt_run_test ()
 		return 0
 	fi
 
-	# List mode: just show the command and return (no execution)
-	if test "$tt_output_mode" = 'list'
-	then
-		tt_list_test
-		tt_reset_test_data
-		return 0
-	fi
-
-	# Verbose mode: show the command that will be tested
-	if test "$tt_output_mode" = 'normal'
-	then
-		tt_list_test
-	fi
+	case "$tt_output_mode" in
+		list)
+			# List mode: just show the command and return (no execution)
+			tt_list_test
+			tt_reset_test_data
+			return 0
+		;;
+		normal)
+			# Normal mode: show the command that will be tested
+			tt_list_test
+		;;
+	esac
 
 	#tt_debug EVAL "$tt_test_command"
 
