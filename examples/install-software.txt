@@ -20,16 +20,7 @@ txt2tags*
 $ ./txt2tags -V                         # test execution
 txt2tags version 2.6 <http://txt2tags.org>
 $ test -d ~/bin || mkdir ~/bin          # create folder if needed
-$ ~/bin/txt2tags --help | head          # final test
-
-Usage: txt2tags [OPTIONS] [infile.t2t ...]
-
-      --targets       print a list of all the available targets and exit
-  -t, --target=TYPE   set target document type. currently supported:
-                      adoc, art, creole, dbk, doku, gwiki, html, lout, man,
-                      mgp, moin, pm6, pmw, sgml, tex, txt, wiki, xhtml
-  -i, --infile=FILE   set FILE as the input file name ('-' for STDIN)
-  -o, --outfile=FILE  set FILE as the output file name ('-' for STDOUT)
-      --encoding=ENC  set target file encoding (utf-8, iso-8859-1, etc)
 $ cp txt2tags ~/bin/                    # install to user folder
+$ ~/bin/txt2tags -V                     # final test
+txt2tags version 2.6 <http://txt2tags.org>
 $
