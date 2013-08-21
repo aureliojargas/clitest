@@ -2,7 +2,7 @@
 
 > This file is an example of a technical “how to” document
 > that can also be automatically tested:
-> `cltest -v --prefix tab install-software.md`
+> `cltest --prefix tab install-software.md`
 
 
 ## 1. Prepare
