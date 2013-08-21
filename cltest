@@ -124,7 +124,7 @@ do
 		-t|--test       ) shift; tt_run_range="$1"; shift ;;
 		-s|--skip       ) shift; tt_skip_range="$1"; shift ;;
 		--color|--colour) shift; tt_color_mode="$1"; shift ;;
-  		--debug         ) shift; tt_debug=1 ;;
+		--debug         ) shift; tt_debug=1 ;;
 		--pre-flight    ) shift; tt_pre_command="$1"; shift ;;
 		--post-flight   ) shift; tt_post_command="$1"; shift ;;
 		--diff-options  ) shift; tt_diff_options="$1"; shift ;;
