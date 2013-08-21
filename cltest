@@ -208,8 +208,8 @@ tt_list_test ()  # $1=ok|fail|verbose
 			fi
 		;;
 		verbose)
-			# Cyan line, no stamp (--verbose)
-			tt_message "${tt_color_cyan}#${tt_test_number}${tt_tab}${tt_test_command}${tt_color_off}"
+			# No color, no stamp (--verbose)
+			tt_message "#${tt_test_number}${tt_tab}${tt_test_command}"
 		;;
 		*)
 			# Normal line, no color, no stamp (--list)
