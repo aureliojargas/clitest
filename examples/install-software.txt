@@ -3,8 +3,8 @@ $ url="http://txt2tags.googlecode.com/files/txt2tags-2.6.tgz"
 $ curl -O -s -S "$url"                  # download
 $ du -h txt2tags-2.6.tgz                # verify size
 532K	txt2tags-2.6.tgz
-$ tar tzf txt2tags-2.6.tgz | wc -l      # verify number of files
-     545
+$ tar tzf txt2tags-2.6.tgz | sed -n '$='  # verify number of files
+545
 $ tar xzf txt2tags-2.6.tgz              # extract
 $ cd txt2tags-2.6
 $ ls -1F                                # list contents
