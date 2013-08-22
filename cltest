@@ -55,8 +55,8 @@ Options:
   -V, --version               Show program version and exit
 
 Customization options:
+  -P, --progress TYPE         Set progress indicator: test, number, dot, none
       --color WHEN            Set when to use colors: auto, always, never
-      --progress TYPE         Set progress indicator: test, number, dot, none
       --diff-options OPTIONS  Set diff command options (default: '$tt_diff_options')
       --inline-prefix PREFIX  Set inline output prefix (default: '$tt_inline_prefix')
       --prefix PREFIX         Set command line prefix (default: '$tt_prefix')
@@ -127,8 +127,8 @@ do
 		--pre-flight    ) shift; tt_pre_command="$1"; shift ;;
 		--post-flight   ) shift; tt_post_command="$1"; shift ;;
 		--debug         ) shift; tt_debug=1 ;;
+		-P|--progress   ) shift; tt_progress="$1"; tt_output_mode='normal'; shift ;;
 		--color|--colour) shift; tt_color_mode="$1"; shift ;;
-		--progress      ) shift; tt_progress="$1"; tt_output_mode='normal'; shift ;;
 		--diff-options  ) shift; tt_diff_options="$1"; shift ;;
 		--inline-prefix ) shift; tt_inline_prefix="$1"; shift ;;
 		--prefix        ) shift; tt_prefix="$1"; shift ;;

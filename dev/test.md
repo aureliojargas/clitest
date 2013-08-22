@@ -141,8 +141,8 @@ Options:
   -V, --version               Show program version and exit
 
 Customization options:
+  -P, --progress TYPE         Set progress indicator: test, number, dot, none
       --color WHEN            Set when to use colors: auto, always, never
-      --progress TYPE         Set progress indicator: test, number, dot, none
       --diff-options OPTIONS  Set diff command options (default: '-u')
       --inline-prefix PREFIX  Set inline output prefix (default: '#→ ')
       --prefix PREFIX         Set command line prefix (default: '')
@@ -399,6 +399,17 @@ No progress:
 $ ./cltest --progress none dev/test/ok-1.sh
 OK: 1 of 1 test passed
 $ ./cltest --progress no dev/test/ok-1.sh
+OK: 1 of 1 test passed
+$
+```
+
+Short option `-P`:
+
+```
+$ ./cltest -P dot dev/test/ok-1.sh
+.
+OK: 1 of 1 test passed
+$ ./cltest -P no dev/test/ok-1.sh
 OK: 1 of 1 test passed
 $
 ```
