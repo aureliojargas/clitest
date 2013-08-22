@@ -56,6 +56,21 @@ $
 
 ## I/O, file reading  (message and exit code)
 
+Missing input file
+
+```
+$ ./cltest; echo $?
+cltest: Error: no test file informed (try --help)
+2
+$ ./cltest --
+cltest: Error: no test file informed (try --help)
+$ ./cltest --list
+cltest: Error: no test file informed (try --help)
+$
+```
+
+File not found
+
 ```
 $ ./cltest XXnotfoundXX.sh; echo $?
 cltest: Error: cannot read input file: XXnotfoundXX.sh
@@ -294,8 +309,8 @@ $
 First, some invalid values:
 
 ```
-$ ./cltest --progress dev/test/ok-1.sh | head -1
-Usage: cltest [options] <file ...>
+$ ./cltest --progress dev/test/ok-1.sh
+cltest: Error: no test file informed (try --help)
 $ cltest --progress '' dev/test/ok-1.sh
 cltest: Error: invalid value '' for --progress. Use: test, number, dot or none.
 $ ./cltest --progress foo dev/test/ok-1.sh
