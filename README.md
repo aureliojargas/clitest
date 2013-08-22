@@ -380,8 +380,8 @@ Developers: Learn mode about portability in POSIX shells:
 
 ## KISS
 
-* A shell script to test shell commands.
-* No other language or environment involved.
+A shell script to test shell commands.  
+No other language or environment involved.
 
 
 ## Meta
