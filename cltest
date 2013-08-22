@@ -35,6 +35,7 @@ tt_prompt='$ '
 tt_inline_prefix='#→ '    # Problem with Unicode? Use '#=> ' or '### '
 tt_diff_options='-u'
 tt_color_mode='auto'      # auto, always, never
+tt_progress='test'        # test, number, dot, none
 # End of customization
 
 # --help message, keep it simple, short and informative
@@ -49,12 +50,12 @@ Options:
   -s, --skip RANGE            Skip specific tests, by number (1,2,4-7)
       --pre-flight COMMAND    Execute command before running the first test
       --post-flight COMMAND   Execute command after running the last test
-      --dots                  Short output, show a dot for each test
   -q, --quiet                 Quiet operation, no output shown
   -V, --version               Show program version and exit
 
 Customization options:
       --color WHEN            Set when to use colors: auto, always, never
+      --progress TYPE         Set progress indicator: test, number, dot, none
       --diff-options OPTIONS  Set diff command options (default: '$tt_diff_options')
       --inline-prefix PREFIX  Set inline output prefix (default: '$tt_inline_prefix')
       --prefix PREFIX         Set command line prefix (default: '$tt_prefix')
@@ -73,7 +74,7 @@ tt_stop_on_first_fail=0
 tt_separator_line_shown=0
 
 # The output mode values are mutually exclusive
-tt_output_mode='normal'    # normal, quiet, list, list-run, dots
+tt_output_mode='normal'    # normal, quiet, list, list-run
 
 # Globals (all variables are globals, for better portability)
 tt_nr_files=0
@@ -116,21 +117,21 @@ tt_nl='
 while test "${1#-}" != "$1"
 do
 	case "$1" in
-		-q|--quiet      ) shift; tt_output_mode='quiet' ;;
+		-1|--first      ) shift; tt_stop_on_first_fail=1 ;;
 		-l|--list       ) shift; tt_output_mode='list' ;;
 		-L|--list-run   ) shift; tt_output_mode='list-run' ;;
-		-1|--first      ) shift; tt_stop_on_first_fail=1 ;;
+		-q|--quiet      ) shift; tt_output_mode='quiet' ;;
 		-t|--test       ) shift; tt_run_range="$1"; shift ;;
 		-s|--skip       ) shift; tt_skip_range="$1"; shift ;;
-		--color|--colour) shift; tt_color_mode="$1"; shift ;;
-		--debug         ) shift; tt_debug=1 ;;
-		--dots          ) shift; tt_output_mode='dots' ;;
 		--pre-flight    ) shift; tt_pre_command="$1"; shift ;;
 		--post-flight   ) shift; tt_post_command="$1"; shift ;;
+		--debug         ) shift; tt_debug=1 ;;
+		--color|--colour) shift; tt_color_mode="$1"; shift ;;
+		--progress      ) shift; tt_progress="$1"; tt_output_mode='normal'; shift ;;
 		--diff-options  ) shift; tt_diff_options="$1"; shift ;;
 		--inline-prefix ) shift; tt_inline_prefix="$1"; shift ;;
-		--prompt        ) shift; tt_prompt="$1"; shift ;;
 		--prefix        ) shift; tt_prefix="$1"; shift ;;
+		--prompt        ) shift; tt_prompt="$1"; shift ;;
 		-V|--version    ) printf '%s\n' "$tt_my_name $tt_my_version"; exit 0 ;;
 		-h|--help       ) printf '%s\n' "$tt_my_help"; exit 0 ;;
 		--) shift; break ;;
@@ -326,12 +327,21 @@ tt_run_test ()
 
 	case "$tt_output_mode" in
 		normal)
-			# Normal mode: show the command that will be tested
-			tt_list_test normal
-		;;
-		dots)
-			# Dot mode: show a dot for each command
-			tt_message_part '.'
+			# Normal mode: show progress indicator
+			case "$tt_progress" in
+				test)
+					tt_list_test normal
+				;;
+				number)
+					tt_message_part "$tt_test_number "
+				;;
+				none)
+					:
+				;;
+				*)
+					tt_message_part "$tt_progress"
+				;;
+			esac
 		;;
 		list)
 			# List mode: just show the command and return (no execution)
@@ -639,6 +649,30 @@ case "$tt_prefix" in
 	;;
 esac
 
+# Validate and normalize progress value
+if test "$tt_output_mode" = 'normal'
+then
+	case "$tt_progress" in
+		test)
+			:
+		;;
+		number | n | [0-9])
+			tt_progress='number'
+		;;
+		dot | .)
+			tt_progress='.'
+		;;
+		none | no)
+			tt_progress='none'
+		;;
+		?)  # Single char, use it as the progress
+			:
+		;;
+		*)
+		tt_error "invalid value '$tt_progress' for --progress. Use: test, number, dot or none."
+	esac
+fi
+
 # Will we use colors in the output?
 case "$tt_color_mode" in
 	always | yes | y)
@@ -726,11 +760,16 @@ do
 	then
 		case "$tt_output_mode" in
 			normal)
-				tt_message "Testing file $tt_test_file"
-			;;
-			dots)
-				test $tt_missing_nl -eq 1 && echo
-				tt_message_part "Testing file $tt_test_file "
+				# Normal mode, show message with filename
+				case "$tt_progress" in
+					test | none)
+						tt_message "Testing file $tt_test_file"
+					;;
+					*)
+						test $tt_missing_nl -eq 1 && echo
+						tt_message_part "Testing file $tt_test_file "
+					;;
+				esac
 			;;
 			list | list-run)
 				# List mode, show ------ and the filename
