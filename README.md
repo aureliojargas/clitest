@@ -263,6 +263,35 @@ When automating the tests execution, use `--quiet` to show no output and just ch
     fi
 
 
+## Nerdiness
+
+* Use any file format for the tests, it doesn't matter. The command lines just need to be grepable and have a fixed prefix (or none). Even Windows text files (CR+LF) will work fine.
+
+* The cmdline power is available in your test files: use variables, pipes, redirection, create files, folders, move around…
+
+* All the commands are tested in the same shell. Defined variables, aliases and functions will persist between tests.
+
+* Both STDIN and STDOUT are catch, you can also test error messages.
+
+* To test the exit code, just add a `;echo $?` after the command.
+
+* Use an empty `$` prompt to close the last command output.
+
+* In the output, every single char (blank or not) counts. Any difference will cause a test to fail. To ignore the difference in blanks, use `--diff-options '-u -w'`.
+
+* Unlike doctest's `<BLANKLINE>`, in cltest blank lines in the command output aren't a problem. Just insert them normally.
+
+* To test outputs with no final `\n`, such as `printf foo`, use `#→ --regex ^foo$`.
+
+* In multifile mode, the current folder (`$PWD`) is reset when starting to test a new file. This avoids that a `cd` command in a previous file will affect the next.
+
+* Multiline prompts (`$PS2`) are not yet supported.
+
+* Ellipsis (as in doctest) are not supported. Use `#→ --regex` instead.
+
+* Simple examples in [examples/](https://github.com/aureliojargas/cltest/blob/master/examples/). Hardcore examples in [dev/test.md](https://github.com/aureliojargas/cltest/blob/master/dev/test.md) and [dev/test/](https://github.com/aureliojargas/cltest/blob/master/dev/test/), the cltest own test-suite.
+
+
 ## Portability
 
 This script was carefully coded to be portable between [POSIX](http://en.wikipedia.org/wiki/POSIX) shells.
