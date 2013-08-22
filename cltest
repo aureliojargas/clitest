@@ -374,6 +374,11 @@ tt_run_test ()
 			tt_test_diff="Expected $tt_test_inline lines, got $tt_test_output."
 		;;
 		file)
+			# If path is relative, make it relative to the test file path, not $PWD
+			if test $tt_test_inline = ${tt_test_inline#/}
+			then
+				tt_test_inline="$(dirname "$tt_test_file")/$tt_test_inline"
+			fi
 			# Abort when ok file not found/readable
 			if test ! -f "$tt_test_inline" || test ! -r "$tt_test_inline"
 			then

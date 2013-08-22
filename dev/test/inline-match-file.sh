@@ -3,7 +3,7 @@
 
 # Just inform the file path (no quotes, no escapes)
 
-$ printf '$ echo ok\nok\n'      #→ --file dev/test/ok-1.sh
+$ printf '$ echo ok\nok\n'      #→ --file ok-1.sh
 
 # Absolute paths are also supported
 

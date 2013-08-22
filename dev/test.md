@@ -1008,7 +1008,7 @@ $ ./cltest dev/test/inline-match-file-error-1.sh
 cltest: Error: empty --file at line 1 of dev/test/inline-match-file-error-1.sh
 $ ./cltest dev/test/inline-match-file-error-2.sh
 #1	echo "error: file not found"  
-cltest: Error: cannot read inline output file 'XXnotfoundXX', from line 1 of dev/test/inline-match-file-error-2.sh
+cltest: Error: cannot read inline output file 'dev/test/XXnotfoundXX', from line 1 of dev/test/inline-match-file-error-2.sh
 $ ./cltest dev/test/inline-match-file-error-3.sh
 #1	echo "error: directory"  
 cltest: Error: cannot read inline output file '/etc/', from line 1 of dev/test/inline-match-file-error-3.sh
