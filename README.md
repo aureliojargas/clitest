@@ -163,7 +163,7 @@ $
 For Markdown files with 4-spaces indented code blocks, use `--prefix 4`.
 
 Of course, this [README.md][8] file you are now reading is also
-testable. Since it uses non-indented fenced code blocks (` ``` `),
+testable. Since it uses non-indented fenced code blocks (\`\`\`),
 no prefix option is needed: `cltest README.md`.
 
 
