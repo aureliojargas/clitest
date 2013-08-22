@@ -284,8 +284,10 @@ Developers: Learn mode about portability in POSIX shells:
 * [Official POSIX specification: Shell & Utilities](http://pubs.opengroup.org/onlinepubs/9699919799/utilities/contents.html)
 
 
-## Author
+## Meta
 
-[Aurelio Jargas](http://aurelio.net/about.html)
-
+* Author:   [Aurelio Jargas](http://aurelio.net/about.html)
+* Created:  2013-07-24
+* Language: Shell Script
+* License:  [MIT](https://github.com/aureliojargas/cltest/blob/master/LICENSE.txt)
 
