@@ -133,7 +133,10 @@ do
 		--prefix        ) shift; tt_prefix="$1"; shift ;;
 		--prompt        ) shift; tt_prompt="$1"; shift ;;
 		-V|--version    ) printf '%s\n' "$tt_my_name $tt_my_version"; exit 0 ;;
-		-h|--help       ) printf '%s\n' "$tt_my_help"; exit 0 ;;
+		-h|--help       )
+			printf '%s\n' "$tt_my_help"
+			exit 0
+		;;
 		--) shift; break ;;
 		*) break ;;
 	esac
