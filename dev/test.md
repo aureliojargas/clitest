@@ -112,14 +112,10 @@ $
 
 ## Option --help
 
+Test the full help text contents and the exit code (zero).
+
 ```
-$ ./cltest | sed -n '1p; $p'
-Usage: cltest [options] <file ...>
-      --prompt STRING         Set prompt string (default: '$ ')
-$ ./cltest -h | sed -n '1p; $p'
-Usage: cltest [options] <file ...>
-      --prompt STRING         Set prompt string (default: '$ ')
-$ ./cltest --help
+$ ./cltest --help; echo $?
 Usage: cltest [options] <file ...>
 
 Options:
@@ -140,8 +136,19 @@ Customization options:
       --inline-prefix PREFIX  Set inline output prefix (default: '#→ ')
       --prefix PREFIX         Set command line prefix (default: '')
       --prompt STRING         Set prompt string (default: '$ ')
+0
 $
 ```
+
+The short option `-h` is working? Testing just the first and last lines for brevity.
+
+```
+$ ./cltest -h | sed -n '1p; $p'
+Usage: cltest [options] <file ...>
+      --prompt STRING         Set prompt string (default: '$ ')
+$
+```
+
 
 ## Option --quiet and exit code
 
