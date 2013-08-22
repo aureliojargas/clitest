@@ -4,8 +4,8 @@ cltest is a [portable][1] POSIX shell script that performs automatic
 testing in Unix command lines.
 
 It's the same concept as in Python's [doctest][2] module: you document
-both the commands and their expected output, **using the familiar
-interactive prompt format**, and a specialized tool tests them.
+both the commands and their expected output, using the familiar
+interactive prompt format, and a specialized tool tests them.
 
 In fact, the doctest [official][3] description can also be used for
 cltest:
