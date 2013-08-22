@@ -28,6 +28,7 @@
 
 tt_my_name="$(basename "$0")"
 tt_my_version='pre-1.0'
+tt_my_version_url="https://github.com/aureliojargas/cltest/tree/$tt_my_version"
 
 # Customization (if needed, edit here or use the command line options)
 tt_prefix=''
@@ -132,9 +133,12 @@ do
 		--inline-prefix ) shift; tt_inline_prefix="$1"; shift ;;
 		--prefix        ) shift; tt_prefix="$1"; shift ;;
 		--prompt        ) shift; tt_prompt="$1"; shift ;;
-		-V|--version    ) printf '%s\n' "$tt_my_name $tt_my_version"; exit 0 ;;
 		-h|--help       )
 			printf '%s\n' "$tt_my_help"
+			exit 0
+		;;
+		-V|--version    )
+			printf '%s %s\n%s\n' $tt_my_name $tt_my_version $tt_my_version_url
 			exit 0
 		;;
 		--) shift; break ;;

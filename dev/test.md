@@ -101,12 +101,23 @@ $
 
 ## Option --version
 
+The exit code must always be zero.
+
 ```
-$ v="$(grep ^tt_my_version= ./cltest | cut -d = -f 2 | tr -d \')"
-$ ./cltest -V | grep "^cltest ${v}$" > /dev/null; echo $?
+$ ./cltest --version > /dev/null; echo $?
 0
-$ ./cltest --version | grep "^cltest ${v}$" > /dev/null; echo $?
-0
+$
+```
+
+Test the output text and the short option `-V`.
+
+```
+$ ./cltest --version
+cltest pre-1.0
+https://github.com/aureliojargas/cltest/tree/pre-1.0
+$ ./cltest -V
+cltest pre-1.0
+https://github.com/aureliojargas/cltest/tree/pre-1.0
 $
 ```
 
