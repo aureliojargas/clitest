@@ -1,15 +1,15 @@
 # cltest – Command Line Tester
 
-cltest is a [portable](#portability) POSIX shell script that performs
+cltest is a [portable][1] POSIX shell script that performs
 automatic testing in Unix command lines.
 
 It's the same concept as in Python's
-[doctest](http://en.wikipedia.org/wiki/Doctest) module: you document
+[doctest][2] module: you document
 both the commands and their expected output, **using the familiar
 interactive prompt format**, and a specialized tool tests them.
 
 In fact, the doctest
-[official](http://docs.python.org/3/library/doctest.html) description
+[official][3] description
 can also be used for cltest:
 
 * The **doctest** module searches for pieces of text that look like
@@ -23,7 +23,7 @@ can also be used for cltest:
 
 ## Download
 
-The full program is just [a single shell script file](https://raw.github.com/aureliojargas/cltest/master/cltest).
+The full program is just [a single shell script file][4].
 Save it and make it executable: `chmod +x cltest`
 
 
@@ -31,7 +31,7 @@ Save it and make it executable: `chmod +x cltest`
 
 Save the commands and their expected output in a text file:
 
-♦ [examples/intro.txt](https://github.com/aureliojargas/cltest/blob/master/examples/intro.txt)
+♦ [examples/intro.txt][5]
 
 ```
 $ echo "Hello World"
@@ -63,7 +63,7 @@ There's no syntax to learn.
 The test files are identical to the good old command line interface
 (CLI) you're so familiar:
 
-♦ [examples/cut.txt](https://github.com/aureliojargas/cltest/blob/master/examples/cut.txt)
+♦ [examples/cut.txt][6]
 
 ```
 $ echo "one:two:three:four:five:six" | cut -d : -f 1
@@ -109,7 +109,7 @@ cltest can also extract and run command lines from technical documents.
 Given the following Markdown sample document, which uses tabs to mark
 code blocks:
 
-♦ [examples/cut.md](https://github.com/aureliojargas/cltest/blob/master/examples/cut.md)
+♦ [examples/cut.md][7]
 
 ```
 The numeric ranges of the Unix command "cut"
@@ -164,7 +164,7 @@ $
 For Markdown files with 4-spaces indented code blocks, use `--prefix 4`.
 
 Of course, this
-[README.md](https://github.com/aureliojargas/cltest/blob/master/README.md)
+[README.md][8]
 file you are now reading is also testable. Since it uses non-indented
 fenced code blocks (` ``` `), no prefix option is needed:
 `cltest README.md`.
@@ -233,7 +233,7 @@ $ pwd                         #→ --eval echo $PWD
 
 * Using `#→ --regex` the test will pass if the command output is
   matched by a [Perl regular
-  expression](http://perldoc.perl.org/perlre.html). A multiline output
+  expression][9]. A multiline output
   is matched as a single string, with inner `\n`'s. Use the `(?ims)`
   modifiers when needed.
 
@@ -352,13 +352,13 @@ Example:
 * Ellipsis (as in doctest) are not supported. Use `#→ --regex`
   instead.
 
-* Simple examples in [examples/](https://github.com/aureliojargas/cltest/blob/master/examples/). Hardcore examples in [dev/test.md](https://github.com/aureliojargas/cltest/blob/master/dev/test.md) and [dev/test/](https://github.com/aureliojargas/cltest/blob/master/dev/test/), the cltest own test-suite.
+* Simple examples in [examples/][10]. Hardcore examples in [dev/test.md][11] and [dev/test/][12], the cltest own test-suite.
 
 
 ## Portability
 
 This script was carefully coded to be portable between
-[POSIX](http://en.wikipedia.org/wiki/POSIX) shells.
+[POSIX][13] shells.
 
 It was tested in:
 
@@ -367,15 +367,15 @@ It was tested in:
 * ksh 93u 2011-02-08
 
 Portability issues are considered serious bugs, please
-[report them](https://github.com/aureliojargas/cltest/issues)!
+[report them][14]!
 
 Developers: Learn mode about portability in POSIX shells:
 
-* [How to make bash scripts work in dash](http://mywiki.wooledge.org/Bashism)
-* [Ubuntu — Dash as /bin/sh](https://wiki.ubuntu.com/DashAsBinSh)
-* [Rich’s sh (POSIX shell) tricks](http://www.etalabs.net/sh_tricks.html)
-* [lintsh](http://code.dogmap.org/lintsh/) 
-* [Official POSIX specification: Shell & Utilities](http://pubs.opengroup.org/onlinepubs/9699919799/utilities/contents.html)
+* [How to make bash scripts work in dash][15]
+* [Ubuntu — Dash as /bin/sh][16]
+* [Rich’s sh (POSIX shell) tricks][17]
+* [lintsh][18] 
+* [Official POSIX specification: Shell & Utilities][19]
 
 
 ## KISS
@@ -386,8 +386,31 @@ No other language or environment involved.
 
 ## Meta
 
-* Author:   [Aurelio Jargas](http://aurelio.net/about.html)
+* Author:   [Aurelio Jargas][20]
 * Created:  2013-07-24
 * Language: Shell Script
-* License:  [MIT](https://github.com/aureliojargas/cltest/blob/master/LICENSE.txt)
+* License:  [MIT][21]
+
+
+[1]: #portability
+[2]: http://en.wikipedia.org/wiki/Doctest
+[3]: http://docs.python.org/3/library/doctest.html
+[4]: https://raw.github.com/aureliojargas/cltest/master/cltest
+[5]: https://github.com/aureliojargas/cltest/blob/master/examples/intro.txt
+[6]: https://github.com/aureliojargas/cltest/blob/master/examples/cut.txt
+[7]: https://github.com/aureliojargas/cltest/blob/master/examples/cut.md
+[8]: https://github.com/aureliojargas/cltest/blob/master/README.md
+[9]: http://perldoc.perl.org/perlre.html
+[10]: https://github.com/aureliojargas/cltest/blob/master/examples/
+[11]: https://github.com/aureliojargas/cltest/blob/master/dev/test.md
+[12]: https://github.com/aureliojargas/cltest/blob/master/dev/test/
+[13]: http://en.wikipedia.org/wiki/POSIX
+[14]: https://github.com/aureliojargas/cltest/issues
+[15]: http://mywiki.wooledge.org/Bashism
+[16]: https://wiki.ubuntu.com/DashAsBinSh
+[17]: http://www.etalabs.net/sh_tricks.html
+[18]: http://code.dogmap.org/lintsh/
+[19]: http://pubs.opengroup.org/onlinepubs/9699919799/utilities/contents.html
+[20]: http://aurelio.net/about.html
+[21]: https://github.com/aureliojargas/cltest/blob/master/LICENSE.txt
 
