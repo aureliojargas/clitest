@@ -27,7 +27,7 @@
 #   avoid clashing with test's variables, functions, aliases and commands.
 
 tt_my_name="$(basename "$0")"
-tt_my_version='pre-1.0'
+tt_my_version='HEAD'
 tt_my_version_url="https://github.com/aureliojargas/cltest/tree/$tt_my_version"
 
 # Customization (if needed, edit here or use the command line options)

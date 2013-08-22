@@ -113,11 +113,11 @@ Test the output text and the short option `-V`.
 
 ```
 $ ./cltest --version
-cltest pre-1.0
-https://github.com/aureliojargas/cltest/tree/pre-1.0
+cltest HEAD
+https://github.com/aureliojargas/cltest/tree/HEAD
 $ ./cltest -V
-cltest pre-1.0
-https://github.com/aureliojargas/cltest/tree/pre-1.0
+cltest HEAD
+https://github.com/aureliojargas/cltest/tree/HEAD
 $
 ```
 
