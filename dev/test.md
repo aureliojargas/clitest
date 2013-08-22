@@ -184,22 +184,22 @@ $ ./cltest --color foo dev/test/ok-1.sh
 cltest: Error: invalid value 'foo' for --color. Use: auto, always or never.
 $ ./cltest --color always dev/test/ok-1.sh
 #1	echo ok
-[32mOK:[m 1 of 1 tests passed
+[32mOK:[m 1 of 1 test passed
 $ ./cltest --color yes dev/test/ok-1.sh
 #1	echo ok
-[32mOK:[m 1 of 1 tests passed
+[32mOK:[m 1 of 1 test passed
 $ ./cltest --color never dev/test/ok-1.sh
 #1	echo ok
-OK: 1 of 1 tests passed
+OK: 1 of 1 test passed
 $ ./cltest --color no dev/test/ok-1.sh
 #1	echo ok
-OK: 1 of 1 tests passed
+OK: 1 of 1 test passed
 $
 ## Note: Inside this file, the output is not a terminal,
 ##       so the default is no colored output.
 $ ./cltest dev/test/ok-1.sh
 #1	echo ok
-OK: 1 of 1 tests passed
+OK: 1 of 1 test passed
 $
 ## Note: The real default '--color auto' cannot be tested here.
 ##       Test it by hand at the command line.
@@ -294,7 +294,7 @@ $
 ```
 $ ./cltest --dots dev/test/ok-1.sh
 .
-OK: 1 of 1 tests passed
+OK: 1 of 1 test passed
 $ ./cltest --dots dev/test/ok-2.sh
 ..
 OK: 2 of 2 tests passed
@@ -310,7 +310,7 @@ $ ./cltest --dots dev/test/fail-1.sh
 +ok
 --------------------------------------------------------------------------------
 
-FAIL: 1 of 1 tests failed
+FAIL: 1 of 1 test failed
 $ ./cltest --dots dev/test/ok-1.sh dev/test/ok-2.sh dev/test/ok-10.sh
 Testing file dev/test/ok-1.sh .
 Testing file dev/test/ok-2.sh ..
@@ -415,7 +415,7 @@ $ ./cltest --quiet --dots --list --list-run dev/test/ok-1.sh
 #1	OK	echo ok
 $ ./cltest --quiet --list --list-run --dots dev/test/ok-1.sh
 .
-OK: 1 of 1 tests passed
+OK: 1 of 1 test passed
 $
 ```
 
@@ -493,7 +493,7 @@ $
 ```
 $ ./cltest dev/test/ok-1.sh
 #1	echo ok
-OK: 1 of 1 tests passed
+OK: 1 of 1 test passed
 $ ./cltest dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
@@ -732,7 +732,7 @@ $ ./cltest dev/test/fail-1.sh
 +ok
 --------------------------------------------------------------------------------
 
-FAIL: 1 of 1 tests failed
+FAIL: 1 of 1 test failed
 $ ./cltest dev/test/fail-2.sh
 #1	echo ok
 --------------------------------------------------------------------------------
@@ -1032,7 +1032,7 @@ $ ./cltest dev/test/inline-match-eval-error-2.sh 2>&1 | sed 's/line [0-9][0-9]*/
 +error: syntax error
 --------------------------------------------------------------------------------
 
-FAIL: 1 of 1 tests failed
+FAIL: 1 of 1 test failed
 $
 ```
 
@@ -1651,13 +1651,13 @@ Testing file dev/test/ok-2.sh
 OK: 3 of 3 tests passed
 $ ./cltest dev/test/no-nl-file-1.sh
 #1	printf '%s\n' 'a file with no \n at the last line'
-OK: 1 of 1 tests passed
+OK: 1 of 1 test passed
 $ ./cltest dev/test/no-nl-file-2.sh
 #1	printf '%s\n' 'another file with no \n at the last line'
-OK: 1 of 1 tests passed
+OK: 1 of 1 test passed
 $ ./cltest dev/test/no-nl-file-3.sh
 #1	printf '%s\n' 'oneliner, no \n'  
-OK: 1 of 1 tests passed
+OK: 1 of 1 test passed
 $ ./cltest dev/test/no-nl-command.sh
 #1	printf 'ok\n'
 #2	printf 'fail'
