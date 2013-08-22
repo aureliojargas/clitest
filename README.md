@@ -375,7 +375,7 @@ Developers: Learn mode about portability in POSIX shells:
 * [Official POSIX specification: Shell & Utilities][19]
 
 
-## KISS
+## [KISS][20]
 
 A shell script to test shell commands.  
 No other language or environment involved.
@@ -383,10 +383,10 @@ No other language or environment involved.
 
 ## Meta
 
-* Author:   [Aurelio Jargas][20]
+* Author:   [Aurelio Jargas][21]
 * Created:  2013-07-24
 * Language: Shell Script
-* License:  [MIT][21]
+* License:  [MIT][22]
 
 
 [1]: #portability
@@ -408,6 +408,6 @@ No other language or environment involved.
 [17]: http://www.etalabs.net/sh_tricks.html
 [18]: http://code.dogmap.org/lintsh/
 [19]: http://pubs.opengroup.org/onlinepubs/9699919799/utilities/contents.html
-[20]: http://aurelio.net/about.html
-[21]: https://github.com/aureliojargas/cltest/blob/master/LICENSE.txt
-
+[20]: http://en.wikipedia.org/wiki/KISS_principle
+[21]: http://aurelio.net/about.html
+[22]: https://github.com/aureliojargas/cltest/blob/master/LICENSE.txt
