@@ -213,6 +213,7 @@ Options:
   -V, --version               Show program version and exit
 
 Customization options:
+  -P, --progress TYPE         Set progress indicator: test, number, dot, none
       --color WHEN            Set when to use colors: auto, always, never
       --diff-options OPTIONS  Set diff command options (default: '-u')
       --inline-prefix PREFIX  Set inline output prefix (default: '#→ ')
