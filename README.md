@@ -25,7 +25,7 @@ $ cd "$OLDPWD"
 $
 ```
 
-Use `cltest` to run these commands and check their output:
+Use cltest to run these commands and check their output:
 
 ```
 $ cltest examples/intro.txt
@@ -78,11 +78,12 @@ OK: 6 of 6 tests passed
 $
 ```
 
+
 ## Test Documents
 
 Ever wanted to test the command line instructions you give in the `INSTALL.txt` or `README.md` files for your projects? Now you can!
 
-`cltest` can also extract and run command lines from technical documents.
+cltest can also extract and run command lines from technical documents.
 
 Given the following Markdown sample document, which uses tabs to mark code blocks:
 
@@ -122,7 +123,7 @@ If you omit the second range number, it matches until the last:
 cut is cool, isn't it?
 ```
 
-It's easy to convert it to a readable HTML document with your favorite Markdown program. It's also easy to test this file directly with `cltest`, you just need to inform that the command lines are prefixed by a tab:
+It's easy to convert it to a readable HTML document with your favorite Markdown program. It's also easy to test this file directly with cltest, just inform that the command lines are prefixed by a tab:
 
 ```
 $ cltest --prefix tab examples/cut.md
@@ -136,14 +137,14 @@ OK: 6 of 6 tests passed
 $
 ```
 
-For Markdown files with 4-spaces code blocks, use `--prefix 4`.
+For Markdown files with 4-spaces indented code blocks, use `--prefix 4`.
 
-Of course, this [README.md](https://github.com/aureliojargas/cltest/blob/master/README.md) file you are now reading is also testable. Since it uses fenced code blocks (` ``` `), no prefix option is needed: `cltest README.md`.
+Of course, this [README.md](https://github.com/aureliojargas/cltest/blob/master/README.md) file you are now reading is also testable. Since it uses non-indented fenced code blocks (` ``` `), no prefix option is needed: `cltest README.md`.
 
 
 ## Alternative Syntax: Inline Output
 
-Using the special marker `#→` you can embed the expected command output at the end of the command line.
+Now a nice extension to the original idea. Using the special marker `#→` you can embed the expected command output at the end of the command line.
 
 ```
 $ echo "foo"                      #→ foo
@@ -169,7 +170,7 @@ $ echo "abcdef" | cut -c 1,4      #→ ad
 $ echo "abcdef" | cut -c 1-4      #→ abcd
 ```
 
-> Note: The Unicode character `→` <!-- (U+2192) --> was chosen because it's meaningful and less likely to appear on a real command. If needed, you can change this marker (i.e., to `#->`) at the top of the script or using the `--inline-prefix` option.
+> Note: The Unicode character `→` (U+2192) was chosen because it's meaningful and less likely to appear on a real command. If needed, you can change this marker (i.e., to `#->`) at the top of the script or using the `--inline-prefix` option.
 
 
 ## Advanced Tests
@@ -195,7 +196,7 @@ $ pwd                         #→ --eval echo $PWD
 * Using `#→ --eval` the test will pass if both commands result in the same output. Useful to expand variables which store the full or partial output.
 
 
-## Command Line Options
+## Options
 
 ```
 $ cltest --help
@@ -234,7 +235,7 @@ To rerun a specific problematic test, or to limit the execution to a set of test
 You can run a preparing script or command before the first test with `--pre-flight`, for setting env variables and create auxiliary files. At the end of all tests, run a final cleanup script/command with `--post-flight` to remove temporary files or other transient data. Example:
 
 
-    cltest --pre-flight ./test-init.sh --post-flight "rm *.tmp" tests.txt
+    cltest --pre-flight ./test-init.sh --post-flight 'rm *.tmp' tests.txt
 
 Use the customization options to extract and test command lines from documents or wiki pages. For example, to test all the command line examples listed inside a Markdown file using the 4-spaces syntax for code blocks:
 
