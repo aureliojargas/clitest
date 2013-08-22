@@ -1,6 +1,14 @@
 # cltest – Command Line Tester
 
-cltest is a <!-- [portable](#portability) --> POSIX shell script that performs automatic testing in Unix command lines.
+cltest is a [portable](#portability) POSIX shell script that performs automatic testing in Unix command lines.
+
+It's the same concept as in Python's [doctest](http://en.wikipedia.org/wiki/Doctest) module: you document both the commands and their expected output, **using the familiar interactive prompt format**, and a specialized tool tests them.
+
+In fact, the doctest [official](http://docs.python.org/3/library/doctest.html) description can also be used for cltest:
+
+* The **doctest** module searches for pieces of text that look like interactive **Python sessions**, and then executes those **sessions** to verify that they work exactly as shown.
+
+* The **cltest** command searches for pieces of text that look like interactive **Unix command lines**, and then executes those **command lines** to verify that they work exactly as shown.
 
 
 ## Download
