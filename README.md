@@ -366,7 +366,7 @@ It was tested in:
 Portability issues are considered serious bugs, please
 [report them][14]!
 
-Developers: Learn mode about portability in POSIX shells:
+Developers: Learn more about portability in POSIX shells:
 
 * [How to make bash scripts work in dash][15]
 * [Ubuntu — Dash as /bin/sh][16]
