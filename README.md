@@ -1,16 +1,14 @@
 # cltest – Command Line Tester
 
-cltest is a [portable][1] POSIX shell script that performs
-automatic testing in Unix command lines.
+cltest is a [portable][1] POSIX shell script that performs automatic
+testing in Unix command lines.
 
-It's the same concept as in Python's
-[doctest][2] module: you document
+It's the same concept as in Python's [doctest][2] module: you document
 both the commands and their expected output, **using the familiar
 interactive prompt format**, and a specialized tool tests them.
 
-In fact, the doctest
-[official][3] description
-can also be used for cltest:
+In fact, the doctest [official][3] description can also be used for
+cltest:
 
 * The **doctest** module searches for pieces of text that look like
   interactive **Python sessions**, and then executes those **sessions**
@@ -24,6 +22,7 @@ can also be used for cltest:
 ## Download
 
 The full program is just [a single shell script file][4].
+
 Save it and make it executable: `chmod +x cltest`
 
 
@@ -163,11 +162,9 @@ $
 
 For Markdown files with 4-spaces indented code blocks, use `--prefix 4`.
 
-Of course, this
-[README.md][8]
-file you are now reading is also testable. Since it uses non-indented
-fenced code blocks (` ``` `), no prefix option is needed:
-`cltest README.md`.
+Of course, this [README.md][8] file you are now reading is also
+testable. Since it uses non-indented fenced code blocks (` ``` `),
+no prefix option is needed: `cltest README.md`.
 
 
 ## Alternative Syntax: Inline Output
@@ -232,9 +229,8 @@ $ pwd                         #→ --eval echo $PWD
   one line of the command output.
 
 * Using `#→ --regex` the test will pass if the command output is
-  matched by a [Perl regular
-  expression][9]. A multiline output
-  is matched as a single string, with inner `\n`'s. Use the `(?ims)`
+  matched by a [Perl regular expression][9]. A multiline output is
+  matched as a single string, with inner `\n`'s. Use the `(?ims)`
   modifiers when needed.
 
 * Using `#→ --eval` the test will pass if both commands result in the
@@ -352,13 +348,14 @@ Example:
 * Ellipsis (as in doctest) are not supported. Use `#→ --regex`
   instead.
 
-* Simple examples in [examples/][10]. Hardcore examples in [dev/test.md][11] and [dev/test/][12], the cltest own test-suite.
+* Simple examples in [examples/][10]. Hardcore examples in
+  [dev/test.md][11] and [dev/test/][12], the cltest own test-suite.
 
 
 ## Portability
 
-This script was carefully coded to be portable between
-[POSIX][13] shells.
+This script was carefully coded to be portable between [POSIX][13]
+shells.
 
 It was tested in:
 
