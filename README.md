@@ -1,14 +1,24 @@
 # cltest – Command Line Tester
 
-cltest is a [portable](#portability) POSIX shell script that performs automatic testing in Unix command lines.
+cltest is a [portable](#portability) POSIX shell script that performs
+automatic testing in Unix command lines.
 
-It's the same concept as in Python's [doctest](http://en.wikipedia.org/wiki/Doctest) module: you document both the commands and their expected output, **using the familiar interactive prompt format**, and a specialized tool tests them.
+It's the same concept as in Python's
+[doctest](http://en.wikipedia.org/wiki/Doctest) module: you document
+both the commands and their expected output, **using the familiar
+interactive prompt format**, and a specialized tool tests them.
 
-In fact, the doctest [official](http://docs.python.org/3/library/doctest.html) description can also be used for cltest:
+In fact, the doctest
+[official](http://docs.python.org/3/library/doctest.html) description
+can also be used for cltest:
 
-* The **doctest** module searches for pieces of text that look like interactive **Python sessions**, and then executes those **sessions** to verify that they work exactly as shown.
+* The **doctest** module searches for pieces of text that look like
+  interactive **Python sessions**, and then executes those **sessions**
+  to verify that they work exactly as shown.
 
-* The **cltest** command searches for pieces of text that look like interactive **Unix command lines**, and then executes those **command lines** to verify that they work exactly as shown.
+* The **cltest** command searches for pieces of text that look like
+  interactive **Unix command lines**, and then executes those
+  **command lines** to verify that they work exactly as shown.
 
 
 ## Download
@@ -50,7 +60,8 @@ $
 
 There's no syntax to learn.
 
-The test files are identical to the good old command line interface (CLI) you're so familiar:
+The test files are identical to the good old command line interface
+(CLI) you're so familiar:
 
 ♦ [examples/cut.txt](https://github.com/aureliojargas/cltest/blob/master/examples/cut.txt)
 
@@ -72,7 +83,8 @@ $
 
 That's it.
 
-Just paste your shell session inside a text file and you have a ready-to-use test suite.
+Just paste your shell session inside a text file and you have a
+ready-to-use test suite.
 
 ```
 $ cltest examples/cut.txt
@@ -89,11 +101,13 @@ $
 
 ## Test Documents
 
-Ever wanted to test the command line instructions you give in the `INSTALL.txt` or `README.md` files for your projects? Now you can!
+Ever wanted to test the command line instructions you give in the
+`INSTALL.txt` or `README.md` files for your projects? Now you can!
 
 cltest can also extract and run command lines from technical documents.
 
-Given the following Markdown sample document, which uses tabs to mark code blocks:
+Given the following Markdown sample document, which uses tabs to mark
+code blocks:
 
 ♦ [examples/cut.md](https://github.com/aureliojargas/cltest/blob/master/examples/cut.md)
 
@@ -131,7 +145,9 @@ If you omit the second range number, it matches until the last:
 cut is cool, isn't it?
 ```
 
-It's easy to convert it to a readable HTML document with your favorite Markdown program. It's also easy to test this file directly with cltest, just inform that the command lines are prefixed by a tab:
+It's easy to convert it to a readable HTML document with your favorite
+Markdown program. It's also easy to test this file directly with
+cltest, just inform that the command lines are prefixed by a tab:
 
 ```
 $ cltest --prefix tab examples/cut.md
@@ -147,12 +163,18 @@ $
 
 For Markdown files with 4-spaces indented code blocks, use `--prefix 4`.
 
-Of course, this [README.md](https://github.com/aureliojargas/cltest/blob/master/README.md) file you are now reading is also testable. Since it uses non-indented fenced code blocks (` ``` `), no prefix option is needed: `cltest README.md`.
+Of course, this
+[README.md](https://github.com/aureliojargas/cltest/blob/master/README.md)
+file you are now reading is also testable. Since it uses non-indented
+fenced code blocks (` ``` `), no prefix option is needed:
+`cltest README.md`.
 
 
 ## Alternative Syntax: Inline Output
 
-Now a nice extension to the original idea. Using the special marker `#→` you can embed the expected command output at the end of the command line.
+Now a nice extension to the original idea. Using the special marker
+`#→` you can embed the expected command output at the end of the
+command line.
 
 ```
 $ echo "foo"                      #→ foo
@@ -169,7 +191,8 @@ $ echo $((10 + 2))
 $
 ```
 
-Inline outputs are very readable when testing series of commands that result in short texts.
+Inline outputs are very readable when testing series of commands that
+result in short texts.
 
 ```
 $ echo "abcdef" | cut -c 1        #→ a
@@ -178,12 +201,16 @@ $ echo "abcdef" | cut -c 1,4      #→ ad
 $ echo "abcdef" | cut -c 1-4      #→ abcd
 ```
 
-> Note: The Unicode character `→` (U+2192) was chosen because it's meaningful and less likely to appear on a real command. If needed, you can change this marker (i.e., to `#->`) at the top of the script or using the `--inline-prefix` option.
+> Note: The Unicode character `→` (U+2192) was chosen because it's
+> meaningful and less likely to appear on a real command. If needed,
+> you can change this marker (i.e., to `#->`) at the top of the script
+> or using the `--inline-prefix` option.
 
 
 ## Advanced Tests
 
-When using the `#→` marker, you can take advantage of special options to change the default output matching method.
+When using the `#→` marker, you can take advantage of special options
+to change the default output matching method.
 
 ```
 $ head /etc/passwd            #→ --lines 10
@@ -193,15 +220,26 @@ $ echo $((2 + 10))            #→ --regex ^\d+$
 $ pwd                         #→ --eval echo $PWD
 ```
 
-* Using `#→ --lines` the test will pass if the command output has exactly `N` lines. Handy when the output text is variable (unpredictable), but the number of resulting lines is constant.
+* Using `#→ --lines` the test will pass if the command output has
+  exactly `N` lines. Handy when the output text is variable
+  (unpredictable), but the number of resulting lines is constant.
 
-* Using `#→ --file` the test will pass if the command output matches the contents of an external file. Useful to organize long/complex outputs into files.
+* Using `#→ --file` the test will pass if the command output matches
+  the contents of an external file. Useful to organize long/complex
+  outputs into files.
 
-* Using `#→ --egrep` the test will pass if `egrep` matches at least one line of the command output.
+* Using `#→ --egrep` the test will pass if `egrep` matches at least
+  one line of the command output.
 
-* Using `#→ --regex` the test will pass if the command output is matched by a [Perl regular expression](http://perldoc.perl.org/perlre.html). A multiline output is matched as a single string, with inner `\n`'s. Use the `(?ims)` modifiers when needed.
+* Using `#→ --regex` the test will pass if the command output is
+  matched by a [Perl regular
+  expression](http://perldoc.perl.org/perlre.html). A multiline output
+  is matched as a single string, with inner `\n`'s. Use the `(?ims)`
+  modifiers when needed.
 
-* Using `#→ --eval` the test will pass if both commands result in the same output. Useful to expand variables which store the full or partial output.
+* Using `#→ --eval` the test will pass if both commands result in the
+  same output. Useful to expand variables which store the full or
+  partial output.
 
 
 ## Options
@@ -231,21 +269,33 @@ Customization options:
 $
 ```
 
-When running sequential tests, where the next test depends on the correct result of the previous test, use the `--first` option to abort the execution if any test fails.
+When running sequential tests, where the next test depends on the
+correct result of the previous test, use the `--first` option to abort
+the execution if any test fails.
 
-To rerun a specific problematic test, or to limit the execution to a set of tests, use `--test`. To ignore one or more tests, use `--skip`. If needed, you can combine both options to inform a very specific test range. Examples:
+To rerun a specific problematic test, or to limit the execution to a
+set of tests, use `--test`. To ignore one or more tests, use `--skip`.
+If needed, you can combine both options to inform a very specific test
+range. Examples:
 
     cltest --test 1-10    tests.txt   # Run the first 10 tests
     cltest --test 1,2,6-8 tests.txt   # Run tests #1, #2, #6, #7 and #8
     cltest --skip 11,15   tests.txt   # Run all tests, except #11 and #15
     cltest -t 1-10 -s 5   tests.txt   # Run first 10 tests, but skip #5
 
-You can run a preparing script or command before the first test with `--pre-flight`, for setting env variables and create auxiliary files. At the end of all tests, run a final cleanup script/command with `--post-flight` to remove temporary files or other transient data. Example:
+You can run a preparing script or command before the first test with
+`--pre-flight`, for setting env variables and create auxiliary files.
+At the end of all tests, run a final cleanup script/command with
+`--post-flight` to remove temporary files or other transient data.
+Example:
 
 
     cltest --pre-flight ./test-init.sh --post-flight 'rm *.tmp' tests.txt
 
-Use the customization options to extract and test command lines from documents or wiki pages. For example, to test all the command line examples listed inside a Markdown file using the 4-spaces syntax for code blocks:
+Use the customization options to extract and test command lines from
+documents or wiki pages. For example, to test all the command line
+examples listed inside a Markdown file using the 4-spaces syntax for
+code blocks:
 
     cltest --prefix 4 README.md
 
@@ -253,7 +303,9 @@ Or maybe you use a different prompt (`$PS1`) in your documentation?
 
     cltest  --prefix 4 --prompt '[john@localhost ~]$ ' README.md
 
-When automating the tests execution, use `--quiet` to show no output and just check the exit code to make sure all tests have passed. Example:
+When automating the tests execution, use `--quiet` to show no output
+and just check the exit code to make sure all tests have passed.
+Example:
 
     if cltest --quiet tests.txt
     then
@@ -265,11 +317,15 @@ When automating the tests execution, use `--quiet` to show no output and just ch
 
 ## Nerdiness
 
-* Use any file format for the tests, it doesn't matter. The command lines just need to be grepable and have a fixed prefix (or none). Even Windows text files (CR+LF) will work fine.
+* Use any file format for the tests, it doesn't matter. The command
+  lines just need to be grepable and have a fixed prefix (or none).
+  Even Windows text files (CR+LF) will work fine.
 
-* The cmdline power is available in your test files: use variables, pipes, redirection, create files, folders, move around…
+* The cmdline power is available in your test files: use variables,
+  pipes, redirection, create files, folders, move around…
 
-* All the commands are tested in the same shell. Defined variables, aliases and functions will persist between tests.
+* All the commands are tested in the same shell. Defined variables,
+  aliases and functions will persist between tests.
 
 * Both STDIN and STDOUT are catch, you can also test error messages.
 
@@ -277,24 +333,32 @@ When automating the tests execution, use `--quiet` to show no output and just ch
 
 * Use an empty `$` prompt to close the last command output.
 
-* In the output, every single char (blank or not) counts. Any difference will cause a test to fail. To ignore the difference in blanks, use `--diff-options '-u -w'`.
+* In the output, every single char (blank or not) counts. Any
+  difference will cause a test to fail. To ignore the difference in
+  blanks, use `--diff-options '-u -w'`.
 
-* Unlike doctest's `<BLANKLINE>`, in cltest blank lines in the command output aren't a problem. Just insert them normally.
+* Unlike doctest's `<BLANKLINE>`, in cltest blank lines in the
+  command output aren't a problem. Just insert them normally.
 
-* To test outputs with no final `\n`, such as `printf foo`, use `#→ --regex ^foo$`.
+* To test outputs with no final `\n`, such as `printf foo`, use `#→
+  --regex ^foo$`.
 
-* In multifile mode, the current folder (`$PWD`) is reset when starting to test a new file. This avoids that a `cd` command in a previous file will affect the next.
+* In multifile mode, the current folder (`$PWD`) is reset when
+  starting to test a new file. This avoids that a `cd` command in a
+  previous file will affect the next.
 
 * Multiline prompts (`$PS2`) are not yet supported.
 
-* Ellipsis (as in doctest) are not supported. Use `#→ --regex` instead.
+* Ellipsis (as in doctest) are not supported. Use `#→ --regex`
+  instead.
 
 * Simple examples in [examples/](https://github.com/aureliojargas/cltest/blob/master/examples/). Hardcore examples in [dev/test.md](https://github.com/aureliojargas/cltest/blob/master/dev/test.md) and [dev/test/](https://github.com/aureliojargas/cltest/blob/master/dev/test/), the cltest own test-suite.
 
 
 ## Portability
 
-This script was carefully coded to be portable between [POSIX](http://en.wikipedia.org/wiki/POSIX) shells.
+This script was carefully coded to be portable between
+[POSIX](http://en.wikipedia.org/wiki/POSIX) shells.
 
 It was tested in:
 
@@ -302,7 +366,8 @@ It was tested in:
 * dash 0.5.5.1
 * ksh 93u 2011-02-08
 
-Portability issues are considered serious bugs, please [report them](https://github.com/aureliojargas/cltest/issues)!
+Portability issues are considered serious bugs, please
+[report them](https://github.com/aureliojargas/cltest/issues)!
 
 Developers: Learn mode about portability in POSIX shells:
 
