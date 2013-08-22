@@ -284,6 +284,12 @@ Developers: Learn mode about portability in POSIX shells:
 * [Official POSIX specification: Shell & Utilities](http://pubs.opengroup.org/onlinepubs/9699919799/utilities/contents.html)
 
 
+## KISS
+
+* A shell script to test shell commands.
+* No other language or environment involved.
+
+
 ## Meta
 
 * Author:   [Aurelio Jargas](http://aurelio.net/about.html)
