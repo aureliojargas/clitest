@@ -146,7 +146,7 @@ tt_nr_files=$#
 if test $tt_nr_files -eq 0
 then
 	printf '%s\n' "$tt_my_help"
-	exit 0
+	exit 1
 fi
 
 
