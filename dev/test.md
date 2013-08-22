@@ -329,7 +329,7 @@ First, some invalid values:
 ```
 $ ./cltest --progress dev/test/ok-1.sh
 cltest: Error: no test file informed (try --help)
-$ cltest --progress '' dev/test/ok-1.sh
+$ ./cltest --progress '' dev/test/ok-1.sh
 cltest: Error: invalid value '' for --progress. Use: test, number, dot or none.
 $ ./cltest --progress foo dev/test/ok-1.sh
 cltest: Error: invalid value 'foo' for --progress. Use: test, number, dot or none.
