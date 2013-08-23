@@ -287,6 +287,7 @@ $ ./cltest --list dev/test/no-nl-command.sh; echo $?
 #4	printf 'ok\n'    
 #5	printf 'fail'    
 #6	printf 'ok'; echo   
+#7	printf 'ok'         
 0
 $
 ```
@@ -301,6 +302,7 @@ $ ./cltest -l dev/test/no-nl-command.sh
 #4	printf 'ok\n'    
 #5	printf 'fail'    
 #6	printf 'ok'; echo   
+#7	printf 'ok'         
 $
 ```
 
@@ -315,8 +317,9 @@ $ ./cltest --list dev/test/no-nl-command.sh dev/test/ok-1.sh; echo $?
 #4	printf 'ok\n'    
 #5	printf 'fail'    
 #6	printf 'ok'; echo   
+#7	printf 'ok'         
 ---------------------------------------- dev/test/ok-1.sh
-#7	echo ok
+#8	echo ok
 0
 $
 ```
@@ -341,6 +344,7 @@ $ ./cltest --list-run --color yes dev/test/no-nl-command.sh; echo $?
 [32m#4	printf 'ok\n'    [m
 [31m#5	printf 'fail'    [m
 [32m#6	printf 'ok'; echo   [m
+[32m#7	printf 'ok'         [m
 1
 $
 ```
@@ -355,6 +359,7 @@ $ ./cltest --list-run dev/test/no-nl-command.sh; echo $?
 #4	OK	printf 'ok\n'    
 #5	FAIL	printf 'fail'    
 #6	OK	printf 'ok'; echo   
+#7	OK	printf 'ok'         
 1
 $
 ```
@@ -369,6 +374,7 @@ $ ./cltest -L dev/test/no-nl-command.sh
 #4	OK	printf 'ok\n'    
 #5	FAIL	printf 'fail'    
 #6	OK	printf 'ok'; echo   
+#7	OK	printf 'ok'         
 $
 ```
 
@@ -383,8 +389,9 @@ $ ./cltest -L dev/test/no-nl-command.sh dev/test/ok-1.sh; echo $?
 #4	OK	printf 'ok\n'    
 #5	FAIL	printf 'fail'    
 #6	OK	printf 'ok'; echo   
+#7	OK	printf 'ok'         
 ---------------------------------------- dev/test/ok-1.sh
-#7	OK	echo ok
+#8	OK	echo ok
 1
 $ ./cltest -L dev/test/ok-1.sh; echo $?
 #1	OK	echo ok
@@ -2061,8 +2068,9 @@ $ ./cltest dev/test/no-nl-command.sh
 \ No newline at end of file
 --------------------------------------------------------------------------------
 #6	printf 'ok'; echo   
+#7	printf 'ok'         
 
-FAIL: 3 of 6 tests failed
+FAIL: 3 of 7 tests failed
 $
 ```
 

@@ -19,3 +19,7 @@ $ printf 'fail'    #→ fail
 # An easy workaround is to add an empty 'echo' at the end:
 
 $ printf 'ok'; echo   #→ ok
+
+# Another workaround is to use --regex
+
+$ printf 'ok'         #→ --regex ^ok$
