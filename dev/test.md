@@ -669,19 +669,39 @@ $
 
 ## Option --test and --skip combined with --list and --list-run
 
+Error: Out of range
+
 ```
 $ ./cltest --list -t 99 dev/test/ok-10.sh
 cltest: Error: no test found for the specified number or range '99'
 $ ./cltest --list-run -t 99 dev/test/ok-10.sh
 cltest: Error: no test found for the specified number or range '99'
+$
+```
+
+Error: Skipped all tests
+
+```
 $ ./cltest --list -s 1-10 dev/test/ok-10.sh
 cltest: Error: no test found. Maybe '--skip 1-10' was too much?
 $ ./cltest --list-run -s 1-10 dev/test/ok-10.sh
 cltest: Error: no test found. Maybe '--skip 1-10' was too much?
+$
+```
+
+Error: The combination of `-t` and `-s` resulted in no tests
+
+```
 $ ./cltest --list -t 9 -s 9 dev/test/ok-10.sh
 cltest: Error: no test found. The combination of -t and -s resulted in no tests.
 $ ./cltest --list-run -t 9 -s 9 dev/test/ok-10.sh
 cltest: Error: no test found. The combination of -t and -s resulted in no tests.
+$
+```
+
+Using `-t` alone
+
+```
 $ ./cltest --list -t 3,5-7 dev/test/ok-10.sh
 #3	echo 3 
 #5	echo 5 
@@ -692,6 +712,12 @@ $ ./cltest --list-run -t 3,5-7 dev/test/ok-10.sh
 #5	OK	echo 5 
 #6	OK	echo 6 
 #7	OK	echo 7 
+$
+```
+
+Using `-t` to limit to a range and the `-s` exclude some more
+
+```
 $ ./cltest --list -t 3,5-7 -s 6 dev/test/ok-10.sh
 #3	echo 3 
 #5	echo 5 
@@ -700,6 +726,13 @@ $ ./cltest --list-run -t 3,5-7 -s 6 dev/test/ok-10.sh
 #3	OK	echo 3 
 #5	OK	echo 5 
 #7	OK	echo 7 
+$
+```
+
+Multifile, using `-t` alone
+
+
+```
 $ ./cltest --list -t 1,3,5-7 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.sh
 ---------------------------------------- dev/test/ok-1.sh
 #1	echo ok
@@ -719,6 +752,11 @@ $ ./cltest --list-run -t 1,3,5-7 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok
 #6	OK	echo 3 
 #7	OK	echo 4 
 $
+```
+
+Multifile, using `-t` and `-s`
+
+```
 $ ./cltest --list -t 1,3,5-7 -s 3,6 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.sh
 ---------------------------------------- dev/test/ok-1.sh
 #1	echo ok
@@ -1220,6 +1258,8 @@ $
 
 ## Option -t, --test
 
+Error: Invalid argument
+
 ```
 $ ./cltest -t - dev/test/ok-2.sh
 cltest: Error: invalid argument for -t or --test: -
@@ -1231,8 +1271,20 @@ $ ./cltest -t 1--2 dev/test/ok-2.sh
 cltest: Error: invalid argument for -t or --test: 1--2
 $ ./cltest -t 1-2-3 dev/test/ok-2.sh
 cltest: Error: invalid argument for -t or --test: 1-2-3
+$
+```
+
+Error: Out of range
+
+```
 $ ./cltest -t 99 dev/test/ok-2.sh
 cltest: Error: no test found for the specified number or range '99'
+$
+```
+
+If range = zero or empty, run all tests
+
+```
 $ ./cltest -t '' dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
@@ -1241,28 +1293,72 @@ $ ./cltest -t 0 dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
 OK: 2 of 2 tests passed
+$
+```
+
+* Empty values inside range are ignored
+* The bogus `0-0` range is ignored
+* The resulting range is zero
+
+```
 $ ./cltest -t ,,,0,0-0,,, dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
 OK: 2 of 2 tests passed
+$
+```
+
+Normal operation, using `--test` and `-t`
+
+```
 $ ./cltest -t 1 dev/test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
 $ ./cltest --test 1 dev/test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
+$
+```
+
+Ranges `0-1` and `1-0` expand to `1`
+
+```
 $ ./cltest -t 0-1,1-0 dev/test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
+$
+```
+
+Range `1-1` expand to `1`
+
+```
 $ ./cltest -t 1-1 dev/test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
+$
+```
+
+Repeated values are OK
+
+```
 $ ./cltest -t 1,1,1,0,1 dev/test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
+$
+```
+
+Range terminator is out of bounds
+
+```
 $ ./cltest -t 10-20 dev/test/ok-10.sh
 #10	echo 10 
 OK: 1 of 10 tests passed (9 skipped)
+$
+```
+
+Inverted ranges
+
+```
 $ ./cltest -t 3,2,1 dev/test/ok-10.sh
 #1	echo 1 
 #2	echo 2 
@@ -1273,6 +1369,12 @@ $ ./cltest -t 3-1 dev/test/ok-10.sh
 #2	echo 2 
 #3	echo 3 
 OK: 3 of 10 tests passed (7 skipped)
+$
+```
+
+Multifile. The test numbers always increase sequentially, regardless of the file changes.
+
+```
 $ ./cltest -t 1,5,13 dev/test/ok-?.sh dev/test/ok-10.sh
 Testing file dev/test/ok-1.sh
 #1	echo ok
@@ -1323,6 +1425,8 @@ $
 
 ## Option -s, --skip
 
+Error: Invalid argument
+
 ```
 $ ./cltest -s - dev/test/ok-2.sh
 cltest: Error: invalid argument for -s or --skip: -
@@ -1334,10 +1438,30 @@ $ ./cltest -s 1--2 dev/test/ok-2.sh
 cltest: Error: invalid argument for -s or --skip: 1--2
 $ ./cltest -s 1-2-3 dev/test/ok-2.sh
 cltest: Error: invalid argument for -s or --skip: 1-2-3
+$
+```
+
+Error: Skipped all tests
+
+```
+$ ./cltest -s 1 dev/test/ok-1.sh
+cltest: Error: no test found. Maybe '--skip 1' was too much?
+$
+```
+
+Out of range: no problem, you just skipped a non-existent test. All tests will be run.
+
+```
 $ ./cltest -s 99 dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
 OK: 2 of 2 tests passed
+$
+```
+
+If range = zero or empty, run all tests
+
+```
 $ ./cltest -s '' dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
@@ -1346,30 +1470,72 @@ $ ./cltest -s 0 dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
 OK: 2 of 2 tests passed
+$
+```
+
+* Empty values inside range are ignored
+* The bogus `0-0` range is ignored
+* The resulting range is zero
+
+```
 $ ./cltest -s ,,,0,0-0,,, dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
 OK: 2 of 2 tests passed
-$ ./cltest -s 1 dev/test/ok-1.sh
-cltest: Error: no test found. Maybe '--skip 1' was too much?
+$
+```
+
+Normal operation, using `--skip` and `-s`
+
+```
 $ ./cltest -s 1 dev/test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
 $ ./cltest --skip 1 dev/test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
+$
+```
+
+Ranges `0-1` and `1-0` expand to `1`
+
+```
 $ ./cltest -s 0-1,1-0 dev/test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
+$
+```
+
+Range `1-1` expand to `1`
+
+```
 $ ./cltest -s 1-1 dev/test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
+$
+```
+
+Repeated values are OK
+
+```
 $ ./cltest -s 1,1,1,0,1 dev/test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
+$
+```
+
+Range terminator is out of bounds
+
+```
 $ ./cltest -s 2-10 dev/test/ok-2.sh
 #1	echo ok
 OK: 1 of 2 tests passed (1 skipped)
+$
+```
+
+Inverted ranges
+
+```
 $ ./cltest -s 10,9,8,7,6,5,4 dev/test/ok-10.sh
 #1	echo 1 
 #2	echo 2 
@@ -1380,6 +1546,12 @@ $ ./cltest -s 10-4 dev/test/ok-10.sh
 #2	echo 2 
 #3	echo 3 
 OK: 3 of 10 tests passed (7 skipped)
+$
+```
+
+Multifile. The test numbers always increase sequentially, regardless of the file changes.
+
+```
 $ ./cltest -s 2,3,13 dev/test/ok-?.sh dev/test/ok-10.sh
 Testing file dev/test/ok-1.sh
 #1	echo ok
@@ -1437,16 +1609,36 @@ $
 
 ## Option --test combined with --skip
 
+Error: The combination of `-t` and `-s` resulted in no tests
+
 ```
 $ ./cltest -t 9 -s 9 dev/test/ok-10.sh
 cltest: Error: no test found. The combination of -t and -s resulted in no tests.
-$ ./cltest -s 9 -t 9 dev/test/ok-10.sh  # -s always wins
+$
+```
+
+The order does not matter, `-s` always wins
+
+```
+$ ./cltest -s 9 -t 9 dev/test/ok-10.sh
 cltest: Error: no test found. The combination of -t and -s resulted in no tests.
+$
+```
+
+Using `-t` to limit to a range and the `-s` exclude some more
+
+```
 $ ./cltest -t 3,5-7 -s 6 dev/test/ok-10.sh
 #3	echo 3 
 #5	echo 5 
 #7	echo 7 
 OK: 3 of 10 tests passed (7 skipped)
+$
+```
+
+Same as previous, but now multifile
+
+```
 $ ./cltest -t 1,3,5-7 -s 3,6 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.sh
 Testing file dev/test/ok-1.sh
 #1	echo ok
@@ -1462,7 +1654,6 @@ Testing file dev/test/ok-10.sh
 
 OK: 3 of 13 tests passed (10 skipped)
 $
-
 ```
 
 ## Option --diff-options
