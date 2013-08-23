@@ -39,9 +39,13 @@ $
 
 ## Documentation Tests
  
-Now take a look at the `.md` files. They're normal Markdown documents (with titles, paragraphs, code blocks), created to be read by humans (after HTML conversion).
+Now take a look at the `.md` files. They're normal Markdown documents
+(with titles, paragraphs, code blocks), created to be read by humans
+(after HTML conversion).
 
-Inside the code blocks there are examples of command lines and their results. `clitest` can extract and run these commands for you! Now you can guarantee that all your examples are correct.
+Inside the code blocks there are examples of command lines and their
+results. `clitest` can extract and run these commands for you! Now you
+can guarantee that all your examples are correct.
 
 ```
 $ clitest --prefix tab cut.md
@@ -55,11 +59,14 @@ OK: 6 of 6 tests passed
 $
 ```
 
-Note that since the code blocks in these Markdown documents are prefixed by a tab, you must use the `--prefix` option.
+Note that since the code blocks in these Markdown documents are
+prefixed by a tab, you must use the `--prefix` option.
 
-Even this `README.md` file you're reading is testable. No options needed, since the code blocks here do not use prefixes.
+Even this `README.md` file you're reading is testable. No options
+needed, since the code blocks here do not use prefixes.
 
 
 ## Play Around
 
-Run the tests, change the expected output to force a test fail, use the `--list-run` option, ...
+Run the tests, change the expected output to force a test fail, use
+the `--list-run` option, ...
