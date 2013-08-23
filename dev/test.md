@@ -1971,40 +1971,19 @@ $
 
 ## Gotchas
 
+Exit code: normal and error
+
 ```
 $ ./cltest dev/test/exit-code.sh
 #1	echo "ok"            > /dev/null; echo $?
 #2	cp XXnotfoundXX foo 2> /dev/null; echo $?
 OK: 2 of 2 tests passed
-$ ./cltest dev/test/blank-output.sh
-#1	echo ' '
-#2	echo '    '
-#3	printf '\t\n'
-#4	printf '\t\t\t\n'
-#5	printf ' \t  \t\t   \n'
-#6	printf '\n \n  \n   \n    \n\n'
-#7	printf '\n\t\n\t\t\n\t\t\t\n\t\t\t\t\n\n'
-#8	printf '\n'
-#9	printf '\n\n'
-#10	printf '\n\n\n\n'
-OK: 10 of 10 tests passed
-$ ./cltest dev/test/special-chars.sh | tail -1
-OK: 206 of 206 tests passed
-$ ./cltest dev/test/windows.sh
-#1	echo "a file with CRLF line ending"
-#2	echo "inline output"  
-#3	echo "inline regex"  
-OK: 3 of 3 tests passed
-$ ./cltest dev/test/close-command.sh
-#1	echo 1
-#2	echo 2
-#3	echo 3
-OK: 3 of 3 tests passed
-$ ./cltest dev/test/multi-commands.sh
-#1	echo 1; echo 2; echo 3; echo 4; echo 5
-#2	(echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p
-#3	(echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p  
-OK: 3 of 3 tests passed
+$
+```
+
+STDIN and STDOUT
+
+```
 $ ./cltest dev/test/stdout-stderr.sh
 #1	echo "stdout"
 #2	echo "stdout" 2> /dev/null
@@ -2017,6 +1996,23 @@ $ ./cltest dev/test/stdout-stderr.sh
 #9	cp XXnotfoundXX foo 2> /dev/null
 #10	cp XXnotfoundXX foo > /dev/null 2>&1
 OK: 10 of 10 tests passed
+$
+```
+
+Multiple commands in one line
+
+```
+$ ./cltest dev/test/multi-commands.sh
+#1	echo 1; echo 2; echo 3; echo 4; echo 5
+#2	(echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p
+#3	(echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p  
+OK: 3 of 3 tests passed
+$
+```
+
+A `cd` command in one test should not affect the next
+
+```
 $ ./cltest dev/test/cd.sh dev/test/ok-2.sh
 Testing file dev/test/cd.sh
 #1	cd
@@ -2029,6 +2025,64 @@ Testing file dev/test/ok-2.sh
       2     -     -    dev/test/ok-2.sh
 
 OK: 3 of 3 tests passed
+$
+```
+
+Syntax: End-of-file or empty prompt closes the previous command
+
+```
+$ ./cltest dev/test/close-command.sh
+#1	echo 1
+#2	echo 2
+#3	echo 3
+OK: 3 of 3 tests passed
+$
+```
+
+Windows files (CR+LF)
+
+```
+$ ./cltest dev/test/windows.sh
+#1	echo "a file with CRLF line ending"
+#2	echo "inline output"  
+#3	echo "inline regex"  
+OK: 3 of 3 tests passed
+$
+```
+
+Unicode chars
+
+```
+$ ./cltest dev/test/special-chars.sh | tail -1
+OK: 206 of 206 tests passed
+$
+```
+
+Blanks (space, tab, newline) in the output
+
+```
+$ ./cltest dev/test/blank-output.sh
+#1	echo ' '
+#2	echo '    '
+#3	printf '\t\n'
+#4	printf '\t\t\t\n'
+#5	printf ' \t  \t\t   \n'
+#6	printf '\n \n  \n   \n    \n\n'
+#7	printf '\n\t\n\t\t\n\t\t\t\n\t\t\t\t\n\n'
+#8	printf '\n'
+#9	printf '\n\n'
+#10	printf '\n\n\n\n'
+OK: 10 of 10 tests passed
+$
+```
+
+Files with no newline (`\n`) at the end
+
+1. No empty prompt at the last line
+2. Empty prompt at the last line
+3. Inline output
+
+```
 $ ./cltest dev/test/no-nl-file-1.sh
 #1	printf '%s\n' 'a file with no \n at the last line'
 OK: 1 of 1 test passed
@@ -2038,6 +2092,12 @@ OK: 1 of 1 test passed
 $ ./cltest dev/test/no-nl-file-3.sh
 #1	printf '%s\n' 'oneliner, no \n'  
 OK: 1 of 1 test passed
+$
+```
+
+Commands whose output has no `\n`
+
+```
 $ ./cltest dev/test/no-nl-command.sh
 #1	printf 'ok\n'
 #2	printf 'fail'
