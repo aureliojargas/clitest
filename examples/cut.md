@@ -31,4 +31,4 @@ If you omit the second range number, it matches until the last:
 cut is cool, isn't it?
 
 > Note: To automatically test all the shell commands in this article,
-> just run: `cltest --prefix tab cut.md`
+> just run: `clitest --prefix tab cut.md`

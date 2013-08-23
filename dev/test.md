@@ -1,18 +1,18 @@
-#  Test suite for cltest
+#  Test suite for clitest
 
-This is the test file for the `cltest` program. Yes, the program can test itself!
+This is the test file for the `clitest` program. Yes, the program can test itself!
 
 This file runs all the files inside the `dev/test` folder and checks the results. The command line options are also tested.
 
-    Usage: ./cltest dev/test.md
+    Usage: ./clitest dev/test.md
 
 
 ## Preparing
 
-Make sure we're on the same folder as `cltest`, since all the file paths here are relative, not absolute.
+Make sure we're on the same folder as `clitest`, since all the file paths here are relative, not absolute.
 
 ```
-$ test -f ./cltest; echo $?
+$ test -f ./clitest; echo $?
 0
 $ test -d ./dev/test/; echo $?
 0
@@ -47,9 +47,9 @@ $ echo $not_exported  #→ --regex ^1$
 $ TMPDIR___SAVE="$TMPDIR"
 $ TMPDIR=/XXnotfoundXX
 $ export TMPDIR
-$ ./cltest dev/test/ok-1.sh 2>&1 | sed 's/cltest\.[0-9]*$/cltest.NNN/'
+$ ./clitest dev/test/ok-1.sh 2>&1 | sed 's/clitest\.[0-9]*$/clitest.NNN/'
 mkdir: /XXnotfoundXX: No such file or directory
-cltest: Error: cannot create temporary dir: /XXnotfoundXX/cltest.NNN
+clitest: Error: cannot create temporary dir: /XXnotfoundXX/clitest.NNN
 $ TMPDIR="$TMPDIR___SAVE"
 $
 ```
@@ -59,43 +59,43 @@ $
 Missing input file
 
 ```
-$ ./cltest; echo $?
-cltest: Error: no test file informed (try --help)
+$ ./clitest; echo $?
+clitest: Error: no test file informed (try --help)
 2
-$ ./cltest --
-cltest: Error: no test file informed (try --help)
-$ ./cltest --list
-cltest: Error: no test file informed (try --help)
+$ ./clitest --
+clitest: Error: no test file informed (try --help)
+$ ./clitest --list
+clitest: Error: no test file informed (try --help)
 $
 ```
 
 File not found
 
 ```
-$ ./cltest XXnotfoundXX.sh; echo $?
-cltest: Error: cannot read input file: XXnotfoundXX.sh
+$ ./clitest XXnotfoundXX.sh; echo $?
+clitest: Error: cannot read input file: XXnotfoundXX.sh
 2
-$ ./cltest .
-cltest: Error: cannot read input file: .
-$ ./cltest ./
-cltest: Error: cannot read input file: ./
-$ ./cltest /etc
-cltest: Error: cannot read input file: /etc
+$ ./clitest .
+clitest: Error: cannot read input file: .
+$ ./clitest ./
+clitest: Error: cannot read input file: ./
+$ ./clitest /etc
+clitest: Error: cannot read input file: /etc
 $
 ```
 
 ## No test found (message and exit code)
 
 ```
-$ ./cltest dev/test/no-test-found.sh; echo $?
-cltest: Error: no test found in input file: dev/test/no-test-found.sh
+$ ./clitest dev/test/no-test-found.sh; echo $?
+clitest: Error: no test found in input file: dev/test/no-test-found.sh
 2
-$ ./cltest dev/test/empty-file.sh
-cltest: Error: no test found in input file: dev/test/empty-file.sh
-$ ./cltest dev/test/empty-prompt-file.sh
-cltest: Error: no test found in input file: dev/test/empty-prompt-file.sh
-$ ./cltest dev/test/empty-prompts-file.sh
-cltest: Error: no test found in input file: dev/test/empty-prompts-file.sh
+$ ./clitest dev/test/empty-file.sh
+clitest: Error: no test found in input file: dev/test/empty-file.sh
+$ ./clitest dev/test/empty-prompt-file.sh
+clitest: Error: no test found in input file: dev/test/empty-prompt-file.sh
+$ ./clitest dev/test/empty-prompts-file.sh
+clitest: Error: no test found in input file: dev/test/empty-prompts-file.sh
 $
 ```
 
@@ -104,7 +104,7 @@ $
 The exit code must always be zero.
 
 ```
-$ ./cltest --version > /dev/null; echo $?
+$ ./clitest --version > /dev/null; echo $?
 0
 $
 ```
@@ -112,12 +112,12 @@ $
 Test the output text and the short option `-V`.
 
 ```
-$ ./cltest --version
-cltest HEAD
-https://github.com/aureliojargas/cltest/tree/HEAD
-$ ./cltest -V
-cltest HEAD
-https://github.com/aureliojargas/cltest/tree/HEAD
+$ ./clitest --version
+clitest HEAD
+https://github.com/aureliojargas/clitest/tree/HEAD
+$ ./clitest -V
+clitest HEAD
+https://github.com/aureliojargas/clitest/tree/HEAD
 $
 ```
 
@@ -126,8 +126,8 @@ $
 Test the full help text contents and the exit code (zero).
 
 ```
-$ ./cltest --help; echo $?
-Usage: cltest [options] <file ...>
+$ ./clitest --help; echo $?
+Usage: clitest [options] <file ...>
 
 Options:
   -1, --first                 Stop execution upon first failed test
@@ -154,8 +154,8 @@ $
 The short option `-h` is working? Testing just the first and last lines for brevity.
 
 ```
-$ ./cltest -h | sed -n '1p; $p'
-Usage: cltest [options] <file ...>
+$ ./clitest -h | sed -n '1p; $p'
+Usage: clitest [options] <file ...>
       --prompt STRING         Set prompt string (default: '$ ')
 $
 ```
@@ -164,17 +164,17 @@ $
 ## Option --quiet and exit code
 
 ```
-$ ./cltest -q dev/test/ok-2.sh; echo $?
+$ ./clitest -q dev/test/ok-2.sh; echo $?
 0
-$ ./cltest --quiet dev/test/ok-2.sh; echo $?
+$ ./clitest --quiet dev/test/ok-2.sh; echo $?
 0
-$ ./cltest --quiet dev/test/ok-2.sh dev/test/ok-2.sh; echo $?
+$ ./clitest --quiet dev/test/ok-2.sh dev/test/ok-2.sh; echo $?
 0
-$ ./cltest --quiet dev/test/fail-2.sh; echo $?
+$ ./clitest --quiet dev/test/fail-2.sh; echo $?
 1
-$ ./cltest --quiet dev/test/fail-2.sh dev/test/fail-2.sh; echo $?
+$ ./clitest --quiet dev/test/fail-2.sh dev/test/fail-2.sh; echo $?
 1
-$ ./cltest --quiet dev/test/ok-2.sh dev/test/fail-2.sh; echo $?
+$ ./clitest --quiet dev/test/ok-2.sh dev/test/fail-2.sh; echo $?
 1
 $
 ```
@@ -182,15 +182,15 @@ $
 ## Option --quiet has no effect in error messages
 
 ```
-$ ./cltest --quiet /etc
-cltest: Error: cannot read input file: /etc
+$ ./clitest --quiet /etc
+clitest: Error: cannot read input file: /etc
 $
 ```
 
 ## Option --quiet has no effect in --debug (disabled)
 
 ```
-# $ ./cltest --quiet --debug dev/test/ok-2.sh
+# $ ./clitest --quiet --debug dev/test/ok-2.sh
 # [INPUT_LINE: $ echo ok]
 # [  LINE_CMD: $ echo ok]
 # [   NEW_CMD: echo ok]
@@ -215,18 +215,18 @@ $
 Invalid value
 
 ```
-$ ./cltest --color foo dev/test/ok-1.sh
-cltest: Error: invalid value 'foo' for --color. Use: auto, always or never.
+$ ./clitest --color foo dev/test/ok-1.sh
+clitest: Error: invalid value 'foo' for --color. Use: auto, always or never.
 $
 ```
 
 Color ON
 
 ```
-$ ./cltest --color always dev/test/ok-1.sh
+$ ./clitest --color always dev/test/ok-1.sh
 #1	echo ok
 [32mOK:[m 1 of 1 test passed
-$ ./cltest --color yes dev/test/ok-1.sh
+$ ./clitest --color yes dev/test/ok-1.sh
 #1	echo ok
 [32mOK:[m 1 of 1 test passed
 $
@@ -235,10 +235,10 @@ $
 Color OFF
 
 ```
-$ ./cltest --color never dev/test/ok-1.sh
+$ ./clitest --color never dev/test/ok-1.sh
 #1	echo ok
 OK: 1 of 1 test passed
-$ ./cltest --color no dev/test/ok-1.sh
+$ ./clitest --color no dev/test/ok-1.sh
 #1	echo ok
 OK: 1 of 1 test passed
 $
@@ -250,7 +250,7 @@ Inside this file, the output is not a terminal,
 so the default is no colored output.
 
 ```
-$ ./cltest dev/test/ok-1.sh
+$ ./clitest dev/test/ok-1.sh
 #1	echo ok
 OK: 1 of 1 test passed
 $
@@ -260,9 +260,9 @@ The real default `--color auto` cannot be tested here.
 Test it by hand at the command line.
 
 ```
-## $ ./cltest dev/test/ok-1.sh
+## $ ./clitest dev/test/ok-1.sh
 ## [32mOK![m The single test has passed.
-## $ ./cltest --color auto dev/test/ok-1.sh
+## $ ./clitest --color auto dev/test/ok-1.sh
 ## [32mOK![m The single test has passed.
 ## $
 ```
@@ -272,15 +272,15 @@ Test it by hand at the command line.
 Listing a file with no tests
 
 ```
-$ ./cltest --list dev/test/empty-file.sh
-cltest: Error: no test found in input file: dev/test/empty-file.sh
+$ ./clitest --list dev/test/empty-file.sh
+clitest: Error: no test found in input file: dev/test/empty-file.sh
 $
 ```
 
 Normal results and exit code
 
 ```
-$ ./cltest --list dev/test/no-nl-command.sh; echo $?
+$ ./clitest --list dev/test/no-nl-command.sh; echo $?
 #1	printf 'ok\n'
 #2	printf 'fail'
 #3	printf 'ok\nok\nfail'
@@ -295,7 +295,7 @@ $
 Short option `-l`
 
 ```
-$ ./cltest -l dev/test/no-nl-command.sh
+$ ./clitest -l dev/test/no-nl-command.sh
 #1	printf 'ok\n'
 #2	printf 'fail'
 #3	printf 'ok\nok\nfail'
@@ -309,7 +309,7 @@ $
 Multifile and exit code
 
 ```
-$ ./cltest --list dev/test/no-nl-command.sh dev/test/ok-1.sh; echo $?
+$ ./clitest --list dev/test/no-nl-command.sh dev/test/ok-1.sh; echo $?
 ---------------------------------------- dev/test/no-nl-command.sh
 #1	printf 'ok\n'
 #2	printf 'fail'
@@ -329,15 +329,15 @@ $
 Listing a file with no tests
 
 ```
-$ ./cltest --list-run dev/test/empty-file.sh
-cltest: Error: no test found in input file: dev/test/empty-file.sh
+$ ./clitest --list-run dev/test/empty-file.sh
+clitest: Error: no test found in input file: dev/test/empty-file.sh
 $
 ```
 
 Normal results (using colors) and exit code
 
 ```
-$ ./cltest --list-run --color yes dev/test/no-nl-command.sh; echo $?
+$ ./clitest --list-run --color yes dev/test/no-nl-command.sh; echo $?
 [32m#1	printf 'ok\n'[m
 [31m#2	printf 'fail'[m
 [31m#3	printf 'ok\nok\nfail'[m
@@ -352,7 +352,7 @@ $
 Normal results (no colors, use OK/FAIL column) and exit code
 
 ```
-$ ./cltest --list-run dev/test/no-nl-command.sh; echo $?
+$ ./clitest --list-run dev/test/no-nl-command.sh; echo $?
 #1	OK	printf 'ok\n'
 #2	FAIL	printf 'fail'
 #3	FAIL	printf 'ok\nok\nfail'
@@ -367,7 +367,7 @@ $
 Short option `-L`
 
 ```
-$ ./cltest -L dev/test/no-nl-command.sh
+$ ./clitest -L dev/test/no-nl-command.sh
 #1	OK	printf 'ok\n'
 #2	FAIL	printf 'fail'
 #3	FAIL	printf 'ok\nok\nfail'
@@ -381,7 +381,7 @@ $
 Multifile and exit code
 
 ```
-$ ./cltest -L dev/test/no-nl-command.sh dev/test/ok-1.sh; echo $?
+$ ./clitest -L dev/test/no-nl-command.sh dev/test/ok-1.sh; echo $?
 ---------------------------------------- dev/test/no-nl-command.sh
 #1	OK	printf 'ok\n'
 #2	FAIL	printf 'fail'
@@ -393,7 +393,7 @@ $ ./cltest -L dev/test/no-nl-command.sh dev/test/ok-1.sh; echo $?
 ---------------------------------------- dev/test/ok-1.sh
 #8	OK	echo ok
 1
-$ ./cltest -L dev/test/ok-1.sh; echo $?
+$ ./clitest -L dev/test/ok-1.sh; echo $?
 #1	OK	echo ok
 0
 $
@@ -404,28 +404,28 @@ $
 First, some invalid values:
 
 ```
-$ ./cltest --progress dev/test/ok-1.sh
-cltest: Error: no test file informed (try --help)
-$ ./cltest --progress '' dev/test/ok-1.sh
-cltest: Error: invalid value '' for --progress. Use: test, number, dot or none.
-$ ./cltest --progress foo dev/test/ok-1.sh
-cltest: Error: invalid value 'foo' for --progress. Use: test, number, dot or none.
-$ ./cltest --progress DOT dev/test/ok-1.sh
-cltest: Error: invalid value 'DOT' for --progress. Use: test, number, dot or none.
-$ ./cltest --progress @@ dev/test/ok-1.sh
-cltest: Error: invalid value '@@' for --progress. Use: test, number, dot or none.
-$ ./cltest --progress -1 dev/test/ok-1.sh
-cltest: Error: invalid value '-1' for --progress. Use: test, number, dot or none.
+$ ./clitest --progress dev/test/ok-1.sh
+clitest: Error: no test file informed (try --help)
+$ ./clitest --progress '' dev/test/ok-1.sh
+clitest: Error: invalid value '' for --progress. Use: test, number, dot or none.
+$ ./clitest --progress foo dev/test/ok-1.sh
+clitest: Error: invalid value 'foo' for --progress. Use: test, number, dot or none.
+$ ./clitest --progress DOT dev/test/ok-1.sh
+clitest: Error: invalid value 'DOT' for --progress. Use: test, number, dot or none.
+$ ./clitest --progress @@ dev/test/ok-1.sh
+clitest: Error: invalid value '@@' for --progress. Use: test, number, dot or none.
+$ ./clitest --progress -1 dev/test/ok-1.sh
+clitest: Error: invalid value '-1' for --progress. Use: test, number, dot or none.
 $
 ```
 
 If no `--progress` option, defaults to `--progress test`:
 
 ```
- $ ./cltest dev/test/ok-1.sh
+ $ ./clitest dev/test/ok-1.sh
  #1	echo ok
  OK: 1 of 1 test passed
- $ ./cltest --progress test dev/test/ok-1.sh
+ $ ./clitest --progress test dev/test/ok-1.sh
  #1	echo ok
  OK: 1 of 1 test passed
  $
@@ -434,19 +434,19 @@ If no `--progress` option, defaults to `--progress test`:
 Numbers:
 
 ```
-$ ./cltest --progress number dev/test/ok-10.sh
+$ ./clitest --progress number dev/test/ok-10.sh
 1 2 3 4 5 6 7 8 9 10 
 OK: 10 of 10 tests passed
-$ ./cltest --progress n dev/test/ok-10.sh
+$ ./clitest --progress n dev/test/ok-10.sh
 1 2 3 4 5 6 7 8 9 10 
 OK: 10 of 10 tests passed
-$ ./cltest --progress 0 dev/test/ok-10.sh
+$ ./clitest --progress 0 dev/test/ok-10.sh
 1 2 3 4 5 6 7 8 9 10 
 OK: 10 of 10 tests passed
-$ ./cltest --progress 5 dev/test/ok-10.sh
+$ ./clitest --progress 5 dev/test/ok-10.sh
 1 2 3 4 5 6 7 8 9 10 
 OK: 10 of 10 tests passed
-$ ./cltest --progress 9 dev/test/ok-10.sh
+$ ./clitest --progress 9 dev/test/ok-10.sh
 1 2 3 4 5 6 7 8 9 10 
 OK: 10 of 10 tests passed
 $
@@ -455,16 +455,16 @@ $
 Chars:
 
 ```
-$ ./cltest --progress dot dev/test/ok-10.sh
+$ ./clitest --progress dot dev/test/ok-10.sh
 ..........
 OK: 10 of 10 tests passed
-$ ./cltest --progress . dev/test/ok-10.sh
+$ ./clitest --progress . dev/test/ok-10.sh
 ..........
 OK: 10 of 10 tests passed
-$ ./cltest --progress @ dev/test/ok-10.sh
+$ ./clitest --progress @ dev/test/ok-10.sh
 @@@@@@@@@@
 OK: 10 of 10 tests passed
-$ ./cltest --progress x dev/test/ok-10.sh
+$ ./clitest --progress x dev/test/ok-10.sh
 xxxxxxxxxx
 OK: 10 of 10 tests passed
 $
@@ -473,9 +473,9 @@ $
 No progress:
 
 ```
-$ ./cltest --progress none dev/test/ok-1.sh
+$ ./clitest --progress none dev/test/ok-1.sh
 OK: 1 of 1 test passed
-$ ./cltest --progress no dev/test/ok-1.sh
+$ ./clitest --progress no dev/test/ok-1.sh
 OK: 1 of 1 test passed
 $
 ```
@@ -483,10 +483,10 @@ $
 Short option `-P`:
 
 ```
-$ ./cltest -P dot dev/test/ok-1.sh
+$ ./clitest -P dot dev/test/ok-1.sh
 .
 OK: 1 of 1 test passed
-$ ./cltest -P no dev/test/ok-1.sh
+$ ./clitest -P no dev/test/ok-1.sh
 OK: 1 of 1 test passed
 $
 ```
@@ -494,16 +494,16 @@ $
 Ok & fail functionality with dot:
 
 ```
-$ ./cltest --progress . dev/test/ok-1.sh
+$ ./clitest --progress . dev/test/ok-1.sh
 .
 OK: 1 of 1 test passed
-$ ./cltest --progress . dev/test/ok-2.sh
+$ ./clitest --progress . dev/test/ok-2.sh
 ..
 OK: 2 of 2 tests passed
-$ ./cltest --progress . dev/test/ok-50.sh
+$ ./clitest --progress . dev/test/ok-50.sh
 ..................................................
 OK: 50 of 50 tests passed
-$ ./cltest --progress . dev/test/fail-1.sh
+$ ./clitest --progress . dev/test/fail-1.sh
 .
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
@@ -519,7 +519,7 @@ $
 Multifile with dot:
 
 ```
-$ ./cltest --progress . dev/test/ok-1.sh dev/test/ok-2.sh dev/test/ok-10.sh
+$ ./clitest --progress . dev/test/ok-1.sh dev/test/ok-2.sh dev/test/ok-10.sh
 Testing file dev/test/ok-1.sh .
 Testing file dev/test/ok-2.sh ..
 Testing file dev/test/ok-10.sh ..........
@@ -530,7 +530,7 @@ Testing file dev/test/ok-10.sh ..........
      10     -     -    dev/test/ok-10.sh
 
 OK: 13 of 13 tests passed
-$ ./cltest --progress . dev/test/ok-1.sh dev/test/fail-1.sh
+$ ./clitest --progress . dev/test/ok-1.sh dev/test/fail-1.sh
 Testing file dev/test/ok-1.sh .
 Testing file dev/test/fail-1.sh .
 --------------------------------------------------------------------------------
@@ -545,7 +545,7 @@ Testing file dev/test/fail-1.sh .
       -     1     -    dev/test/fail-1.sh
 
 FAIL: 1 of 2 tests failed
-$ ./cltest --progress . dev/test/fail-1.sh dev/test/ok-1.sh
+$ ./clitest --progress . dev/test/fail-1.sh dev/test/ok-1.sh
 Testing file dev/test/fail-1.sh .
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
@@ -566,7 +566,7 @@ $
 Multifile with no progress:
 
 ```
-$ ./cltest --progress none dev/test/ok-1.sh dev/test/ok-2.sh dev/test/ok-10.sh
+$ ./clitest --progress none dev/test/ok-1.sh dev/test/ok-2.sh dev/test/ok-10.sh
 Testing file dev/test/ok-1.sh
 Testing file dev/test/ok-2.sh
 Testing file dev/test/ok-10.sh
@@ -577,7 +577,7 @@ Testing file dev/test/ok-10.sh
      10     -     -    dev/test/ok-10.sh
 
 OK: 13 of 13 tests passed
-$ ./cltest --progress none dev/test/ok-1.sh dev/test/fail-1.sh
+$ ./clitest --progress none dev/test/ok-1.sh dev/test/fail-1.sh
 Testing file dev/test/ok-1.sh
 Testing file dev/test/fail-1.sh
 --------------------------------------------------------------------------------
@@ -592,7 +592,7 @@ Testing file dev/test/fail-1.sh
       -     1     -    dev/test/fail-1.sh
 
 FAIL: 1 of 2 tests failed
-$ ./cltest --progress none dev/test/fail-1.sh dev/test/ok-1.sh
+$ ./clitest --progress none dev/test/fail-1.sh dev/test/ok-1.sh
 Testing file dev/test/fail-1.sh
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
@@ -616,13 +616,13 @@ Since skipped tests affect the output (show nothing), it's worth
 testing if the line break issues won't appear.
 
 ```
-$ ./cltest --progress . --skip 1 dev/test/ok-2.sh
+$ ./clitest --progress . --skip 1 dev/test/ok-2.sh
 .
 OK: 1 of 2 tests passed (1 skipped)
-$ ./cltest --progress . --skip 2 dev/test/ok-2.sh
+$ ./clitest --progress . --skip 2 dev/test/ok-2.sh
 .
 OK: 1 of 2 tests passed (1 skipped)
-$ ./cltest --progress . --skip 1 dev/test/fail-2.sh
+$ ./clitest --progress . --skip 1 dev/test/fail-2.sh
 .
 --------------------------------------------------------------------------------
 [FAILED #2, line 3] echo ok  
@@ -632,7 +632,7 @@ $ ./cltest --progress . --skip 1 dev/test/fail-2.sh
 --------------------------------------------------------------------------------
 
 FAIL: 1 of 2 tests failed (1 skipped)
-$ ./cltest --progress . --skip 2 dev/test/fail-2.sh
+$ ./clitest --progress . --skip 2 dev/test/fail-2.sh
 .
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
@@ -648,8 +648,8 @@ $
 Error messages appear with no leading blank line?
 
 ```
-$ ./cltest --progress . --skip 1,2 dev/test/ok-2.sh
-cltest: Error: no test found. Maybe '--skip 1,2' was too much?
+$ ./clitest --progress . --skip 1,2 dev/test/ok-2.sh
+clitest: Error: no test found. Maybe '--skip 1,2' was too much?
 $
 ```
 
@@ -660,15 +660,15 @@ $
 * The last informed will be the one used.
 
 ```
-$ ./cltest --list --quiet dev/test/ok-1.sh
-$ ./cltest --list-run --quiet dev/test/ok-1.sh
-$ ./cltest --progress . --quiet dev/test/ok-1.sh
-$ ./cltest --list --list-run --progress . --quiet dev/test/ok-1.sh
-$ ./cltest --quiet --progress . --list-run --list dev/test/ok-1.sh
+$ ./clitest --list --quiet dev/test/ok-1.sh
+$ ./clitest --list-run --quiet dev/test/ok-1.sh
+$ ./clitest --progress . --quiet dev/test/ok-1.sh
+$ ./clitest --list --list-run --progress . --quiet dev/test/ok-1.sh
+$ ./clitest --quiet --progress . --list-run --list dev/test/ok-1.sh
 #1	echo ok
-$ ./cltest --quiet --progress . --list --list-run dev/test/ok-1.sh
+$ ./clitest --quiet --progress . --list --list-run dev/test/ok-1.sh
 #1	OK	echo ok
-$ ./cltest --quiet --list --list-run --progress . dev/test/ok-1.sh
+$ ./clitest --quiet --list --list-run --progress . dev/test/ok-1.sh
 .
 OK: 1 of 1 test passed
 $
@@ -679,42 +679,42 @@ $
 Error: Out of range
 
 ```
-$ ./cltest --list -t 99 dev/test/ok-10.sh
-cltest: Error: no test found for the specified number or range '99'
-$ ./cltest --list-run -t 99 dev/test/ok-10.sh
-cltest: Error: no test found for the specified number or range '99'
+$ ./clitest --list -t 99 dev/test/ok-10.sh
+clitest: Error: no test found for the specified number or range '99'
+$ ./clitest --list-run -t 99 dev/test/ok-10.sh
+clitest: Error: no test found for the specified number or range '99'
 $
 ```
 
 Error: Skipped all tests
 
 ```
-$ ./cltest --list -s 1-10 dev/test/ok-10.sh
-cltest: Error: no test found. Maybe '--skip 1-10' was too much?
-$ ./cltest --list-run -s 1-10 dev/test/ok-10.sh
-cltest: Error: no test found. Maybe '--skip 1-10' was too much?
+$ ./clitest --list -s 1-10 dev/test/ok-10.sh
+clitest: Error: no test found. Maybe '--skip 1-10' was too much?
+$ ./clitest --list-run -s 1-10 dev/test/ok-10.sh
+clitest: Error: no test found. Maybe '--skip 1-10' was too much?
 $
 ```
 
 Error: The combination of `-t` and `-s` resulted in no tests
 
 ```
-$ ./cltest --list -t 9 -s 9 dev/test/ok-10.sh
-cltest: Error: no test found. The combination of -t and -s resulted in no tests.
-$ ./cltest --list-run -t 9 -s 9 dev/test/ok-10.sh
-cltest: Error: no test found. The combination of -t and -s resulted in no tests.
+$ ./clitest --list -t 9 -s 9 dev/test/ok-10.sh
+clitest: Error: no test found. The combination of -t and -s resulted in no tests.
+$ ./clitest --list-run -t 9 -s 9 dev/test/ok-10.sh
+clitest: Error: no test found. The combination of -t and -s resulted in no tests.
 $
 ```
 
 Using `-t` alone
 
 ```
-$ ./cltest --list -t 3,5-7 dev/test/ok-10.sh
+$ ./clitest --list -t 3,5-7 dev/test/ok-10.sh
 #3	echo 3 
 #5	echo 5 
 #6	echo 6 
 #7	echo 7 
-$ ./cltest --list-run -t 3,5-7 dev/test/ok-10.sh
+$ ./clitest --list-run -t 3,5-7 dev/test/ok-10.sh
 #3	OK	echo 3 
 #5	OK	echo 5 
 #6	OK	echo 6 
@@ -725,11 +725,11 @@ $
 Using `-t` to limit to a range and the `-s` exclude some more
 
 ```
-$ ./cltest --list -t 3,5-7 -s 6 dev/test/ok-10.sh
+$ ./clitest --list -t 3,5-7 -s 6 dev/test/ok-10.sh
 #3	echo 3 
 #5	echo 5 
 #7	echo 7 
-$ ./cltest --list-run -t 3,5-7 -s 6 dev/test/ok-10.sh
+$ ./clitest --list-run -t 3,5-7 -s 6 dev/test/ok-10.sh
 #3	OK	echo 3 
 #5	OK	echo 5 
 #7	OK	echo 7 
@@ -740,7 +740,7 @@ Multifile, using `-t` alone
 
 
 ```
-$ ./cltest --list -t 1,3,5-7 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.sh
+$ ./clitest --list -t 1,3,5-7 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.sh
 ---------------------------------------- dev/test/ok-1.sh
 #1	echo ok
 ---------------------------------------- dev/test/fail-2.sh
@@ -749,7 +749,7 @@ $ ./cltest --list -t 1,3,5-7 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.
 #5	echo 2 
 #6	echo 3 
 #7	echo 4 
-$ ./cltest --list-run -t 1,3,5-7 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.sh
+$ ./clitest --list-run -t 1,3,5-7 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.sh
 ---------------------------------------- dev/test/ok-1.sh
 #1	OK	echo ok
 ---------------------------------------- dev/test/fail-2.sh
@@ -764,14 +764,14 @@ $
 Multifile, using `-t` and `-s`
 
 ```
-$ ./cltest --list -t 1,3,5-7 -s 3,6 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.sh
+$ ./clitest --list -t 1,3,5-7 -s 3,6 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.sh
 ---------------------------------------- dev/test/ok-1.sh
 #1	echo ok
 ---------------------------------------- dev/test/fail-2.sh
 ---------------------------------------- dev/test/ok-10.sh
 #5	echo 2 
 #7	echo 4 
-$ ./cltest --list-run -t 1,3,5-7 -s 3,6 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.sh
+$ ./clitest --list-run -t 1,3,5-7 -s 3,6 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.sh
 ---------------------------------------- dev/test/ok-1.sh
 #1	OK	echo ok
 ---------------------------------------- dev/test/fail-2.sh
@@ -784,18 +784,18 @@ $
 ## Single file, OK
 
 ```
-$ ./cltest dev/test/ok-1.sh
+$ ./clitest dev/test/ok-1.sh
 #1	echo ok
 OK: 1 of 1 test passed
-$ ./cltest dev/test/ok-2.sh
+$ ./clitest dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
 OK: 2 of 2 tests passed
-$ ./cltest dev/test/ok-50.sh | tail -1
+$ ./clitest dev/test/ok-50.sh | tail -1
 OK: 50 of 50 tests passed
-$ ./cltest dev/test/ok-100.sh | tail -1
+$ ./clitest dev/test/ok-100.sh | tail -1
 OK: 100 of 100 tests passed
-$ ./cltest dev/test/ok-2.sh
+$ ./clitest dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
 OK: 2 of 2 tests passed
@@ -805,7 +805,7 @@ $
 ## Multifile, all OK
 
 ```
-$ ./cltest dev/test/ok-2.sh dev/test/ok-2.sh
+$ ./clitest dev/test/ok-2.sh dev/test/ok-2.sh
 Testing file dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
@@ -818,7 +818,7 @@ Testing file dev/test/ok-2.sh
       2     -     -    dev/test/ok-2.sh
 
 OK: 4 of 4 tests passed
-$ ./cltest dev/test/ok-[0-9]*.sh | grep -v ^#
+$ ./clitest dev/test/ok-[0-9]*.sh | grep -v ^#
 Testing file dev/test/ok-1.sh
 Testing file dev/test/ok-10.sh
 Testing file dev/test/ok-100.sh
@@ -833,7 +833,7 @@ Testing file dev/test/ok-50.sh
      50     -     -    dev/test/ok-50.sh
 
 OK: 163 of 163 tests passed
-$ ./cltest dev/test/ok-?.sh dev/test/ok-10.sh
+$ ./clitest dev/test/ok-?.sh dev/test/ok-10.sh
 Testing file dev/test/ok-1.sh
 #1	echo ok
 Testing file dev/test/ok-2.sh
@@ -863,7 +863,7 @@ $
 ## Multifile, OK and fail
 
 ```
-$ ./cltest dev/test/ok-1.sh dev/test/fail-1.sh dev/test/ok-2.sh dev/test/fail-2.sh
+$ ./clitest dev/test/ok-1.sh dev/test/fail-1.sh dev/test/ok-2.sh dev/test/fail-2.sh
 Testing file dev/test/ok-1.sh
 #1	echo ok
 Testing file dev/test/fail-1.sh
@@ -900,7 +900,7 @@ Testing file dev/test/fail-2.sh
       -     2     -    dev/test/fail-2.sh
 
 FAIL: 3 of 6 tests failed
-$ ./cltest dev/test/ok-1.sh dev/test/fail-1.sh dev/test/ok-2.sh dev/test/fail-2.sh
+$ ./clitest dev/test/ok-1.sh dev/test/fail-1.sh dev/test/ok-2.sh dev/test/fail-2.sh
 Testing file dev/test/ok-1.sh
 #1	echo ok
 Testing file dev/test/fail-1.sh
@@ -943,14 +943,14 @@ $
 ## Fail messages
 
 ```
-$ ./cltest --prefix tab -P none dev/test/fail-messages.md  #→ --file test/fail-messages.out.txt
+$ ./clitest --prefix tab -P none dev/test/fail-messages.md  #→ --file test/fail-messages.out.txt
 $
 ```
 
 ## Fails
 
 ```
-$ ./cltest dev/test/fail-1.sh
+$ ./clitest dev/test/fail-1.sh
 #1	echo ok
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
@@ -960,7 +960,7 @@ $ ./cltest dev/test/fail-1.sh
 --------------------------------------------------------------------------------
 
 FAIL: 1 of 1 test failed
-$ ./cltest dev/test/fail-2.sh
+$ ./clitest dev/test/fail-2.sh
 #1	echo ok
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
@@ -977,9 +977,9 @@ $ ./cltest dev/test/fail-2.sh
 --------------------------------------------------------------------------------
 
 FAIL: 2 of 2 tests failed
-$ ./cltest dev/test/fail-50.sh | tail -1
+$ ./clitest dev/test/fail-50.sh | tail -1
 FAIL: 50 of 50 tests failed
-$ ./cltest -1 dev/test/fail-2.sh
+$ ./clitest -1 dev/test/fail-2.sh
 #1	echo ok
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
@@ -987,7 +987,7 @@ $ ./cltest -1 dev/test/fail-2.sh
 -fail
 +ok
 --------------------------------------------------------------------------------
-$ ./cltest --first dev/test/fail-2.sh
+$ ./clitest --first dev/test/fail-2.sh
 #1	echo ok
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
@@ -995,7 +995,7 @@ $ ./cltest --first dev/test/fail-2.sh
 -fail
 +ok
 --------------------------------------------------------------------------------
-$ ./cltest --first dev/test/fail-2.sh
+$ ./clitest --first dev/test/fail-2.sh
 #1	echo ok
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
@@ -1003,7 +1003,7 @@ $ ./cltest --first dev/test/fail-2.sh
 -fail
 +ok
 --------------------------------------------------------------------------------
-$ ./cltest dev/test/fail-2.sh
+$ ./clitest dev/test/fail-2.sh
 #1	echo ok
 --------------------------------------------------------------------------------
 [FAILED #1, line 1] echo ok
@@ -1026,7 +1026,7 @@ $
 ## Inline output with #→
 
 ```
-$ ./cltest dev/test/inline.sh
+$ ./clitest dev/test/inline.sh
 #1	echo 'one space' 
 #2	echo 'one tab'	
 #3	echo 'multi spaces'           
@@ -1058,7 +1058,7 @@ Mode #→ --text
 * The --text part can be omitted.
 
 ```
-$ ./cltest --list-run dev/test/inline-match-text.sh
+$ ./clitest --list-run dev/test/inline-match-text.sh
 #1	OK	echo 'abc'                    
 #2	OK	echo 'abc'                    
 #3	OK	printf '%s\n' '\t'            
@@ -1105,7 +1105,7 @@ $
 Mode #→ --eval
 
 ```
-$ ./cltest --list-run dev/test/inline-match-eval.sh
+$ ./clitest --list-run dev/test/inline-match-eval.sh
 #1	OK	folder=$(pwd)
 #2	OK	echo $folder                  
 #3	OK	var='abc'
@@ -1138,7 +1138,7 @@ $
 Mode #→ --egrep
 
 ```
-$ ./cltest --list-run dev/test/inline-match-egrep.sh
+$ ./clitest --list-run dev/test/inline-match-egrep.sh
 #1	OK	echo 'abc123'                 
 #2	OK	echo 'abc123'                 
 #3	OK	echo 'abc123'                 
@@ -1175,7 +1175,7 @@ Mode #→ --perl
 * --regex is an alias to --perl
 
 ```
-$ ./cltest --list-run dev/test/inline-match-perl.sh
+$ ./clitest --list-run dev/test/inline-match-perl.sh
 #1	OK	echo 'abc123'                 
 #2	OK	echo 'abc123'                 
 #3	OK	echo 'abc123'                 
@@ -1217,7 +1217,7 @@ $
 Mode #→ --file
 
 ```
-$ ./cltest --list-run dev/test/inline-match-file.sh
+$ ./clitest --list-run dev/test/inline-match-file.sh
 #1	OK	printf '$ echo ok\nok\n'      
 #2	OK	echo 'ok' > /tmp/foo.txt
 #3	OK	echo 'ok'                     
@@ -1232,7 +1232,7 @@ $
 Mode #→ --lines
 
 ```
-$ ./cltest --list-run dev/test/inline-match-lines.sh
+$ ./clitest --list-run dev/test/inline-match-lines.sh
 #1	OK	a=1                           
 #2	OK	echo 'ok'                     
 #3	OK	printf '1\n2\n3\n'            
@@ -1245,7 +1245,7 @@ $ ./cltest --list-run dev/test/inline-match-lines.sh
 #10	OK	echo '--lines'                 
 #11	OK	echo '--linesout'             
 #12	OK	echo '--lines is cool'         
-$ ./cltest --first dev/test/inline-match-lines.sh
+$ ./clitest --first dev/test/inline-match-lines.sh
 #1	a=1                           
 #2	echo 'ok'                     
 #3	printf '1\n2\n3\n'            
@@ -1262,64 +1262,64 @@ $
 Errors for #→ --egrep
 
 ```
-$ ./cltest dev/test/inline-match-egrep-error-1.sh
-cltest: Error: empty --egrep at line 1 of dev/test/inline-match-egrep-error-1.sh
-$ ./cltest dev/test/inline-match-egrep-error-2.sh 2>&1 | sed 's/^egrep: .*/egrep: ERROR_MSG/'
+$ ./clitest dev/test/inline-match-egrep-error-1.sh
+clitest: Error: empty --egrep at line 1 of dev/test/inline-match-egrep-error-1.sh
+$ ./clitest dev/test/inline-match-egrep-error-2.sh 2>&1 | sed 's/^egrep: .*/egrep: ERROR_MSG/'
 #1	echo "error: malformed regex"  
 egrep: ERROR_MSG
-cltest: Error: check your inline egrep regex at line 1 of dev/test/inline-match-egrep-error-2.sh
+clitest: Error: check your inline egrep regex at line 1 of dev/test/inline-match-egrep-error-2.sh
 $
 ```
 
 Errors for #→ --perl (and --regex)
 
 ```
-$ ./cltest dev/test/inline-match-perl-error-1.sh
-cltest: Error: empty --perl at line 1 of dev/test/inline-match-perl-error-1.sh
-$ ./cltest dev/test/inline-match-perl-error-2.sh
+$ ./clitest dev/test/inline-match-perl-error-1.sh
+clitest: Error: empty --perl at line 1 of dev/test/inline-match-perl-error-1.sh
+$ ./clitest dev/test/inline-match-perl-error-2.sh
 #1	echo "error: malformed regex"  
 Unmatched ( in regex; marked by <-- HERE in m/( <-- HERE / at -e line 1.
-cltest: Error: check your inline Perl regex at line 1 of dev/test/inline-match-perl-error-2.sh
+clitest: Error: check your inline Perl regex at line 1 of dev/test/inline-match-perl-error-2.sh
 $
 ```
 
 Errors for #→ --file
 
 ```
-$ ./cltest dev/test/inline-match-file-error-1.sh
-cltest: Error: empty --file at line 1 of dev/test/inline-match-file-error-1.sh
-$ ./cltest dev/test/inline-match-file-error-2.sh
+$ ./clitest dev/test/inline-match-file-error-1.sh
+clitest: Error: empty --file at line 1 of dev/test/inline-match-file-error-1.sh
+$ ./clitest dev/test/inline-match-file-error-2.sh
 #1	echo "error: file not found"  
-cltest: Error: cannot read inline output file 'dev/test/XXnotfoundXX', from line 1 of dev/test/inline-match-file-error-2.sh
-$ ./cltest dev/test/inline-match-file-error-3.sh
+clitest: Error: cannot read inline output file 'dev/test/XXnotfoundXX', from line 1 of dev/test/inline-match-file-error-2.sh
+$ ./clitest dev/test/inline-match-file-error-3.sh
 #1	echo "error: directory"  
-cltest: Error: cannot read inline output file '/etc/', from line 1 of dev/test/inline-match-file-error-3.sh
+clitest: Error: cannot read inline output file '/etc/', from line 1 of dev/test/inline-match-file-error-3.sh
 $
 ```
 
 Errors for #→ --lines
 
 ```
-$ ./cltest dev/test/inline-match-lines-error-1.sh
-cltest: Error: --lines requires a number. See line 1 of dev/test/inline-match-lines-error-1.sh
-$ ./cltest dev/test/inline-match-lines-error-2.sh
-cltest: Error: --lines requires a number. See line 1 of dev/test/inline-match-lines-error-2.sh
-$ ./cltest dev/test/inline-match-lines-error-3.sh
-cltest: Error: --lines requires a number. See line 1 of dev/test/inline-match-lines-error-3.sh
-$ ./cltest dev/test/inline-match-lines-error-4.sh
-cltest: Error: --lines requires a number. See line 1 of dev/test/inline-match-lines-error-4.sh
+$ ./clitest dev/test/inline-match-lines-error-1.sh
+clitest: Error: --lines requires a number. See line 1 of dev/test/inline-match-lines-error-1.sh
+$ ./clitest dev/test/inline-match-lines-error-2.sh
+clitest: Error: --lines requires a number. See line 1 of dev/test/inline-match-lines-error-2.sh
+$ ./clitest dev/test/inline-match-lines-error-3.sh
+clitest: Error: --lines requires a number. See line 1 of dev/test/inline-match-lines-error-3.sh
+$ ./clitest dev/test/inline-match-lines-error-4.sh
+clitest: Error: --lines requires a number. See line 1 of dev/test/inline-match-lines-error-4.sh
 $
 ```
 
 Errors for #→ --eval
 
 ```
-$ ./cltest dev/test/inline-match-eval-error-1.sh
-cltest: Error: empty --eval at line 1 of dev/test/inline-match-eval-error-1.sh
-$ ./cltest dev/test/inline-match-eval-error-2.sh 2>&1 | sed 's/line [0-9][0-9]*/line N/'
+$ ./clitest dev/test/inline-match-eval-error-1.sh
+clitest: Error: empty --eval at line 1 of dev/test/inline-match-eval-error-1.sh
+$ ./clitest dev/test/inline-match-eval-error-2.sh 2>&1 | sed 's/line [0-9][0-9]*/line N/'
 #1	echo 'error: syntax error'  
-./cltest: eval: line N: unexpected EOF while looking for matching `)'
-./cltest: eval: line N: syntax error: unexpected end of file
+./clitest: eval: line N: unexpected EOF while looking for matching `)'
+./clitest: eval: line N: syntax error: unexpected end of file
 --------------------------------------------------------------------------------
 [FAILED #1, line N] echo 'error: syntax error'  
 @@ -0,0 +1 @@
@@ -1335,35 +1335,35 @@ $
 Error: Invalid argument
 
 ```
-$ ./cltest -t - dev/test/ok-2.sh
-cltest: Error: invalid argument for -t or --test: -
-$ ./cltest -t -1 dev/test/ok-2.sh
-cltest: Error: invalid argument for -t or --test: -1
-$ ./cltest -t 1- dev/test/ok-2.sh
-cltest: Error: invalid argument for -t or --test: 1-
-$ ./cltest -t 1--2 dev/test/ok-2.sh
-cltest: Error: invalid argument for -t or --test: 1--2
-$ ./cltest -t 1-2-3 dev/test/ok-2.sh
-cltest: Error: invalid argument for -t or --test: 1-2-3
+$ ./clitest -t - dev/test/ok-2.sh
+clitest: Error: invalid argument for -t or --test: -
+$ ./clitest -t -1 dev/test/ok-2.sh
+clitest: Error: invalid argument for -t or --test: -1
+$ ./clitest -t 1- dev/test/ok-2.sh
+clitest: Error: invalid argument for -t or --test: 1-
+$ ./clitest -t 1--2 dev/test/ok-2.sh
+clitest: Error: invalid argument for -t or --test: 1--2
+$ ./clitest -t 1-2-3 dev/test/ok-2.sh
+clitest: Error: invalid argument for -t or --test: 1-2-3
 $
 ```
 
 Error: Out of range
 
 ```
-$ ./cltest -t 99 dev/test/ok-2.sh
-cltest: Error: no test found for the specified number or range '99'
+$ ./clitest -t 99 dev/test/ok-2.sh
+clitest: Error: no test found for the specified number or range '99'
 $
 ```
 
 If range = zero or empty, run all tests
 
 ```
-$ ./cltest -t '' dev/test/ok-2.sh
+$ ./clitest -t '' dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
 OK: 2 of 2 tests passed
-$ ./cltest -t 0 dev/test/ok-2.sh
+$ ./clitest -t 0 dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
 OK: 2 of 2 tests passed
@@ -1375,7 +1375,7 @@ $
 * The resulting range is zero
 
 ```
-$ ./cltest -t ,,,0,0-0,,, dev/test/ok-2.sh
+$ ./clitest -t ,,,0,0-0,,, dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
 OK: 2 of 2 tests passed
@@ -1385,10 +1385,10 @@ $
 Normal operation, using `--test` and `-t`
 
 ```
-$ ./cltest -t 1 dev/test/ok-10.sh
+$ ./clitest -t 1 dev/test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
-$ ./cltest --test 1 dev/test/ok-10.sh
+$ ./clitest --test 1 dev/test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
 $
@@ -1397,7 +1397,7 @@ $
 Ranges `0-1` and `1-0` expand to `1`
 
 ```
-$ ./cltest -t 0-1,1-0 dev/test/ok-10.sh
+$ ./clitest -t 0-1,1-0 dev/test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
 $
@@ -1406,7 +1406,7 @@ $
 Range `1-1` expand to `1`
 
 ```
-$ ./cltest -t 1-1 dev/test/ok-10.sh
+$ ./clitest -t 1-1 dev/test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
 $
@@ -1415,7 +1415,7 @@ $
 Repeated values are OK
 
 ```
-$ ./cltest -t 1,1,1,0,1 dev/test/ok-10.sh
+$ ./clitest -t 1,1,1,0,1 dev/test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
 $
@@ -1424,7 +1424,7 @@ $
 Range terminator is out of bounds
 
 ```
-$ ./cltest -t 10-20 dev/test/ok-10.sh
+$ ./clitest -t 10-20 dev/test/ok-10.sh
 #10	echo 10 
 OK: 1 of 10 tests passed (9 skipped)
 $
@@ -1433,12 +1433,12 @@ $
 Inverted ranges
 
 ```
-$ ./cltest -t 3,2,1 dev/test/ok-10.sh
+$ ./clitest -t 3,2,1 dev/test/ok-10.sh
 #1	echo 1 
 #2	echo 2 
 #3	echo 3 
 OK: 3 of 10 tests passed (7 skipped)
-$ ./cltest -t 3-1 dev/test/ok-10.sh
+$ ./clitest -t 3-1 dev/test/ok-10.sh
 #1	echo 1 
 #2	echo 2 
 #3	echo 3 
@@ -1449,7 +1449,7 @@ $
 Multifile. The test numbers always increase sequentially, regardless of the file changes.
 
 ```
-$ ./cltest -t 1,5,13 dev/test/ok-?.sh dev/test/ok-10.sh
+$ ./clitest -t 1,5,13 dev/test/ok-?.sh dev/test/ok-10.sh
 Testing file dev/test/ok-1.sh
 #1	echo ok
 Testing file dev/test/ok-2.sh
@@ -1463,7 +1463,7 @@ Testing file dev/test/ok-10.sh
       2     -     8    dev/test/ok-10.sh
 
 OK: 3 of 13 tests passed (10 skipped)
-$ ./cltest -t 1,5 dev/test/ok-[12].sh dev/test/fail-2.sh
+$ ./clitest -t 1,5 dev/test/ok-[12].sh dev/test/fail-2.sh
 Testing file dev/test/ok-1.sh
 #1	echo ok
 Testing file dev/test/ok-2.sh
@@ -1482,7 +1482,7 @@ Testing file dev/test/fail-2.sh
       -     1     1    dev/test/fail-2.sh
 
 FAIL: 1 of 5 tests failed (3 skipped)
-$ ./cltest -t 1 dev/test/ok-[12].sh dev/test/fail-2.sh
+$ ./clitest -t 1 dev/test/ok-[12].sh dev/test/fail-2.sh
 Testing file dev/test/ok-1.sh
 #1	echo ok
 Testing file dev/test/ok-2.sh
@@ -1502,31 +1502,31 @@ $
 Error: Invalid argument
 
 ```
-$ ./cltest -s - dev/test/ok-2.sh
-cltest: Error: invalid argument for -s or --skip: -
-$ ./cltest -s -1 dev/test/ok-2.sh
-cltest: Error: invalid argument for -s or --skip: -1
-$ ./cltest -s 1- dev/test/ok-2.sh
-cltest: Error: invalid argument for -s or --skip: 1-
-$ ./cltest -s 1--2 dev/test/ok-2.sh
-cltest: Error: invalid argument for -s or --skip: 1--2
-$ ./cltest -s 1-2-3 dev/test/ok-2.sh
-cltest: Error: invalid argument for -s or --skip: 1-2-3
+$ ./clitest -s - dev/test/ok-2.sh
+clitest: Error: invalid argument for -s or --skip: -
+$ ./clitest -s -1 dev/test/ok-2.sh
+clitest: Error: invalid argument for -s or --skip: -1
+$ ./clitest -s 1- dev/test/ok-2.sh
+clitest: Error: invalid argument for -s or --skip: 1-
+$ ./clitest -s 1--2 dev/test/ok-2.sh
+clitest: Error: invalid argument for -s or --skip: 1--2
+$ ./clitest -s 1-2-3 dev/test/ok-2.sh
+clitest: Error: invalid argument for -s or --skip: 1-2-3
 $
 ```
 
 Error: Skipped all tests
 
 ```
-$ ./cltest -s 1 dev/test/ok-1.sh
-cltest: Error: no test found. Maybe '--skip 1' was too much?
+$ ./clitest -s 1 dev/test/ok-1.sh
+clitest: Error: no test found. Maybe '--skip 1' was too much?
 $
 ```
 
 Out of range: no problem, you just skipped a non-existent test. All tests will be run.
 
 ```
-$ ./cltest -s 99 dev/test/ok-2.sh
+$ ./clitest -s 99 dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
 OK: 2 of 2 tests passed
@@ -1536,11 +1536,11 @@ $
 If range = zero or empty, run all tests
 
 ```
-$ ./cltest -s '' dev/test/ok-2.sh
+$ ./clitest -s '' dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
 OK: 2 of 2 tests passed
-$ ./cltest -s 0 dev/test/ok-2.sh
+$ ./clitest -s 0 dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
 OK: 2 of 2 tests passed
@@ -1552,7 +1552,7 @@ $
 * The resulting range is zero
 
 ```
-$ ./cltest -s ,,,0,0-0,,, dev/test/ok-2.sh
+$ ./clitest -s ,,,0,0-0,,, dev/test/ok-2.sh
 #1	echo ok
 #2	echo ok  
 OK: 2 of 2 tests passed
@@ -1562,10 +1562,10 @@ $
 Normal operation, using `--skip` and `-s`
 
 ```
-$ ./cltest -s 1 dev/test/ok-2.sh
+$ ./clitest -s 1 dev/test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
-$ ./cltest --skip 1 dev/test/ok-2.sh
+$ ./clitest --skip 1 dev/test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
 $
@@ -1574,7 +1574,7 @@ $
 Ranges `0-1` and `1-0` expand to `1`
 
 ```
-$ ./cltest -s 0-1,1-0 dev/test/ok-2.sh
+$ ./clitest -s 0-1,1-0 dev/test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
 $
@@ -1583,7 +1583,7 @@ $
 Range `1-1` expand to `1`
 
 ```
-$ ./cltest -s 1-1 dev/test/ok-2.sh
+$ ./clitest -s 1-1 dev/test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
 $
@@ -1592,7 +1592,7 @@ $
 Repeated values are OK
 
 ```
-$ ./cltest -s 1,1,1,0,1 dev/test/ok-2.sh
+$ ./clitest -s 1,1,1,0,1 dev/test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
 $
@@ -1601,7 +1601,7 @@ $
 Range terminator is out of bounds
 
 ```
-$ ./cltest -s 2-10 dev/test/ok-2.sh
+$ ./clitest -s 2-10 dev/test/ok-2.sh
 #1	echo ok
 OK: 1 of 2 tests passed (1 skipped)
 $
@@ -1610,12 +1610,12 @@ $
 Inverted ranges
 
 ```
-$ ./cltest -s 10,9,8,7,6,5,4 dev/test/ok-10.sh
+$ ./clitest -s 10,9,8,7,6,5,4 dev/test/ok-10.sh
 #1	echo 1 
 #2	echo 2 
 #3	echo 3 
 OK: 3 of 10 tests passed (7 skipped)
-$ ./cltest -s 10-4 dev/test/ok-10.sh
+$ ./clitest -s 10-4 dev/test/ok-10.sh
 #1	echo 1 
 #2	echo 2 
 #3	echo 3 
@@ -1626,7 +1626,7 @@ $
 Multifile. The test numbers always increase sequentially, regardless of the file changes.
 
 ```
-$ ./cltest -s 2,3,13 dev/test/ok-?.sh dev/test/ok-10.sh
+$ ./clitest -s 2,3,13 dev/test/ok-?.sh dev/test/ok-10.sh
 Testing file dev/test/ok-1.sh
 #1	echo ok
 Testing file dev/test/ok-2.sh
@@ -1647,7 +1647,7 @@ Testing file dev/test/ok-10.sh
       9     -     1    dev/test/ok-10.sh
 
 OK: 10 of 13 tests passed (3 skipped)
-$ ./cltest -s 2,3,4 dev/test/ok-[12].sh dev/test/fail-2.sh
+$ ./clitest -s 2,3,4 dev/test/ok-[12].sh dev/test/fail-2.sh
 Testing file dev/test/ok-1.sh
 #1	echo ok
 Testing file dev/test/ok-2.sh
@@ -1666,7 +1666,7 @@ Testing file dev/test/fail-2.sh
       -     1     1    dev/test/fail-2.sh
 
 FAIL: 1 of 5 tests failed (3 skipped)
-$ ./cltest -s 2-10 dev/test/ok-[12].sh dev/test/fail-2.sh
+$ ./clitest -s 2-10 dev/test/ok-[12].sh dev/test/fail-2.sh
 Testing file dev/test/ok-1.sh
 #1	echo ok
 Testing file dev/test/ok-2.sh
@@ -1686,23 +1686,23 @@ $
 Error: The combination of `-t` and `-s` resulted in no tests
 
 ```
-$ ./cltest -t 9 -s 9 dev/test/ok-10.sh
-cltest: Error: no test found. The combination of -t and -s resulted in no tests.
+$ ./clitest -t 9 -s 9 dev/test/ok-10.sh
+clitest: Error: no test found. The combination of -t and -s resulted in no tests.
 $
 ```
 
 The order does not matter, `-s` always wins
 
 ```
-$ ./cltest -s 9 -t 9 dev/test/ok-10.sh
-cltest: Error: no test found. The combination of -t and -s resulted in no tests.
+$ ./clitest -s 9 -t 9 dev/test/ok-10.sh
+clitest: Error: no test found. The combination of -t and -s resulted in no tests.
 $
 ```
 
 Using `-t` to limit to a range and the `-s` exclude some more
 
 ```
-$ ./cltest -t 3,5-7 -s 6 dev/test/ok-10.sh
+$ ./clitest -t 3,5-7 -s 6 dev/test/ok-10.sh
 #3	echo 3 
 #5	echo 5 
 #7	echo 7 
@@ -1713,7 +1713,7 @@ $
 Same as previous, but now multifile
 
 ```
-$ ./cltest -t 1,3,5-7 -s 3,6 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.sh
+$ ./clitest -t 1,3,5-7 -s 3,6 dev/test/ok-1.sh dev/test/fail-2.sh dev/test/ok-10.sh
 Testing file dev/test/ok-1.sh
 #1	echo ok
 Testing file dev/test/fail-2.sh
@@ -1733,7 +1733,7 @@ $
 ## Option --diff-options
 
 ```
-$ ./cltest dev/test/option-diff-options.sh
+$ ./clitest dev/test/option-diff-options.sh
 #1	echo "	diff -w to ignore spaces    "
 --------------------------------------------------------------------------------
 [FAILED #1, line 3] echo "	diff -w to ignore spaces    "
@@ -1750,7 +1750,7 @@ $ ./cltest dev/test/option-diff-options.sh
 --------------------------------------------------------------------------------
 
 FAIL: 2 of 2 tests failed
-$ ./cltest --diff-options '-u -w' dev/test/option-diff-options.sh
+$ ./clitest --diff-options '-u -w' dev/test/option-diff-options.sh
 #1	echo "	diff -w to ignore spaces    "
 #2	echo "	diff -w now inline    "  
 OK: 2 of 2 tests passed
@@ -1760,14 +1760,14 @@ $
 ## Option --prompt
 
 ```
-$ ./cltest dev/test/option-prompt.sh
-cltest: Error: no test found in input file: dev/test/option-prompt.sh
-$ ./cltest --prompt 'prompt$ ' dev/test/option-prompt.sh
+$ ./clitest dev/test/option-prompt.sh
+clitest: Error: no test found in input file: dev/test/option-prompt.sh
+$ ./clitest --prompt 'prompt$ ' dev/test/option-prompt.sh
 #1	echo "1"  
 #2	echo "2"
 #3	echo "3"
 OK: 3 of 3 tests passed
-$ ./cltest --prompt '♥ ' dev/test/option-prompt-unicode.sh
+$ ./clitest --prompt '♥ ' dev/test/option-prompt-unicode.sh
 #1	echo "1"  
 #2	echo "2"
 #3	echo "3"
@@ -1778,7 +1778,7 @@ $
 ## Option --inline-prefix
 
 ```
-$ ./cltest dev/test/option-inline-prefix.sh
+$ ./clitest dev/test/option-inline-prefix.sh
 #1	echo "1 space" #==> 1 space
 --------------------------------------------------------------------------------
 [FAILED #1, line 3] echo "1 space" #==> 1 space
@@ -1799,7 +1799,7 @@ $ ./cltest dev/test/option-inline-prefix.sh
 --------------------------------------------------------------------------------
 
 FAIL: 3 of 3 tests failed
-$ ./cltest --inline-prefix '#==>' dev/test/option-inline-prefix.sh
+$ ./clitest --inline-prefix '#==>' dev/test/option-inline-prefix.sh
 #1	echo "1 space" 
 --------------------------------------------------------------------------------
 [FAILED #1, line 3] echo "1 space" 
@@ -1823,7 +1823,7 @@ $ ./cltest --inline-prefix '#==>' dev/test/option-inline-prefix.sh
 --------------------------------------------------------------------------------
 
 FAIL: 3 of 3 tests failed
-$ ./cltest --inline-prefix '#==> ' dev/test/option-inline-prefix.sh
+$ ./clitest --inline-prefix '#==> ' dev/test/option-inline-prefix.sh
 #1	echo "1 space" 
 #2	echo "8 spaces"        
 #3	echo "2 tabs"		
@@ -1834,7 +1834,7 @@ $
 ## Option --prefix
 
 ```
-$ ./cltest --prefix '    ' dev/test/option-prefix.sh
+$ ./clitest --prefix '    ' dev/test/option-prefix.sh
 #1	echo "1"  
 #2	echo "2"
 #3	echo "3"
@@ -1842,7 +1842,7 @@ $ ./cltest --prefix '    ' dev/test/option-prefix.sh
 #5	echo "5"  
 #6	echo; echo "6"; echo; echo "7"
 OK: 6 of 6 tests passed
-$ ./cltest --prefix 4 dev/test/option-prefix.sh
+$ ./clitest --prefix 4 dev/test/option-prefix.sh
 #1	echo "1"  
 #2	echo "2"
 #3	echo "3"
@@ -1850,7 +1850,7 @@ $ ./cltest --prefix 4 dev/test/option-prefix.sh
 #5	echo "5"  
 #6	echo; echo "6"; echo; echo "7"
 OK: 6 of 6 tests passed
-$ ./cltest --prefix '\t' dev/test/option-prefix-tab.sh
+$ ./clitest --prefix '\t' dev/test/option-prefix-tab.sh
 #1	echo "1"  
 #2	echo "2"
 #3	echo "3"
@@ -1858,7 +1858,7 @@ $ ./cltest --prefix '\t' dev/test/option-prefix-tab.sh
 #5	echo "5"  
 #6	echo; echo "6"; echo; echo "7"
 OK: 6 of 6 tests passed
-$ ./cltest --prefix tab dev/test/option-prefix-tab.sh
+$ ./clitest --prefix tab dev/test/option-prefix-tab.sh
 #1	echo "1"  
 #2	echo "2"
 #3	echo "3"
@@ -1872,43 +1872,43 @@ $
 ## Option --prefix: glob gotchas
 
 ```
-$ ./cltest --prefix '?' dev/test/option-prefix-glob.sh
+$ ./clitest --prefix '?' dev/test/option-prefix-glob.sh
 #1	echo 'prefix ?'	
 #2	echo 'prefix ?'
 OK: 2 of 2 tests passed
-$ ./cltest --prefix '*' dev/test/option-prefix-glob.sh
+$ ./clitest --prefix '*' dev/test/option-prefix-glob.sh
 #1	echo 'prefix *'	
 #2	echo 'prefix *'
 OK: 2 of 2 tests passed
-$ ./cltest --prefix '#' dev/test/option-prefix-glob.sh
+$ ./clitest --prefix '#' dev/test/option-prefix-glob.sh
 #1	echo 'prefix #'	
 #2	echo 'prefix #'
 OK: 2 of 2 tests passed
-$ ./cltest --prefix '%' dev/test/option-prefix-glob.sh
+$ ./clitest --prefix '%' dev/test/option-prefix-glob.sh
 #1	echo 'prefix %'	
 #2	echo 'prefix %'
 OK: 2 of 2 tests passed
-$ ./cltest --prefix '##' dev/test/option-prefix-glob.sh
+$ ./clitest --prefix '##' dev/test/option-prefix-glob.sh
 #1	echo 'prefix ##'	
 #2	echo 'prefix ##'
 OK: 2 of 2 tests passed
-$ ./cltest --prefix '%%' dev/test/option-prefix-glob.sh
+$ ./clitest --prefix '%%' dev/test/option-prefix-glob.sh
 #1	echo 'prefix %%'	
 #2	echo 'prefix %%'
 OK: 2 of 2 tests passed
-$ ./cltest --prefix '#*' dev/test/option-prefix-glob.sh
+$ ./clitest --prefix '#*' dev/test/option-prefix-glob.sh
 #1	echo 'prefix #*'	
 #2	echo 'prefix #*'
 OK: 2 of 2 tests passed
-$ ./cltest --prefix '*#' dev/test/option-prefix-glob.sh
+$ ./clitest --prefix '*#' dev/test/option-prefix-glob.sh
 #1	echo 'prefix *#'	
 #2	echo 'prefix *#'
 OK: 2 of 2 tests passed
-$ ./cltest --prefix '%*' dev/test/option-prefix-glob.sh
+$ ./clitest --prefix '%*' dev/test/option-prefix-glob.sh
 #1	echo 'prefix %*'	
 #2	echo 'prefix %*'
 OK: 2 of 2 tests passed
-$ ./cltest --prefix '*%' dev/test/option-prefix-glob.sh
+$ ./clitest --prefix '*%' dev/test/option-prefix-glob.sh
 #1	echo 'prefix *%'	
 #2	echo 'prefix *%'
 OK: 2 of 2 tests passed
@@ -1918,43 +1918,43 @@ $
 ## Option --prompt: glob gotchas (char + space)
 
 ```
-$ ./cltest --prompt '? ' dev/test/option-prompt-glob-space.sh
+$ ./clitest --prompt '? ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt ? '	
 #2	echo 'prompt ? '
 OK: 2 of 2 tests passed
-$ ./cltest --prompt '* ' dev/test/option-prompt-glob-space.sh
+$ ./clitest --prompt '* ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt * '	
 #2	echo 'prompt * '
 OK: 2 of 2 tests passed
-$ ./cltest --prompt '# ' dev/test/option-prompt-glob-space.sh
+$ ./clitest --prompt '# ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt # '	
 #2	echo 'prompt # '
 OK: 2 of 2 tests passed
-$ ./cltest --prompt '% ' dev/test/option-prompt-glob-space.sh
+$ ./clitest --prompt '% ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt % '	
 #2	echo 'prompt % '
 OK: 2 of 2 tests passed
-$ ./cltest --prompt '## ' dev/test/option-prompt-glob-space.sh
+$ ./clitest --prompt '## ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt ## '	
 #2	echo 'prompt ## '
 OK: 2 of 2 tests passed
-$ ./cltest --prompt '%% ' dev/test/option-prompt-glob-space.sh
+$ ./clitest --prompt '%% ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt %% '	
 #2	echo 'prompt %% '
 OK: 2 of 2 tests passed
-$ ./cltest --prompt '#* ' dev/test/option-prompt-glob-space.sh
+$ ./clitest --prompt '#* ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt #* '	
 #2	echo 'prompt #* '
 OK: 2 of 2 tests passed
-$ ./cltest --prompt '*# ' dev/test/option-prompt-glob-space.sh
+$ ./clitest --prompt '*# ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt *# '	
 #2	echo 'prompt *# '
 OK: 2 of 2 tests passed
-$ ./cltest --prompt '%* ' dev/test/option-prompt-glob-space.sh
+$ ./clitest --prompt '%* ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt %* '	
 #2	echo 'prompt %* '
 OK: 2 of 2 tests passed
-$ ./cltest --prompt '*% ' dev/test/option-prompt-glob-space.sh
+$ ./clitest --prompt '*% ' dev/test/option-prompt-glob-space.sh
 #1	echo 'prompt *% '	
 #2	echo 'prompt *% '
 OK: 2 of 2 tests passed
@@ -1964,43 +1964,43 @@ $
 ## Option --prompt: glob gotchas (chars only)
 
 ```
-$ ./cltest --prompt '?' dev/test/option-prompt-glob-1.sh
+$ ./clitest --prompt '?' dev/test/option-prompt-glob-1.sh
 #1	echo 'prompt ?'	
 #2	echo 'prompt ?'
 OK: 2 of 2 tests passed
-$ ./cltest --prompt '*' dev/test/option-prompt-glob-1.sh
+$ ./clitest --prompt '*' dev/test/option-prompt-glob-1.sh
 #1	echo 'prompt *'	
 #2	echo 'prompt *'
 OK: 2 of 2 tests passed
-$ ./cltest --prompt '#' dev/test/option-prompt-glob-1.sh
+$ ./clitest --prompt '#' dev/test/option-prompt-glob-1.sh
 #1	echo 'prompt #'	
 #2	echo 'prompt #'
 OK: 2 of 2 tests passed
-$ ./cltest --prompt '%' dev/test/option-prompt-glob-1.sh
+$ ./clitest --prompt '%' dev/test/option-prompt-glob-1.sh
 #1	echo 'prompt %'	
 #2	echo 'prompt %'
 OK: 2 of 2 tests passed
-$ ./cltest --prompt '##' dev/test/option-prompt-glob-2.sh
+$ ./clitest --prompt '##' dev/test/option-prompt-glob-2.sh
 #1	echo 'prompt ##'	
 #2	echo 'prompt ##'
 OK: 2 of 2 tests passed
-$ ./cltest --prompt '%%' dev/test/option-prompt-glob-2.sh
+$ ./clitest --prompt '%%' dev/test/option-prompt-glob-2.sh
 #1	echo 'prompt %%'	
 #2	echo 'prompt %%'
 OK: 2 of 2 tests passed
-$ ./cltest --prompt '#*' dev/test/option-prompt-glob-2.sh
+$ ./clitest --prompt '#*' dev/test/option-prompt-glob-2.sh
 #1	echo 'prompt #*'	
 #2	echo 'prompt #*'
 OK: 2 of 2 tests passed
-$ ./cltest --prompt '*#' dev/test/option-prompt-glob-2.sh
+$ ./clitest --prompt '*#' dev/test/option-prompt-glob-2.sh
 #1	echo 'prompt *#'	
 #2	echo 'prompt *#'
 OK: 2 of 2 tests passed
-$ ./cltest --prompt '%*' dev/test/option-prompt-glob-2.sh
+$ ./clitest --prompt '%*' dev/test/option-prompt-glob-2.sh
 #1	echo 'prompt %*'	
 #2	echo 'prompt %*'
 OK: 2 of 2 tests passed
-$ ./cltest --prompt '*%' dev/test/option-prompt-glob-2.sh
+$ ./clitest --prompt '*%' dev/test/option-prompt-glob-2.sh
 #1	echo 'prompt *%'	
 #2	echo 'prompt *%'
 OK: 2 of 2 tests passed
@@ -2010,29 +2010,29 @@ $
 ## Options --pre-flight and --post-flight
 
 ```
-$ ./cltest --pre-flight 'tt_test_number=99; tt_nr_total_tests=99' dev/test/ok-1.sh
+$ ./clitest --pre-flight 'tt_test_number=99; tt_nr_total_tests=99' dev/test/ok-1.sh
 #100	echo ok
 OK: 100 of 100 tests passed
-$ ./cltest --post-flight 'tt_nr_total_fails=50' dev/test/ok-50.sh | tail -1
+$ ./clitest --post-flight 'tt_nr_total_fails=50' dev/test/ok-50.sh | tail -1
 FAIL: 50 of 50 tests failed
-$ ./cltest --pre-flight 'false' dev/test/ok-1.sh
-cltest: Error: pre-flight command failed with status=1: false
+$ ./clitest --pre-flight 'false' dev/test/ok-1.sh
+clitest: Error: pre-flight command failed with status=1: false
 $
 ```
 
 ## Options terminator -- 
 
 ```
-$ ./cltest -t 99 -- --quiet
-cltest: Error: cannot read input file: --quiet
+$ ./clitest -t 99 -- --quiet
+clitest: Error: cannot read input file: --quiet
 $
 ```
 
 ## File - meaning STDIN (no support for now)
 
 ```
-$ cat dev/test/ok-1.sh | ./cltest -
-cltest: Error: cannot read input file: -
+$ cat dev/test/ok-1.sh | ./clitest -
+clitest: Error: cannot read input file: -
 $
 ```
 
@@ -2041,7 +2041,7 @@ $
 Exit code: normal and error
 
 ```
-$ ./cltest dev/test/exit-code.sh
+$ ./clitest dev/test/exit-code.sh
 #1	echo "ok"            > /dev/null; echo $?
 #2	cp XXnotfoundXX foo 2> /dev/null; echo $?
 OK: 2 of 2 tests passed
@@ -2051,7 +2051,7 @@ $
 STDIN and STDOUT
 
 ```
-$ ./cltest dev/test/stdout-stderr.sh
+$ ./clitest dev/test/stdout-stderr.sh
 #1	echo "stdout"
 #2	echo "stdout" 2> /dev/null
 #3	echo "stderr" 1>&2
@@ -2069,7 +2069,7 @@ $
 Multiple commands in one line
 
 ```
-$ ./cltest dev/test/multi-commands.sh
+$ ./clitest dev/test/multi-commands.sh
 #1	echo 1; echo 2; echo 3; echo 4; echo 5
 #2	(echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p
 #3	(echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p  
@@ -2080,7 +2080,7 @@ $
 A `cd` command in one test should not affect the next
 
 ```
-$ ./cltest dev/test/cd.sh dev/test/ok-2.sh
+$ ./clitest dev/test/cd.sh dev/test/ok-2.sh
 Testing file dev/test/cd.sh
 #1	cd
 Testing file dev/test/ok-2.sh
@@ -2098,7 +2098,7 @@ $
 Syntax: End-of-file or empty prompt closes the previous command
 
 ```
-$ ./cltest dev/test/close-command.sh
+$ ./clitest dev/test/close-command.sh
 #1	echo 1
 #2	echo 2
 #3	echo 3
@@ -2109,7 +2109,7 @@ $
 Windows files (CR+LF)
 
 ```
-$ ./cltest dev/test/windows.sh
+$ ./clitest dev/test/windows.sh
 #1	echo "a file with CRLF line ending"
 #2	echo "inline output"  
 #3	echo "inline regex"  
@@ -2120,7 +2120,7 @@ $
 Unicode chars
 
 ```
-$ ./cltest dev/test/special-chars.sh | tail -1
+$ ./clitest dev/test/special-chars.sh | tail -1
 OK: 206 of 206 tests passed
 $
 ```
@@ -2128,7 +2128,7 @@ $
 Blanks (space, tab, newline) in the output
 
 ```
-$ ./cltest dev/test/blank-output.sh
+$ ./clitest dev/test/blank-output.sh
 #1	echo ' '
 #2	echo '    '
 #3	printf '\t\n'
@@ -2150,13 +2150,13 @@ Files with no newline (`\n`) at the end
 3. Inline output
 
 ```
-$ ./cltest dev/test/no-nl-file-1.sh
+$ ./clitest dev/test/no-nl-file-1.sh
 #1	printf '%s\n' 'a file with no \n at the last line'
 OK: 1 of 1 test passed
-$ ./cltest dev/test/no-nl-file-2.sh
+$ ./clitest dev/test/no-nl-file-2.sh
 #1	printf '%s\n' 'another file with no \n at the last line'
 OK: 1 of 1 test passed
-$ ./cltest dev/test/no-nl-file-3.sh
+$ ./clitest dev/test/no-nl-file-3.sh
 #1	printf '%s\n' 'oneliner, no \n'  
 OK: 1 of 1 test passed
 $
@@ -2165,7 +2165,7 @@ $
 Commands whose output has no `\n`
 
 ```
-$ ./cltest dev/test/no-nl-command.sh
+$ ./clitest dev/test/no-nl-command.sh
 #1	printf 'ok\n'
 #2	printf 'fail'
 --------------------------------------------------------------------------------
@@ -2204,7 +2204,7 @@ $
 ## And now, the colored output tests
 
 ```
-$ ./cltest --color yes --first dev/test/fail-2.sh
+$ ./clitest --color yes --first dev/test/fail-2.sh
 #1	echo ok
 [31m--------------------------------------------------------------------------------[m
 [31m[FAILED #1, line 1] echo ok[m

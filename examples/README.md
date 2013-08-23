@@ -1,4 +1,4 @@
-# cltest Examples
+# clitest Examples
 
 Here's some simple examples to show you how a test file looks like.
 
@@ -15,10 +15,10 @@ Hello World
 $
 ```
 
-To test these files, just call `cltest` with no options.
+To test these files, just call `clitest` with no options.
 
 ```
-$ cltest intro.txt
+$ clitest intro.txt
 #1	echo "Hello World"
 #2	cd /tmp
 #3	pwd
@@ -41,10 +41,10 @@ $
  
 Now take a look at the `.md` files. They're normal Markdown documents (with titles, paragraphs, code blocks), created to be read by humans (after HTML conversion).
 
-Inside the code blocks there are examples of command lines and their results. `cltest` can extract and run these commands for you! Now you can guarantee that all your examples are correct.
+Inside the code blocks there are examples of command lines and their results. `clitest` can extract and run these commands for you! Now you can guarantee that all your examples are correct.
 
 ```
-$ cltest --prefix tab cut.md
+$ clitest --prefix tab cut.md
 #1	echo "one:two:three:four:five:six" | cut -d : -f 1
 #2	echo "one:two:three:four:five:six" | cut -d : -f 4
 #3	echo "one:two:three:four:five:six" | cut -d : -f 1,4

@@ -1,10 +1,10 @@
 #!/bin/sh
-# cltest - Tester for Unix command lines
+# clitest - Tester for Unix command lines
 #
 # Author:  Aurelio Jargas (http://aurelio.net)
 # Created: 2013-07-24
 # License: MIT
-# GitHub:  https://github.com/aureliojargas/cltest
+# GitHub:  https://github.com/aureliojargas/clitest
 #
 # POSIX shell script:
 #   This script was coded to be compatible with POSIX shells.
@@ -28,7 +28,7 @@
 
 tt_my_name="$(basename "$0")"
 tt_my_version='HEAD'
-tt_my_version_url="https://github.com/aureliojargas/cltest/tree/$tt_my_version"
+tt_my_version_url="https://github.com/aureliojargas/clitest/tree/$tt_my_version"
 
 # Customization (if needed, edit here or use the command line options)
 tt_prefix=''
@@ -63,7 +63,7 @@ Customization options:
       --prompt STRING         Set prompt string (default: '$tt_prompt')"
 
 # Temporary files (using files because <(...) is not portable)
-tt_temp_dir="${TMPDIR:-/tmp}/cltest.$$"
+tt_temp_dir="${TMPDIR:-/tmp}/clitest.$$"
 tt_temp_file="$tt_temp_dir/temp.txt"
 tt_test_ok_file="$tt_temp_dir/ok.txt"
 tt_test_output_file="$tt_temp_dir/output.txt"

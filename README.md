@@ -1,6 +1,6 @@
-# cltest – Command Line Tester
+# clitest – Command Line Tester
 
-cltest is a [portable][1] POSIX shell script that performs automatic
+clitest is a [portable][1] POSIX shell script that performs automatic
 testing in Unix command lines.
 
 It's the same concept as in Python's [doctest][2] module: you document
@@ -8,13 +8,13 @@ both the commands and their expected output, using the familiar
 interactive prompt format, and a specialized tool tests them.
 
 In fact, the doctest [official][3] description can also be used for
-cltest:
+clitest:
 
 * The **doctest** module searches for pieces of text that look like
   interactive **Python sessions**, and then executes those **sessions**
   to verify that they work exactly as shown.
 
-* The **cltest** command searches for pieces of text that look like
+* The **clitest** command searches for pieces of text that look like
   interactive **Unix command lines**, and then executes those
   **command lines** to verify that they work exactly as shown.
 
@@ -23,7 +23,7 @@ cltest:
 
 The full program is just [a single shell script file][4].
 
-Save it and make it executable: `chmod +x cltest`
+Save it and make it executable: `chmod +x clitest`
 
 
 ## Quick Intro
@@ -42,10 +42,10 @@ $ cd "$OLDPWD"
 $
 ```
 
-Use cltest to run these commands and check their output:
+Use clitest to run these commands and check their output:
 
 ```
-$ cltest examples/intro.txt
+$ clitest examples/intro.txt
 #1	echo "Hello World"
 #2	cd /tmp
 #3	pwd
@@ -86,7 +86,7 @@ Just paste your shell session inside a text file and you have a
 ready-to-use test suite.
 
 ```
-$ cltest examples/cut.txt
+$ clitest examples/cut.txt
 #1	echo "one:two:three:four:five:six" | cut -d : -f 1
 #2	echo "one:two:three:four:five:six" | cut -d : -f 4
 #3	echo "one:two:three:four:five:six" | cut -d : -f 1,4
@@ -103,7 +103,7 @@ $
 Ever wanted to test the command line instructions you give in the
 `INSTALL.txt` or `README.md` files for your projects? Now you can!
 
-cltest can also extract and run command lines from technical documents.
+clitest can also extract and run command lines from technical documents.
 
 Given the following Markdown sample document, which uses tabs to mark
 code blocks:
@@ -146,10 +146,10 @@ cut is cool, isn't it?
 
 It's easy to convert it to a readable HTML document with your favorite
 Markdown program. It's also easy to test this file directly with
-cltest, just inform that the command lines are prefixed by a tab:
+clitest, just inform that the command lines are prefixed by a tab:
 
 ```
-$ cltest --prefix tab examples/cut.md
+$ clitest --prefix tab examples/cut.md
 #1	echo "one:two:three:four:five:six" | cut -d : -f 1
 #2	echo "one:two:three:four:five:six" | cut -d : -f 4
 #3	echo "one:two:three:four:five:six" | cut -d : -f 1,4
@@ -164,7 +164,7 @@ For Markdown files with 4-spaces indented code blocks, use `--prefix 4`.
 
 Of course, this [README.md][8] file you are now reading is also
 testable. Since it uses non-indented fenced code blocks (\`\`\`),
-no prefix option is needed: `cltest README.md`.
+no prefix option is needed: `clitest README.md`.
 
 
 ## Alternative Syntax: Inline Output
@@ -241,8 +241,8 @@ $ pwd                         #→ --eval echo $PWD
 ## Options
 
 ```
-$ cltest --help
-Usage: cltest [options] <file ...>
+$ clitest --help
+Usage: clitest [options] <file ...>
 
 Options:
   -1, --first                 Stop execution upon first failed test
@@ -274,10 +274,10 @@ set of tests, use `--test`. To ignore one or more tests, use `--skip`.
 If needed, you can combine both options to inform a very specific test
 range. Examples:
 
-    cltest --test 1-10    tests.txt   # Run the first 10 tests
-    cltest --test 1,2,6-8 tests.txt   # Run tests #1, #2, #6, #7 and #8
-    cltest --skip 11,15   tests.txt   # Run all tests, except #11 and #15
-    cltest -t 1-10 -s 5   tests.txt   # Run first 10 tests, but skip #5
+    clitest --test 1-10    tests.txt   # Run the first 10 tests
+    clitest --test 1,2,6-8 tests.txt   # Run tests #1, #2, #6, #7 and #8
+    clitest --skip 11,15   tests.txt   # Run all tests, except #11 and #15
+    clitest -t 1-10 -s 5   tests.txt   # Run first 10 tests, but skip #5
 
 You can run a preparing script or command before the first test with
 `--pre-flight`, for setting env variables and create auxiliary files.
@@ -286,24 +286,24 @@ At the end of all tests, run a final cleanup script/command with
 Example:
 
 
-    cltest --pre-flight ./test-init.sh --post-flight 'rm *.tmp' tests.txt
+    clitest --pre-flight ./test-init.sh --post-flight 'rm *.tmp' tests.txt
 
 Use the customization options to extract and test command lines from
 documents or wiki pages. For example, to test all the command line
 examples listed inside a Markdown file using the 4-spaces syntax for
 code blocks:
 
-    cltest --prefix 4 README.md
+    clitest --prefix 4 README.md
 
 Or maybe you use a different prompt (`$PS1`) in your documentation?
 
-    cltest  --prefix 4 --prompt '[john@localhost ~]$ ' README.md
+    clitest  --prefix 4 --prompt '[john@localhost ~]$ ' README.md
 
 When automating the tests execution, use `--quiet` to show no output
 and just check the exit code to make sure all tests have passed.
 Example:
 
-    if cltest --quiet tests.txt
+    if clitest --quiet tests.txt
     then
         # all tests passed
     else
@@ -333,7 +333,7 @@ Example:
   difference will cause a test to fail. To ignore the difference in
   blanks, use `--diff-options '-u -w'`.
 
-* Unlike doctest's `<BLANKLINE>`, in cltest blank lines in the
+* Unlike doctest's `<BLANKLINE>`, in clitest blank lines in the
   command output aren't a problem. Just insert them normally.
 
 * To test outputs with no final `\n`, such as `printf foo`, use `#→
@@ -349,7 +349,7 @@ Example:
   instead.
 
 * Simple examples in [examples/][10]. Hardcore examples in
-  [dev/test.md][11] and [dev/test/][12], the cltest own test-suite.
+  [dev/test.md][11] and [dev/test/][12], the clitest own test-suite.
 
 
 ## Portability
@@ -392,17 +392,17 @@ No other language or environment involved.
 [1]: #portability
 [2]: http://en.wikipedia.org/wiki/Doctest
 [3]: http://docs.python.org/3/library/doctest.html
-[4]: https://raw.github.com/aureliojargas/cltest/master/cltest
-[5]: https://github.com/aureliojargas/cltest/blob/master/examples/intro.txt
-[6]: https://github.com/aureliojargas/cltest/blob/master/examples/cut.txt
-[7]: https://github.com/aureliojargas/cltest/blob/master/examples/cut.md
-[8]: https://github.com/aureliojargas/cltest/blob/master/README.md
+[4]: https://raw.github.com/aureliojargas/clitest/master/clitest
+[5]: https://github.com/aureliojargas/clitest/blob/master/examples/intro.txt
+[6]: https://github.com/aureliojargas/clitest/blob/master/examples/cut.txt
+[7]: https://github.com/aureliojargas/clitest/blob/master/examples/cut.md
+[8]: https://github.com/aureliojargas/clitest/blob/master/README.md
 [9]: http://perldoc.perl.org/perlre.html
-[10]: https://github.com/aureliojargas/cltest/blob/master/examples/
-[11]: https://github.com/aureliojargas/cltest/blob/master/dev/test.md
-[12]: https://github.com/aureliojargas/cltest/blob/master/dev/test/
+[10]: https://github.com/aureliojargas/clitest/blob/master/examples/
+[11]: https://github.com/aureliojargas/clitest/blob/master/dev/test.md
+[12]: https://github.com/aureliojargas/clitest/blob/master/dev/test/
 [13]: http://en.wikipedia.org/wiki/POSIX
-[14]: https://github.com/aureliojargas/cltest/issues
+[14]: https://github.com/aureliojargas/clitest/issues
 [15]: http://mywiki.wooledge.org/Bashism
 [16]: https://wiki.ubuntu.com/DashAsBinSh
 [17]: http://www.etalabs.net/sh_tricks.html
@@ -410,4 +410,4 @@ No other language or environment involved.
 [19]: http://pubs.opengroup.org/onlinepubs/9699919799/utilities/contents.html
 [20]: http://en.wikipedia.org/wiki/KISS_principle
 [21]: http://aurelio.net/about.html
-[22]: https://github.com/aureliojargas/cltest/blob/master/LICENSE.txt
+[22]: https://github.com/aureliojargas/clitest/blob/master/LICENSE.txt
