@@ -212,15 +212,29 @@ $
 
 ## Option --color
 
+Invalid value
+
 ```
 $ ./cltest --color foo dev/test/ok-1.sh
 cltest: Error: invalid value 'foo' for --color. Use: auto, always or never.
+$
+```
+
+Color ON
+
+```
 $ ./cltest --color always dev/test/ok-1.sh
 #1	echo ok
 [32mOK:[m 1 of 1 test passed
 $ ./cltest --color yes dev/test/ok-1.sh
 #1	echo ok
 [32mOK:[m 1 of 1 test passed
+$
+```
+
+Color OFF
+
+```
 $ ./cltest --color never dev/test/ok-1.sh
 #1	echo ok
 OK: 1 of 1 test passed
@@ -228,14 +242,24 @@ $ ./cltest --color no dev/test/ok-1.sh
 #1	echo ok
 OK: 1 of 1 test passed
 $
-## Note: Inside this file, the output is not a terminal,
-##       so the default is no colored output.
+```
+
+Color AUTO
+
+Inside this file, the output is not a terminal,
+so the default is no colored output.
+
+```
 $ ./cltest dev/test/ok-1.sh
 #1	echo ok
 OK: 1 of 1 test passed
 $
-## Note: The real default '--color auto' cannot be tested here.
-##       Test it by hand at the command line.
+```
+
+The real default `--color auto` cannot be tested here.
+Test it by hand at the command line.
+
+```
 ## $ ./cltest dev/test/ok-1.sh
 ## [32mOK![m The single test has passed.
 ## $ ./cltest --color auto dev/test/ok-1.sh
