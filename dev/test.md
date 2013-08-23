@@ -269,10 +269,18 @@ Test it by hand at the command line.
 
 ## Option --list
 
+Listing a file with no tests
+
 ```
 $ ./cltest --list dev/test/empty-file.sh
 cltest: Error: no test found in input file: dev/test/empty-file.sh
-$ ./cltest -l dev/test/no-nl-command.sh; echo $?
+$
+```
+
+Normal results and exit code
+
+```
+$ ./cltest --list dev/test/no-nl-command.sh; echo $?
 #1	printf 'ok\n'
 #2	printf 'fail'
 #3	printf 'ok\nok\nfail'
@@ -280,13 +288,25 @@ $ ./cltest -l dev/test/no-nl-command.sh; echo $?
 #5	printf 'fail'    
 #6	printf 'ok'; echo   
 0
-$ ./cltest --list dev/test/no-nl-command.sh
+$
+```
+
+Short option `-l`
+
+```
+$ ./cltest -l dev/test/no-nl-command.sh
 #1	printf 'ok\n'
 #2	printf 'fail'
 #3	printf 'ok\nok\nfail'
 #4	printf 'ok\n'    
 #5	printf 'fail'    
 #6	printf 'ok'; echo   
+$
+```
+
+Multifile and exit code
+
+```
 $ ./cltest --list dev/test/no-nl-command.sh dev/test/ok-1.sh; echo $?
 ---------------------------------------- dev/test/no-nl-command.sh
 #1	printf 'ok\n'
@@ -303,9 +323,17 @@ $
 
 ## Option --list-run
 
+Listing a file with no tests
+
 ```
 $ ./cltest --list-run dev/test/empty-file.sh
 cltest: Error: no test found in input file: dev/test/empty-file.sh
+$
+```
+
+Normal results (using colors) and exit code
+
+```
 $ ./cltest --list-run --color yes dev/test/no-nl-command.sh; echo $?
 [32m#1	printf 'ok\n'[m
 [31m#2	printf 'fail'[m
@@ -314,6 +342,12 @@ $ ./cltest --list-run --color yes dev/test/no-nl-command.sh; echo $?
 [31m#5	printf 'fail'    [m
 [32m#6	printf 'ok'; echo   [m
 1
+$
+```
+
+Normal results (no colors, use OK/FAIL column) and exit code
+
+```
 $ ./cltest --list-run dev/test/no-nl-command.sh; echo $?
 #1	OK	printf 'ok\n'
 #2	FAIL	printf 'fail'
@@ -322,6 +356,12 @@ $ ./cltest --list-run dev/test/no-nl-command.sh; echo $?
 #5	FAIL	printf 'fail'    
 #6	OK	printf 'ok'; echo   
 1
+$
+```
+
+Short option `-L`
+
+```
 $ ./cltest -L dev/test/no-nl-command.sh
 #1	OK	printf 'ok\n'
 #2	FAIL	printf 'fail'
@@ -329,6 +369,12 @@ $ ./cltest -L dev/test/no-nl-command.sh
 #4	OK	printf 'ok\n'    
 #5	FAIL	printf 'fail'    
 #6	OK	printf 'ok'; echo   
+$
+```
+
+Multifile and exit code
+
+```
 $ ./cltest -L dev/test/no-nl-command.sh dev/test/ok-1.sh; echo $?
 ---------------------------------------- dev/test/no-nl-command.sh
 #1	OK	printf 'ok\n'
