@@ -1052,6 +1052,11 @@ $
 
 ## Inline match modes
 
+Mode #→ --text
+
+* This is the default mode.
+* The --text part can be omitted.
+
 ```
 $ ./cltest --list-run dev/test/inline-match-text.sh
 #1	OK	echo 'abc'                    
@@ -1094,6 +1099,12 @@ $ ./cltest --list-run dev/test/inline-match-text.sh
 #38	OK	echo '--text'                 
 #39	OK	echo '--textual'              
 #40	OK	echo '--text is cool'         
+$
+```
+
+Mode #→ --eval
+
+```
 $ ./cltest --list-run dev/test/inline-match-eval.sh
 #1	OK	folder=$(pwd)
 #2	OK	echo $folder                  
@@ -1121,6 +1132,12 @@ $ ./cltest --list-run dev/test/inline-match-eval.sh
 #24	OK	echo '--eval'                 
 #25	OK	echo '--evaluate'             
 #26	OK	echo '--eval is evil'         
+$
+```
+
+Mode #→ --egrep
+
+```
 $ ./cltest --list-run dev/test/inline-match-egrep.sh
 #1	OK	echo 'abc123'                 
 #2	OK	echo 'abc123'                 
@@ -1150,6 +1167,14 @@ $ ./cltest --list-run dev/test/inline-match-egrep.sh
 #26	OK	echo '--egrep'                
 #27	OK	echo '--egreppal'             
 #28	OK	echo '--egrep is cool'        
+$
+```
+
+Mode #→ --perl
+
+* --regex is an alias to --perl
+
+```
 $ ./cltest --list-run dev/test/inline-match-perl.sh
 #1	OK	echo 'abc123'                 
 #2	OK	echo 'abc123'                 
@@ -1186,6 +1211,12 @@ $ ./cltest --list-run dev/test/inline-match-perl.sh
 #33	OK	echo '--perl'                 
 #34	OK	echo '--perlism'              
 #35	OK	echo '--perl is cool'         
+$
+```
+
+Mode #→ --file
+
+```
 $ ./cltest --list-run dev/test/inline-match-file.sh
 #1	OK	printf '$ echo ok\nok\n'      
 #2	OK	echo 'ok' > /tmp/foo.txt
@@ -1195,6 +1226,12 @@ $ ./cltest --list-run dev/test/inline-match-file.sh
 #6	OK	echo '--file'                 
 #7	OK	echo '--filer'                
 #8	OK	echo '--file is cool'         
+$
+```
+
+Mode #→ --lines
+
+```
 $ ./cltest --list-run dev/test/inline-match-lines.sh
 #1	OK	a=1                           
 #2	OK	echo 'ok'                     
@@ -1219,18 +1256,36 @@ $ ./cltest --first dev/test/inline-match-lines.sh
 [FAILED #6, line 16] echo 'fail'                   
 Expected 99 lines, got 1.
 --------------------------------------------------------------------------------
+$
+```
+
+Errors for #→ --egrep
+
+```
 $ ./cltest dev/test/inline-match-egrep-error-1.sh
 cltest: Error: empty --egrep at line 1 of dev/test/inline-match-egrep-error-1.sh
 $ ./cltest dev/test/inline-match-egrep-error-2.sh 2>&1 | sed 's/^egrep: .*/egrep: ERROR_MSG/'
 #1	echo "error: malformed regex"  
 egrep: ERROR_MSG
 cltest: Error: check your inline egrep regex at line 1 of dev/test/inline-match-egrep-error-2.sh
+$
+```
+
+Errors for #→ --perl (and --regex)
+
+```
 $ ./cltest dev/test/inline-match-perl-error-1.sh
 cltest: Error: empty --perl at line 1 of dev/test/inline-match-perl-error-1.sh
 $ ./cltest dev/test/inline-match-perl-error-2.sh
 #1	echo "error: malformed regex"  
 Unmatched ( in regex; marked by <-- HERE in m/( <-- HERE / at -e line 1.
 cltest: Error: check your inline Perl regex at line 1 of dev/test/inline-match-perl-error-2.sh
+$
+```
+
+Errors for #→ --file
+
+```
 $ ./cltest dev/test/inline-match-file-error-1.sh
 cltest: Error: empty --file at line 1 of dev/test/inline-match-file-error-1.sh
 $ ./cltest dev/test/inline-match-file-error-2.sh
@@ -1239,6 +1294,12 @@ cltest: Error: cannot read inline output file 'dev/test/XXnotfoundXX', from line
 $ ./cltest dev/test/inline-match-file-error-3.sh
 #1	echo "error: directory"  
 cltest: Error: cannot read inline output file '/etc/', from line 1 of dev/test/inline-match-file-error-3.sh
+$
+```
+
+Errors for #→ --lines
+
+```
 $ ./cltest dev/test/inline-match-lines-error-1.sh
 cltest: Error: --lines requires a number. See line 1 of dev/test/inline-match-lines-error-1.sh
 $ ./cltest dev/test/inline-match-lines-error-2.sh
@@ -1247,6 +1308,12 @@ $ ./cltest dev/test/inline-match-lines-error-3.sh
 cltest: Error: --lines requires a number. See line 1 of dev/test/inline-match-lines-error-3.sh
 $ ./cltest dev/test/inline-match-lines-error-4.sh
 cltest: Error: --lines requires a number. See line 1 of dev/test/inline-match-lines-error-4.sh
+$
+```
+
+Errors for #→ --eval
+
+```
 $ ./cltest dev/test/inline-match-eval-error-1.sh
 cltest: Error: empty --eval at line 1 of dev/test/inline-match-eval-error-1.sh
 $ ./cltest dev/test/inline-match-eval-error-2.sh 2>&1 | sed 's/line [0-9][0-9]*/line N/'
