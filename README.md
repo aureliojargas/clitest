@@ -313,7 +313,7 @@ Example:
 
 ## Nerdiness
 
-* Use any file format for the tests, it doesn't matter. The command
+* Use any text file format for the tests, it doesn't matter. The command
   lines just need to be grepable and have a fixed prefix (or none).
   Even Windows text files (CR+LF) will work fine.
 
@@ -347,6 +347,8 @@ Example:
 
 * Ellipsis (as in doctest) are not supported. Use `#→ --regex`
   instead.
+
+* The clitest shebang is `/bin/sh`. That will be the shell used to run the tests. To force execution in a specific shell, Bash for example, run the tests as `bash clitest mytests.txt`.
 
 * Simple examples in [examples/][10]. Hardcore examples in
   [dev/test.md][11] and [dev/test/][12], the clitest own test-suite.
