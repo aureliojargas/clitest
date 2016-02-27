@@ -44,7 +44,7 @@ $
 
 Use clitest to run these commands and check their output:
 
-```
+```console
 $ clitest examples/intro.txt
 #1	echo "Hello World"
 #2	cd /tmp
@@ -85,7 +85,7 @@ That's it.
 Just paste your shell session inside a text file and you have a
 ready-to-use test suite.
 
-```
+```console
 $ clitest examples/cut.txt
 #1	echo "one:two:three:four:five:six" | cut -d : -f 1
 #2	echo "one:two:three:four:five:six" | cut -d : -f 4
@@ -110,7 +110,7 @@ code blocks:
 
 ♦ [examples/cut.md][7]
 
-```
+```markdown
 The numeric ranges of the Unix command "cut"
 ============================================
 
@@ -148,7 +148,7 @@ It's easy to convert it to a readable HTML document with your favorite
 Markdown program. It's also easy to test this file directly with
 clitest, just inform that the command lines are prefixed by a tab:
 
-```
+```console
 $ clitest --prefix tab examples/cut.md
 #1	echo "one:two:three:four:five:six" | cut -d : -f 1
 #2	echo "one:two:three:four:five:six" | cut -d : -f 4
@@ -173,14 +173,14 @@ Now a nice extension to the original idea. Using the special marker
 `#→` you can embed the expected command output at the end of the
 command line.
 
-```
+```console
 $ echo "foo"                      #→ foo
 $ echo $((10 + 2))                #→ 12
 ```
 
 This is the same as doing:
 
-```
+```console
 $ echo "foo"
 foo
 $ echo $((10 + 2))
@@ -191,7 +191,7 @@ $
 Inline outputs are very readable when testing series of commands that
 result in short texts.
 
-```
+```console
 $ echo "abcdef" | cut -c 1        #→ a
 $ echo "abcdef" | cut -c 4        #→ d
 $ echo "abcdef" | cut -c 1,4      #→ ad
@@ -209,7 +209,7 @@ $ echo "abcdef" | cut -c 1-4      #→ abcd
 When using the `#→` marker, you can take advantage of special options
 to change the default output matching method.
 
-```
+```console
 $ head /etc/passwd            #→ --lines 10
 $ tac /etc/passwd | tac       #→ --file /etc/passwd
 $ cat /etc/passwd             #→ --egrep ^root:
@@ -240,7 +240,7 @@ $ pwd                         #→ --eval echo $PWD
 
 ## Options
 
-```
+```console
 $ clitest --help
 Usage: clitest [options] <file ...>
 
@@ -274,7 +274,7 @@ set of tests, use `--test`. To ignore one or more tests, use `--skip`.
 If needed, you can combine both options to inform a very specific test
 range. Examples:
 
-```
+```bash
 clitest --test 1-10    tests.txt   # Run the first 10 tests
 clitest --test 1,2,6-8 tests.txt   # Run tests #1, #2, #6, #7 and #8
 clitest --skip 11,15   tests.txt   # Run all tests, except #11 and #15
@@ -287,7 +287,7 @@ At the end of all tests, run a final cleanup script/command with
 `--post-flight` to remove temporary files or other transient data.
 Example:
 
-```
+```bash
 clitest --pre-flight ./test-init.sh --post-flight 'rm *.tmp' tests.txt
 ```
 
@@ -296,13 +296,13 @@ documents or wiki pages. For example, to test all the command line
 examples listed inside a Markdown file using the 4-spaces syntax for
 code blocks:
 
-```
+```bash
 clitest --prefix 4 README.md
 ```
 
 Or maybe you use a different prompt (`$PS1`) in your documentation?
 
-```
+```bash
 clitest  --prefix 4 --prompt '[john@localhost ~]$ ' README.md
 ```
 
@@ -310,7 +310,7 @@ When automating the tests execution, use `--quiet` to show no output
 and just check the exit code to make sure all tests have passed.
 Example:
 
-```
+```bash
 if clitest --quiet tests.txt
 then
     # all tests passed
