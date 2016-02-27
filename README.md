@@ -274,10 +274,12 @@ set of tests, use `--test`. To ignore one or more tests, use `--skip`.
 If needed, you can combine both options to inform a very specific test
 range. Examples:
 
-    clitest --test 1-10    tests.txt   # Run the first 10 tests
-    clitest --test 1,2,6-8 tests.txt   # Run tests #1, #2, #6, #7 and #8
-    clitest --skip 11,15   tests.txt   # Run all tests, except #11 and #15
-    clitest -t 1-10 -s 5   tests.txt   # Run first 10 tests, but skip #5
+```
+clitest --test 1-10    tests.txt   # Run the first 10 tests
+clitest --test 1,2,6-8 tests.txt   # Run tests #1, #2, #6, #7 and #8
+clitest --skip 11,15   tests.txt   # Run all tests, except #11 and #15
+clitest -t 1-10 -s 5   tests.txt   # Run first 10 tests, but skip #5
+```
 
 You can run a preparing script or command before the first test with
 `--pre-flight`, for setting env variables and create auxiliary files.
@@ -285,30 +287,37 @@ At the end of all tests, run a final cleanup script/command with
 `--post-flight` to remove temporary files or other transient data.
 Example:
 
-
-    clitest --pre-flight ./test-init.sh --post-flight 'rm *.tmp' tests.txt
+```
+clitest --pre-flight ./test-init.sh --post-flight 'rm *.tmp' tests.txt
+```
 
 Use the customization options to extract and test command lines from
 documents or wiki pages. For example, to test all the command line
 examples listed inside a Markdown file using the 4-spaces syntax for
 code blocks:
 
-    clitest --prefix 4 README.md
+```
+clitest --prefix 4 README.md
+```
 
 Or maybe you use a different prompt (`$PS1`) in your documentation?
 
-    clitest  --prefix 4 --prompt '[john@localhost ~]$ ' README.md
+```
+clitest  --prefix 4 --prompt '[john@localhost ~]$ ' README.md
+```
 
 When automating the tests execution, use `--quiet` to show no output
 and just check the exit code to make sure all tests have passed.
 Example:
 
-    if clitest --quiet tests.txt
-    then
-        # all tests passed
-    else
-        # one or more tests failed :(
-    fi
+```
+if clitest --quiet tests.txt
+then
+    # all tests passed
+else
+    # one or more tests failed :(
+fi
+```
 
 
 ## Nerdiness
@@ -373,7 +382,7 @@ Developers: Learn more about portability in POSIX shells:
 * [How to make bash scripts work in dash][15]
 * [Ubuntu — Dash as /bin/sh][16]
 * [Rich’s sh (POSIX shell) tricks][17]
-* [lintsh][18] 
+* [lintsh][18]
 * [Official POSIX specification: Shell & Utilities][19]
 
 
