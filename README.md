@@ -111,16 +111,17 @@ OK: 6 of 6 tests passed
 $
 ```
 
+## Testable Documentation
 
-## Test Documents
+Clitest can also **extract and run command lines from documentation**,
+such as Markdown files. This very `README.md` file you are now reading
+is testable with `clitest README.md`. All the command lines inside it
+will be run and checked.
 
-Ever wanted to test the command line instructions you give in the
-`INSTALL.txt` or `README.md` files for your projects? Now you can!
+No more malfunctioning shell commands in your READMEs, you can have
+testable documentation.
 
-clitest can also extract and run command lines from technical documents.
-
-Given the following Markdown sample document, which uses tabs to mark
-code blocks:
+Given the following Markdown sample document:
 
 ♦ [examples/cut.md][7]
 
@@ -158,9 +159,12 @@ If you omit the second range number, it matches until the last:
 cut is cool, isn't it?
 ```
 
-It's easy to convert it to a readable HTML document with your favorite
-Markdown program. It's also easy to test this file directly with
-clitest, just inform that the command lines are prefixed by a tab:
+It is a technical article, not a boring code-only test file. You can
+read its final (formatted) version [here][7].
+
+You can give this article to clitest, who will identify all the shell
+command lines inside it, run them and check if the results are the
+same.
 
 ```console
 $ clitest --prefix tab examples/cut.md
@@ -174,11 +178,17 @@ OK: 6 of 6 tests passed
 $
 ```
 
-For Markdown files with 4-spaces indented code blocks, use `--prefix 4`.
+Note the use of `--prefix tab` option, to inform clitest that the code
+blocks are prefixed by a tab in this Markdown file. For files with
+4-spaces indented code blocks, use `--prefix 4`. When using
+non-indented fenced code blocks (\`\`\`), such as this [README.md][8],
+no prefix option is needed.
 
-Of course, this [README.md][8] file you are now reading is also
-testable. Since it uses non-indented fenced code blocks (\`\`\`),
-no prefix option is needed: `clitest README.md`.
+Examples of testable documentation handled by clitest:
+
+* https://github.com/caarlos0/jvm/blob/master/tests/test.clitest.md
+* https://github.com/aureliojargas/clitest/blob/master/examples/install-software.md
+* https://github.com/aureliojargas/clitest/blob/master/dev/test.md
 
 
 ## Alternative Syntax: Inline Output
