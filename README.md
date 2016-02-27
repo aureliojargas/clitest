@@ -124,7 +124,7 @@ code blocks:
 
 ♦ [examples/cut.md][7]
 
-```markdown
+```
 The numeric ranges of the Unix command "cut"
 ============================================
 
