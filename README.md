@@ -23,8 +23,22 @@ clitest:
 
 The full program is just [a single shell script file][4].
 
-Save it and make it executable: `chmod +x clitest`
+Save it, make it executable and move it to a `$PATH` directory:
 
+```bash
+curl -sOL https://raw.githubusercontent.com/aureliojargas/clitest/master/clitest
+chmod +x clitest
+sudo mv clitest /usr/bin
+```
+
+Now check if everything is fine:
+
+```console
+$ clitest -V
+clitest HEAD
+https://github.com/aureliojargas/clitest/tree/HEAD
+$
+```
 
 ## Quick Intro
 
