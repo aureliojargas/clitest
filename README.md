@@ -111,6 +111,9 @@ OK: 6 of 6 tests passed
 $
 ```
 
+There are more examples and instructions in the [examples folder][10]. For a real-life collection of hundreds of test files, see [funcoeszz test files][24].
+
+
 ## Testable Documentation
 
 Clitest can also **extract and run command lines from documentation**,
@@ -457,3 +460,4 @@ No other language or environment involved.
 [21]: http://aurelio.net/about.html
 [22]: https://github.com/aureliojargas/clitest/blob/master/LICENSE.txt
 [23]: https://www.gnu.org/software/bash/manual/html_node/Bash-POSIX-Mode.html
+[24]: https://github.com/funcoeszz/funcoeszz/tree/master/testador
