@@ -292,9 +292,40 @@ Customization options:
 $
 ```
 
-When running sequential tests, where the next test depends on the
-correct result of the previous test, use the `--first` option to abort
-the execution if any test fails.
+
+## Exit codes
+
+* `0` - All tests passed, or normal operation (--help, --list, …)
+* `1` - One or more tests have failed
+* `2` - An error occurred (file not found, invalid range, …)
+
+
+## Fail fast
+
+Use the `--first` option (or the short version `-1`) to abort the
+execution when any test fails.
+
+Useful for Continuous Integration (CI), or when running sequential
+tests where the next test depends on the correct result of the
+previous.
+
+
+## Quiet operation
+
+When automating the tests execution, use `--quiet` to show no output
+and just check the exit code to make sure all tests have passed. Using `--first` to fail fast is also a good idea in this case.
+
+```bash
+if clitest --quiet --first tests.txt
+then
+    # all tests passed
+else
+    # one or more tests failed :(
+fi
+```
+
+
+## Run specific tests
 
 To rerun a specific problematic test, or to limit the execution to a
 set of tests, use `--test`. To ignore one or more tests, use `--skip`.
@@ -308,15 +339,20 @@ clitest --skip 11,15   tests.txt   # Run all tests, except #11 and #15
 clitest -t 1-10 -s 5   tests.txt   # Run first 10 tests, but skip #5
 ```
 
+
+## Pre/post scripts
+
 You can run a preparing script or command before the first test with
 `--pre-flight`, for setting env variables and create auxiliary files.
 At the end of all tests, run a final cleanup script/command with
 `--post-flight` to remove temporary files or other transient data.
-Example:
 
 ```bash
 clitest --pre-flight ./test-init.sh --post-flight 'rm *.tmp' tests.txt
 ```
+
+
+## Customization
 
 Use the customization options to extract and test command lines from
 documents or wiki pages. For example, to test all the command line
@@ -333,18 +369,7 @@ Or maybe you use a different prompt (`$PS1`) in your documentation?
 clitest  --prefix 4 --prompt '[john@localhost ~]$ ' README.md
 ```
 
-When automating the tests execution, use `--quiet` to show no output
-and just check the exit code to make sure all tests have passed.
-Example:
 
-```bash
-if clitest --quiet tests.txt
-then
-    # all tests passed
-else
-    # one or more tests failed :(
-fi
-```
 
 
 ## Nerdiness
