@@ -443,7 +443,7 @@ No other language or environment involved.
 [7]: https://github.com/aureliojargas/clitest/blob/master/examples/cut.md
 [8]: https://github.com/aureliojargas/clitest/blob/master/README.md
 [9]: http://perldoc.perl.org/perlre.html
-[10]: https://github.com/aureliojargas/clitest/blob/master/examples/
+[10]: https://github.com/aureliojargas/clitest/tree/master/examples
 [11]: https://github.com/aureliojargas/clitest/blob/master/dev/test.md
 [12]: https://github.com/aureliojargas/clitest/blob/master/dev/test/
 [13]: http://en.wikipedia.org/wiki/POSIX
