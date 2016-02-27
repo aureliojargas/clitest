@@ -357,11 +357,21 @@ fi
 * Ellipsis (as in doctest) are not supported. Use `#→ --regex`
   instead.
 
-* The clitest shebang is `/bin/sh`. That will be the shell used to run the tests. To force execution in a specific shell, Bash for example, run the tests as `bash clitest mytests.txt`.
-
 * Simple examples in [examples/][10]. Hardcore examples in
   [dev/test.md][11] and [dev/test/][12], the clitest own test-suite.
 
+
+## Choose the execution shell
+
+The clitest shebang is `#!/bin/sh`. That's the default shell that will be used to run your test command lines. Depending on the system, that path points to a different shell, such as ash, dash, or bash ([running in POSIX mode][23]).
+
+To force your test commands to always run on a specific shell, just call the desired shell before:
+
+```bash
+clitest tests.txt            # Uses /bin/sh
+bash clitest tests.txt       # Uses Bash
+ksh clitest tests.txt        # Uses Korn Shell
+```
 
 ## Portability
 
@@ -422,3 +432,4 @@ No other language or environment involved.
 [20]: http://en.wikipedia.org/wiki/KISS_principle
 [21]: http://aurelio.net/about.html
 [22]: https://github.com/aureliojargas/clitest/blob/master/LICENSE.txt
+[23]: https://www.gnu.org/software/bash/manual/html_node/Bash-POSIX-Mode.html
