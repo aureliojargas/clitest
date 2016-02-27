@@ -19,7 +19,7 @@ clitest:
   **command lines** to verify that they work exactly as shown.
 
 
-## Download
+## Download & install
 
 The full program is just [a single shell script file][4].
 
