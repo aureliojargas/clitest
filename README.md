@@ -190,6 +190,7 @@ no prefix option is needed.
 Examples of testable documentation handled by clitest:
 
 * https://github.com/caarlos0/jvm/blob/master/tests/test.clitest.md
+* https://github.com/caarlos0/git-add-remote/blob/master/tests/suite.clitest.md
 * https://github.com/aureliojargas/clitest/blob/master/examples/install-software.md
 * https://github.com/aureliojargas/clitest/blob/master/dev/test.md
 
