@@ -1263,7 +1263,7 @@ Errors for #→ --egrep
 ```
 $ ./clitest dev/test/inline-match-egrep-error-1.sh
 clitest: Error: empty --egrep at line 1 of dev/test/inline-match-egrep-error-1.sh
-$ ./clitest dev/test/inline-match-egrep-error-2.sh 2>&1 | sed 's/^egrep: .*/egrep: ERROR_MSG/'
+$ ./clitest dev/test/inline-match-egrep-error-2.sh 2>&1 | sed 's/^e*grep: .*/egrep: ERROR_MSG/'
 #1	echo "error: malformed regex"  
 egrep: ERROR_MSG
 clitest: Error: check your inline egrep regex at line 1 of dev/test/inline-match-egrep-error-2.sh
