@@ -1137,7 +1137,7 @@ $
 Mode #→ --egrep
 
 ```
-$ ./clitest --list-run dev/test/inline-match-egrep.sh
+$ ./clitest --list-run dev/test/inline-match-egrep.sh | sed 's/^\(#1[56].\)[A-Z]*/\1?/'
 #1	OK	echo 'abc123'                 
 #2	OK	echo 'abc123'                 
 #3	OK	echo 'abc123'                 
@@ -1152,8 +1152,8 @@ $ ./clitest --list-run dev/test/inline-match-egrep.sh
 #12	OK	printf '\t\n'                 
 #13	OK	printf '\t\t\t\n'             
 #14	OK	printf ' \t  \t\t   \n'       
-#15	OK	printf 'may\tfail'            
-#16	FAIL	printf 'may\tfail'            
+#15	?	printf 'may\tfail'            
+#16	?	printf 'may\tfail'            
 #17	OK	printf 'will\tmatch'          
 #18	FAIL	printf 'will\nfail'           
 #19	FAIL	printf 'will\nfail'           
