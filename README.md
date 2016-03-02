@@ -436,6 +436,7 @@ It was tested in:
 * Bash 3.2
 * dash 0.5.5.1
 * ksh 93u 2011-02-08
+* zsh 5.0.5
 
 Portability issues are considered serious bugs, please
 [report them][14]!
