@@ -817,7 +817,7 @@ Testing file dev/test/ok-2.sh
       2     -     -    dev/test/ok-2.sh
 
 OK: 4 of 4 tests passed
-$ ./clitest dev/test/ok-[0-9]*.sh | grep -v ^#
+$ ./clitest dev/test/ok-{1,10,100,2,50}.sh | grep -v ^#
 Testing file dev/test/ok-1.sh
 Testing file dev/test/ok-10.sh
 Testing file dev/test/ok-100.sh
