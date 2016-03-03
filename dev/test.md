@@ -2056,11 +2056,11 @@ $ ./clitest dev/test/stdout-stderr.sh
 #3	echo "stderr" 1>&2
 #4	echo "stdout" > /dev/null
 #5	echo "stdout" 2> /dev/null 1>&2
-#6	cp XXnotfoundXX foo
-#7	cp XXnotfoundXX foo > /dev/null
-#8	cp XXnotfoundXX foo 2>&1
-#9	cp XXnotfoundXX foo 2> /dev/null
-#10	cp XXnotfoundXX foo > /dev/null 2>&1
+#6	./clitest foo
+#7	./clitest foo > /dev/null
+#8	./clitest foo 2>&1
+#9	./clitest foo 2> /dev/null
+#10	./clitest foo > /dev/null 2>&1
 OK: 10 of 10 tests passed
 $
 ```
