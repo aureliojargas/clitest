@@ -817,21 +817,19 @@ Testing file dev/test/ok-2.sh
       2     -     -    dev/test/ok-2.sh
 
 OK: 4 of 4 tests passed
-$ ./clitest dev/test/ok-{1,10,100,2,50}.sh | grep -v ^#
+$ ./clitest dev/test/ok-1.sh dev/test/ok-10.sh dev/test/ok-100.sh dev/test/ok-50.sh | grep -v ^#
 Testing file dev/test/ok-1.sh
 Testing file dev/test/ok-10.sh
 Testing file dev/test/ok-100.sh
-Testing file dev/test/ok-2.sh
 Testing file dev/test/ok-50.sh
 
      ok  fail  skip
       1     -     -    dev/test/ok-1.sh
      10     -     -    dev/test/ok-10.sh
     100     -     -    dev/test/ok-100.sh
-      2     -     -    dev/test/ok-2.sh
      50     -     -    dev/test/ok-50.sh
 
-OK: 163 of 163 tests passed
+OK: 161 of 161 tests passed
 $ ./clitest dev/test/ok-?.sh dev/test/ok-10.sh
 Testing file dev/test/ok-1.sh
 #1	echo ok
