@@ -1313,17 +1313,6 @@ Errors for #→ --eval
 ```
 $ ./clitest dev/test/inline-match-eval-error-1.sh
 clitest: Error: empty --eval at line 1 of dev/test/inline-match-eval-error-1.sh
-$ ./clitest dev/test/inline-match-eval-error-2.sh 2>&1 | sed 's/line [0-9][0-9]*/line N/'
-#1	echo 'error: syntax error'  
-./clitest: eval: line N: unexpected EOF while looking for matching `)'
-./clitest: eval: line N: syntax error: unexpected end of file
---------------------------------------------------------------------------------
-[FAILED #1, line N] echo 'error: syntax error'  
-@@ -0,0 +1 @@
-+error: syntax error
---------------------------------------------------------------------------------
-
-FAIL: 1 of 1 test failed
 $
 ```
 
