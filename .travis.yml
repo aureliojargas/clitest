@@ -2,6 +2,9 @@ language: bash
 os:
   - linux
   - osx
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y ksh zsh
 script:
   - bash clitest dev/test.md
   - ksh  clitest dev/test.md
