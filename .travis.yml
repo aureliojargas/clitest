@@ -1,0 +1,8 @@
+language: bash
+os:
+  - linux
+  - osx
+script:
+  - bash clitest dev/test.md
+notifications:
+  email: false
