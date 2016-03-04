@@ -243,6 +243,7 @@ $ tac /etc/passwd | tac       #→ --file /etc/passwd
 $ cat /etc/passwd             #→ --egrep ^root:
 $ echo $((2 + 10))            #→ --regex ^\d+$
 $ pwd                         #→ --eval echo $PWD
+$ make test                   #→ --exit 0
 ```
 
 * Using `#→ --lines` the test will pass if the command output has
@@ -265,6 +266,10 @@ $ pwd                         #→ --eval echo $PWD
   same output. Useful to expand variables which store the full or
   partial output.
 
+* Using `#→ --exit` the test will pass if the exit code of the command
+  is equal to the code specified. Useful when testing commands that generate
+  variable output (or not output at all), and the exit code is the best 
+  indication of the result.
 
 ## Options
 
@@ -386,8 +391,6 @@ clitest  --prefix 4 --prompt '[john@localhost ~]$ ' README.md
   aliases and functions will persist between tests.
 
 * Both STDIN and STDOUT are catch, you can also test error messages.
-
-* To test the exit code, just add a `;echo $?` after the command.
 
 * Use an empty `$` prompt to close the last command output.
 

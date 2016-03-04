@@ -355,6 +355,7 @@ tt_run_test ()
 
 	# Execute the test command, saving output (STDOUT and STDERR)
 	eval "$tt_test_command" > "$tt_test_output_file" 2>&1
+	tt_exit_code=$?
 
 	#tt_debug OUTPUT "$(cat "$tt_test_output_file")"
 
@@ -442,6 +443,12 @@ tt_run_test ()
 				;;
 			esac
 		;;
+		exit)
+			test "$tt_exit_code" -eq "$tt_test_inline"
+			tt_test_status=$?
+			tt_test_diff="Command exited $tt_exit_code, but the expected exit code was $tt_test_inline"
+		;;
+
 		*)
 			tt_error "unknown test mode '$tt_test_mode'"
 		;;
@@ -565,6 +572,10 @@ tt_process_test_file ()
 							tt_test_inline=${tt_test_inline#--text }
 							tt_test_mode='text'
 						;;
+						'--exit '*)
+							tt_test_inline=${tt_test_inline#--exit }
+							tt_test_mode='exit'
+						;;
 						*)
 							tt_test_mode='text'
 						;;
@@ -573,11 +584,11 @@ tt_process_test_file ()
 					#tt_debug OK_TEXT "$tt_test_inline"
 
 					# There must be a number in --lines
-					if test "$tt_test_mode" = 'lines'
+					if test "$tt_test_mode" = 'lines' || test "$tt_test_mode" = 'exit'
 					then
 						case "$tt_test_inline" in
 							'' | *[!0-9]*)
-								tt_error "--lines requires a number. See line $tt_line_number of $tt_test_file"
+								tt_error "--$tt_test_mode requires a number. See line $tt_line_number of $tt_test_file"
 							;;
 						esac
 					fi
