@@ -4,8 +4,8 @@ os:
   - osx
 script:
   - bash clitest dev/test.md
-  - ksh clitest dev/test.md
-  - zsh clitest dev/test.md
-  - sh clitest dev/test.md
+  - ksh  clitest dev/test.md
+  - zsh  clitest dev/test.md
+  - sh   clitest dev/test.md
 notifications:
   email: false
