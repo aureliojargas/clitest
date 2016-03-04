@@ -47,8 +47,7 @@ $ echo $not_exported  #→ --regex ^1$
 $ TMPDIR___SAVE="$TMPDIR"
 $ TMPDIR=/XXnotfoundXX
 $ export TMPDIR
-$ ./clitest dev/test/ok-1.sh 2>&1 | sed 's/clitest\.[0-9]*$/clitest.NNN/'
-mkdir: /XXnotfoundXX: No such file or directory
+$ ./clitest dev/test/ok-1.sh 2>&1 | grep ^clitest | sed 's/clitest\.[0-9]*$/clitest.NNN/'
 clitest: Error: cannot create temporary dir: /XXnotfoundXX/clitest.NNN
 $ TMPDIR="$TMPDIR___SAVE"
 $
@@ -818,21 +817,19 @@ Testing file dev/test/ok-2.sh
       2     -     -    dev/test/ok-2.sh
 
 OK: 4 of 4 tests passed
-$ ./clitest dev/test/ok-[0-9]*.sh | grep -v ^#
+$ ./clitest dev/test/ok-1.sh dev/test/ok-10.sh dev/test/ok-100.sh dev/test/ok-50.sh | grep -v ^#
 Testing file dev/test/ok-1.sh
 Testing file dev/test/ok-10.sh
 Testing file dev/test/ok-100.sh
-Testing file dev/test/ok-2.sh
 Testing file dev/test/ok-50.sh
 
      ok  fail  skip
       1     -     -    dev/test/ok-1.sh
      10     -     -    dev/test/ok-10.sh
     100     -     -    dev/test/ok-100.sh
-      2     -     -    dev/test/ok-2.sh
      50     -     -    dev/test/ok-50.sh
 
-OK: 163 of 163 tests passed
+OK: 161 of 161 tests passed
 $ ./clitest dev/test/ok-?.sh dev/test/ok-10.sh
 Testing file dev/test/ok-1.sh
 #1	echo ok
@@ -1138,7 +1135,7 @@ $
 Mode #→ --egrep
 
 ```
-$ ./clitest --list-run dev/test/inline-match-egrep.sh
+$ ./clitest --list-run dev/test/inline-match-egrep.sh | sed 's/^\(#1[56].\)[A-Z]*/\1?/'
 #1	OK	echo 'abc123'                 
 #2	OK	echo 'abc123'                 
 #3	OK	echo 'abc123'                 
@@ -1153,8 +1150,8 @@ $ ./clitest --list-run dev/test/inline-match-egrep.sh
 #12	OK	printf '\t\n'                 
 #13	OK	printf '\t\t\t\n'             
 #14	OK	printf ' \t  \t\t   \n'       
-#15	OK	printf 'may\tfail'            
-#16	FAIL	printf 'may\tfail'            
+#15	?	printf 'may\tfail'            
+#16	?	printf 'may\tfail'            
 #17	OK	printf 'will\tmatch'          
 #18	FAIL	printf 'will\nfail'           
 #19	FAIL	printf 'will\nfail'           
@@ -1264,7 +1261,7 @@ Errors for #→ --egrep
 ```
 $ ./clitest dev/test/inline-match-egrep-error-1.sh
 clitest: Error: empty --egrep at line 1 of dev/test/inline-match-egrep-error-1.sh
-$ ./clitest dev/test/inline-match-egrep-error-2.sh 2>&1 | sed 's/^egrep: .*/egrep: ERROR_MSG/'
+$ ./clitest dev/test/inline-match-egrep-error-2.sh 2>&1 | sed 's/^e*grep: .*/egrep: ERROR_MSG/'
 #1	echo "error: malformed regex"  
 egrep: ERROR_MSG
 clitest: Error: check your inline egrep regex at line 1 of dev/test/inline-match-egrep-error-2.sh
@@ -1316,17 +1313,6 @@ Errors for #→ --eval
 ```
 $ ./clitest dev/test/inline-match-eval-error-1.sh
 clitest: Error: empty --eval at line 1 of dev/test/inline-match-eval-error-1.sh
-$ ./clitest dev/test/inline-match-eval-error-2.sh 2>&1 | sed 's/line [0-9][0-9]*/line N/'
-#1	echo 'error: syntax error'  
-./clitest: eval: line N: unexpected EOF while looking for matching `)'
-./clitest: eval: line N: syntax error: unexpected end of file
---------------------------------------------------------------------------------
-[FAILED #1, line N] echo 'error: syntax error'  
-@@ -0,0 +1 @@
-+error: syntax error
---------------------------------------------------------------------------------
-
-FAIL: 1 of 1 test failed
 $
 ```
 
@@ -2057,11 +2043,11 @@ $ ./clitest dev/test/stdout-stderr.sh
 #3	echo "stderr" 1>&2
 #4	echo "stdout" > /dev/null
 #5	echo "stdout" 2> /dev/null 1>&2
-#6	cp XXnotfoundXX foo
-#7	cp XXnotfoundXX foo > /dev/null
-#8	cp XXnotfoundXX foo 2>&1
-#9	cp XXnotfoundXX foo 2> /dev/null
-#10	cp XXnotfoundXX foo > /dev/null 2>&1
+#6	./clitest foo
+#7	./clitest foo > /dev/null
+#8	./clitest foo 2>&1
+#9	./clitest foo 2> /dev/null
+#10	./clitest foo > /dev/null 2>&1
 OK: 10 of 10 tests passed
 $
 ```
