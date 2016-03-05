@@ -1,1 +1,1 @@
-$ /bin/false                    #→ --exit 0
+$ echo 'error: negative number'  #→ --exit -1

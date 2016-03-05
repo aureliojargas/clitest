@@ -1,1 +1,1 @@
-$ /bin/true                     #→ --exit 1
+$ echo 'error: no contents'  #→ --exit 
