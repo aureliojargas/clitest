@@ -2087,12 +2087,15 @@ $
 
 ## Gotchas
 
-Exit code: normal and error
+Test exit code and STDOUT/STDERR at the same time
 
 ```
-$ ./clitest dev/test/exit-code.sh
-#1	echo "ok"            > /dev/null; echo $?
-#2	cp XXnotfoundXX foo 2> /dev/null; echo $?
+$ ./clitest foo; echo $?
+clitest: Error: cannot read input file: foo
+2
+$ ./clitest dev/test/exit-code-and-stdout.sh 
+#1	echo "zero"; echo $?
+#2	echo "two"; sh -c "exit 2"; echo $?
 OK: 2 of 2 tests passed
 $
 ```
