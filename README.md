@@ -214,8 +214,8 @@ $ head /etc/passwd            #→ --lines 10
 $ tac /etc/passwd | tac       #→ --file /etc/passwd
 $ cat /etc/passwd             #→ --egrep ^root:
 $ echo $((2 + 10))            #→ --regex ^\d+$
-$ pwd                         #→ --eval echo $PWD
 $ make test                   #→ --exit 0
+$ pwd                         #→ --eval echo $PWD
 ```
 
 * Using `#→ --lines` the test will pass if the command output has
@@ -234,14 +234,15 @@ $ make test                   #→ --exit 0
   matched as a single string, with inner `\n`'s. Use the `(?ims)`
   modifiers when needed.
 
+* Using `#→ --exit` the test will pass if the exit code of the command
+  is equal to the code specified. Useful when testing commands that
+  generate variable output (or no output at all), and the exit code is
+  the best indication of success. Both STDIN and STDOUT are ignored
+  when using this option.
+
 * Using `#→ --eval` the test will pass if both commands result in the
   same output. Useful to expand variables which store the full or
   partial output.
-
-* Using `#→ --exit` the test will pass if the exit code of the command
-  is equal to the code specified. Useful when testing commands that generate
-  variable output (or not output at all), and the exit code is the best 
-  indication of the result.
 
 ## Options
 
@@ -330,6 +331,9 @@ Example:
 
 * Both STDIN and STDOUT are catch, you can also test error messages.
 
+* To test STDOUT and the exit code at the same time, add a `;echo $?`
+  after the command.
+
 * Use an empty `$` prompt to close the last command output.
 
 * In the output, every single char (blank or not) counts. Any
@@ -374,7 +378,7 @@ Developers: Learn more about portability in POSIX shells:
 * [How to make bash scripts work in dash][15]
 * [Ubuntu — Dash as /bin/sh][16]
 * [Rich’s sh (POSIX shell) tricks][17]
-* [lintsh][18] 
+* [lintsh][18]
 * [Official POSIX specification: Shell & Utilities][19]
 
 
