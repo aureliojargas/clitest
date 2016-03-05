@@ -583,7 +583,7 @@ tt_process_test_file ()
 
 					#tt_debug OK_TEXT "$tt_test_inline"
 
-					# There must be a number in --lines
+					# There must be a number in --lines and --exit
 					if test "$tt_test_mode" = 'lines' || test "$tt_test_mode" = 'exit'
 					then
 						case "$tt_test_inline" in
