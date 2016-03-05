@@ -564,6 +564,10 @@ tt_process_test_file ()
 							tt_test_inline=${tt_test_inline#--lines }
 							tt_test_mode='lines'
 						;;
+						'--exit '*)
+							tt_test_inline=${tt_test_inline#--exit }
+							tt_test_mode='exit'
+						;;
 						'--eval '*)
 							tt_test_inline=${tt_test_inline#--eval }
 							tt_test_mode='eval'
@@ -571,10 +575,6 @@ tt_process_test_file ()
 						'--text '*)
 							tt_test_inline=${tt_test_inline#--text }
 							tt_test_mode='text'
-						;;
-						'--exit '*)
-							tt_test_inline=${tt_test_inline#--exit }
-							tt_test_mode='exit'
 						;;
 						*)
 							tt_test_mode='text'
