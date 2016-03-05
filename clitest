@@ -105,6 +105,7 @@ tt_test_inline=
 tt_test_mode=
 tt_test_status=2
 tt_test_output=
+tt_test_exit_code=
 tt_test_diff=
 tt_test_ok_text=
 tt_missing_nl=0
@@ -355,7 +356,7 @@ tt_run_test ()
 
 	# Execute the test command, saving output (STDOUT and STDERR)
 	eval "$tt_test_command" > "$tt_test_output_file" 2>&1
-	tt_exit_code=$?
+	tt_test_exit_code=$?
 
 	#tt_debug OUTPUT "$(cat "$tt_test_output_file")"
 
@@ -444,9 +445,9 @@ tt_run_test ()
 			esac
 		;;
 		exit)
-			test "$tt_exit_code" -eq "$tt_test_inline"
+			test "$tt_test_exit_code" -eq "$tt_test_inline"
 			tt_test_status=$?
-			tt_test_diff="Expected exit code $tt_test_inline, got $tt_exit_code"
+			tt_test_diff="Expected exit code $tt_test_inline, got $tt_test_exit_code"
 		;;
 		*)
 			tt_error "unknown test mode '$tt_test_mode'"
