@@ -446,9 +446,8 @@ tt_run_test ()
 		exit)
 			test "$tt_exit_code" -eq "$tt_test_inline"
 			tt_test_status=$?
-			tt_test_diff="Command exited $tt_exit_code, but the expected exit code was $tt_test_inline"
+			tt_test_diff="Expected exit code $tt_test_inline, got $tt_exit_code"
 		;;
-
 		*)
 			tt_error "unknown test mode '$tt_test_mode'"
 		;;
