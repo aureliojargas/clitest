@@ -1,16 +1,31 @@
 language: bash
+
 os:
   - linux
   - osx
+
+# Prepare the environment
 addons:
   apt:
     packages:
+      # Linux: only bash (and sh) are installed by default
       - ksh
       - zsh
+      # Linux: install the checkbashisms script
+      - devscripts
+before_install:
+  # OS X: install the checkbashisms script (||true to avoid Linux fail)
+  - test "$TRAVIS_OS_NAME" = osx && brew update                || true
+  - test "$TRAVIS_OS_NAME" = osx && brew install checkbashisms || true
+
 script:
+  # Run some code checkings on the script itself
+  - checkbashisms --posix clitest
+  # Run the full test suite in all the supported POSIX shells
   - bash clitest test.md
   - ksh  clitest test.md
   - zsh  clitest test.md
   - sh   clitest test.md
+
 notifications:
   email: false
