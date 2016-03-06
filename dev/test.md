@@ -214,8 +214,9 @@ $
 Invalid value
 
 ```
-$ ./clitest --color foo dev/test/ok-1.sh
+$ ./clitest --color foo dev/test/ok-1.sh; echo $?
 clitest: Error: invalid value 'foo' for --color. Use: auto, always or never.
+2
 $
 ```
 
@@ -271,8 +272,9 @@ Test it by hand at the command line.
 Listing a file with no tests
 
 ```
-$ ./clitest --list dev/test/empty-file.sh
+$ ./clitest --list dev/test/empty-file.sh; echo $?
 clitest: Error: no test found in input file: dev/test/empty-file.sh
+2
 $
 ```
 
@@ -328,8 +330,9 @@ $
 Listing a file with no tests
 
 ```
-$ ./clitest --list-run dev/test/empty-file.sh
+$ ./clitest --list-run dev/test/empty-file.sh; echo $?
 clitest: Error: no test found in input file: dev/test/empty-file.sh
+2
 $
 ```
 
@@ -413,8 +416,9 @@ $ ./clitest --progress DOT dev/test/ok-1.sh
 clitest: Error: invalid value 'DOT' for --progress. Use: test, number, dot or none.
 $ ./clitest --progress @@ dev/test/ok-1.sh
 clitest: Error: invalid value '@@' for --progress. Use: test, number, dot or none.
-$ ./clitest --progress -1 dev/test/ok-1.sh
+$ ./clitest --progress -1 dev/test/ok-1.sh; echo $?
 clitest: Error: invalid value '-1' for --progress. Use: test, number, dot or none.
+2
 $
 ```
 
@@ -680,8 +684,9 @@ Error: Out of range
 ```
 $ ./clitest --list -t 99 dev/test/ok-10.sh
 clitest: Error: no test found for the specified number or range '99'
-$ ./clitest --list-run -t 99 dev/test/ok-10.sh
+$ ./clitest --list-run -t 99 dev/test/ok-10.sh; echo $?
 clitest: Error: no test found for the specified number or range '99'
+2
 $
 ```
 
@@ -690,8 +695,9 @@ Error: Skipped all tests
 ```
 $ ./clitest --list -s 1-10 dev/test/ok-10.sh
 clitest: Error: no test found. Maybe '--skip 1-10' was too much?
-$ ./clitest --list-run -s 1-10 dev/test/ok-10.sh
+$ ./clitest --list-run -s 1-10 dev/test/ok-10.sh; echo $?
 clitest: Error: no test found. Maybe '--skip 1-10' was too much?
+2
 $
 ```
 
@@ -700,8 +706,9 @@ Error: The combination of `-t` and `-s` resulted in no tests
 ```
 $ ./clitest --list -t 9 -s 9 dev/test/ok-10.sh
 clitest: Error: no test found. The combination of -t and -s resulted in no tests.
-$ ./clitest --list-run -t 9 -s 9 dev/test/ok-10.sh
+$ ./clitest --list-run -t 9 -s 9 dev/test/ok-10.sh; echo $?
 clitest: Error: no test found. The combination of -t and -s resulted in no tests.
+2
 $
 ```
 
@@ -1294,8 +1301,9 @@ $
 Errors for #→ --egrep
 
 ```
-$ ./clitest dev/test/inline-match-egrep-error-1.sh
+$ ./clitest dev/test/inline-match-egrep-error-1.sh; echo $?
 clitest: Error: empty --egrep at line 1 of dev/test/inline-match-egrep-error-1.sh
+2
 $ ./clitest dev/test/inline-match-egrep-error-2.sh 2>&1 | sed 's/^e*grep: .*/egrep: ERROR_MSG/'
 #1	echo "error: malformed regex"  
 egrep: ERROR_MSG
@@ -1306,8 +1314,9 @@ $
 Errors for #→ --perl (and --regex)
 
 ```
-$ ./clitest dev/test/inline-match-perl-error-1.sh
+$ ./clitest dev/test/inline-match-perl-error-1.sh; echo $?
 clitest: Error: empty --perl at line 1 of dev/test/inline-match-perl-error-1.sh
+2
 $ ./clitest dev/test/inline-match-perl-error-2.sh
 #1	echo "error: malformed regex"  
 Unmatched ( in regex; marked by <-- HERE in m/( <-- HERE / at -e line 1.
@@ -1318,14 +1327,17 @@ $
 Errors for #→ --file
 
 ```
-$ ./clitest dev/test/inline-match-file-error-1.sh
+$ ./clitest dev/test/inline-match-file-error-1.sh; echo $?
 clitest: Error: empty --file at line 1 of dev/test/inline-match-file-error-1.sh
-$ ./clitest dev/test/inline-match-file-error-2.sh
+2
+$ ./clitest dev/test/inline-match-file-error-2.sh; echo $?
 #1	echo "error: file not found"  
 clitest: Error: cannot read inline output file 'dev/test/XXnotfoundXX', from line 1 of dev/test/inline-match-file-error-2.sh
-$ ./clitest dev/test/inline-match-file-error-3.sh
+2
+$ ./clitest dev/test/inline-match-file-error-3.sh; echo $?
 #1	echo "error: directory"  
 clitest: Error: cannot read inline output file '/etc/', from line 1 of dev/test/inline-match-file-error-3.sh
+2
 $
 ```
 
@@ -1338,8 +1350,9 @@ $ ./clitest dev/test/inline-match-lines-error-2.sh
 clitest: Error: --lines requires a number. See line 1 of dev/test/inline-match-lines-error-2.sh
 $ ./clitest dev/test/inline-match-lines-error-3.sh
 clitest: Error: --lines requires a number. See line 1 of dev/test/inline-match-lines-error-3.sh
-$ ./clitest dev/test/inline-match-lines-error-4.sh
+$ ./clitest dev/test/inline-match-lines-error-4.sh; echo $?
 clitest: Error: --lines requires a number. See line 1 of dev/test/inline-match-lines-error-4.sh
+2
 $
 ```
 
@@ -1352,16 +1365,18 @@ $ ./clitest dev/test/inline-match-exit-error-2.sh
 clitest: Error: --exit requires a number. See line 1 of dev/test/inline-match-exit-error-2.sh
 $ ./clitest dev/test/inline-match-exit-error-3.sh
 clitest: Error: --exit requires a number. See line 1 of dev/test/inline-match-exit-error-3.sh
-$ ./clitest dev/test/inline-match-exit-error-4.sh
+$ ./clitest dev/test/inline-match-exit-error-4.sh; echo $?
 clitest: Error: --exit requires a number. See line 1 of dev/test/inline-match-exit-error-4.sh
+2
 $
 ```
 
 Errors for #→ --eval
 
 ```
-$ ./clitest dev/test/inline-match-eval-error-1.sh
+$ ./clitest dev/test/inline-match-eval-error-1.sh; echo $?
 clitest: Error: empty --eval at line 1 of dev/test/inline-match-eval-error-1.sh
+2
 $
 ```
 
@@ -1378,16 +1393,18 @@ $ ./clitest -t 1- dev/test/ok-2.sh
 clitest: Error: invalid argument for -t or --test: 1-
 $ ./clitest -t 1--2 dev/test/ok-2.sh
 clitest: Error: invalid argument for -t or --test: 1--2
-$ ./clitest -t 1-2-3 dev/test/ok-2.sh
+$ ./clitest -t 1-2-3 dev/test/ok-2.sh; echo $?
 clitest: Error: invalid argument for -t or --test: 1-2-3
+2
 $
 ```
 
 Error: Out of range
 
 ```
-$ ./clitest -t 99 dev/test/ok-2.sh
+$ ./clitest -t 99 dev/test/ok-2.sh; echo $?
 clitest: Error: no test found for the specified number or range '99'
+2
 $
 ```
 
@@ -1545,16 +1562,18 @@ $ ./clitest -s 1- dev/test/ok-2.sh
 clitest: Error: invalid argument for -s or --skip: 1-
 $ ./clitest -s 1--2 dev/test/ok-2.sh
 clitest: Error: invalid argument for -s or --skip: 1--2
-$ ./clitest -s 1-2-3 dev/test/ok-2.sh
+$ ./clitest -s 1-2-3 dev/test/ok-2.sh; echo $?
 clitest: Error: invalid argument for -s or --skip: 1-2-3
+2
 $
 ```
 
 Error: Skipped all tests
 
 ```
-$ ./clitest -s 1 dev/test/ok-1.sh
+$ ./clitest -s 1 dev/test/ok-1.sh; echo $?
 clitest: Error: no test found. Maybe '--skip 1' was too much?
+2
 $
 ```
 
@@ -1721,8 +1740,9 @@ $
 Error: The combination of `-t` and `-s` resulted in no tests
 
 ```
-$ ./clitest -t 9 -s 9 dev/test/ok-10.sh
+$ ./clitest -t 9 -s 9 dev/test/ok-10.sh; echo $?
 clitest: Error: no test found. The combination of -t and -s resulted in no tests.
+2
 $
 ```
 
@@ -1795,8 +1815,9 @@ $
 ## Option --prompt
 
 ```
-$ ./clitest dev/test/option-prompt.sh
+$ ./clitest dev/test/option-prompt.sh; echo $?
 clitest: Error: no test found in input file: dev/test/option-prompt.sh
+2
 $ ./clitest --prompt 'prompt$ ' dev/test/option-prompt.sh
 #1	echo "1"  
 #2	echo "2"
@@ -2050,8 +2071,9 @@ $ ./clitest --pre-flight 'tt_test_number=99; tt_nr_total_tests=99' dev/test/ok-1
 OK: 100 of 100 tests passed
 $ ./clitest --post-flight 'tt_nr_total_fails=50' dev/test/ok-50.sh | tail -1
 FAIL: 50 of 50 tests failed
-$ ./clitest --pre-flight 'false' dev/test/ok-1.sh
+$ ./clitest --pre-flight 'false' dev/test/ok-1.sh; echo $?
 clitest: Error: pre-flight command failed with status=1: false
+2
 $
 ```
 
@@ -2066,8 +2088,9 @@ $ ./clitest --foo dev/test/ok-1.sh
 clitest: Error: invalid option --foo
 $ ./clitest --foo
 clitest: Error: invalid option --foo
-$ ./clitest -Z
+$ ./clitest -Z; echo $?
 clitest: Error: invalid option -Z
+2
 $
 ```
 
@@ -2084,16 +2107,18 @@ $
 ```
 $ cat dev/test/ok-1.sh | ./clitest -
 clitest: Error: cannot read input file: -
-$ cat dev/test/ok-1.sh | ./clitest -- -
+$ cat dev/test/ok-1.sh | ./clitest -- -; echo $?
 clitest: Error: cannot read input file: -
+2
 $
 ```
 
 ## Read test file from STDIN (not supported)
 
 ```
-$ cat dev/test/ok-1.sh | ./clitest /dev/stdin
+$ cat dev/test/ok-1.sh | ./clitest /dev/stdin; echo $?
 clitest: Error: cannot read input file: /dev/stdin
+2
 $
 ```
 
