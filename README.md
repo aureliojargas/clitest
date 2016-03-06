@@ -418,7 +418,7 @@ clitest  --prefix 4 --prompt '[john@localhost ~]$ ' README.md
   instead.
 
 * Simple examples in [examples/][10]. Hardcore examples in
-  [test.md][11] and [dev/test/][12], the clitest own test-suite.
+  [test.md][11] and [test/][12], the clitest own test-suite.
 
 
 ## Choose the execution shell
@@ -482,7 +482,7 @@ No other language or environment involved.
 [9]: http://perldoc.perl.org/perlre.html
 [10]: https://github.com/aureliojargas/clitest/tree/master/examples
 [11]: https://github.com/aureliojargas/clitest/blob/master/test.md
-[12]: https://github.com/aureliojargas/clitest/blob/master/dev/test/
+[12]: https://github.com/aureliojargas/clitest/blob/master/test/
 [13]: http://en.wikipedia.org/wiki/POSIX
 [14]: https://github.com/aureliojargas/clitest/issues
 [15]: http://mywiki.wooledge.org/Bashism
