@@ -115,41 +115,6 @@ tt_tab='	'
 tt_nl='
 '
 
-# Handle command line options
-while test "${1#-}" != "$1"
-do
-	case "$1" in
-		-1|--first      ) shift; tt_stop_on_first_fail=1 ;;
-		-l|--list       ) shift; tt_output_mode='list' ;;
-		-L|--list-run   ) shift; tt_output_mode='list-run' ;;
-		-q|--quiet      ) shift; tt_output_mode='quiet' ;;
-		-t|--test       ) shift; tt_run_range="$1"; shift ;;
-		-s|--skip       ) shift; tt_skip_range="$1"; shift ;;
-		--pre-flight    ) shift; tt_pre_command="$1"; shift ;;
-		--post-flight   ) shift; tt_post_command="$1"; shift ;;
-		--debug         ) shift; tt_debug=1 ;;
-		-P|--progress   ) shift; tt_progress="$1"; tt_output_mode='normal'; shift ;;
-		--color|--colour) shift; tt_color_mode="$1"; shift ;;
-		--diff-options  ) shift; tt_diff_options="$1"; shift ;;
-		--inline-prefix ) shift; tt_inline_prefix="$1"; shift ;;
-		--prefix        ) shift; tt_prefix="$1"; shift ;;
-		--prompt        ) shift; tt_prompt="$1"; shift ;;
-		-h|--help)
-			printf '%s\n' "$tt_my_help"
-			exit 0
-		;;
-		-V|--version)
-			printf '%s %s\n%s\n' $tt_my_name $tt_my_version $tt_my_version_url
-			exit 0
-		;;
-		--) shift; break ;;
-		*) break ;;
-	esac
-done
-
-# Command line options consumed, now it's just the files
-tt_nr_files=$#
-
 
 ### Utilities
 
@@ -643,6 +608,40 @@ tt_process_test_file ()
 
 ### Init process
 
+# Handle command line options
+while test "${1#-}" != "$1"
+do
+	case "$1" in
+		-1|--first      ) shift; tt_stop_on_first_fail=1 ;;
+		-l|--list       ) shift; tt_output_mode='list' ;;
+		-L|--list-run   ) shift; tt_output_mode='list-run' ;;
+		-q|--quiet      ) shift; tt_output_mode='quiet' ;;
+		-t|--test       ) shift; tt_run_range="$1"; shift ;;
+		-s|--skip       ) shift; tt_skip_range="$1"; shift ;;
+		--pre-flight    ) shift; tt_pre_command="$1"; shift ;;
+		--post-flight   ) shift; tt_post_command="$1"; shift ;;
+		--debug         ) shift; tt_debug=1 ;;
+		-P|--progress   ) shift; tt_progress="$1"; tt_output_mode='normal'; shift ;;
+		--color|--colour) shift; tt_color_mode="$1"; shift ;;
+		--diff-options  ) shift; tt_diff_options="$1"; shift ;;
+		--inline-prefix ) shift; tt_inline_prefix="$1"; shift ;;
+		--prefix        ) shift; tt_prefix="$1"; shift ;;
+		--prompt        ) shift; tt_prompt="$1"; shift ;;
+		-h|--help)
+			printf '%s\n' "$tt_my_help"
+			exit 0
+		;;
+		-V|--version)
+			printf '%s %s\n%s\n' $tt_my_name $tt_my_version $tt_my_version_url
+			exit 0
+		;;
+		--) shift; break ;;
+		*) break ;;
+	esac
+done
+
+# Command line options consumed, now it's just the files
+tt_nr_files=$#
 
 # No files?
 if test $tt_nr_files -eq 0
