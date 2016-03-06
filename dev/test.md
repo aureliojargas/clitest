@@ -2063,11 +2063,21 @@ clitest: Error: cannot read input file: --quiet
 $
 ```
 
-## File - meaning STDIN (no support for now)
+## File - meaning STDIN (not supported)
 
 ```
 $ cat dev/test/ok-1.sh | ./clitest -
 clitest: Error: cannot read input file: -
+$ cat dev/test/ok-1.sh | ./clitest -- -
+clitest: Error: cannot read input file: -
+$
+```
+
+## Read test file from STDIN (not supported)
+
+```
+$ cat dev/test/ok-1.sh | ./clitest /dev/stdin
+clitest: Error: cannot read input file: /dev/stdin
 $
 ```
 
