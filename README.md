@@ -192,7 +192,7 @@ Examples of testable documentation handled by clitest:
 * https://github.com/caarlos0/jvm/blob/master/tests/test.clitest.md
 * https://github.com/caarlos0/git-add-remote/blob/master/tests/suite.clitest.md
 * https://github.com/aureliojargas/clitest/blob/master/examples/install-software.md
-* https://github.com/aureliojargas/clitest/blob/master/dev/test.md
+* https://github.com/aureliojargas/clitest/blob/master/test.md
 
 
 ## Alternative Syntax: Inline Output
@@ -418,7 +418,7 @@ clitest  --prefix 4 --prompt '[john@localhost ~]$ ' README.md
   instead.
 
 * Simple examples in [examples/][10]. Hardcore examples in
-  [dev/test.md][11] and [dev/test/][12], the clitest own test-suite.
+  [test.md][11] and [dev/test/][12], the clitest own test-suite.
 
 
 ## Choose the execution shell
@@ -481,7 +481,7 @@ No other language or environment involved.
 [8]: https://github.com/aureliojargas/clitest/blob/master/README.md
 [9]: http://perldoc.perl.org/perlre.html
 [10]: https://github.com/aureliojargas/clitest/tree/master/examples
-[11]: https://github.com/aureliojargas/clitest/blob/master/dev/test.md
+[11]: https://github.com/aureliojargas/clitest/blob/master/test.md
 [12]: https://github.com/aureliojargas/clitest/blob/master/dev/test/
 [13]: http://en.wikipedia.org/wiki/POSIX
 [14]: https://github.com/aureliojargas/clitest/issues

@@ -4,7 +4,7 @@ This is the test file for the `clitest` program. Yes, the program can test itsel
 
 This file runs all the files inside the `dev/test` folder and checks the results. The command line options are also tested.
 
-    Usage: ./clitest dev/test.md
+    Usage: ./clitest test.md
 
 
 ## Preparing
