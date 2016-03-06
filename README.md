@@ -19,12 +19,26 @@ clitest:
   **command lines** to verify that they work exactly as shown.
 
 
-## Download
+## Download & install
 
 The full program is just [a single shell script file][4].
 
-Save it and make it executable: `chmod +x clitest`
+Save it, make it executable and move it to a `$PATH` directory:
 
+```bash
+curl -sOL https://raw.githubusercontent.com/aureliojargas/clitest/master/clitest
+chmod +x clitest
+sudo mv clitest /usr/bin
+```
+
+Now check if everything is fine:
+
+```console
+$ clitest -V
+clitest HEAD
+https://github.com/aureliojargas/clitest/tree/HEAD
+$
+```
 
 ## Quick Intro
 
@@ -44,7 +58,7 @@ $
 
 Use clitest to run these commands and check their output:
 
-```
+```console
 $ clitest examples/intro.txt
 #1	echo "Hello World"
 #2	cd /tmp
@@ -85,7 +99,7 @@ That's it.
 Just paste your shell session inside a text file and you have a
 ready-to-use test suite.
 
-```
+```console
 $ clitest examples/cut.txt
 #1	echo "one:two:three:four:five:six" | cut -d : -f 1
 #2	echo "one:two:three:four:five:six" | cut -d : -f 4
@@ -97,16 +111,20 @@ OK: 6 of 6 tests passed
 $
 ```
 
+There are more examples and instructions in the [examples folder][10]. For a real-life collection of hundreds of test files, see [funcoeszz test files][24].
 
-## Test Documents
 
-Ever wanted to test the command line instructions you give in the
-`INSTALL.txt` or `README.md` files for your projects? Now you can!
+## Testable Documentation
 
-clitest can also extract and run command lines from technical documents.
+Clitest can also **extract and run command lines from documentation**,
+such as Markdown files. This very `README.md` file you are now reading
+is testable with `clitest README.md`. All the command lines inside it
+will be run and checked.
 
-Given the following Markdown sample document, which uses tabs to mark
-code blocks:
+No more malfunctioning shell commands in your READMEs, you can have
+testable documentation.
+
+Given the following Markdown sample document:
 
 ♦ [examples/cut.md][7]
 
@@ -144,11 +162,14 @@ If you omit the second range number, it matches until the last:
 cut is cool, isn't it?
 ```
 
-It's easy to convert it to a readable HTML document with your favorite
-Markdown program. It's also easy to test this file directly with
-clitest, just inform that the command lines are prefixed by a tab:
+It is a technical article, not a boring code-only test file. You can
+read its final (formatted) version [here][7].
 
-```
+You can give this article to clitest, who will identify all the shell
+command lines inside it, run them and check if the results are the
+same.
+
+```console
 $ clitest --prefix tab examples/cut.md
 #1	echo "one:two:three:four:five:six" | cut -d : -f 1
 #2	echo "one:two:three:four:five:six" | cut -d : -f 4
@@ -160,11 +181,18 @@ OK: 6 of 6 tests passed
 $
 ```
 
-For Markdown files with 4-spaces indented code blocks, use `--prefix 4`.
+Note the use of `--prefix tab` option, to inform clitest that the code
+blocks are prefixed by a tab in this Markdown file. For files with
+4-spaces indented code blocks, use `--prefix 4`. When using
+non-indented fenced code blocks (\`\`\`), such as this [README.md][8],
+no prefix option is needed.
 
-Of course, this [README.md][8] file you are now reading is also
-testable. Since it uses non-indented fenced code blocks (\`\`\`),
-no prefix option is needed: `clitest README.md`.
+Examples of testable documentation handled by clitest:
+
+* https://github.com/caarlos0/jvm/blob/master/tests/test.clitest.md
+* https://github.com/caarlos0/git-add-remote/blob/master/tests/suite.clitest.md
+* https://github.com/aureliojargas/clitest/blob/master/examples/install-software.md
+* https://github.com/aureliojargas/clitest/blob/master/dev/test.md
 
 
 ## Alternative Syntax: Inline Output
@@ -173,14 +201,14 @@ Now a nice extension to the original idea. Using the special marker
 `#→` you can embed the expected command output at the end of the
 command line.
 
-```
+```console
 $ echo "foo"                      #→ foo
 $ echo $((10 + 2))                #→ 12
 ```
 
 This is the same as doing:
 
-```
+```console
 $ echo "foo"
 foo
 $ echo $((10 + 2))
@@ -191,7 +219,7 @@ $
 Inline outputs are very readable when testing series of commands that
 result in short texts.
 
-```
+```console
 $ echo "abcdef" | cut -c 1        #→ a
 $ echo "abcdef" | cut -c 4        #→ d
 $ echo "abcdef" | cut -c 1,4      #→ ad
@@ -209,7 +237,7 @@ $ echo "abcdef" | cut -c 1-4      #→ abcd
 When using the `#→` marker, you can take advantage of special options
 to change the default output matching method.
 
-```
+```console
 $ head /etc/passwd            #→ --lines 10
 $ tac /etc/passwd | tac       #→ --file /etc/passwd
 $ cat /etc/passwd             #→ --egrep ^root:
@@ -246,7 +274,7 @@ $ pwd                         #→ --eval echo $PWD
 
 ## Options
 
-```
+```console
 $ clitest --help
 Usage: clitest [options] <file ...>
 
@@ -271,55 +299,89 @@ Customization options:
 $
 ```
 
-When running sequential tests, where the next test depends on the
-correct result of the previous test, use the `--first` option to abort
-the execution if any test fails.
+
+## Exit codes
+
+* `0` - All tests passed, or normal operation (--help, --list, …)
+* `1` - One or more tests have failed
+* `2` - An error occurred (file not found, invalid range, …)
+
+
+## Fail fast
+
+Use the `--first` option (or the short version `-1`) to abort the
+execution when any test fails.
+
+Useful for Continuous Integration (CI), or when running sequential
+tests where the next test depends on the correct result of the
+previous.
+
+
+## Quiet operation
+
+When automating the tests execution, use `--quiet` to show no output
+and just check the exit code to make sure all tests have passed. Using `--first` to fail fast is also a good idea in this case.
+
+```bash
+if clitest --quiet --first tests.txt
+then
+    # all tests passed
+else
+    # one or more tests failed :(
+fi
+```
+
+
+## Run specific tests
 
 To rerun a specific problematic test, or to limit the execution to a
 set of tests, use `--test`. To ignore one or more tests, use `--skip`.
 If needed, you can combine both options to inform a very specific test
 range. Examples:
 
-    clitest --test 1-10    tests.txt   # Run the first 10 tests
-    clitest --test 1,2,6-8 tests.txt   # Run tests #1, #2, #6, #7 and #8
-    clitest --skip 11,15   tests.txt   # Run all tests, except #11 and #15
-    clitest -t 1-10 -s 5   tests.txt   # Run first 10 tests, but skip #5
+```bash
+clitest --test 1-10    tests.txt   # Run the first 10 tests
+clitest --test 1,2,6-8 tests.txt   # Run tests #1, #2, #6, #7 and #8
+clitest --skip 11,15   tests.txt   # Run all tests, except #11 and #15
+clitest -t 1-10 -s 5   tests.txt   # Run first 10 tests, but skip #5
+```
+
+
+## Pre/post scripts
 
 You can run a preparing script or command before the first test with
 `--pre-flight`, for setting env variables and create auxiliary files.
 At the end of all tests, run a final cleanup script/command with
 `--post-flight` to remove temporary files or other transient data.
-Example:
+
+```bash
+clitest --pre-flight ./test-init.sh --post-flight 'rm *.tmp' tests.txt
+```
 
 
-    clitest --pre-flight ./test-init.sh --post-flight 'rm *.tmp' tests.txt
+## Customization
 
 Use the customization options to extract and test command lines from
 documents or wiki pages. For example, to test all the command line
 examples listed inside a Markdown file using the 4-spaces syntax for
 code blocks:
 
-    clitest --prefix 4 README.md
+```bash
+clitest --prefix 4 README.md
+```
 
 Or maybe you use a different prompt (`$PS1`) in your documentation?
 
-    clitest  --prefix 4 --prompt '[john@localhost ~]$ ' README.md
+```bash
+clitest  --prefix 4 --prompt '[john@localhost ~]$ ' README.md
+```
 
-When automating the tests execution, use `--quiet` to show no output
-and just check the exit code to make sure all tests have passed.
-Example:
 
-    if clitest --quiet tests.txt
-    then
-        # all tests passed
-    else
-        # one or more tests failed :(
-    fi
 
 
 ## Nerdiness
 
-* Use any file format for the tests, it doesn't matter. The command
+* Use any text file format for the tests, it doesn't matter. The command
   lines just need to be grepable and have a fixed prefix (or none).
   Even Windows text files (CR+LF) will work fine.
 
@@ -359,6 +421,18 @@ Example:
   [dev/test.md][11] and [dev/test/][12], the clitest own test-suite.
 
 
+## Choose the execution shell
+
+The clitest shebang is `#!/bin/sh`. That's the default shell that will be used to run your test command lines. Depending on the system, that path points to a different shell, such as ash, dash, or bash ([running in POSIX mode][23]).
+
+To force your test commands to always run on a specific shell, just call the desired shell before:
+
+```bash
+clitest tests.txt            # Uses /bin/sh
+bash clitest tests.txt       # Uses Bash
+ksh clitest tests.txt        # Uses Korn Shell
+```
+
 ## Portability
 
 This script was carefully coded to be portable between [POSIX][13]
@@ -369,6 +443,7 @@ It was tested in:
 * Bash 3.2
 * dash 0.5.5.1
 * ksh 93u 2011-02-08
+* zsh 5.0.5
 
 Portability issues are considered serious bugs, please
 [report them][14]!
@@ -405,7 +480,7 @@ No other language or environment involved.
 [7]: https://github.com/aureliojargas/clitest/blob/master/examples/cut.md
 [8]: https://github.com/aureliojargas/clitest/blob/master/README.md
 [9]: http://perldoc.perl.org/perlre.html
-[10]: https://github.com/aureliojargas/clitest/blob/master/examples/
+[10]: https://github.com/aureliojargas/clitest/tree/master/examples
 [11]: https://github.com/aureliojargas/clitest/blob/master/dev/test.md
 [12]: https://github.com/aureliojargas/clitest/blob/master/dev/test/
 [13]: http://en.wikipedia.org/wiki/POSIX
@@ -418,3 +493,5 @@ No other language or environment involved.
 [20]: http://en.wikipedia.org/wiki/KISS_principle
 [21]: http://aurelio.net/about.html
 [22]: https://github.com/aureliojargas/clitest/blob/master/LICENSE.txt
+[23]: https://www.gnu.org/software/bash/manual/html_node/Bash-POSIX-Mode.html
+[24]: https://github.com/funcoeszz/funcoeszz/tree/master/testador

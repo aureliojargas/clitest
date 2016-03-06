@@ -26,20 +26,20 @@ $
 
 # Showing STDERR
 
-$ cp XXnotfoundXX foo
-cp: XXnotfoundXX: No such file or directory
-$ cp XXnotfoundXX foo > /dev/null
-cp: XXnotfoundXX: No such file or directory
+$ ./clitest foo
+clitest: Error: cannot read input file: foo
+$ ./clitest foo > /dev/null
+clitest: Error: cannot read input file: foo
 $
 
 # Redirecting STDERR to STDOUT
 
-$ cp XXnotfoundXX foo 2>&1
-cp: XXnotfoundXX: No such file or directory
+$ ./clitest foo 2>&1
+clitest: Error: cannot read input file: foo
 $
 
 # Closing STDERR
 
-$ cp XXnotfoundXX foo 2> /dev/null
-$ cp XXnotfoundXX foo > /dev/null 2>&1
+$ ./clitest foo 2> /dev/null
+$ ./clitest foo > /dev/null 2>&1
 $

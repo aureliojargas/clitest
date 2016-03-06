@@ -687,7 +687,8 @@ then
 			:
 		;;
 		*)
-		tt_error "invalid value '$tt_progress' for --progress. Use: test, number, dot or none."
+			tt_error "invalid value '$tt_progress' for --progress. Use: test, number, dot or none."
+		;;
 	esac
 fi
 
