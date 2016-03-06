@@ -635,8 +635,18 @@ do
 			printf '%s %s\n%s\n' $tt_my_name $tt_my_version $tt_my_version_url
 			exit 0
 		;;
-		--) shift; break ;;
-		*) break ;;
+		--)
+			# No more options to process
+			shift
+			break
+		;;
+		-)
+			# Argument - means "read from STDIN" (not supported)
+			break
+		;;
+		*)
+			tt_error "invalid option $1"
+		;;
 	esac
 done
 

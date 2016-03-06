@@ -2055,6 +2055,22 @@ clitest: Error: pre-flight command failed with status=1: false
 $
 ```
 
+## Invalid option
+
+```
+$ ./clitest --quiet --foo dev/test/ok-1.sh
+clitest: Error: invalid option --foo
+$ ./clitest --first --foo dev/test/ok-1.sh
+clitest: Error: invalid option --foo
+$ ./clitest --foo dev/test/ok-1.sh
+clitest: Error: invalid option --foo
+$ ./clitest --foo
+clitest: Error: invalid option --foo
+$ ./clitest -Z
+clitest: Error: invalid option -Z
+$
+```
+
 ## Options terminator -- 
 
 ```
