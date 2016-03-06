@@ -1265,9 +1265,9 @@ $ ./clitest --list-run dev/test/inline-match-exit.sh
 #3	OK	sh -c 'exit 3'                
 #4	OK	command-not-found             
 #5	OK	echo "STDOUT ignored"         
-#6	OK	ls /XXnotfoundXX              
+#6	OK	cut                           
 #7	OK	echo "STDOUT ignored"         
-#8	OK	ls /XXnotfoundXX              
+#8	OK	cut                           
 #9	FAIL	echo 'fail'                   
 #10	FAIL	echo 'fail'                   
 #11	FAIL	echo 'fail'                   
@@ -1280,9 +1280,9 @@ $ ./clitest --first dev/test/inline-match-exit.sh
 #3	sh -c 'exit 3'                
 #4	command-not-found             
 #5	echo "STDOUT ignored"         
-#6	ls /XXnotfoundXX              
+#6	cut                           
 #7	echo "STDOUT ignored"         
-#8	ls /XXnotfoundXX              
+#8	cut                           
 #9	echo 'fail'                   
 --------------------------------------------------------------------------------
 [FAILED #9, line 25] echo 'fail'                   

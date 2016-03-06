@@ -10,14 +10,14 @@ $ command-not-found             #→ --exit 127
 
 $ echo "STDOUT ignored"         #→ --exit 0
 This output will be ignored.
-$ ls /XXnotfoundXX              #→ --exit 1
+$ cut                           #→ --exit 1
 This output will be ignored.
 $ 
 
 # You can also safely omit the output in the test file
 
 $ echo "STDOUT ignored"         #→ --exit 0
-$ ls /XXnotfoundXX              #→ --exit 1
+$ cut                           #→ --exit 1
 
 # The error message is a short sentence, not a diff
 # Example: Expected exit code 0, got 1.
