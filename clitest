@@ -911,6 +911,6 @@ else
 	stats="$tt_nr_total_fails of $tt_nr_total_tests tests failed"
 	test $tt_nr_total_tests -eq 1 && stats=$(echo "$stats" | sed 's/tests /test /')
 	tt_message "$stamp $stats$skips"
-	test $tt_test_file = 'test.md' && tt_message "-t ${tt_failed_range%,}"  # XXX dev helper, remove before release
+	# test $tt_test_file = 'test.md' && tt_message "-t ${tt_failed_range%,}"  # dev helper
 	exit 1
 fi
