@@ -801,7 +801,7 @@ do
 			;;
 			list | list-run)
 				# List mode, show ------ and the filename
-				tt_message $(tt_separator_line | cut -c 1-40) $tt_test_file
+				tt_message "$(tt_separator_line | cut -c 1-40)" "$tt_test_file"
 			;;
 		esac
 	fi
