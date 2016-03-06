@@ -8,9 +8,9 @@ addons:
       - ksh
       - zsh
 script:
-  - bash clitest dev/test.md
-  - ksh  clitest dev/test.md
-  - zsh  clitest dev/test.md
-  - sh   clitest dev/test.md
+  - bash clitest test.md
+  - ksh  clitest test.md
+  - zsh  clitest test.md
+  - sh   clitest test.md
 notifications:
   email: false
