@@ -1,1 +1,1 @@
-$ echo 'error: no contents'  #→ --exit 
+$ echo 'error: no contents'  #=> --exit 

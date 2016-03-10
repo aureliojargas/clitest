@@ -2,16 +2,16 @@
 
 /// Inline output
 
-?echo 'prompt ?'	#→ prompt ?
-*echo 'prompt *'	#→ prompt *
-#echo 'prompt #'	#→ prompt #
-%echo 'prompt %'	#→ prompt %
-##echo 'prompt ##'	#→ prompt ##
-%%echo 'prompt %%'	#→ prompt %%
-#*echo 'prompt #*'	#→ prompt #*
-*#echo 'prompt *#'	#→ prompt *#
-%*echo 'prompt %*'	#→ prompt %*
-*%echo 'prompt *%'	#→ prompt *%
+?echo 'prompt ?'	#=> prompt ?
+*echo 'prompt *'	#=> prompt *
+#echo 'prompt #'	#=> prompt #
+%echo 'prompt %'	#=> prompt %
+##echo 'prompt ##'	#=> prompt ##
+%%echo 'prompt %%'	#=> prompt %%
+#*echo 'prompt #*'	#=> prompt #*
+*#echo 'prompt *#'	#=> prompt *#
+%*echo 'prompt %*'	#=> prompt %*
+*%echo 'prompt *%'	#=> prompt *%
 
 
 /// Normal output

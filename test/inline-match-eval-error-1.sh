@@ -1,1 +1,1 @@
-$ echo 'error: no contents'  #→ --eval 
+$ echo 'error: no contents'  #=> --eval 

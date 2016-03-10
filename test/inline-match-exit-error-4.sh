@@ -1,1 +1,1 @@
-$ echo 'error: not a number'  #→ --exit foo
+$ echo 'error: not a number'  #=> --exit foo

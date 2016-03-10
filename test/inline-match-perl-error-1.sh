@@ -1,1 +1,1 @@
-$ echo 'error: no contents'  #→ --perl 
+$ echo 'error: no contents'  #=> --perl 

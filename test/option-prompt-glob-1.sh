@@ -5,10 +5,10 @@
 
 /// Inline output (one char)
 
-?echo 'prompt ?'	#→ prompt ?
-*echo 'prompt *'	#→ prompt *
-#echo 'prompt #'	#→ prompt #
-%echo 'prompt %'	#→ prompt %
+?echo 'prompt ?'	#=> prompt ?
+*echo 'prompt *'	#=> prompt *
+#echo 'prompt #'	#=> prompt #
+%echo 'prompt %'	#=> prompt %
 
 /// Normal output (one char)
 

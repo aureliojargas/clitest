@@ -1,1 +1,1 @@
-$ echo 'error: not a number'  #→ --lines foo
+$ echo 'error: not a number'  #=> --lines foo

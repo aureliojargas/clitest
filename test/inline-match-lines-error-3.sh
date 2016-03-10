@@ -1,1 +1,1 @@
-$ echo 'error: float number'  #→ --lines 1.0
+$ echo 'error: float number'  #=> --lines 1.0

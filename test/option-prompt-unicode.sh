@@ -1,6 +1,6 @@
 # Configurable prompt with --prompt
 
-♥ echo "1"  #→ 1
+♥ echo "1"  #=> 1
 ♥ echo "2"
 2
 ♥ 

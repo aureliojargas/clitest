@@ -37,8 +37,8 @@ $ echo $COLUMNS
 $ not_exported=1
 $ echo $not_exported
 1
-$ echo $not_exported  #→ 1
-$ echo $not_exported  #→ --regex ^1$
+$ echo $not_exported  #=> 1
+$ echo $not_exported  #=> --regex ^1$
 ```
 
 ## Check the temporary dir creation
@@ -143,7 +143,7 @@ Customization options:
   -P, --progress TYPE         Set progress indicator: test, number, dot, none
       --color WHEN            Set when to use colors: auto, always, never
       --diff-options OPTIONS  Set diff command options (default: '-u')
-      --inline-prefix PREFIX  Set inline output prefix (default: '#→ ')
+      --inline-prefix PREFIX  Set inline output prefix (default: '#=> ')
       --prefix PREFIX         Set command line prefix (default: '')
       --prompt STRING         Set prompt string (default: '$ ')
 0
@@ -196,8 +196,8 @@ $
 # [INPUT_LINE: ok]
 # [    LINE_*: ok]
 # [   OK_TEXT: ok]
-# [INPUT_LINE: $ echo ok  #→ ok]
-# [  LINE_CMD: $ echo ok  #→ ok]
+# [INPUT_LINE: $ echo ok  #=> ok]
+# [  LINE_CMD: $ echo ok  #=> ok]
 # [      EVAL: echo ok]
 # [    OUTPUT: ok]
 # [   NEW_CMD: echo ok  ]
@@ -947,7 +947,7 @@ $
 ## Fail messages
 
 ```
-$ ./clitest --prefix tab -P none test/fail-messages.md  #→ --file test/fail-messages.out.txt
+$ ./clitest --prefix tab -P none test/fail-messages.md  #=> --file test/fail-messages.out.txt
 $
 ```
 
@@ -1027,7 +1027,7 @@ FAIL: 2 of 2 tests failed
 $
 ```
 
-## Inline output with #→
+## Inline output with #=>
 
 ```
 $ ./clitest test/inline.sh
@@ -1056,7 +1056,7 @@ $
 
 ## Inline match modes
 
-Mode #→ --text
+Mode #=> --text
 
 * This is the default mode.
 * The --text part can be omitted.
@@ -1077,7 +1077,7 @@ $ ./clitest --list-run test/inline-match-text.sh
 #12	OK	echo '['                      
 #13	OK	echo '('                      
 #14	OK	echo                          
-#15	OK	echo "not inline output"      #→
+#15	OK	echo "not inline output"      #=>
 #16	OK	echo '123456789'              
 #17	OK	echo '1 3   7 9'              
 #18	OK	echo '    5    '              
@@ -1106,7 +1106,7 @@ $ ./clitest --list-run test/inline-match-text.sh
 $
 ```
 
-Mode #→ --eval
+Mode #=> --eval
 
 ```
 $ ./clitest --list-run test/inline-match-eval.sh
@@ -1139,7 +1139,7 @@ $ ./clitest --list-run test/inline-match-eval.sh
 $
 ```
 
-Mode #→ --egrep
+Mode #=> --egrep
 
 ```
 $ ./clitest --list-run test/inline-match-egrep.sh | sed 's/^\(#1[56].\)[A-Z]*/\1?/'
@@ -1174,7 +1174,7 @@ $ ./clitest --list-run test/inline-match-egrep.sh | sed 's/^\(#1[56].\)[A-Z]*/\1
 $
 ```
 
-Mode #→ --perl
+Mode #=> --perl
 
 * --regex is an alias to --perl
 
@@ -1218,7 +1218,7 @@ $ ./clitest --list-run test/inline-match-perl.sh
 $
 ```
 
-Mode #→ --file
+Mode #=> --file
 
 ```
 $ ./clitest --list-run test/inline-match-file.sh
@@ -1233,7 +1233,7 @@ $ ./clitest --list-run test/inline-match-file.sh
 $
 ```
 
-Mode #→ --lines
+Mode #=> --lines
 
 ```
 $ ./clitest --list-run test/inline-match-lines.sh
@@ -1263,7 +1263,7 @@ Expected 99 lines, got 1.
 $
 ```
 
-Mode #→ --exit
+Mode #=> --exit
 
 ```
 $ ./clitest --list-run test/inline-match-exit.sh
@@ -1298,7 +1298,7 @@ Expected exit code 99, got 0
 $
 ```
 
-Errors for #→ --egrep
+Errors for #=> --egrep
 
 ```
 $ ./clitest test/inline-match-egrep-error-1.sh; echo $?
@@ -1311,7 +1311,7 @@ clitest: Error: check your inline egrep regex at line 1 of test/inline-match-egr
 $
 ```
 
-Errors for #→ --perl (and --regex)
+Errors for #=> --perl (and --regex)
 
 ```
 $ ./clitest test/inline-match-perl-error-1.sh; echo $?
@@ -1324,7 +1324,7 @@ clitest: Error: check your inline Perl regex at line 1 of test/inline-match-perl
 $
 ```
 
-Errors for #→ --file
+Errors for #=> --file
 
 ```
 $ ./clitest test/inline-match-file-error-1.sh; echo $?
@@ -1341,7 +1341,7 @@ clitest: Error: cannot read inline output file '/etc/', from line 1 of test/inli
 $
 ```
 
-Errors for #→ --lines
+Errors for #=> --lines
 
 ```
 $ ./clitest test/inline-match-lines-error-1.sh
@@ -1356,7 +1356,7 @@ clitest: Error: --lines requires a number. See line 1 of test/inline-match-lines
 $
 ```
 
-Errors for #→ --exit
+Errors for #=> --exit
 
 ```
 $ ./clitest test/inline-match-exit-error-1.sh
@@ -1371,7 +1371,7 @@ clitest: Error: --exit requires a number. See line 1 of test/inline-match-exit-e
 $
 ```
 
-Errors for #→ --eval
+Errors for #=> --eval
 
 ```
 $ ./clitest test/inline-match-eval-error-1.sh; echo $?

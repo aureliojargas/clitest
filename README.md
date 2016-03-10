@@ -198,12 +198,12 @@ Examples of testable documentation handled by clitest:
 ## Alternative Syntax: Inline Output
 
 Now a nice extension to the original idea. Using the special marker
-`#→` you can embed the expected command output at the end of the
+`#=>` you can embed the expected command output at the end of the
 command line.
 
 ```console
-$ echo "foo"                      #→ foo
-$ echo $((10 + 2))                #→ 12
+$ echo "foo"                      #=> foo
+$ echo $((10 + 2))                #=> 12
 ```
 
 This is the same as doing:
@@ -220,10 +220,10 @@ Inline outputs are very readable when testing series of commands that
 result in short texts.
 
 ```console
-$ echo "abcdef" | cut -c 1        #→ a
-$ echo "abcdef" | cut -c 4        #→ d
-$ echo "abcdef" | cut -c 1,4      #→ ad
-$ echo "abcdef" | cut -c 1-4      #→ abcd
+$ echo "abcdef" | cut -c 1        #=> a
+$ echo "abcdef" | cut -c 4        #=> d
+$ echo "abcdef" | cut -c 1,4      #=> ad
+$ echo "abcdef" | cut -c 1-4      #=> abcd
 ```
 
 > Note: The Unicode character `→` (U+2192) was chosen because it's
@@ -234,41 +234,41 @@ $ echo "abcdef" | cut -c 1-4      #→ abcd
 
 ## Advanced Tests
 
-When using the `#→` marker, you can take advantage of special options
+When using the `#=>` marker, you can take advantage of special options
 to change the default output matching method.
 
 ```console
-$ head /etc/passwd            #→ --lines 10
-$ tac /etc/passwd | tac       #→ --file /etc/passwd
-$ cat /etc/passwd             #→ --egrep ^root:
-$ echo $((2 + 10))            #→ --regex ^\d+$
-$ make test                   #→ --exit 0
-$ pwd                         #→ --eval echo $PWD
+$ head /etc/passwd            #=> --lines 10
+$ tac /etc/passwd | tac       #=> --file /etc/passwd
+$ cat /etc/passwd             #=> --egrep ^root:
+$ echo $((2 + 10))            #=> --regex ^\d+$
+$ make test                   #=> --exit 0
+$ pwd                         #=> --eval echo $PWD
 ```
 
-* Using `#→ --lines` the test will pass if the command output has
+* Using `#=> --lines` the test will pass if the command output has
   exactly `N` lines. Handy when the output text is variable
   (unpredictable), but the number of resulting lines is constant.
 
-* Using `#→ --file` the test will pass if the command output matches
+* Using `#=> --file` the test will pass if the command output matches
   the contents of an external file. Useful to organize long/complex
   outputs into files.
 
-* Using `#→ --egrep` the test will pass if `egrep` matches at least
+* Using `#=> --egrep` the test will pass if `egrep` matches at least
   one line of the command output.
 
-* Using `#→ --regex` the test will pass if the command output is
+* Using `#=> --regex` the test will pass if the command output is
   matched by a [Perl regular expression][9]. A multiline output is
   matched as a single string, with inner `\n`'s. Use the `(?ims)`
   modifiers when needed.
 
-* Using `#→ --exit` the test will pass if the exit code of the command
+* Using `#=> --exit` the test will pass if the exit code of the command
   is equal to the code specified. Useful when testing commands that
   generate variable output (or no output at all), and the exit code is
   the best indication of success. Both STDIN and STDOUT are ignored
   when using this option.
 
-* Using `#→ --eval` the test will pass if both commands result in the
+* Using `#=> --eval` the test will pass if both commands result in the
   same output. Useful to expand variables which store the full or
   partial output.
 
@@ -293,7 +293,7 @@ Customization options:
   -P, --progress TYPE         Set progress indicator: test, number, dot, none
       --color WHEN            Set when to use colors: auto, always, never
       --diff-options OPTIONS  Set diff command options (default: '-u')
-      --inline-prefix PREFIX  Set inline output prefix (default: '#→ ')
+      --inline-prefix PREFIX  Set inline output prefix (default: '#=> ')
       --prefix PREFIX         Set command line prefix (default: '')
       --prompt STRING         Set prompt string (default: '$ ')
 $
@@ -405,7 +405,7 @@ clitest  --prefix 4 --prompt '[john@localhost ~]$ ' README.md
 * Unlike doctest's `<BLANKLINE>`, in clitest blank lines in the
   command output aren't a problem. Just insert them normally.
 
-* To test outputs with no final `\n`, such as `printf foo`, use `#→
+* To test outputs with no final `\n`, such as `printf foo`, use `#=>
   --regex ^foo$`.
 
 * In multifile mode, the current folder (`$PWD`) is reset when
@@ -414,7 +414,7 @@ clitest  --prefix 4 --prompt '[john@localhost ~]$ ' README.md
 
 * Multiline prompts (`$PS2`) are not yet supported.
 
-* Ellipsis (as in doctest) are not supported. Use `#→ --regex`
+* Ellipsis (as in doctest) are not supported. Use `#=> --regex`
   instead.
 
 * Simple examples in [examples/][10]. Hardcore examples in

@@ -1,1 +1,1 @@
-$ echo 'error: negative number'  #→ --exit -1
+$ echo 'error: negative number'  #=> --exit -1

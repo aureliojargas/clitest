@@ -33,7 +33,7 @@ tt_my_version_url="https://github.com/aureliojargas/clitest/tree/$tt_my_version"
 # Customization (if needed, edit here or use the command line options)
 tt_prefix=''
 tt_prompt='$ '
-tt_inline_prefix='#→ '    # Problem with Unicode? Use '#=> ' or '### '
+tt_inline_prefix='#=> '    # Problem with Unicode? Use '#=> ' or '### '
 tt_diff_options='-u'
 tt_color_mode='auto'      # auto, always, never
 tt_progress='test'        # test, number, dot, none
