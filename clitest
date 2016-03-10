@@ -33,7 +33,7 @@ tt_my_version_url="https://github.com/aureliojargas/clitest/tree/$tt_my_version"
 # Customization (if needed, edit here or use the command line options)
 tt_prefix=''
 tt_prompt='$ '
-tt_inline_prefix='#=> '    # Problem with Unicode? Use '#=> ' or '### '
+tt_inline_prefix='#=> '
 tt_diff_options='-u'
 tt_color_mode='auto'      # auto, always, never
 tt_progress='test'        # test, number, dot, none
@@ -602,10 +602,10 @@ tt_make_temp_dir ()
 {
     # Create private temporary dir and sets global $tt_temp_dir.
     # http://mywiki.wooledge.org/BashFAQ/062
-    
+
     # Prefer mktemp when available
     tt_temp_dir=$(mktemp -d "${TMPDIR:-/tmp}/clitest.XXXXXX" 2> /dev/null) && return 0
-    
+
     # No mktemp, let's create the dir manually
     tt_temp_dir="${TMPDIR:-/tmp}/clitest.$(awk 'BEGIN { srand(); print rand() }').$$" &&
         mkdir -m 700 "$tt_temp_dir" || tt_error "cannot create temporary dir: $tt_temp_dir"

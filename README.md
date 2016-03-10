@@ -226,10 +226,8 @@ $ echo "abcdef" | cut -c 1,4      #=> ad
 $ echo "abcdef" | cut -c 1-4      #=> abcd
 ```
 
-> Note: The Unicode character `→` (U+2192) was chosen because it's
-> meaningful and less likely to appear on a real command. If needed,
-> you can change this marker (i.e., to `#->`) at the top of the script
-> or using the `--inline-prefix` option.
+> Note: If needed, you can change this marker (i.e., to `#→` or `###`)
+> at the top of the script or using the `--inline-prefix` option.
 
 
 ## Advanced Tests
