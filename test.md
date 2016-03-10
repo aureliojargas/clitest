@@ -47,8 +47,8 @@ $ echo $not_exported  #→ --regex ^1$
 $ TMPDIR___SAVE="$TMPDIR"
 $ TMPDIR=/XXnotfoundXX
 $ export TMPDIR
-$ ./clitest test/ok-1.sh 2>&1 | grep ^clitest | sed 's/clitest\.[0-9]*$/clitest.NNN/'
-clitest: Error: cannot create temporary dir: /XXnotfoundXX/clitest.NNN
+$ ./clitest test/ok-1.sh 2>&1 | grep ^clitest | sed 's/clitest\..*$/clitest.XXXXXX/'
+clitest: Error: cannot create temporary dir: /XXnotfoundXX/clitest.XXXXXX
 $ TMPDIR="$TMPDIR___SAVE"
 $
 ```
