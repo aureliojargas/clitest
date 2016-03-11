@@ -1,6 +1,6 @@
 # Configurable prompt with --prompt
 
-prompt$ echo "1"  #→ 1
+prompt$ echo "1"  #=> 1
 prompt$ echo "2"
 2
 prompt$ 

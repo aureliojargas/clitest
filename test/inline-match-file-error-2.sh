@@ -1,1 +1,1 @@
-$ echo "error: file not found"  #→ --file XXnotfoundXX
+$ echo "error: file not found"  #=> --file XXnotfoundXX

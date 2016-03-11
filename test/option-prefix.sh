@@ -2,7 +2,7 @@
 # Command blocks here are prefixed by 4 spaces (Markdown-style)
 # Run with --prefix '    ' or --prefix 4
 
-    $ echo "1"  #→ 1
+    $ echo "1"  #=> 1
     $ echo "2"
     2
 
@@ -12,7 +12,7 @@
 # All other non-indented text is just ignored:
 
 $ echo "ignored"  # not indented
-$ echo "ignored"  #→ not indented
+$ echo "ignored"  #=> not indented
 
 # Lines with the wrong indentation are also ignored
 
@@ -32,7 +32,7 @@ $ echo "ignored"  #→ not indented
     4
     $
     Last command closed by the empty prompt.
-    $ echo "5"  #→ 5
+    $ echo "5"  #=> 5
     Last command is auto-closed (inline output).
 
 # Blank lines in the output are supported

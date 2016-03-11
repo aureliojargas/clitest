@@ -13,13 +13,13 @@ $
 
 # The same applies for inline output.
 
-$ printf 'ok\n'    #→ ok
-$ printf 'fail'    #→ fail
+$ printf 'ok\n'    #=> ok
+$ printf 'fail'    #=> fail
 
 # An easy workaround is to add an empty 'echo' at the end:
 
-$ printf 'ok'; echo   #→ ok
+$ printf 'ok'; echo   #=> ok
 
 # Another workaround is to use --regex
 
-$ printf 'ok'         #→ --regex ^ok$
+$ printf 'ok'         #=> --regex ^ok$

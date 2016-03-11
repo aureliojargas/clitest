@@ -2,16 +2,16 @@
 
 /// Inline output
 
-?$ echo 'prefix ?'	#→ prefix ?
-*$ echo 'prefix *'	#→ prefix *
-#$ echo 'prefix #'	#→ prefix #
-%$ echo 'prefix %'	#→ prefix %
-##$ echo 'prefix ##'	#→ prefix ##
-%%$ echo 'prefix %%'	#→ prefix %%
-#*$ echo 'prefix #*'	#→ prefix #*
-*#$ echo 'prefix *#'	#→ prefix *#
-%*$ echo 'prefix %*'	#→ prefix %*
-*%$ echo 'prefix *%'	#→ prefix *%
+?$ echo 'prefix ?'	#=> prefix ?
+*$ echo 'prefix *'	#=> prefix *
+#$ echo 'prefix #'	#=> prefix #
+%$ echo 'prefix %'	#=> prefix %
+##$ echo 'prefix ##'	#=> prefix ##
+%%$ echo 'prefix %%'	#=> prefix %%
+#*$ echo 'prefix #*'	#=> prefix #*
+*#$ echo 'prefix *#'	#=> prefix *#
+%*$ echo 'prefix %*'	#=> prefix %*
+*%$ echo 'prefix *%'	#=> prefix *%
 
 /// Normal output
 

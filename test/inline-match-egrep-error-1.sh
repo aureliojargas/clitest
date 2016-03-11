@@ -1,1 +1,1 @@
-$ echo 'error: no contents'  #→ --egrep 
+$ echo 'error: no contents'  #=> --egrep 

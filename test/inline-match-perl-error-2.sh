@@ -1,4 +1,4 @@
-$ echo "error: malformed regex"  #→ --perl (
+$ echo "error: malformed regex"  #=> --perl (
 
 
 # Some perl errors:
