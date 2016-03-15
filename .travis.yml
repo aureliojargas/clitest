@@ -17,6 +17,7 @@ before_install:
   # OS X: install the checkbashisms script (||true to avoid Linux fail)
   - test "$TRAVIS_OS_NAME" = osx && brew update                || true
   - test "$TRAVIS_OS_NAME" = osx && brew install checkbashisms || true
+  - test "$TRAVIS_OS_NAME" = osx && brew install dash          || true
 
 script:
   # Run some code checkings on the script itself
