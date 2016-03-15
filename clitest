@@ -369,7 +369,7 @@ tt_run_test ()
                 tt_test_diff="egrep '$tt_test_inline' failed in:$tt_nl$(cat "$tt_test_output_file")"
 
             # Regex errors are common and user must take action to fix them
-            elif test $tt_test_status -eq 2
+            elif test $tt_test_status -gt 1
             then
                 tt_error "check your inline egrep regex at line $tt_line_number of $tt_test_file"
             fi
