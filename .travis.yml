@@ -23,6 +23,7 @@ script:
   - checkbashisms --posix clitest
   # Run the full test suite in all the supported POSIX shells
   - bash clitest test.md
+  - dash clitest test.md
   - ksh  clitest test.md
   - zsh  clitest test.md
   - sh   clitest test.md
