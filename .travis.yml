@@ -2,7 +2,7 @@ language: bash
 
 os:
   - linux
-  - osx
+  # - osx  # >30min to process :(
 
 # Prepare the environment
 addons:
