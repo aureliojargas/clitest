@@ -14,10 +14,8 @@ addons:
       # Linux: install the checkbashisms script
       - devscripts
 before_install:
-  # OS X: install the checkbashisms script (||true to avoid Linux fail)
-  - test "$TRAVIS_OS_NAME" = osx && brew update                || true
-  - test "$TRAVIS_OS_NAME" = osx && brew install checkbashisms || true
-  - test "$TRAVIS_OS_NAME" = osx && brew install dash          || true
+  # OS X: install the dash and checkbashisms script
+  - if test "$TRAVIS_OS_NAME" = osx; then brew update && brew install dash checkbashisms; fi
 
 script:
   # Run some code checkings on the script itself
