@@ -6,7 +6,8 @@ MAINTAINER Aurelio Jargas <verde@aurelio.net>
 # Perl is required by clitest's --regex matching mode
 RUN apk --no-cache add perl
 
-COPY clitest test test.md /app/
+COPY clitest test.md /app/
+COPY test/ /app/test/
 RUN ln -s /app/clitest /usr/local/bin/clitest
 
 CMD ["clitest", "--help"]
