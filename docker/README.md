@@ -46,10 +46,16 @@ To run clitest on your own test files, map their directory with `-v`. For exampl
 docker run -v "$PWD:/src/" aureliojargas/clitest clitest /src/test.md
 ```
 
+Same as before, but this time using `-w` to set the current directory to `/src`, making sure the execution happens inside your directory:
+
+```
+docker run -v "$PWD:/src/" -w /src aureliojargas/clitest clitest test.md
+```
+
 If you don't have any test files right now, you can see clitest in action by running its own test suite:
 
 ```
-$ docker run aureliojargas/clitest sh -c 'cd /clitest && ./clitest test.md'
+$ docker run -w /clitest aureliojargas/clitest clitest test.md
 #1    test -f ./clitest; echo $?
 #2    test -d ./test/; echo $?
 #3    COLUMNS=80
