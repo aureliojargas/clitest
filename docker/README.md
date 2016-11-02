@@ -54,7 +54,7 @@ docker run --rm -v "$PWD:/src/" -w /src aureliojargas/clitest clitest test.md
 
 If you don't have any test files right now, you can see clitest in action by running its own test suite:
 
-```
+```console
 $ docker run --rm -w /clitest aureliojargas/clitest clitest test.md
 #1    test -f ./clitest; echo $?
 #2    test -d ./test/; echo $?
