@@ -49,7 +49,7 @@ docker run -v "$PWD:/src/" aureliojargas/clitest clitest /src/test.md
 If you don't have any test files right now, you can see clitest in action by running its own test suite:
 
 ```
-$ docker run aureliojargas/clitest sh -c 'cd /app && ./clitest test.md'
+$ docker run aureliojargas/clitest sh -c 'cd /clitest && ./clitest test.md'
 #1    test -f ./clitest; echo $?
 #2    test -d ./test/; echo $?
 #3    COLUMNS=80
