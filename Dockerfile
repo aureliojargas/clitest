@@ -1,5 +1,4 @@
-# Why edge? https://github.com/aureliojargas/clitest/issues/17
-FROM alpine:edge
+FROM alpine:3.7
 
 MAINTAINER Aurelio Jargas <verde@aurelio.net>
 
