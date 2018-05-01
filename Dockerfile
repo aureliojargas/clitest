@@ -9,4 +9,5 @@ COPY clitest test.md /clitest/
 COPY test/ /clitest/test/
 RUN ln -s /clitest/clitest /usr/local/bin/clitest
 
-CMD ["clitest", "--help"]
+ENTRYPOINT ["clitest"]
+CMD ["--help"]
