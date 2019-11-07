@@ -17,7 +17,7 @@ and test the txt2tags package before installing it to the system.
 
 Download the .tgz file for the version 2.6, directly from Google Code.
 
-	$ url="http://txt2tags.googlecode.com/files/txt2tags-2.6.tgz"
+	$ url="https://fossies.org/linux/privat/txt2tags-2.6.tgz"
 	$ curl -O -s -S "$url"
 
 
