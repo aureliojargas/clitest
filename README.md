@@ -380,16 +380,18 @@ clitest  --prefix 4 --prompt '[john@localhost ~]$ ' README.md
 ## Nerdiness
 
 * Use any text file format for the tests, it doesn't matter. The command
-  lines just need to be grepable and have a fixed prefix (or none).
+  lines just need to be grepable and have a fixed prefix (or even none).
   Even Windows text files (CR+LF) will work fine.
 
-* The cmdline power is available in your test files: use variables,
+* The command line power is available in your test files: use variables,
   pipes, redirection, create files, folders, move around…
 
-* All the commands are tested in the same shell. Defined variables,
-  aliases and functions will persist between tests.
+* All the commands are tested using a single shell session. This means
+  that variables, aliases and functions defined in one test will persist
+  in the following tests.
 
-* Both STDIN and STDOUT are catch, you can also test error messages.
+* Both STDOUT and STDERR are captured, so you can also test error
+  messages.
 
 * To test STDOUT/STDERR and the exit code at the same time, add a
   `;echo $?` after the command.
