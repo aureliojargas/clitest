@@ -26,20 +26,20 @@ $
 
 # Showing STDERR
 
-$ ./clitest foo
-clitest: Error: cannot read input file: foo
-$ ./clitest foo > /dev/null
-clitest: Error: cannot read input file: foo
+$ ./clitest notfound
+clitest: Error: cannot read input file: notfound
+$ ./clitest notfound > /dev/null
+clitest: Error: cannot read input file: notfound
 $
 
 # Redirecting STDERR to STDOUT
 
-$ ./clitest foo 2>&1
-clitest: Error: cannot read input file: foo
+$ ./clitest notfound 2>&1
+clitest: Error: cannot read input file: notfound
 $
 
 # Closing STDERR
 
-$ ./clitest foo 2> /dev/null
-$ ./clitest foo > /dev/null 2>&1
+$ ./clitest notfound 2> /dev/null
+$ ./clitest notfound > /dev/null 2>&1
 $

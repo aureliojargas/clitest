@@ -45,10 +45,10 @@ $ echo $not_exported  #=> --regex ^1$
 
 ```
 $ TMPDIR___SAVE="$TMPDIR"
-$ TMPDIR=/XXnotfoundXX
+$ TMPDIR=/notfound
 $ export TMPDIR
 $ ./clitest test/ok-1.sh 2>&1 | grep ^clitest | sed 's/clitest\..*$/clitest.XXXXXX/'
-clitest: Error: cannot create temporary dir: /XXnotfoundXX/clitest.XXXXXX
+clitest: Error: cannot create temporary dir: /notfound/clitest.XXXXXX
 $ TMPDIR="$TMPDIR___SAVE"
 $
 ```
@@ -71,8 +71,8 @@ $
 File not found
 
 ```
-$ ./clitest XXnotfoundXX.sh; echo $?
-clitest: Error: cannot read input file: XXnotfoundXX.sh
+$ ./clitest notfound; echo $?
+clitest: Error: cannot read input file: notfound
 2
 $ ./clitest .
 clitest: Error: cannot read input file: .
@@ -1332,7 +1332,7 @@ clitest: Error: empty --file at line 1 of test/inline-match-file-error-1.sh
 2
 $ ./clitest test/inline-match-file-error-2.sh; echo $?
 #1	echo "error: file not found"  
-clitest: Error: cannot read inline output file 'test/XXnotfoundXX', from line 1 of test/inline-match-file-error-2.sh
+clitest: Error: cannot read inline output file 'test/notfound', from line 1 of test/inline-match-file-error-2.sh
 2
 $ ./clitest test/inline-match-file-error-3.sh; echo $?
 #1	echo "error: directory"  
@@ -2127,8 +2127,8 @@ $
 Test exit code and STDOUT/STDERR at the same time
 
 ```
-$ ./clitest foo; echo $?
-clitest: Error: cannot read input file: foo
+$ ./clitest notfound; echo $?
+clitest: Error: cannot read input file: notfound
 2
 $ ./clitest test/exit-code-and-stdout.sh 
 #1	echo "zero"; echo $?
@@ -2146,11 +2146,11 @@ $ ./clitest test/stdout-stderr.sh
 #3	echo "stderr" 1>&2
 #4	echo "stdout" > /dev/null
 #5	echo "stdout" 2> /dev/null 1>&2
-#6	./clitest foo
-#7	./clitest foo > /dev/null
-#8	./clitest foo 2>&1
-#9	./clitest foo 2> /dev/null
-#10	./clitest foo > /dev/null 2>&1
+#6	./clitest notfound
+#7	./clitest notfound > /dev/null
+#8	./clitest notfound 2>&1
+#9	./clitest notfound 2> /dev/null
+#10	./clitest notfound > /dev/null 2>&1
 OK: 10 of 10 tests passed
 $
 ```
