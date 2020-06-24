@@ -1,6 +1,4 @@
-FROM alpine:3.7
-
-MAINTAINER Aurelio Jargas <verde@aurelio.net>
+FROM alpine:3.11
 
 # Perl is required by clitest's --regex matching mode
 RUN apk --no-cache add perl
