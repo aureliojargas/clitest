@@ -22,6 +22,8 @@ $
 Set a default terminal width of 80 columns. It's used by separator lines.
 
 ```
+$ shopt -u checkwinsize 2> /dev/null  # bash: disable automatic check
+$ unset COLUMNS  # mksh: first unset, then one can manually set it
 $ COLUMNS=80
 $ export COLUMNS
 $
