@@ -10,10 +10,10 @@ docker pull aureliojargas/clitest
 
 ## Initial run
 
-For the available clitest options, just run the image with no arguments:
+For the available clitest options, just run the image with the command `clitest --help`:
 
 ```console
-$ docker run --rm aureliojargas/clitest
+$ docker run --rm aureliojargas/clitest clitest --help
 Usage: clitest [options] <file ...>
 
 Options:
@@ -42,19 +42,19 @@ $
 To run clitest on your own test files, map their directory with `-v`. For example, mapping the current directory to container's `/src` and testing the `test.md` file:
 
 ```
-docker run --rm -v "$PWD:/src/" aureliojargas/clitest /src/test.md
+docker run --rm -t -v "$PWD:/src/" aureliojargas/clitest clitest /src/test.md
 ```
 
 Same as before, but this time using `-w` to set the current directory to `/src`, making sure the execution happens inside your directory:
 
 ```
-docker run --rm -v "$PWD:/src/" -w /src aureliojargas/clitest test.md
+docker run --rm -t -v "$PWD:/src/" -w /src aureliojargas/clitest clitest test.md
 ```
 
 If you don't have any test files right now, you can see clitest in action by running its own test suite:
 
 ```console
-$ docker run --rm -w /clitest aureliojargas/clitest test.md
+$ docker run --rm -t -w /clitest aureliojargas/clitest clitest test.md
 #1    test -f ./clitest; echo $?
 #2    test -d ./test/; echo $?
 #3    COLUMNS=80
@@ -70,6 +70,8 @@ $ docker run --rm -w /clitest aureliojargas/clitest test.md
 OK: 265 of 265 tests passed
 $
 ```
+
+Make sure to use `-t` in `docker run` to get colors in clitest output.
 
 ## Build
 

@@ -7,5 +7,4 @@ COPY clitest test.md /clitest/
 COPY test/ /clitest/test/
 RUN ln -s /clitest/clitest /usr/local/bin/clitest
 
-ENTRYPOINT ["clitest"]
-CMD ["--help"]
+WORKDIR /clitest
