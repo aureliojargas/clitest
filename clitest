@@ -606,8 +606,10 @@ tt_make_temp_dir ()
     tt_temp_dir=$(mktemp -d "${TMPDIR:-/tmp}/clitest.XXXXXX" 2> /dev/null) && return 0
 
     # No mktemp, let's create the dir manually
+    # shellcheck disable=SC2015
     tt_temp_dir="${TMPDIR:-/tmp}/clitest.$(awk 'BEGIN { srand(); print rand() }').$$" &&
-        mkdir -m 700 "$tt_temp_dir" || tt_error "cannot create temporary dir: $tt_temp_dir"
+        mkdir -m 700 "$tt_temp_dir" ||
+        tt_error "cannot create temporary dir: $tt_temp_dir"
 }
 
 
