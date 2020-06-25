@@ -2121,12 +2121,23 @@ clitest: Error: cannot read input file: -
 $
 ```
 
-## Read test file from STDIN (not supported)
+## Read test file from /dev/stdin
 
 ```
-$ cat test/ok-1.sh | ./clitest /dev/stdin; echo $?
-clitest: Error: cannot read input file: /dev/stdin
-2
+$ cat test/ok-1.sh | ./clitest /dev/stdin
+#1	echo ok
+OK: 1 of 1 test passed
+$
+```
+
+## Test file is a symlink
+
+```
+$ ln -s test/ok-1.sh testsymlink
+$ ./clitest testsymlink
+#1	echo ok
+OK: 1 of 1 test passed
+$ rm testsymlink
 $
 ```
 
