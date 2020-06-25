@@ -76,12 +76,18 @@ File not found
 $ ./clitest notfound; echo $?
 clitest: Error: cannot read input file: notfound
 2
+$
+```
+
+File is a directory
+
+```
 $ ./clitest .
-clitest: Error: cannot read input file: .
+clitest: Error: input file is a directory: .
 $ ./clitest ./
-clitest: Error: cannot read input file: ./
+clitest: Error: input file is a directory: ./
 $ ./clitest /etc
-clitest: Error: cannot read input file: /etc
+clitest: Error: input file is a directory: /etc
 $
 ```
 
@@ -183,8 +189,8 @@ $
 ## Option --quiet has no effect in error messages
 
 ```
-$ ./clitest --quiet /etc
-clitest: Error: cannot read input file: /etc
+$ ./clitest --quiet notfound
+clitest: Error: cannot read input file: notfound
 $
 ```
 

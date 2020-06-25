@@ -786,6 +786,12 @@ do
     # to preserve the relative paths of the input files
     cd "$tt_original_dir"
 
+    # Abort when test file is a directory
+    if test -d "$tt_test_file"
+    then
+        tt_error "input file is a directory: $tt_test_file"
+    fi
+
     # Abort when test file not found/readable
     if test ! -f "$tt_test_file" || test ! -r "$tt_test_file"
     then
