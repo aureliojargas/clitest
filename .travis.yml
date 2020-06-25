@@ -1,31 +1,9 @@
 language: bash
 
-os:
-  - linux
-  # - osx  # >30min to process :(
-
-# Prepare the environment
-addons:
-  apt:
-    packages:
-      # Linux: only bash (and sh) are installed by default
-      - ksh
-      - zsh
-      # Linux: install the checkbashisms script
-      - devscripts
-before_install:
-  # OS X: install the dash and checkbashisms script
-  - if test "$TRAVIS_OS_NAME" = osx; then brew update && brew install dash checkbashisms; fi
-
 script:
-  # Run some code checkings on the script itself
-  - checkbashisms --posix clitest
-  # Run the full test suite in all the supported POSIX shells
-  - bash clitest test.md
-  - dash clitest test.md
-  - ksh  clitest test.md
-  - zsh  clitest test.md
-  - sh   clitest test.md
+  - make docker-build
+  - make lint
+  - make test
 
 notifications:
   email: false
