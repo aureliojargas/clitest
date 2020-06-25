@@ -235,7 +235,7 @@ tt_parse_range ()  # $1=range
                 tt_part=$tt_n1:
                 while test "$tt_n1" -ne "$tt_n2"
                 do
-                    tt_n1=$(($tt_n1 $tt_operation 1))
+                    tt_n1=$((tt_n1 tt_operation 1))
                     tt_part=$tt_part$tt_n1:
                 done
                 tt_part=${tt_part%:}
@@ -261,15 +261,15 @@ tt_reset_test_data ()
 }
 tt_run_test ()
 {
-    tt_test_number=$(($tt_test_number + 1))
-    tt_nr_total_tests=$(($tt_nr_total_tests + 1))
-    tt_nr_file_tests=$(($tt_nr_file_tests + 1))
+    tt_test_number=$((tt_test_number + 1))
+    tt_nr_total_tests=$((tt_nr_total_tests + 1))
+    tt_nr_file_tests=$((tt_nr_file_tests + 1))
 
     # Run range on: skip this test if it's not listed in $tt_run_range_data
     if test -n "$tt_run_range_data" && test "$tt_run_range_data" = "${tt_run_range_data#*:$tt_test_number:}"
     then
-        tt_nr_total_skips=$(($tt_nr_total_skips + 1))
-        tt_nr_file_skips=$(($tt_nr_file_skips + 1))
+        tt_nr_total_skips=$((tt_nr_total_skips + 1))
+        tt_nr_file_skips=$((tt_nr_file_skips + 1))
         tt_reset_test_data
         return 0
     fi
@@ -278,8 +278,8 @@ tt_run_test ()
     # Note: --skip always wins over --test, regardless of order
     if test -n "$tt_skip_range_data" && test "$tt_skip_range_data" != "${tt_skip_range_data#*:$tt_test_number:}"
     then
-        tt_nr_total_skips=$(($tt_nr_total_skips + 1))
-        tt_nr_file_skips=$(($tt_nr_file_skips + 1))
+        tt_nr_total_skips=$((tt_nr_total_skips + 1))
+        tt_nr_file_skips=$((tt_nr_file_skips + 1))
         tt_reset_test_data
         return 0
     fi
@@ -415,8 +415,8 @@ tt_run_test ()
     # Test failed :(
     if test $tt_test_status -ne 0
     then
-        tt_nr_file_fails=$(($tt_nr_file_fails + 1))
-        tt_nr_total_fails=$(($tt_nr_total_fails + 1))
+        tt_nr_file_fails=$((tt_nr_file_fails + 1))
+        tt_nr_total_fails=$((tt_nr_total_fails + 1))
         tt_failed_range="$tt_failed_range$tt_test_number,"
 
         # Decide the message format
@@ -464,7 +464,7 @@ tt_process_test_file ()
     # Note: read -r to preserve the backslashes
     while IFS='' read -r tt_input_line || test -n "$tt_input_line"
     do
-        tt_line_number=$(($tt_line_number + 1))
+        tt_line_number=$((tt_line_number + 1))
         #tt_debug INPUT_LINE "$tt_input_line"
 
         case "$tt_input_line" in
@@ -844,7 +844,7 @@ do
     fi
 
     # Save file stats
-    tt_nr_file_ok=$(($tt_nr_file_tests - $tt_nr_file_fails - $tt_nr_file_skips))
+    tt_nr_file_ok=$((tt_nr_file_tests - tt_nr_file_fails - tt_nr_file_skips))
     tt_files_stats="$tt_files_stats$tt_nr_file_ok $tt_nr_file_fails $tt_nr_file_skips$tt_nl"
 
     # Dots mode: any missing new line?
@@ -923,7 +923,7 @@ fi
 if test $tt_nr_total_fails -eq 0
 then
     stamp="${tt_color_green}OK:${tt_color_off}"
-    stats="$(($tt_nr_total_tests - $tt_nr_total_skips)) of $tt_nr_total_tests tests passed"
+    stats="$((tt_nr_total_tests - tt_nr_total_skips)) of $tt_nr_total_tests tests passed"
     test $tt_nr_total_tests -eq 1 && stats=$(echo "$stats" | sed 's/tests /test /')
     tt_message "$stamp $stats$skips"
     exit 0
