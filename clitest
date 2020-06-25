@@ -787,7 +787,8 @@ for tt_test_file
 do
     # Some tests may 'cd' to another dir, we need to get back
     # to preserve the relative paths of the input files
-    cd "$tt_original_dir"
+    cd "$tt_original_dir" ||
+        tt_error "cannot enter starting directory $tt_original_dir"
 
     # Support using '-' to read the test file from STDIN
     if test "$tt_test_file" = '-'
