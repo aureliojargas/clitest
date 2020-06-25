@@ -495,3 +495,4 @@ No other language or environment involved.
 [22]: https://github.com/aureliojargas/clitest/blob/master/LICENSE.txt
 [23]: https://www.gnu.org/software/bash/manual/html_node/Bash-POSIX-Mode.html
 [24]: https://github.com/funcoeszz/funcoeszz/tree/master/testador
+
