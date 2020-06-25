@@ -76,12 +76,18 @@ File not found
 $ ./clitest notfound; echo $?
 clitest: Error: cannot read input file: notfound
 2
+$
+```
+
+File is a directory
+
+```
 $ ./clitest .
-clitest: Error: cannot read input file: .
+clitest: Error: input file is a directory: .
 $ ./clitest ./
-clitest: Error: cannot read input file: ./
+clitest: Error: input file is a directory: ./
 $ ./clitest /etc
-clitest: Error: cannot read input file: /etc
+clitest: Error: input file is a directory: /etc
 $
 ```
 
@@ -183,8 +189,8 @@ $
 ## Option --quiet has no effect in error messages
 
 ```
-$ ./clitest --quiet /etc
-clitest: Error: cannot read input file: /etc
+$ ./clitest --quiet notfound
+clitest: Error: cannot read input file: notfound
 $
 ```
 
@@ -2104,23 +2110,36 @@ clitest: Error: cannot read input file: --quiet
 $
 ```
 
-## File - meaning STDIN (not supported)
+## File - meaning STDIN
 
 ```
 $ cat test/ok-1.sh | ./clitest -
-clitest: Error: cannot read input file: -
+#1	echo ok
+OK: 1 of 1 test passed
 $ cat test/ok-1.sh | ./clitest -- -; echo $?
-clitest: Error: cannot read input file: -
-2
+#1	echo ok
+OK: 1 of 1 test passed
+0
 $
 ```
 
-## Read test file from STDIN (not supported)
+## Read test file from /dev/stdin
 
 ```
-$ cat test/ok-1.sh | ./clitest /dev/stdin; echo $?
-clitest: Error: cannot read input file: /dev/stdin
-2
+$ cat test/ok-1.sh | ./clitest /dev/stdin
+#1	echo ok
+OK: 1 of 1 test passed
+$
+```
+
+## Test file is a symlink
+
+```
+$ ln -s test/ok-1.sh testsymlink
+$ ./clitest testsymlink
+#1	echo ok
+OK: 1 of 1 test passed
+$ rm testsymlink
 $
 ```
 

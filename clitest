@@ -617,6 +617,7 @@ tt_make_temp_dir ()
 tt_temp_dir=
 tt_make_temp_dir  # sets global $tt_temp_dir
 tt_temp_file="$tt_temp_dir/temp.txt"
+tt_stdin_file="$tt_temp_dir/stdin.txt"
 tt_test_ok_file="$tt_temp_dir/ok.txt"
 tt_test_output_file="$tt_temp_dir/output.txt"
 
@@ -653,7 +654,7 @@ do
             break
         ;;
         -)
-            # Argument - means "read from STDIN" (not supported)
+            # Argument - means "read test file from STDIN"
             break
         ;;
         *)
@@ -786,8 +787,21 @@ do
     # to preserve the relative paths of the input files
     cd "$tt_original_dir"
 
+    # Support using '-' to read the test file from STDIN
+    if test "$tt_test_file" = '-'
+    then
+        tt_test_file="$tt_stdin_file"
+        cat > "$tt_test_file"
+    fi
+
+    # Abort when test file is a directory
+    if test -d "$tt_test_file"
+    then
+        tt_error "input file is a directory: $tt_test_file"
+    fi
+
     # Abort when test file not found/readable
-    if test ! -f "$tt_test_file" || test ! -r "$tt_test_file"
+    if test ! -r "$tt_test_file"
     then
         tt_error "cannot read input file: $tt_test_file"
     fi
