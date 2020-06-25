@@ -359,7 +359,7 @@ tt_run_test ()
             tt_test_status=$?
         ;;
         egrep)
-            egrep "$tt_test_inline" "$tt_test_output_file" > /dev/null
+            grep -E "$tt_test_inline" "$tt_test_output_file" > /dev/null
             tt_test_status=$?
 
             # Test failed: the regex not matched
