@@ -229,11 +229,11 @@ tt_parse_range ()  # $1=range
                 tt_n2=${tt_part#*-}
 
                 tt_operation='+'
-                test $tt_n1 -gt $tt_n2 && tt_operation='-'
+                test "$tt_n1" -gt "$tt_n2" && tt_operation='-'
 
                 # Expand the range (1-4 => 1:2:3:4)
                 tt_part=$tt_n1:
-                while test $tt_n1 -ne $tt_n2
+                while test "$tt_n1" -ne "$tt_n2"
                 do
                     tt_n1=$(($tt_n1 $tt_operation 1))
                     tt_part=$tt_part$tt_n1:
@@ -243,10 +243,10 @@ tt_parse_range ()  # $1=range
         esac
 
         # Append the number or expanded range to the holder
-        test $tt_part != 0 && tt_range_data=$tt_range_data$tt_part:
+        test "$tt_part" != 0 && tt_range_data=$tt_range_data$tt_part:
     done
 
-    test $tt_range_data != ':' && echo $tt_range_data
+    test "$tt_range_data" != ':' && echo "$tt_range_data"
     return 0
 }
 tt_reset_test_data ()
@@ -345,7 +345,7 @@ tt_run_test ()
         ;;
         file)
             # If path is relative, make it relative to the test file path, not $PWD
-            if test $tt_test_inline = ${tt_test_inline#/}
+            if test "$tt_test_inline" = "${tt_test_inline#/}"
             then
                 tt_test_inline="$(dirname "$tt_test_file")/$tt_test_inline"
             fi
@@ -645,7 +645,7 @@ do
             exit 0
         ;;
         -V|--version)
-            printf '%s %s\n%s\n' $tt_my_name $tt_my_version $tt_my_version_url
+            printf '%s %s\n%s\n' "$tt_my_name" "$tt_my_version" "$tt_my_version_url"
             exit 0
         ;;
         --)
@@ -904,7 +904,7 @@ then
     printf '  %5s %5s %5s\n' ok fail skip
     printf %s "$tt_files_stats" | while read ok fail skip
     do
-        printf '  %5s %5s %5s    %s\n' $ok $fail $skip "$1"
+        printf '  %5s %5s %5s    %s\n' "$ok" "$fail" "$skip" "$1"
         shift
     done | sed 's/     0/     -/g'  # hide zeros
     echo
