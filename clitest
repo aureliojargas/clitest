@@ -7,9 +7,8 @@
 # GitHub:  https://github.com/aureliojargas/clitest
 #
 # POSIX shell script:
-#   This script was coded to be compatible with POSIX shells.
-#   Tested in Bash 3.2, dash 0.5.5.1, ksh 93u 2011-02-08.
-#   Note: Can't set -o posix nor POSIXLY_CORRECT: test env must be intact.
+#   This script is carefully coded to be compatible with POSIX shells.
+#   It is currently tested in bash, dash, ksh, zsh and busybox's sh.
 #
 # Exit codes:
 #   0  All tests passed, or normal operation (--help, --list, ...)
@@ -19,8 +18,8 @@
 # Test environment:
 #   By default, the tests will run in the current working directory ($PWD).
 #   You can change to another dir normally using 'cd' inside the test file.
-#   All the tests are executed in the same shell, using eval. Test data
-#   such as variables and working directory will persist between tests.
+#   All the tests are executed in the same shell session, using eval. Test
+#   data such as variables and working directory will persist between tests.
 #
 # Namespace:
 #   All variables and functions in this script are prefixed by 'tt_' to
