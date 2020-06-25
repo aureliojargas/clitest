@@ -2,6 +2,7 @@ language: bash
 
 script:
   - make docker-build
+  - make versions
   - make lint
   - make test
 

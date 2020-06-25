@@ -22,6 +22,9 @@ test: test-bash test-dash test-mksh test-sh test-zsh
 test-%:
 	$(docker_run) $* $(test_cmd)
 
+versions:
+	@$(docker_run) sh -c 'apk list 2>/dev/null | cut -d " " -f 1 | sort'
+
 docker-build:
 	docker build -t $(docker_image) .
 
