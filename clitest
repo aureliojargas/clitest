@@ -754,7 +754,7 @@ fi
 # In other shells, try to use 'tput cols' (not POSIX).
 # If not, defaults to 50 columns, a conservative amount.
 : ${COLUMNS:=$(tput cols 2> /dev/null)}
-: ${COLUMNS:=50}
+: "${COLUMNS:=50}"
 
 # Parse and validate --test option value, if informed
 tt_run_range_data=$(tt_parse_range "$tt_run_range")
