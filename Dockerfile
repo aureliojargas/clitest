@@ -5,7 +5,7 @@ RUN apk --no-cache add \
     bash dash mksh zsh \
     perl \
     make \
-    checkbashisms
+    checkbashisms shellcheck
 
 COPY clitest test.md /clitest/
 COPY test/ /clitest/test/
