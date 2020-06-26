@@ -235,7 +235,10 @@ tt_parse_range ()  # $1=range
                 tt_part=$tt_n1:
                 while test "$tt_n1" -ne "$tt_n2"
                 do
-                    tt_n1=$((tt_n1 tt_operation 1))
+                    # Math operator in a variable drives shellcheck crazy
+                    # https://github.com/koalaman/shellcheck/issues/2000
+                    # shellcheck disable=SC1102
+                    tt_n1=$((tt_n1 $tt_operation 1))
                     tt_part=$tt_part$tt_n1:
                 done
                 tt_part=${tt_part%:}
