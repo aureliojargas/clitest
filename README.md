@@ -191,10 +191,13 @@ no prefix option is needed.
 
 Examples of testable documentation handled by clitest:
 
+* https://github.com/aureliojargas/txt2regex/blob/master/tests/features.md
+* https://github.com/aureliojargas/txt2regex/blob/master/tests/cmdline.md
+* https://github.com/aureliojargas/sedsed/blob/master/test/command_line.md
+* https://github.com/aureliojargas/replace/blob/master/README.md
+* https://github.com/aureliojargas/clitest/blob/master/test.md
 * https://github.com/caarlos0/jvm/blob/master/tests/test.clitest.md
 * https://github.com/caarlos0/git-add-remote/blob/master/tests/suite.clitest.md
-* https://github.com/aureliojargas/clitest/blob/master/examples/install-software.md
-* https://github.com/aureliojargas/clitest/blob/master/test.md
 
 
 ## Alternative Syntax: Inline Output
