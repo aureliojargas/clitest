@@ -443,14 +443,17 @@ ksh clitest tests.txt        # Uses Korn Shell
 ## Portability
 
 This script was carefully coded to be portable between [POSIX][13]
-shells. It's validated by [checkbashisms][25] and [shellcheck][26].
+shells. It's code is validated by [checkbashisms][25] and
+[shellcheck][26].
 
-It was tested in:
+To make sure it keeps working as expected, after every change clitest is
+automatically tested in the CI, using the following shells:
 
-* Bash 3.2
-* dash 0.5.5.1
-* ksh 93u 2011-02-08
-* zsh 5.0.5
+- bash
+- dash
+- ksh
+- sh (busybox)
+- zsh
 
 Portability issues are considered serious bugs, please
 [report them][14]!
