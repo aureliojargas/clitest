@@ -111,7 +111,9 @@ OK: 6 of 6 tests passed
 $
 ```
 
-There are more examples and instructions in the [examples folder][10]. For a real-life collection of hundreds of test files, see [funcoeszz test files][24].
+There are more examples and instructions in the [examples folder][10].
+For a real-life collection of hundreds of test files, see
+[funcoeszz test files][24].
 
 
 ## Testable Documentation
@@ -317,8 +319,9 @@ previous.
 
 ## Quiet operation
 
-When automating the tests execution, use `--quiet` to show no output
-and just check the exit code to make sure all tests have passed. Using `--first` to fail fast is also a good idea in this case.
+When automating the tests execution, use `--quiet` to show no output and
+just check the exit code to make sure all tests have passed. Using
+`--first` to fail fast is also a good idea in this case.
 
 ```bash
 if clitest --quiet --first tests.txt
@@ -423,9 +426,13 @@ clitest  --prefix 4 --prompt '[john@localhost ~]$ ' README.md
 
 ## Choose the execution shell
 
-The clitest shebang is `#!/bin/sh`. That's the default shell that will be used to run your test command lines. Depending on the system, that path points to a different shell, such as ash, dash, or bash ([running in POSIX mode][23]).
+The clitest shebang is `#!/bin/sh`. That's the default shell that will
+be used to run your test command lines. Depending on the system, that
+path points to a different shell, such as ash, dash, or bash
+([running in POSIX mode][23]).
 
-To force your test commands to always run on a specific shell, just call the desired shell before:
+To force your test commands to always run on a specific shell, just call
+the desired shell before:
 
 ```bash
 clitest tests.txt            # Uses /bin/sh
