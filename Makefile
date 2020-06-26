@@ -17,6 +17,7 @@ default:
 
 lint:
 	$(docker_run) checkbashisms --posix clitest
+	$(docker_run) shellcheck clitest
 
 test: test-bash test-dash test-mksh test-sh test-zsh
 test-%:

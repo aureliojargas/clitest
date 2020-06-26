@@ -229,13 +229,16 @@ tt_parse_range ()  # $1=range
                 tt_n2=${tt_part#*-}
 
                 tt_operation='+'
-                test $tt_n1 -gt $tt_n2 && tt_operation='-'
+                test "$tt_n1" -gt "$tt_n2" && tt_operation='-'
 
                 # Expand the range (1-4 => 1:2:3:4)
                 tt_part=$tt_n1:
-                while test $tt_n1 -ne $tt_n2
+                while test "$tt_n1" -ne "$tt_n2"
                 do
-                    tt_n1=$(($tt_n1 $tt_operation 1))
+                    # Math operator in a variable drives shellcheck crazy
+                    # https://github.com/koalaman/shellcheck/issues/2000
+                    # shellcheck disable=SC1102
+                    tt_n1=$((tt_n1 $tt_operation 1))
                     tt_part=$tt_part$tt_n1:
                 done
                 tt_part=${tt_part%:}
@@ -243,10 +246,10 @@ tt_parse_range ()  # $1=range
         esac
 
         # Append the number or expanded range to the holder
-        test $tt_part != 0 && tt_range_data=$tt_range_data$tt_part:
+        test "$tt_part" != 0 && tt_range_data=$tt_range_data$tt_part:
     done
 
-    test $tt_range_data != ':' && echo $tt_range_data
+    test "$tt_range_data" != ':' && echo "$tt_range_data"
     return 0
 }
 tt_reset_test_data ()
@@ -261,15 +264,15 @@ tt_reset_test_data ()
 }
 tt_run_test ()
 {
-    tt_test_number=$(($tt_test_number + 1))
-    tt_nr_total_tests=$(($tt_nr_total_tests + 1))
-    tt_nr_file_tests=$(($tt_nr_file_tests + 1))
+    tt_test_number=$((tt_test_number + 1))
+    tt_nr_total_tests=$((tt_nr_total_tests + 1))
+    tt_nr_file_tests=$((tt_nr_file_tests + 1))
 
     # Run range on: skip this test if it's not listed in $tt_run_range_data
     if test -n "$tt_run_range_data" && test "$tt_run_range_data" = "${tt_run_range_data#*:$tt_test_number:}"
     then
-        tt_nr_total_skips=$(($tt_nr_total_skips + 1))
-        tt_nr_file_skips=$(($tt_nr_file_skips + 1))
+        tt_nr_total_skips=$((tt_nr_total_skips + 1))
+        tt_nr_file_skips=$((tt_nr_file_skips + 1))
         tt_reset_test_data
         return 0
     fi
@@ -278,8 +281,8 @@ tt_run_test ()
     # Note: --skip always wins over --test, regardless of order
     if test -n "$tt_skip_range_data" && test "$tt_skip_range_data" != "${tt_skip_range_data#*:$tt_test_number:}"
     then
-        tt_nr_total_skips=$(($tt_nr_total_skips + 1))
-        tt_nr_file_skips=$(($tt_nr_file_skips + 1))
+        tt_nr_total_skips=$((tt_nr_total_skips + 1))
+        tt_nr_file_skips=$((tt_nr_file_skips + 1))
         tt_reset_test_data
         return 0
     fi
@@ -345,7 +348,7 @@ tt_run_test ()
         ;;
         file)
             # If path is relative, make it relative to the test file path, not $PWD
-            if test $tt_test_inline = ${tt_test_inline#/}
+            if test "$tt_test_inline" = "${tt_test_inline#/}"
             then
                 tt_test_inline="$(dirname "$tt_test_file")/$tt_test_inline"
             fi
@@ -359,7 +362,7 @@ tt_run_test ()
             tt_test_status=$?
         ;;
         egrep)
-            egrep "$tt_test_inline" "$tt_test_output_file" > /dev/null
+            grep -E "$tt_test_inline" "$tt_test_output_file" > /dev/null
             tt_test_status=$?
 
             # Test failed: the regex not matched
@@ -415,8 +418,8 @@ tt_run_test ()
     # Test failed :(
     if test $tt_test_status -ne 0
     then
-        tt_nr_file_fails=$(($tt_nr_file_fails + 1))
-        tt_nr_total_fails=$(($tt_nr_total_fails + 1))
+        tt_nr_file_fails=$((tt_nr_file_fails + 1))
+        tt_nr_total_fails=$((tt_nr_total_fails + 1))
         tt_failed_range="$tt_failed_range$tt_test_number,"
 
         # Decide the message format
@@ -464,7 +467,7 @@ tt_process_test_file ()
     # Note: read -r to preserve the backslashes
     while IFS='' read -r tt_input_line || test -n "$tt_input_line"
     do
-        tt_line_number=$(($tt_line_number + 1))
+        tt_line_number=$((tt_line_number + 1))
         #tt_debug INPUT_LINE "$tt_input_line"
 
         case "$tt_input_line" in
@@ -606,8 +609,10 @@ tt_make_temp_dir ()
     tt_temp_dir=$(mktemp -d "${TMPDIR:-/tmp}/clitest.XXXXXX" 2> /dev/null) && return 0
 
     # No mktemp, let's create the dir manually
+    # shellcheck disable=SC2015
     tt_temp_dir="${TMPDIR:-/tmp}/clitest.$(awk 'BEGIN { srand(); print rand() }').$$" &&
-        mkdir -m 700 "$tt_temp_dir" || tt_error "cannot create temporary dir: $tt_temp_dir"
+        mkdir -m 700 "$tt_temp_dir" ||
+        tt_error "cannot create temporary dir: $tt_temp_dir"
 }
 
 
@@ -645,7 +650,7 @@ do
             exit 0
         ;;
         -V|--version)
-            printf '%s %s\n%s\n' $tt_my_name $tt_my_version $tt_my_version_url
+            printf '%s %s\n%s\n' "$tt_my_name" "$tt_my_version" "$tt_my_version_url"
             exit 0
         ;;
         --)
@@ -754,7 +759,7 @@ fi
 # In other shells, try to use 'tput cols' (not POSIX).
 # If not, defaults to 50 columns, a conservative amount.
 : ${COLUMNS:=$(tput cols 2> /dev/null)}
-: ${COLUMNS:=50}
+: "${COLUMNS:=50}"
 
 # Parse and validate --test option value, if informed
 tt_run_range_data=$(tt_parse_range "$tt_run_range")
@@ -785,7 +790,8 @@ for tt_test_file
 do
     # Some tests may 'cd' to another dir, we need to get back
     # to preserve the relative paths of the input files
-    cd "$tt_original_dir"
+    cd "$tt_original_dir" ||
+        tt_error "cannot enter starting directory $tt_original_dir"
 
     # Support using '-' to read the test file from STDIN
     if test "$tt_test_file" = '-'
@@ -844,7 +850,7 @@ do
     fi
 
     # Save file stats
-    tt_nr_file_ok=$(($tt_nr_file_tests - $tt_nr_file_fails - $tt_nr_file_skips))
+    tt_nr_file_ok=$((tt_nr_file_tests - tt_nr_file_fails - tt_nr_file_skips))
     tt_files_stats="$tt_files_stats$tt_nr_file_ok $tt_nr_file_fails $tt_nr_file_skips$tt_nl"
 
     # Dots mode: any missing new line?
@@ -902,9 +908,9 @@ if test $tt_nr_files -gt 1 && test "$tt_output_mode" != 'quiet'
 then
     echo
     printf '  %5s %5s %5s\n' ok fail skip
-    printf %s "$tt_files_stats" | while read ok fail skip
+    printf %s "$tt_files_stats" | while read -r ok fail skip
     do
-        printf '  %5s %5s %5s    %s\n' $ok $fail $skip "$1"
+        printf '  %5s %5s %5s    %s\n' "$ok" "$fail" "$skip" "$1"
         shift
     done | sed 's/     0/     -/g'  # hide zeros
     echo
@@ -923,7 +929,7 @@ fi
 if test $tt_nr_total_fails -eq 0
 then
     stamp="${tt_color_green}OK:${tt_color_off}"
-    stats="$(($tt_nr_total_tests - $tt_nr_total_skips)) of $tt_nr_total_tests tests passed"
+    stats="$((tt_nr_total_tests - tt_nr_total_skips)) of $tt_nr_total_tests tests passed"
     test $tt_nr_total_tests -eq 1 && stats=$(echo "$stats" | sed 's/tests /test /')
     tt_message "$stamp $stats$skips"
     exit 0

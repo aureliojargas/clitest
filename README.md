@@ -436,7 +436,7 @@ ksh clitest tests.txt        # Uses Korn Shell
 ## Portability
 
 This script was carefully coded to be portable between [POSIX][13]
-shells.
+shells. It's validated by [checkbashisms][25] and [shellcheck][26].
 
 It was tested in:
 
@@ -495,3 +495,5 @@ No other language or environment involved.
 [22]: https://github.com/aureliojargas/clitest/blob/master/LICENSE.txt
 [23]: https://www.gnu.org/software/bash/manual/html_node/Bash-POSIX-Mode.html
 [24]: https://github.com/funcoeszz/funcoeszz/tree/master/testador
+[25]: https://linux.die.net/man/1/checkbashisms
+[26]: https://www.shellcheck.net/
