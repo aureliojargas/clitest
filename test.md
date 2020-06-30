@@ -736,6 +736,17 @@ $ ./clitest --list-run -t 3,5-7 test/ok-10.sh
 $
 ```
 
+Reverse ranges and repeated numbers are supported
+
+```
+$ ./clitest --list -t 3,7-5,3,6,5 test/ok-10.sh
+#3	echo 3 
+#5	echo 5 
+#6	echo 6 
+#7	echo 7 
+$
+```
+
 Using `-t` to limit to a range and the `-s` exclude some more
 
 ```

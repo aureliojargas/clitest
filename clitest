@@ -213,7 +213,7 @@ tt_parse_range ()  # $1=range
     tt_part=
     tt_n1=
     tt_n2=
-    tt_operation=
+    tt_swap=
     tt_range_data=':'  # :1:2:4:7:
 
     # Loop each component: a number or a range
@@ -228,17 +228,19 @@ tt_parse_range ()  # $1=range
                 tt_n1=${tt_part%-*}
                 tt_n2=${tt_part#*-}
 
-                tt_operation='+'
-                test "$tt_n1" -gt "$tt_n2" && tt_operation='-'
+                # Negative range, let's just reverse it (5-1 => 1-5)
+                if test "$tt_n1" -gt "$tt_n2"
+                then
+                    tt_swap=$tt_n1
+                    tt_n1=$tt_n2
+                    tt_n2=$tt_swap
+                fi
 
                 # Expand the range (1-4 => 1:2:3:4)
                 tt_part=$tt_n1:
                 while test "$tt_n1" -ne "$tt_n2"
                 do
-                    # Math operator in a variable drives shellcheck crazy
-                    # https://github.com/koalaman/shellcheck/issues/2000
-                    # shellcheck disable=SC1102
-                    tt_n1=$((tt_n1 $tt_operation 1))
+                    tt_n1=$((tt_n1 + 1))
                     tt_part=$tt_part$tt_n1:
                 done
                 tt_part=${tt_part%:}
