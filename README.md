@@ -33,12 +33,19 @@ sudo mv clitest /usr/bin
 
 Now check if everything is fine:
 
-```console
-$ clitest -V
-clitest HEAD
-https://github.com/aureliojargas/clitest/tree/HEAD
-$
 ```
+clitest --help
+```
+
+
+## Docker image
+
+You can also run clitest in a Docker container ([more info in Docker Hub](https://hub.docker.com/r/aureliojargas/clitest)).
+
+```
+docker run --rm -t aureliojargas/clitest --help
+```
+
 
 ## Quick Intro
 
