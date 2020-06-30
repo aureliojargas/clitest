@@ -15,7 +15,11 @@ test_cmd = ./clitest --first --progress none test.md
 default:
 	@echo "Read the comments in the Makefile for help"
 
+fmt:
+	$(docker_run) shfmt -w -i 4 -ci -kp -sr clitest
+
 lint:
+	$(docker_run) shfmt -d -i 4 -ci -kp -sr clitest
 	$(docker_run) checkbashisms --posix clitest
 	$(docker_run) shellcheck clitest
 
