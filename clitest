@@ -874,7 +874,8 @@ tt_clean_up
 
 # Some clean up command to run after all the tests?
 if test -n "$tt_post_command"; then
-    eval "$tt_post_command"
+    eval "$tt_post_command" ||
+        tt_error "post-flight command failed with status=$?: $tt_post_command"
 fi
 
 #-----------------------------------------------------------------------
