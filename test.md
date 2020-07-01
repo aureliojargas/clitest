@@ -154,6 +154,8 @@ Customization options:
       --inline-prefix PREFIX  Set inline output prefix (default: '#=> ')
       --prefix PREFIX         Set command line prefix (default: '')
       --prompt STRING         Set prompt string (default: '$ ')
+
+See also: https://github.com/aureliojargas/clitest
 0
 $
 ```
@@ -163,7 +165,7 @@ The short option `-h` is working? Testing just the first and last lines for brev
 ```
 $ ./clitest -h | sed -n '1p; $p'
 Usage: clitest [options] <file ...>
-      --prompt STRING         Set prompt string (default: '$ ')
+See also: https://github.com/aureliojargas/clitest
 $
 ```
 

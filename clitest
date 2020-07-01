@@ -26,6 +26,7 @@
 #   avoid clashing with test's variables, functions, aliases and commands.
 
 tt_my_name="$(basename "$0")"
+tt_my_url='https://github.com/aureliojargas/clitest'
 tt_my_version='HEAD'
 tt_my_version_url="https://github.com/aureliojargas/clitest/tree/$tt_my_version"
 
@@ -59,7 +60,9 @@ Customization options:
       --diff-options OPTIONS  Set diff command options (default: '$tt_diff_options')
       --inline-prefix PREFIX  Set inline output prefix (default: '$tt_inline_prefix')
       --prefix PREFIX         Set command line prefix (default: '$tt_prefix')
-      --prompt STRING         Set prompt string (default: '$tt_prompt')"
+      --prompt STRING         Set prompt string (default: '$tt_prompt')
+
+See also: $tt_my_url"
 
 # Flags (0=off, 1=on), most can be altered by command line options
 tt_debug=0
