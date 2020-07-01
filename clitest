@@ -28,7 +28,6 @@
 tt_my_name="$(basename "$0")"
 tt_my_url='https://github.com/aureliojargas/clitest'
 tt_my_version='HEAD'
-tt_my_version_url="https://github.com/aureliojargas/clitest/tree/$tt_my_version"
 
 # Customization (if needed, edit here or use the command line options)
 tt_prefix=''
@@ -677,7 +676,7 @@ while test "${1#-}" != "$1"; do
             exit 0
             ;;
         -V | --version)
-            printf '%s %s\n%s\n' "$tt_my_name" "$tt_my_version" "$tt_my_version_url"
+            printf '%s %s\n' "$tt_my_name" "$tt_my_version"
             exit 0
             ;;
         --)

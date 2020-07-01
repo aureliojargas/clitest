@@ -121,10 +121,8 @@ Test the output text and the short option `-V`.
 ```
 $ ./clitest --version
 clitest HEAD
-https://github.com/aureliojargas/clitest/tree/HEAD
 $ ./clitest -V
 clitest HEAD
-https://github.com/aureliojargas/clitest/tree/HEAD
 $
 ```
 
