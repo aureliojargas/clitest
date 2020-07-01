@@ -2093,6 +2093,10 @@ FAIL: 50 of 50 tests failed
 $ ./clitest --pre-flight 'false' test/ok-1.sh; echo $?
 clitest: Error: pre-flight command failed with status=1: false
 2
+$ ./clitest --post-flight 'false' test/ok-1.sh; echo $?
+#1	echo ok
+clitest: Error: post-flight command failed with status=1: false
+2
 $
 ```
 
