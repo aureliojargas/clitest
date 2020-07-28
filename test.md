@@ -230,13 +230,15 @@ $
 
 Color ON
 
+> Note that the escape character (`\033`) is removed to have only printable ASCII characters in the output.
+
 ```
-$ ./clitest --color always test/ok-1.sh
+$ ./clitest --color always test/ok-1.sh | tr -d '\033'
 #1	echo ok
-[32mOK:[m 1 of 1 test passed
-$ ./clitest --color yes test/ok-1.sh
+[32mOK:[m 1 of 1 test passed
+$ ./clitest --color yes test/ok-1.sh | tr -d '\033'
 #1	echo ok
-[32mOK:[m 1 of 1 test passed
+[32mOK:[m 1 of 1 test passed
 $
 ```
 
@@ -266,14 +268,6 @@ $
 
 The real default `--color auto` cannot be tested here.
 Test it by hand at the command line.
-
-```
-## $ ./clitest test/ok-1.sh
-## [32mOK![m The single test has passed.
-## $ ./clitest --color auto test/ok-1.sh
-## [32mOK![m The single test has passed.
-## $
-```
 
 ## Option --list
 
@@ -346,16 +340,20 @@ $
 
 Normal results (using colors) and exit code
 
+> Note that the escape character (`\033`) is removed to have only printable ASCII characters in the output.
+
 ```
-$ ./clitest --list-run --color yes test/no-nl-command.sh; echo $?
-[32m#1	printf 'ok\n'[m
-[31m#2	printf 'fail'[m
-[31m#3	printf 'ok\nok\nfail'[m
-[32m#4	printf 'ok\n'    [m
-[31m#5	printf 'fail'    [m
-[32m#6	printf 'ok'; echo   [m
-[32m#7	printf 'ok'         [m
+$ ./clitest --list-run --color always test/no-nl-command.sh > /tmp/foo.txt; echo $?
 1
+$ cat /tmp/foo.txt | tr -d '\033'
+[32m#1	printf 'ok\n'[m
+[31m#2	printf 'fail'[m
+[31m#3	printf 'ok\nok\nfail'[m
+[32m#4	printf 'ok\n'    [m
+[31m#5	printf 'fail'    [m
+[32m#6	printf 'ok'; echo   [m
+[32m#7	printf 'ok'         [m
+$ rm /tmp/foo.txt
 $
 ```
 
@@ -2329,14 +2327,16 @@ $
 
 ## And now, the colored output tests
 
+> Note that the escape character (`\033`) is removed to have only printable ASCII characters in the output.
+
 ```
-$ ./clitest --color yes --first test/fail-2.sh
+$ ./clitest --color yes --first test/fail-2.sh | tr -d '\033'
 #1	echo ok
-[31m--------------------------------------------------------------------------------[m
-[31m[FAILED #1, line 1] echo ok[m
+[31m--------------------------------------------------------------------------------[m
+[31m[FAILED #1, line 1] echo ok[m
 @@ -1 +1 @@
 -fail
 +ok
-[31m--------------------------------------------------------------------------------[m
+[31m--------------------------------------------------------------------------------[m
 $
 ```
