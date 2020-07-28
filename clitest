@@ -137,12 +137,13 @@ tt_error() {
 tt_debug() { # $1=id, $2=contents
     test $tt_debug -ne 1 && return 0
     if test INPUT_LINE = "$1"; then
-        # Original input line is all blue
-        printf "${tt_color_blue}[%10s: %s]${tt_color_off}\n" "$1" "$2"
+        # Original input line is all cyan and preceded by separator line
+        printf -- "${tt_color_cyan}%s${tt_color_off}\n" "$(tt_separator_line)"
+        printf -- "${tt_color_cyan}-- %10s[%s]${tt_color_off}\n" "$1" "$2"
     else
         # Highlight tabs and inline prefix
-        printf "${tt_color_blue}[%10s:${tt_color_off} %s${tt_color_blue}]${tt_color_off}\n" "$1" "$2" |
-            sed "/LINE_CMD:/ s/$tt_inline_prefix/${tt_color_red}&${tt_color_off}/g" |
+        printf -- "${tt_color_cyan}-- %10s[${tt_color_off}%s${tt_color_cyan}]${tt_color_off}\n" "$1" "$2" |
+            sed "/LINE_CMD/ s/$tt_inline_prefix/${tt_color_red}&${tt_color_off}/" |
             sed "s/$tt_tab/${tt_color_green}<tab>${tt_color_off}/g"
     fi
 }
@@ -298,13 +299,13 @@ tt_run_test() {
             ;;
     esac
 
-    #tt_debug EVAL "$tt_test_command"
+    tt_debug EVAL "$tt_test_command"
 
     # Execute the test command, saving output (STDOUT and STDERR)
     eval "$tt_test_command" > "$tt_test_output_file" 2>&1
     tt_test_exit_code=$?
 
-    #tt_debug OUTPUT "$(cat "$tt_test_output_file")"
+    tt_debug OUTPUT "$(cat "$tt_test_output_file")"
 
     # The command output matches the expected output?
     case $tt_test_mode in
@@ -442,14 +443,14 @@ tt_process_test_file() {
     # Note: read -r to preserve the backslashes
     while IFS='' read -r tt_input_line || test -n "$tt_input_line"; do
         tt_line_number=$((tt_line_number + 1))
-        #tt_debug INPUT_LINE "$tt_input_line"
+        tt_debug INPUT_LINE "$tt_input_line"
 
         case "$tt_input_line" in
 
             "$tt_prefix$tt_prompt" | "$tt_prefix${tt_prompt% }" | "$tt_prefix$tt_prompt ")
                 # Prompt alone: closes previous command line (if any)
 
-                #tt_debug 'LINE_$' "$tt_input_line"
+                tt_debug 'LINE_$' "$tt_input_line"
 
                 # Run pending tests
                 test -n "$tt_test_command" && tt_run_test
@@ -458,7 +459,7 @@ tt_process_test_file() {
             "$tt_prefix$tt_prompt"*)
                 # This line is a command line to be tested
 
-                #tt_debug LINE_CMD "$tt_input_line"
+                tt_debug LINE_CMD "$tt_input_line"
 
                 # Run pending tests
                 test -n "$tt_test_command" && tt_run_test
@@ -475,8 +476,8 @@ tt_process_test_file() {
                     tt_test_command="${tt_test_command%"$tt_inline_prefix"*}"
                     tt_test_inline="${tt_input_line##*"$tt_inline_prefix"}"
 
-                    #tt_debug NEW_CMD "$tt_test_command"
-                    #tt_debug OK_INLINE "$tt_test_inline"
+                    tt_debug NEW_CMD "$tt_test_command"
+                    tt_debug OK_INLINE "$tt_test_inline"
 
                     # Maybe the OK text has options?
                     case "$tt_test_inline" in
@@ -517,7 +518,7 @@ tt_process_test_file() {
                             ;;
                     esac
 
-                    #tt_debug OK_TEXT "$tt_test_inline"
+                    tt_debug OK_TEXT "$tt_test_inline"
 
                     # There must be a number in --lines and --exit
                     if test "$tt_test_mode" = 'lines' || test "$tt_test_mode" = 'exit'; then
@@ -539,21 +540,21 @@ tt_process_test_file() {
                     # It's a normal command line, output begins in next line
                     tt_test_mode='output'
 
-                    #tt_debug NEW_CMD "$tt_test_command"
+                    tt_debug NEW_CMD "$tt_test_command"
                 fi
                 ;;
 
             *)
                 # Test output, blank line or comment
 
-                #tt_debug 'LINE_*' "$tt_input_line"
+                tt_debug 'LINE_MISC' "$tt_input_line"
 
                 # Ignore this line if there's no pending test
                 test -n "$tt_test_command" || continue
 
                 # Required prefix is missing: we just left a command block
                 if test -n "$tt_prefix" && test "${tt_input_line#"$tt_prefix"}" = "$tt_input_line"; then
-                    #tt_debug BLOCK_OUT "$tt_input_line"
+                    tt_debug BLOCK_OUT "$tt_input_line"
 
                     # Run the pending test and we're done in this line
                     tt_run_test
@@ -563,12 +564,12 @@ tt_process_test_file() {
                 # This line is a test output, save it (without prefix)
                 tt_test_ok_text="$tt_test_ok_text${tt_input_line#"$tt_prefix"}$tt_nl"
 
-                #tt_debug OK_TEXT "${tt_input_line#"$tt_prefix"}"
+                tt_debug OK_TEXT "${tt_input_line#"$tt_prefix"}"
                 ;;
         esac
     done < "$tt_temp_file"
 
-    #tt_debug LOOP_OUT "\$tt_test_command=$tt_test_command"
+    tt_debug LOOP_OUT "\$tt_test_command=$tt_test_command"
 
     # Run pending tests
     test -n "$tt_test_command" && tt_run_test
@@ -636,10 +637,6 @@ while test "${1#-}" != "$1"; do
             tt_post_command="$1"
             shift
             ;;
-        --debug)
-            shift
-            tt_debug=1
-            ;;
         -P | --progress)
             shift
             tt_progress="$1"
@@ -678,6 +675,11 @@ while test "${1#-}" != "$1"; do
         -V | --version)
             printf '%s %s\n' "$tt_my_name" "$tt_my_version"
             exit 0
+            ;;
+        --debug)
+            # Undocumented dev-only option
+            shift
+            tt_debug=1
             ;;
         --)
             # No more options to process
@@ -771,8 +773,7 @@ esac
 if test $tt_use_colors -eq 1; then
     tt_color_red=$(  printf '\033[31m')  # fail
     tt_color_green=$(printf '\033[32m')  # ok
-    tt_color_blue=$( printf '\033[34m')  # debug
-    #tt_color_cyan=$( printf '\033[36m') # not used
+    tt_color_cyan=$( printf '\033[36m')  # debug
     tt_color_off=$(  printf '\033[m')
 fi
 
