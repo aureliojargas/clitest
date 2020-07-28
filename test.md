@@ -1244,11 +1244,12 @@ $ ./clitest --list-run test/inline-match-file.sh
 #1	OK	printf '$ echo ok\nok\n'      
 #2	OK	echo 'ok' > /tmp/foo.txt
 #3	OK	echo 'ok'                     
-#4	FAIL	echo 'fail'                   
+#4	OK	rm /tmp/foo.txt
 #5	FAIL	echo 'fail'                   
-#6	OK	echo '--file'                 
-#7	OK	echo '--filer'                
-#8	OK	echo '--file is cool'         
+#6	FAIL	echo 'fail'                   
+#7	OK	echo '--file'                 
+#8	OK	echo '--filer'                
+#9	OK	echo '--file is cool'         
 $
 ```
 

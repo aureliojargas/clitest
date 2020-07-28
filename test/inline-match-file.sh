@@ -9,6 +9,8 @@ $ printf '$ echo ok\nok\n'      #=> --file ok-1.sh
 
 $ echo 'ok' > /tmp/foo.txt
 $ echo 'ok'                     #=> --file /tmp/foo.txt
+$ rm /tmp/foo.txt
+$
 
 # Syntax: Must be exactly one space before and after --file
 
