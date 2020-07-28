@@ -141,9 +141,9 @@ tt_debug() { # $1=id, $2=contents
         printf -- "${tt_color_cyan}%s${tt_color_off}\n" "$(tt_separator_line)"
         printf -- "${tt_color_cyan}-- %10s[%s]${tt_color_off}\n" "$1" "$2"
     else
-        # Highlight tabs and inline prefix
+        # Highlight tabs and the (last) inline prefix
         printf -- "${tt_color_cyan}-- %10s[${tt_color_off}%s${tt_color_cyan}]${tt_color_off}\n" "$1" "$2" |
-            sed "/LINE_CMD/ s/$tt_inline_prefix/${tt_color_red}&${tt_color_off}/" |
+            sed "/LINE_CMD/ s/\(.*\)\($tt_inline_prefix\)/\1${tt_color_red}\2${tt_color_off}/" |
             sed "s/$tt_tab/${tt_color_green}<tab>${tt_color_off}/g"
     fi
 }

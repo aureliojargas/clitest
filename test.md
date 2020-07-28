@@ -263,6 +263,14 @@ $ ./clitest --debug --color always test/option-debug-color.sh | head -n 3 | tr -
 $
 ```
 
+In case of multiple `#=>`, only the last one should be red:
+
+```
+$ ./clitest --debug --color always test/inline-multiple-marker.sh | command grep LINE_CMD | tr -d '\033'
+[36m--   LINE_CMD[[m$ echo "a #=> b #=> c"  #=> --lines 99 [31m#=> [m--lines 1[36m][m
+$
+```
+
 ## Option --color
 
 Invalid value
@@ -1116,6 +1124,14 @@ $ ./clitest test/inline.sh
 OK: 19 of 19 tests passed
 $
 ```
+
+In case of multiple `#=>`, consider only the last one:
+
+```
+$ ./clitest test/inline-multiple-marker.sh
+#1	echo "a #=> b #=> c"  #=> --lines 99 
+OK: 1 of 1 test passed
+$
 
 ## Inline match modes
 
