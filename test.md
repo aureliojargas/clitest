@@ -52,7 +52,7 @@ from STDIN. This was reported on issue #42 on Github.
 Testing for a regression.
 
 ```
-$ echo testing stdin isolation. Will read make next test to fail? ; read
+$ echo testing stdin isolation. Will read make next test to fail? ; read asdf
 testing stdin isolation. Will read make next test to fail?
 $ echo does this fail or succeed? If succeeds, stdin isolation is working.  Otherwise, not.
 does this fail or succeed? If succeeds, stdin isolation is working. Otherwise, not.
