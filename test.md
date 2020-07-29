@@ -43,22 +43,6 @@ $ echo $not_exported  #=> 1
 $ echo $not_exported  #=> --regex ^1$
 ```
 
-## Is STDIN isolated?
-
-This was a bug found on early versions of clitest in which tests shared STDIN
-with clitest and with each other, causing unexpected results when a test read
-from STDIN. This was reported on issue #42 on Github.
-
-Testing for a regression.
-
-```
-$ echo testing stdin isolation ; read stdin_isolation
-testing stdin isolation
-$ echo Succeed\? If so, stdin isolation works. ; unset stdin_isolation
-Succeed? If so, stdin isolation works.
-$
-```
-
 ## Check the temporary dir creation
 
 ```
@@ -2204,6 +2188,14 @@ $ ./clitest test/stdout-stderr.sh
 #9	./clitest notfound 2> /dev/null
 #10	./clitest notfound > /dev/null 2>&1
 OK: 10 of 10 tests passed
+$
+```
+
+STDIN Isolation
+
+```
+$ ./clitest --quiet test/stdin-isolation.sh ; echo $?
+0
 $
 ```
 
