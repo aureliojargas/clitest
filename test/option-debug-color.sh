@@ -1,0 +1,2 @@
+$ echo "tab	" #=> tab	
+$

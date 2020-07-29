@@ -194,27 +194,81 @@ clitest: Error: cannot read input file: notfound
 $
 ```
 
-## Option --quiet has no effect in --debug (disabled)
+## Option --quiet has no effect in --debug
 
 ```
-# $ ./clitest --quiet --debug test/ok-2.sh
-# [INPUT_LINE: $ echo ok]
-# [  LINE_CMD: $ echo ok]
-# [   NEW_CMD: echo ok]
-# [INPUT_LINE: ok]
-# [    LINE_*: ok]
-# [   OK_TEXT: ok]
-# [INPUT_LINE: $ echo ok  #=> ok]
-# [  LINE_CMD: $ echo ok  #=> ok]
-# [      EVAL: echo ok]
-# [    OUTPUT: ok]
-# [   NEW_CMD: echo ok  ]
-# [ OK_INLINE: ok]
-# [   OK_TEXT: ok]
-# [      EVAL: echo ok  ]
-# [    OUTPUT: ok]
-# [  LOOP_OUT: $test_command=]
-# $
+$ ./clitest --debug --quiet test/ok-1.sh | grep -o INPUT_LINE
+INPUT_LINE
+INPUT_LINE
+$
+```
+
+## Option --debug
+
+Tricky test file with: empty line, inline marker, tab, $, comment line, normal command, unclosed block.
+
+```
+$ ./clitest --debug test/option-debug.sh
+--------------------------------------------------------------------------------
+-- INPUT_LINE[# Test file to be run with --debug]
+--  LINE_MISC[# Test file to be run with --debug]
+--------------------------------------------------------------------------------
+-- INPUT_LINE[]
+--  LINE_MISC[]
+--------------------------------------------------------------------------------
+-- INPUT_LINE[$ echo "tab+space	 "	 #=> tab+space	 ]
+--   LINE_CMD[$ echo "tab+space<tab> "<tab> #=> tab+space<tab> ]
+--    NEW_CMD[echo "tab+space<tab> "<tab> ]
+--  OK_INLINE[tab+space<tab> ]
+--    OK_TEXT[tab+space<tab> ]
+#1	echo "tab+space	 "	 
+--       EVAL[echo "tab+space<tab> "<tab> ]
+--     OUTPUT[tab+space<tab> ]
+--------------------------------------------------------------------------------
+-- INPUT_LINE[$]
+--     LINE_$[$]
+--------------------------------------------------------------------------------
+-- INPUT_LINE[# A comment line between command blocks]
+--  LINE_MISC[# A comment line between command blocks]
+--------------------------------------------------------------------------------
+-- INPUT_LINE[$ echo "unclosed block"]
+--   LINE_CMD[$ echo "unclosed block"]
+--    NEW_CMD[echo "unclosed block"]
+--------------------------------------------------------------------------------
+-- INPUT_LINE[unclosed block]
+--  LINE_MISC[unclosed block]
+--    OK_TEXT[unclosed block]
+--   LOOP_OUT[$tt_test_command=echo "unclosed block"]
+#2	echo "unclosed block"
+--       EVAL[echo "unclosed block"]
+--     OUTPUT[unclosed block]
+OK: 2 of 2 tests passed
+$
+```
+
+## Option --debug with colors
+
+- Separator line is cyan
+- `INPUT_LINE[...]` is cyan, others are normal color inside `[]`
+- `<tab>` must be green
+- `#=>` inline marker must be red
+
+This test forces `--color always` because normally the tests inside this file are not colored (output is not a terminal). Note that the escape character (`\033`) is removed to have only printable ASCII characters in the output.
+
+```
+$ ./clitest --debug --color always test/option-debug-color.sh | head -n 3 | tr -d '\033'
+[36m--------------------------------------------------------------------------------[m
+[36m-- INPUT_LINE[$ echo "tab	" #=> tab	][m
+[36m--   LINE_CMD[[m$ echo "tab[32m<tab>[m" [31m#=> [mtab[32m<tab>[m[36m][m
+$
+```
+
+In case of multiple `#=>`, only the last one should be red:
+
+```
+$ ./clitest --debug --color always test/inline-multiple-marker.sh | command grep LINE_CMD | tr -d '\033'
+[36m--   LINE_CMD[[m$ echo "a #=> b #=> c"  #=> --lines 99 [31m#=> [m--lines 1[36m][m
+$
 ```
 
 ## Option --color
@@ -230,13 +284,15 @@ $
 
 Color ON
 
+> Note that the escape character (`\033`) is removed to have only printable ASCII characters in the output.
+
 ```
-$ ./clitest --color always test/ok-1.sh
+$ ./clitest --color always test/ok-1.sh | tr -d '\033'
 #1	echo ok
-[32mOK:[m 1 of 1 test passed
-$ ./clitest --color yes test/ok-1.sh
+[32mOK:[m 1 of 1 test passed
+$ ./clitest --color yes test/ok-1.sh | tr -d '\033'
 #1	echo ok
-[32mOK:[m 1 of 1 test passed
+[32mOK:[m 1 of 1 test passed
 $
 ```
 
@@ -266,14 +322,6 @@ $
 
 The real default `--color auto` cannot be tested here.
 Test it by hand at the command line.
-
-```
-## $ ./clitest test/ok-1.sh
-## [32mOK![m The single test has passed.
-## $ ./clitest --color auto test/ok-1.sh
-## [32mOK![m The single test has passed.
-## $
-```
 
 ## Option --list
 
@@ -346,16 +394,20 @@ $
 
 Normal results (using colors) and exit code
 
+> Note that the escape character (`\033`) is removed to have only printable ASCII characters in the output.
+
 ```
-$ ./clitest --list-run --color yes test/no-nl-command.sh; echo $?
-[32m#1	printf 'ok\n'[m
-[31m#2	printf 'fail'[m
-[31m#3	printf 'ok\nok\nfail'[m
-[32m#4	printf 'ok\n'    [m
-[31m#5	printf 'fail'    [m
-[32m#6	printf 'ok'; echo   [m
-[32m#7	printf 'ok'         [m
+$ ./clitest --list-run --color always test/no-nl-command.sh > /tmp/foo.txt; echo $?
 1
+$ cat /tmp/foo.txt | tr -d '\033'
+[32m#1	printf 'ok\n'[m
+[31m#2	printf 'fail'[m
+[31m#3	printf 'ok\nok\nfail'[m
+[32m#4	printf 'ok\n'    [m
+[31m#5	printf 'fail'    [m
+[32m#6	printf 'ok'; echo   [m
+[32m#7	printf 'ok'         [m
+$ rm /tmp/foo.txt
 $
 ```
 
@@ -1073,6 +1125,14 @@ OK: 19 of 19 tests passed
 $
 ```
 
+In case of multiple `#=>`, consider only the last one:
+
+```
+$ ./clitest test/inline-multiple-marker.sh
+#1	echo "a #=> b #=> c"  #=> --lines 99 
+OK: 1 of 1 test passed
+$
+
 ## Inline match modes
 
 Mode #=> --text
@@ -1244,11 +1304,12 @@ $ ./clitest --list-run test/inline-match-file.sh
 #1	OK	printf '$ echo ok\nok\n'      
 #2	OK	echo 'ok' > /tmp/foo.txt
 #3	OK	echo 'ok'                     
-#4	FAIL	echo 'fail'                   
+#4	OK	rm /tmp/foo.txt
 #5	FAIL	echo 'fail'                   
-#6	OK	echo '--file'                 
-#7	OK	echo '--filer'                
-#8	OK	echo '--file is cool'         
+#6	FAIL	echo 'fail'                   
+#7	OK	echo '--file'                 
+#8	OK	echo '--filer'                
+#9	OK	echo '--file is cool'         
 $
 ```
 
@@ -2336,14 +2397,16 @@ $
 
 ## And now, the colored output tests
 
+> Note that the escape character (`\033`) is removed to have only printable ASCII characters in the output.
+
 ```
-$ ./clitest --color yes --first test/fail-2.sh
+$ ./clitest --color yes --first test/fail-2.sh | tr -d '\033'
 #1	echo ok
-[31m--------------------------------------------------------------------------------[m
-[31m[FAILED #1, line 1] echo ok[m
+[31m--------------------------------------------------------------------------------[m
+[31m[FAILED #1, line 1] echo ok[m
 @@ -1 +1 @@
 -fail
 +ok
-[31m--------------------------------------------------------------------------------[m
+[31m--------------------------------------------------------------------------------[m
 $
 ```
