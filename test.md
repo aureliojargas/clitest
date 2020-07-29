@@ -2252,6 +2252,14 @@ OK: 10 of 10 tests passed
 $
 ```
 
+STDIN Isolation
+
+```
+$ ./clitest --quiet test/stdin-isolation.sh ; echo $?
+0
+$
+```
+
 Multiple commands in one line
 
 ```

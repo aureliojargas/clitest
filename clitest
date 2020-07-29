@@ -302,7 +302,7 @@ tt_run_test() {
     tt_debug EVAL "$tt_test_command"
 
     # Execute the test command, saving output (STDOUT and STDERR)
-    eval "$tt_test_command" > "$tt_test_output_file" 2>&1
+    eval "$tt_test_command" > "$tt_test_output_file" 2>&1 < /dev/null
     tt_test_exit_code=$?
 
     tt_debug OUTPUT "$(cat "$tt_test_output_file")"
