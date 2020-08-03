@@ -2265,9 +2265,11 @@ Temporary Directories
 Check for leftover temporary directories
 
 ```
+$ OLD_TMPDIR="$TMPDIR" #=> --exit 0
 $ TMPDIR=$(mktemp -d) && TMPDIR="$TMPDIR" ./clitest --help >/dev/null 2>&1 && ls $TMPDIR | wc -l ; rm -rf "$TMPDIR" #=> 0
-$ TMPDIR=$(mktemp -d) && TMPDIR="$TMPDIR" ./clitest --version >/dev/null 2>&1 && ls $TMPDIR | wc -l ; rm -rf "$TMPDIR" #=> 0
-$ TMPDIR=$(mktemp -d) && echo '$ : #=> --exit 0' | TMPDIR="$TMPDIR" ./clitest --debug - >/dev/null 2>&1 && ls $TMPDIR | wc -l ; rm -rf "$TMPDIR" #=> 0
+$ TMPDIR="$OLD_TMPDIR" ; TMPDIR=$(mktemp -d) && TMPDIR="$TMPDIR" ./clitest --version >/dev/null 2>&1 && ls $TMPDIR | wc -l ; rm -rf "$TMPDIR" #=> 0
+$ TMPDIR="$OLD_TMPDIR" ; TMPDIR=$(mktemp -d) && echo '$ : #=> --exit 0' | TMPDIR="$TMPDIR" ./clitest --debug - >/dev/null 2>&1 && ls $TMPDIR | wc -l ; rm -rf "$TMPDIR" #=> 0
+$ TMPDIR="$OLD_TMPDIR" #=> --exit 0
 $
 ```
 
