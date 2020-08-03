@@ -2260,6 +2260,17 @@ $ ./clitest --quiet test/stdin-isolation.sh ; echo $?
 $
 ```
 
+Temporary Directories
+
+Check for leftover temporary directories
+
+```
+$ TMPDIR=$(mktemp -d) && TMPDIR="$TMPDIR" ./clitest --help >/dev/null 2>&1 && ls $TMPDIR | wc -l ; rm -rf "$TMPDIR" #=> 0
+$ TMPDIR=$(mktemp -d) && TMPDIR="$TMPDIR" ./clitest --version >/dev/null 2>&1 && ls $TMPDIR | wc -l ; rm -rf "$TMPDIR" #=> 0
+$ TMPDIR=$(mktemp -d) && echo '$ : #=> --exit 0' | TMPDIR="$TMPDIR" ./clitest --debug - >/dev/null 2>&1 && ls $TMPDIR | wc -l ; rm -rf "$TMPDIR" #=> 0
+$
+```
+
 Multiple commands in one line
 
 ```

@@ -90,6 +90,7 @@ tt_run_range_data=
 tt_skip_range=
 tt_skip_range_data=
 tt_failed_range=
+tt_temp_dir=
 tt_test_file=
 tt_input_line=
 tt_line_number=0
@@ -113,7 +114,7 @@ tt_nl='
 ### Utilities
 
 tt_clean_up() {
-    rm -rf "$tt_temp_dir"
+    [ -n "$tt_temp_dir" ] && rm -rf "$tt_temp_dir"
 }
 tt_message() {
     test "$tt_output_mode" = 'quiet' && return 0
@@ -131,7 +132,6 @@ tt_message_part() { # no line break
 tt_error() {
     test $tt_missing_nl -eq 1 && echo
     printf '%s\n' "$tt_my_name: Error: $1" >&2
-    tt_clean_up
     exit 2
 }
 tt_debug() { # $1=id, $2=contents
@@ -419,7 +419,6 @@ tt_run_test() {
 
         # Should I abort now?
         if test $tt_stop_on_first_fail -eq 1; then
-            tt_clean_up
             exit 1
         fi
 
@@ -790,8 +789,9 @@ fi
 
 ### Real execution begins here
 
+trap tt_clean_up EXIT
+
 # Temporary files (using files because <(...) is not portable)
-tt_temp_dir=
 tt_make_temp_dir  # sets global $tt_temp_dir
 tt_temp_file="$tt_temp_dir/temp.txt"
 tt_stdin_file="$tt_temp_dir/stdin.txt"
@@ -870,8 +870,6 @@ for tt_test_file; do
     # Note: had to force tt_missing_nl=0, even when it's done in tt_message :/
     test $tt_missing_nl -eq 1 && tt_missing_nl=0 && tt_message
 done
-
-tt_clean_up
 
 # Some clean up command to run after all the tests?
 if test -n "$tt_post_command"; then
