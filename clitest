@@ -114,7 +114,7 @@ tt_nl='
 ### Utilities
 
 tt_clean_up() {
-    [ -n "$tt_temp_dir" ] && rm -rf "$tt_temp_dir"
+    test -n "$tt_temp_dir" && rm -rf "$tt_temp_dir"
 }
 tt_message() {
     test "$tt_output_mode" = 'quiet' && return 0

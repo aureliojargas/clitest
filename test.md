@@ -2260,19 +2260,17 @@ $ ./clitest --quiet test/stdin-isolation.sh ; echo $?
 $
 ```
 
-Temporary Directories
-
-Check for leftover temporary directories
+Temporary files and directories must be removed after execution
 
 ```
-$ OLD_TMPDIR="$TMPDIR" #=> --exit 0
-$ TMPDIR=$(mktemp -d) && TMPDIR="$TMPDIR" ./clitest --help >/dev/null 2>&1 && ls $TMPDIR | wc -l ; rm -rf "$TMPDIR" #=> 0
-$ TMPDIR="$OLD_TMPDIR" ; TMPDIR=$(mktemp -d) && TMPDIR="$TMPDIR" ./clitest --version >/dev/null 2>&1 && ls $TMPDIR | wc -l ; rm -rf "$TMPDIR" #=> 0
-$ TMPDIR="$OLD_TMPDIR" ; TMPDIR=$(mktemp -d) && echo '$ : #=> --exit 0' | TMPDIR="$TMPDIR" ./clitest --debug - >/dev/null 2>&1 && ls $TMPDIR | wc -l ; rm -rf "$TMPDIR" #=> 0
-$ TMPDIR="$OLD_TMPDIR" #=> --exit 0
+$ TMPDIR__TEST=$(mktemp -d)
+$ TMPDIR="$TMPDIR__TEST" ./clitest --help >/dev/null 2>&1
+$ find "$TMPDIR__TEST" -mindepth 1
+$ echo '$ true' | TMPDIR="$TMPDIR__TEST" ./clitest --debug - >/dev/null 2>&1
+$ find "$TMPDIR__TEST" -mindepth 1
+$ unset TMPDIR__TEST
 $
 ```
-
 Multiple commands in one line
 
 ```
