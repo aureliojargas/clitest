@@ -2260,6 +2260,17 @@ $ ./clitest --quiet test/stdin-isolation.sh ; echo $?
 $
 ```
 
+Temporary files and directories must be removed after execution
+
+```
+$ TMPDIR__TEST=$(mktemp -d)
+$ TMPDIR="$TMPDIR__TEST" ./clitest --help >/dev/null 2>&1
+$ find "$TMPDIR__TEST" -mindepth 1
+$ echo '$ true' | TMPDIR="$TMPDIR__TEST" ./clitest --debug - >/dev/null 2>&1
+$ find "$TMPDIR__TEST" -mindepth 1
+$ unset TMPDIR__TEST
+$
+```
 Multiple commands in one line
 
 ```
