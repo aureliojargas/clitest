@@ -1,0 +1,7 @@
+image:
+  file: Dockerfile.dev
+# tasks:
+#   - init: make
+
+# Example:
+# https://github.com/nushell/nushell/blob/main/.gitpod.yml
