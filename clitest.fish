@@ -361,7 +361,7 @@ function tt_process_test_file
                 # Run pending tests
                 test -n "$tt_test_command" && tt_run_test
 
-            case "$tt_prefix$tt_prompt"*
+            case "$tt_prefix$tt_prompt*"
                 # This line is a command line to be tested
 
                 tt_debug LINE_CMD "$tt_input_line"
@@ -434,7 +434,7 @@ end
 ### Init process
 
 # Handle command line options
-while string match -qr '^-' $argv[1]
+while string match -qr -- '^-' $argv[1]
     switch $argv[1]
         case -1 --first
             shift
