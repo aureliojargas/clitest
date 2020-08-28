@@ -134,18 +134,18 @@ function tt_message_part  # no line break
 end
 function tt_error
     test $tt_missing_nl -eq 1 && echo
-    printf '%s\n' "$tt_my_name: Error: $1" >&2
+    printf '%s\n' "$tt_my_name: Error: $argv[1]" >&2
     exit 2
 end
-function tt_debug  # $1=id, $2=contents
+function tt_debug  # $argv[1]=id, $argv[2]=contents
     test $tt_debug -ne 1 && return 0
-    if test INPUT_LINE = "$1"
+    if test INPUT_LINE = $argv[1]
         # Original input line is all cyan and preceded by separator line
         printf -- "{$tt_color_cyan}%s{$tt_color_off}\n" (tt_separator_line)
-        printf -- "{$tt_color_cyan}-- %10s[%s]{$tt_color_off}\n" "$1" "$2"
+        printf -- "{$tt_color_cyan}-- %10s[%s]{$tt_color_off}\n" $argv[1] $argv[2]
     else
         # Highlight tabs and the (last) inline prefix
-        printf -- "{$tt_color_cyan}-- %10s[{$tt_color_off}%s{$tt_color_cyan}]{$tt_color_off}\n" "$1" "$2" |
+        printf -- "{$tt_color_cyan}-- %10s[{$tt_color_off}%s{$tt_color_cyan}]{$tt_color_off}\n" $argv[1] $argv[2] |
             sed "/LINE_CMD/ s/\(.*\)\($tt_inline_prefix\)/\1{$tt_color_red}\2{$tt_color_off}/" |
             sed "s/$tt_tab/{$tt_color_green}<tab>{$tt_color_off}/g"
     end
@@ -153,9 +153,9 @@ end
 function tt_separator_line
     printf "%{$COLUMNS}s" ' ' | tr ' ' -
 end
-function tt_list_test  # $1=normal|list|ok|fail
+function tt_list_test  # $argv[1]=normal|list|ok|fail
     # Show the test command in normal mode, --list and --list-run
-    switch "$1"
+    switch $argv[1]
         case normal list
             # Normal line, no color, no stamp (--list)
             tt_message "#{$tt_test_number}{$tt_tab}{$tt_test_command}"
@@ -175,7 +175,7 @@ function tt_list_test  # $1=normal|list|ok|fail
             end
     end
 end
-function tt_parse_range  # $1=range
+function tt_parse_range  # $argv[1]=range
     # Parse numeric ranges and output them in an expanded format
     #
     #     Supported formats             Expanded
@@ -188,7 +188,7 @@ function tt_parse_range  # $1=range
     #     Reverse ranges and repeated/unordered numbers are ok.
     #     Later we will just grep for :number: in each test.
 
-    switch "$1"
+    switch $argv[1]
         case 0 ''
             # No range, nothing to do
             return 0
@@ -206,7 +206,7 @@ function tt_parse_range  # $1=range
     set -g tt_range_data ':'   # :1:2:4:7:
 
     # Loop each component: a number or a range
-    for tt_part in (echo "$1" | tr , ' ')
+    for tt_part in (echo $argv[1] | tr , ' ')
         # If there's an hyphen, it's a range
         switch "$tt_part"
             case *-*
@@ -439,8 +439,8 @@ end
 ### Init process
 
 # Handle command line options
-while string match -qr '^-' $1
-    switch "$1"
+while string match -qr '^-' $argv[1]
+    switch $argv[1]
         case -1 --first
             shift
             set -g tt_stop_on_first_fail 1
@@ -455,44 +455,44 @@ while string match -qr '^-' $1
             set -g tt_output_mode 'quiet'
         case -t --test
             shift
-            set -g tt_run_range "$1"
+            set -g tt_run_range $argv[1]
             shift
         case -s --skip
             shift
-            set -g tt_skip_range "$1"
+            set -g tt_skip_range $argv[1]
             shift
         case --pre-flight
             shift
-            set -g tt_pre_command "$1"
+            set -g tt_pre_command $argv[1]
             shift
         case --post-flight
             shift
-            set -g tt_post_command "$1"
+            set -g tt_post_command $argv[1]
             shift
         case -P --progress
             shift
-            set -g tt_progress "$1"
+            set -g tt_progress $argv[1]
             set -g tt_output_mode 'normal'
             shift
         case --color --colour
             shift
-            set -g tt_color_mode "$1"
+            set -g tt_color_mode $argv[1]
             shift
         case --diff-options
             shift
-            set -g tt_diff_options "$1"
+            set -g tt_diff_options $argv[1]
             shift
         case --inline-prefix
             shift
-            set -g tt_inline_prefix "$1"
+            set -g tt_inline_prefix $argv[1]
             shift
         case --prefix
             shift
-            set -g tt_prefix "$1"
+            set -g tt_prefix $argv[1]
             shift
         case --prompt
             shift
-            set -g tt_prompt "$1"
+            set -g tt_prompt $argv[1]
             shift
         case -h --help
             printf '%s\n' "$tt_my_help"
@@ -512,7 +512,7 @@ while string match -qr '^-' $1
             # Argument - means "read test file from STDIN"
             break
         case '*'
-            tt_error "invalid option $1"
+            tt_error "invalid option $argv[1]"
     end
 end
 
@@ -724,7 +724,7 @@ if test $tt_nr_files -gt 1 && test "$tt_output_mode" != 'quiet'
     echo
     printf '  %5s %5s %5s\n' ok fail skip
     printf %s "$tt_files_stats" | while read -r ok fail skip
-        printf '  %5s %5s %5s    %s\n' "$ok" "$fail" "$skip" "$1"
+        printf '  %5s %5s %5s    %s\n' "$ok" "$fail" "$skip" $argv[1]
         shift
     end | sed 's/     0/     -/g'  # hide zeros
     echo
