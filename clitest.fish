@@ -21,7 +21,7 @@
 #   All variables and functions in this script are prefixed by 'tt_' to
 #   avoid clashing with test's variables, functions, aliases and commands.
 
-set -g tt_my_name (basename "$0")
+set -g tt_my_name (basename (status -f))
 set -g tt_my_url 'https://github.com/aureliojargas/clitest'
 set -g tt_my_version 'dev'
 
@@ -109,10 +109,6 @@ set -g tt_missing_nl 0
 set -g tt_tab '	'
 set -g tt_nl '
 '
-
-
-echo $tt_my_help
-exit 0
 
 ### Utilities
 
