@@ -229,7 +229,7 @@ function tt_parse_range  # $1=range
                     set -g tt_n1 (math $tt_n1 + 1)
                     set -g tt_part $tt_part$tt_n1:
                 end
-                set -g tt_part ${tt_part%:}
+                set -g tt_part (string replace --regex ':$' '' $tt_part)
         end
 
         # Append the number or expanded range to the holder
@@ -254,7 +254,7 @@ function tt_run_test
     set -g tt_nr_file_tests (math $tt_nr_file_tests + 1)
 
     # Run range on: skip this test if it's not listed in $tt_run_range_data
-    if test -n "$tt_run_range_data" && test "$tt_run_range_data" = "${tt_run_range_data#*:$tt_test_number:}"
+    if test -n "$tt_run_range_data" && string match -qve ":$tt_test_number:" "$tt_run_range_data"
         set -g tt_nr_total_skips (math $tt_nr_total_skips + 1)
         set -g tt_nr_file_skips (math $tt_nr_file_skips + 1)
         tt_reset_test_data
@@ -263,7 +263,7 @@ function tt_run_test
 
     # Skip range on: skip this test if it's listed in $tt_skip_range_data
     # Note: --skip always wins over --test, regardless of order
-    if test -n "$tt_skip_range_data" && test "$tt_skip_range_data" != "${tt_skip_range_data#*:$tt_test_number:}"
+    if test -n "$tt_skip_range_data" && string match -qe ":$tt_test_number:" "$tt_skip_range_data"
         set -g tt_nr_total_skips (math $tt_nr_total_skips + 1)
         set -g tt_nr_file_skips (math $tt_nr_file_skips + 1)
         tt_reset_test_data
@@ -358,7 +358,7 @@ function tt_process_test_file
 
         switch "$tt_input_line"
 
-            case "$tt_prefix$tt_prompt" "$tt_prefix${tt_prompt% }" "$tt_prefix$tt_prompt "
+            case "$tt_prefix$tt_prompt" $tt_prefix(string replace --regex ' $' '' $tt_prompt) "$tt_prefix$tt_prompt "
                 # Prompt alone: closes previous command line (if any)
 
                 tt_debug 'LINE_$' "$tt_input_line"
@@ -375,7 +375,11 @@ function tt_process_test_file
                 test -n "$tt_test_command" && tt_run_test
 
                 # Remove the prompt
-                set -g tt_test_command "${tt_input_line#"$tt_prefix$tt_prompt"}"
+                set -g tt_test_command (
+                    string replace --regex ^(
+                        string escape --style=regex $tt_prefix$tt_prompt
+                    ) '' $tt_input_line
+                )
 
                 # Save the test's line number for future messages
                 set -g tt_test_line_number $tt_line_number
@@ -395,7 +399,7 @@ function tt_process_test_file
                 test -n "$tt_test_command" || continue
 
                 # Required prefix is missing: we just left a command block
-                if test -n "$tt_prefix" && test "${tt_input_line#"$tt_prefix"}" = "$tt_input_line"
+                if test -n "$tt_prefix" && string match -qve $tt_prefix $tt_input_line
                     tt_debug BLOCK_OUT "$tt_input_line"
 
                     # Run the pending test and we're done in this line
@@ -404,9 +408,17 @@ function tt_process_test_file
                 end
 
                 # This line is a test output, save it (without prefix)
-                set -g tt_test_ok_text "$tt_test_ok_text${tt_input_line#"$tt_prefix"}$tt_nl"
+                set -g tt_test_ok_text $tt_test_ok_text(
+                    string replace --regex ^(
+                        string escape --style=regex $tt_prefix
+                    ) '' $tt_input_line
+                )$tt_nl
 
-                tt_debug OK_TEXT "${tt_input_line#"$tt_prefix"}"
+                tt_debug OK_TEXT (
+                    string replace --regex ^(
+                        string escape --style=regex $tt_prefix
+                    ) '' $tt_input_line
+                )
         end
     end < "$tt_temp_file"
 
@@ -420,19 +432,14 @@ function tt_make_temp_dir
     # http://mywiki.wooledge.org/BashFAQ/062
 
     # Prefer mktemp when available
-    set -g tt_temp_dir (mktemp -d "${TMPDIR:-/tmp}/clitest.XXXXXX" 2> /dev/null) && return 0
-
-    # No mktemp, let's create the dir manually
-    # shellcheck disable=SC2015
-    set -g tt_temp_dir "${TMPDIR:-/tmp}/clitest.$(awk 'BEGIN { srand(); print rand() }').$$" &&
-        mkdir -m 700 "$tt_temp_dir" ||
-        tt_error "cannot create temporary dir: $tt_temp_dir"
+    test -n $TMPDIR && set TMPDIR /tmp
+    set -g tt_temp_dir (mktemp -d "$TMPDIR/clitest.XXXXXX" 2> /dev/null)
 end
 
 ### Init process
 
 # Handle command line options
-while test "${1#-}" != "$1"
+while string match -qr '^-' $1
     switch "$1"
         case -1 --first
             shift
@@ -510,7 +517,7 @@ while test "${1#-}" != "$1"
 end
 
 # Command line options consumed, now it's just the files
-set -g tt_nr_files $#
+set -g tt_nr_files (count $argv)
 
 # No files?
 if test $tt_nr_files -eq 0
@@ -580,8 +587,8 @@ end
 # The COLUMNS env var is set by Bash (must be exported in ~/.bashrc).
 # In other shells, try to use 'tput cols' (not POSIX).
 # If not, defaults to 50 columns, a conservative amount.
-: ${COLUMNS:=$(tput cols 2> /dev/null)}
-: "${COLUMNS:=50}"
+test -n $COLUMNS && set COLUMNS (tput cols 2> /dev/null)
+test -n $COLUMNS && set COLUMNS 50
 
 # Parse and validate --test option value, if informed
 set -g tt_run_range_data (tt_parse_range "$tt_run_range")
