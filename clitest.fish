@@ -118,7 +118,7 @@ end
 function tt_message
     test "$tt_output_mode" = 'quiet' && return 0
     test $tt_missing_nl -eq 1 && echo
-    printf '%s\n' "$argv"
+    printf '%s\n' $argv
     set -g tt_separator_line_shown 0
     set -g tt_missing_nl 0
 end
@@ -135,13 +135,16 @@ function tt_error
 end
 function tt_debug  # $argv[1]=id, $argv[2]=contents
     test $tt_debug -ne 1 && return 0
+    # printf -- "@@@%s" "$argv"
     if test INPUT_LINE = $argv[1]
         # Original input line is all cyan and preceded by separator line
         printf -- "$tt_color_cyan%s$tt_color_off\n" (tt_separator_line)
         printf -- "$tt_color_cyan-- %10s[%s]$tt_color_off\n" $argv[1] $argv[2]
     else
+        set name $argv[1]
+        set --erase argv[1]
         # Highlight tabs and the (last) inline prefix
-        printf -- "$tt_color_cyan-- %10s[$tt_color_off%s$tt_color_cyan]$tt_color_off\n" $argv[1] $argv[2] |
+        printf -- "$tt_color_cyan-- %10s[$tt_color_off%s$tt_color_cyan]$tt_color_off\n" $name "$argv" |
             sed "/LINE_CMD/ s/\(.*\)\($tt_inline_prefix\)/\1$tt_color_red\2$tt_color_off/" |
             sed "s/$tt_tab/$tt_color_green<tab>$tt_color_off/g"
     end
@@ -289,15 +292,18 @@ function tt_run_test
     tt_debug EVAL "$tt_test_command"
 
     # Execute the test command, saving output (STDOUT and STDERR)
-    eval "$tt_test_command" > "$tt_test_output_file" 2>&1 < /dev/null
+    eval $tt_test_command > $tt_test_output_file 2>&1 < /dev/null
     set -g tt_test_exit_code $status
 
-    tt_debug OUTPUT (cat "$tt_test_output_file")
+    tt_debug EXIT "$tt_test_exit_code"
+    tt_debug OKOK "$tt_test_ok_text"
+    tt_debug OUTPUT (cat $tt_test_output_file)
 
     # The command output matches the expected output?
     switch $tt_test_mode
         case output
-            printf %s "$tt_test_ok_text" > "$tt_test_ok_file"
+            # printf %s "$tt_test_ok_text" > "$tt_test_ok_file"
+            printf "%s\n" $tt_test_ok_text > $tt_test_ok_file
             set -g tt_test_diff (diff $tt_diff_options "$tt_test_ok_file" "$tt_test_output_file")
             set -g tt_test_status $status
         case '*'
@@ -320,7 +326,7 @@ function tt_run_test
                 tt_message $tt_color_red(tt_separator_line)$tt_color_off
             end
             tt_message $tt_color_red'[FAILED #'$tt_test_number', line '$tt_test_line_number'] '$tt_test_command$tt_color_off
-            tt_message "$tt_test_diff" | sed '1 { /^--- / { N; /\n+++ /d; }; }'  # no ---/+++ headers
+            tt_message $tt_test_diff | sed '1 { /^--- / { N; /\n+++ /d; }; }'  # no ---/+++ headers
             tt_message $tt_color_red(tt_separator_line)$tt_color_off
             set -g tt_separator_line_shown 1
         end
@@ -403,17 +409,17 @@ function tt_process_test_file
                 end
 
                 # This line is a test output, save it (without prefix)
-                set -g tt_test_ok_text $tt_test_ok_text(
-                    string replace --regex '^'(
-                        string escape --style=regex $tt_prefix
-                    ) '' $tt_input_line
-                )$tt_nl
+                # set -g tt_test_ok_text $tt_test_ok_text(
+                #     string sub --start (math 1 + (string length $tt_prefix)) $tt_input_line
+                # )$tt_nl
+                set -ga tt_test_ok_text (
+                    string sub --start (math 1 + (string length $tt_prefix)) $tt_input_line
+                )
 
                 tt_debug OK_TEXT (
-                    string replace --regex '^'(
-                        string escape --style=regex $tt_prefix
-                    ) '' $tt_input_line
+                    string sub --start (math 1 + (string length $tt_prefix)) $tt_input_line
                 )
+                tt_debug OK_TEXT2 $tt_test_ok_text
         end
     end < "$tt_temp_file"
 
