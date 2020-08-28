@@ -143,7 +143,7 @@ function tt_debug  # $argv[1]=id, $argv[2]=contents
         # Highlight tabs and the (last) inline prefix
         printf -- "$tt_color_cyan-- %10s[$tt_color_off%s$tt_color_cyan]$tt_color_off\n" $argv[1] $argv[2] |
             sed "/LINE_CMD/ s/\(.*\)\($tt_inline_prefix\)/\1$tt_color_red\2$tt_color_off/" |
-            sed "s/$tt_tab/{$tt_color_green<tab>$tt_color_off/g"
+            sed "s/$tt_tab/$tt_color_green<tab>$tt_color_off/g"
     end
 end
 function tt_separator_line
@@ -154,20 +154,20 @@ function tt_list_test  # $argv[1]=normal|list|ok|fail
     switch $argv[1]
         case normal list
             # Normal line, no color, no stamp (--list)
-            tt_message "#{$tt_test_number}{$tt_tab}{$tt_test_command}"
+            tt_message "#$tt_test_number$tt_tab$tt_test_command"
         case ok
             # Green line or OK stamp (--list-run)
             if test $tt_use_colors -eq 1
-                tt_message "$tt_color_green#{$tt_test_number}{$tt_tab}{$tt_test_command}$tt_color_off"
+                tt_message "$tt_color_green#$tt_test_number$tt_tab$tt_test_command$tt_color_off"
             else
-                tt_message "#{$tt_test_number}{$tt_tab}OK{$tt_tab}{$tt_test_command}"
+                tt_message '#'$tt_test_number$tt_tab'OK'$tt_tab$tt_test_command
             end
         case fail
             # Red line or FAIL stamp (--list-run)
             if test $tt_use_colors -eq 1
-                tt_message "$tt_color_red#{$tt_test_number}{$tt_tab}{$tt_test_command}$tt_color_off"
+                tt_message "$tt_color_red#$tt_test_number$tt_tab$tt_test_command$tt_color_off"
             else
-                tt_message "#{$tt_test_number}{$tt_tab}FAIL{$tt_tab}{$tt_test_command}"
+                tt_message '#'$tt_test_number$tt_tab'FAIL'$tt_tab$tt_test_command
             end
     end
 end
@@ -527,7 +527,7 @@ switch "$tt_prefix"
         set -g tt_prefix ''
     case 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20  # XXX [1-9] [1-9][0-9]  # 1-99 not supported
         # convert number to spaces: 2 => '  '
-        set -g tt_prefix (printf "%{$tt_prefix}s" ' ')
+        set -g tt_prefix (string repeat -n $tt_prefix ' ')
     case '*\\*'
         set -g tt_prefix (printf %b "$tt_prefix")  # expand \t and others
 end
