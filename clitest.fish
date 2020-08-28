@@ -346,9 +346,8 @@ function tt_process_test_file
     set -g tt_test_line_number 0
 
     # Loop for each line of input file
-    # Note: changing IFS to avoid right-trimming of spaces/tabs
-    # Note: read -r to preserve the backslashes
-    while IFS='' read -r tt_input_line || test -n "$tt_input_line"
+    # Note: fish 'read' preserve backslashes and do not trim whitespace
+    while read tt_input_line || test -n "$tt_input_line"
         set -g tt_line_number (math $tt_line_number + 1)
         tt_debug INPUT_LINE "$tt_input_line"
 
@@ -719,7 +718,7 @@ end
 if test $tt_nr_files -gt 1 && test "$tt_output_mode" != 'quiet'
     echo
     printf '  %5s %5s %5s\n' ok fail skip
-    printf %s "$tt_files_stats" | while read -r ok fail skip
+    printf %s "$tt_files_stats" | while read ok fail skip
         printf '  %5s %5s %5s    %s\n' "$ok" "$fail" "$skip" $argv[1]
         shift
     end | sed 's/     0/     -/g'  # hide zeros
