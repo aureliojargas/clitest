@@ -188,7 +188,7 @@ function tt_parse_range  # $argv[1]=range
         case 0 ''
             # No range, nothing to do
             return 0
-        case *[!0-9,-]*
+        case *[!0-9,-]*  # XXX not supported
             # Error: strange chars, not 0123456789,-
             return 1
     end
@@ -526,10 +526,10 @@ switch "$tt_prefix"
         set -g tt_prefix "$tt_tab"
     case 0
         set -g tt_prefix ''
-    case [1-9] [1-9][0-9]  # 1-99
+    case 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20  # XXX [1-9] [1-9][0-9]  # 1-99 not supported
         # convert number to spaces: 2 => '  '
         set -g tt_prefix (printf "%{$tt_prefix}s" ' ')
-    case *\\*
+    case '*\\*'
         set -g tt_prefix (printf %b "$tt_prefix")  # expand \t and others
 end
 
@@ -538,13 +538,13 @@ if test "$tt_output_mode" = 'normal'
     switch "$tt_progress"
         case test
             :
-        case number n [0-9]
+        case number n   # [0-9] not supported
             set -g tt_progress 'number'
         case dot .
             set -g tt_progress '.'
         case none no
             set -g tt_progress 'none'
-        case ?  # Single char, use it as the progress
+        case '?'  # Single char, use it as the progress
             :
         case '*'
             tt_error "invalid value '$tt_progress' for --progress. Use: test, number, dot or none."
