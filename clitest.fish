@@ -137,17 +137,17 @@ function tt_debug  # $argv[1]=id, $argv[2]=contents
     test $tt_debug -ne 1 && return 0
     if test INPUT_LINE = $argv[1]
         # Original input line is all cyan and preceded by separator line
-        printf -- "{$tt_color_cyan}%s{$tt_color_off}\n" (tt_separator_line)
-        printf -- "{$tt_color_cyan}-- %10s[%s]{$tt_color_off}\n" $argv[1] $argv[2]
+        printf -- "$tt_color_cyan%s$tt_color_off\n" (tt_separator_line)
+        printf -- "$tt_color_cyan-- %10s[%s]$tt_color_off\n" $argv[1] $argv[2]
     else
         # Highlight tabs and the (last) inline prefix
-        printf -- "{$tt_color_cyan}-- %10s[{$tt_color_off}%s{$tt_color_cyan}]{$tt_color_off}\n" $argv[1] $argv[2] |
-            sed "/LINE_CMD/ s/\(.*\)\($tt_inline_prefix\)/\1{$tt_color_red}\2{$tt_color_off}/" |
-            sed "s/$tt_tab/{$tt_color_green}<tab>{$tt_color_off}/g"
+        printf -- "$tt_color_cyan-- %10s[$tt_color_off%s$tt_color_cyan]$tt_color_off\n" $argv[1] $argv[2] |
+            sed "/LINE_CMD/ s/\(.*\)\($tt_inline_prefix\)/\1$tt_color_red\2$tt_color_off/" |
+            sed "s/$tt_tab/{$tt_color_green<tab>$tt_color_off/g"
     end
 end
 function tt_separator_line
-    printf "%{$COLUMNS}s" ' ' | tr ' ' -
+    string repeat -n $COLUMNS -- -
 end
 function tt_list_test  # $argv[1]=normal|list|ok|fail
     # Show the test command in normal mode, --list and --list-run
@@ -158,14 +158,14 @@ function tt_list_test  # $argv[1]=normal|list|ok|fail
         case ok
             # Green line or OK stamp (--list-run)
             if test $tt_use_colors -eq 1
-                tt_message "{$tt_color_green}#{$tt_test_number}{$tt_tab}{$tt_test_command}{$tt_color_off}"
+                tt_message "$tt_color_green#{$tt_test_number}{$tt_tab}{$tt_test_command}$tt_color_off"
             else
                 tt_message "#{$tt_test_number}{$tt_tab}OK{$tt_tab}{$tt_test_command}"
             end
         case fail
             # Red line or FAIL stamp (--list-run)
             if test $tt_use_colors -eq 1
-                tt_message "{$tt_color_red}#{$tt_test_number}{$tt_tab}{$tt_test_command}{$tt_color_off}"
+                tt_message "$tt_color_red#{$tt_test_number}{$tt_tab}{$tt_test_command}$tt_color_off"
             else
                 tt_message "#{$tt_test_number}{$tt_tab}FAIL{$tt_tab}{$tt_test_command}"
             end
@@ -317,11 +317,11 @@ function tt_run_test
         else
             # Normal mode: show FAILED message and the diff
             if test $tt_separator_line_shown -eq 0 # avoid dups
-                tt_message {$tt_color_red}(tt_separator_line){$tt_color_off}
+                tt_message $tt_color_red(tt_separator_line)$tt_color_off
             end
-            tt_message "{$tt_color_red}[FAILED #$tt_test_number, line $tt_test_line_number] $tt_test_command{$tt_color_off}"
+            tt_message "$tt_color_red[FAILED #$tt_test_number, line $tt_test_line_number] $tt_test_command$tt_color_off"
             tt_message "$tt_test_diff" | sed '1 { /^--- / { N; /\n+++ /d; }; }'  # no ---/+++ headers
-            tt_message {$tt_color_red}(tt_separator_line){$tt_color_off}
+            tt_message $tt_color_red(tt_separator_line)$tt_color_off
             set -g tt_separator_line_shown 1
         end
 
@@ -735,7 +735,7 @@ if test $tt_nr_total_skips -gt 0
     set skips " ($tt_nr_total_skips skipped)"
 end
 if test $tt_nr_total_fails -eq 0
-    set stamp "{$tt_color_green}OK:{$tt_color_off}"
+    set stamp $tt_color_green'OK:'$tt_color_off
     set stats (math $tt_nr_total_tests - $tt_nr_total_skips)' of $tt_nr_total_tests tests passed'
     test $tt_nr_total_tests -eq 1 && set stats (echo "$stats" | sed 's/tests /test /')
     tt_message "$stamp $stats$skips"
@@ -743,7 +743,7 @@ if test $tt_nr_total_fails -eq 0
 else
     test $tt_nr_files -eq 1 && tt_message  # separate from previous FAILED message
 
-    set stamp "{$tt_color_red}FAIL:{$tt_color_off}"
+    set stamp $tt_color_red'FAIL:'$tt_color_off
     set stats "$tt_nr_total_fails of $tt_nr_total_tests tests failed"
     test $tt_nr_total_tests -eq 1 && set stats (echo "$stats" | sed 's/tests /test /')
     tt_message "$stamp $stats$skips"
