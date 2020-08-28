@@ -437,58 +437,58 @@ end
 while string match -qr -- '^-' $argv[1]
     switch $argv[1]
         case -1 --first
-            shift
+            set --erase argv[1]
             set -g tt_stop_on_first_fail 1
         case -l --list
-            shift
+            set --erase argv[1]
             set -g tt_output_mode 'list'
         case -L --list-run
-            shift
+            set --erase argv[1]
             set -g tt_output_mode 'list-run'
         case -q --quiet
-            shift
+            set --erase argv[1]
             set -g tt_output_mode 'quiet'
         case -t --test
-            shift
+            set --erase argv[1]
             set -g tt_run_range $argv[1]
-            shift
+            set --erase argv[1]
         case -s --skip
-            shift
+            set --erase argv[1]
             set -g tt_skip_range $argv[1]
-            shift
+            set --erase argv[1]
         case --pre-flight
-            shift
+            set --erase argv[1]
             set -g tt_pre_command $argv[1]
-            shift
+            set --erase argv[1]
         case --post-flight
-            shift
+            set --erase argv[1]
             set -g tt_post_command $argv[1]
-            shift
+            set --erase argv[1]
         case -P --progress
-            shift
+            set --erase argv[1]
             set -g tt_progress $argv[1]
             set -g tt_output_mode 'normal'
-            shift
+            set --erase argv[1]
         case --color --colour
-            shift
+            set --erase argv[1]
             set -g tt_color_mode $argv[1]
-            shift
+            set --erase argv[1]
         case --diff-options
-            shift
+            set --erase argv[1]
             set -g tt_diff_options $argv[1]
-            shift
+            set --erase argv[1]
         case --inline-prefix
-            shift
+            set --erase argv[1]
             set -g tt_inline_prefix $argv[1]
-            shift
+            set --erase argv[1]
         case --prefix
-            shift
+            set --erase argv[1]
             set -g tt_prefix $argv[1]
-            shift
+            set --erase argv[1]
         case --prompt
-            shift
+            set --erase argv[1]
             set -g tt_prompt $argv[1]
-            shift
+            set --erase argv[1]
         case -h --help
             printf '%s\n' "$tt_my_help"
             exit 0
@@ -497,11 +497,11 @@ while string match -qr -- '^-' $argv[1]
             exit 0
         case --debug
             # Undocumented dev-only option
-            shift
+            set --erase argv[1]
             set -g tt_debug 1
         case --
             # No more options to process
-            shift
+            set --erase argv[1]
             break
         case -
             # Argument - means "read test file from STDIN"
@@ -720,7 +720,7 @@ if test $tt_nr_files -gt 1 && test "$tt_output_mode" != 'quiet'
     printf '  %5s %5s %5s\n' ok fail skip
     printf %s "$tt_files_stats" | while read ok fail skip
         printf '  %5s %5s %5s    %s\n' "$ok" "$fail" "$skip" $argv[1]
-        shift
+        set --erase argv[1]
     end | sed 's/     0/     -/g'  # hide zeros
     echo
 end
