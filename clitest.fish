@@ -319,7 +319,7 @@ function tt_run_test
             if test $tt_separator_line_shown -eq 0 # avoid dups
                 tt_message $tt_color_red(tt_separator_line)$tt_color_off
             end
-            tt_message "$tt_color_red[FAILED #$tt_test_number, line $tt_test_line_number] $tt_test_command$tt_color_off"
+            tt_message $tt_color_red'[FAILED #'$tt_test_number', line '$tt_test_line_number'] '$tt_test_command$tt_color_off
             tt_message "$tt_test_diff" | sed '1 { /^--- / { N; /\n+++ /d; }; }'  # no ---/+++ headers
             tt_message $tt_color_red(tt_separator_line)$tt_color_off
             set -g tt_separator_line_shown 1
@@ -371,7 +371,7 @@ function tt_process_test_file
 
                 # Remove the prompt
                 set -g tt_test_command (
-                    string replace --regex ^(
+                    string replace --regex '^'(
                         string escape --style=regex $tt_prefix$tt_prompt
                     ) '' $tt_input_line
                 )
@@ -404,13 +404,13 @@ function tt_process_test_file
 
                 # This line is a test output, save it (without prefix)
                 set -g tt_test_ok_text $tt_test_ok_text(
-                    string replace --regex ^(
+                    string replace --regex '^'(
                         string escape --style=regex $tt_prefix
                     ) '' $tt_input_line
                 )$tt_nl
 
                 tt_debug OK_TEXT (
-                    string replace --regex ^(
+                    string replace --regex '^'(
                         string escape --style=regex $tt_prefix
                     ) '' $tt_input_line
                 )
