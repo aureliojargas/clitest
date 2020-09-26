@@ -465,6 +465,9 @@ automatically tested in the CI, using the following shells:
 - sh (busybox)
 - zsh
 
+> Fish shell is not supported (it's not POSIX), but you 
+> can use [doctest.fish][27] instead.
+
 Portability issues are considered serious bugs, please
 [report them][14]!
 
@@ -517,3 +520,4 @@ No other language or environment involved.
 [24]: https://github.com/funcoeszz/funcoeszz/tree/master/testador
 [25]: https://linux.die.net/man/1/checkbashisms
 [26]: https://www.shellcheck.net/
+[27]: https://github.com/aureliojargas/doctest.fish
