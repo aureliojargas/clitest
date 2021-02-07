@@ -1,0 +1,68 @@
+variables:
+    ^( *)([^ ]+)=(.*?)( *#.*)?$
+    $1set -g $2 $3$4
+
+$((...))
+    \$\(\((.*?)\)\)
+    (math $1)
+    add $ manually to all inner variables
+    (math.* )tt_
+    $1$tt_
+
+subshell $(...)
+    \$\((.*?)\)
+    ($1)
+
+case
+    case (.*) in
+    switch $1
+
+    esac
+    end
+
+    ^( *)([^ ][^)]+)\)$
+    $1case $2
+
+    ^( *case .* )\|
+    $1
+
+    ^( *)\*\)
+    $1case '*'
+
+${var} -> {$var}
+    \$\{(.*?)\}
+    {$$$1}
+
+if
+    ; then
+    -nothing-
+
+    fi
+    end
+
+$?
+$status
+
+for/while
+((for|while) .*); do$
+$1
+
+done
+end
+
+function
+    ^(.+)\(\) \{( #.*)?$
+    function $1 $2
+
+    ^\}$
+    end
+
+$@
+$*
+$argv
+
+"$1"
+$argv[1]
+
+shift
+set --erase argv[1]

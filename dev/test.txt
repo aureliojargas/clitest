@@ -1,0 +1,42 @@
+    > set foo 1
+    > echo "foo:$foo"
+    foo:1
+    > set str foo
+    > string length -q $str; echo $status
+    0
+    > echo (string repeat -n 2 'foo ')x
+    foo foo x
+    > set str foo
+    > string length -q $str; echo $status
+    0
+    > commandline -t
+    > string match -r '^(\w{2,4})\1$' papa mud murmur
+    papa2
+    pa
+    murmur
+    mur
+    > string match -r -i '0x[0-9a-f]{1,8}' 'int magic = 0xBadC0de;'
+    0xBadC0de
+    > cd /tmp/banana/sausage/with/mustard
+    > prompt_pwd
+    /t/b/s/w/mustard
+    > #OFF cd -  # The directory '-' does not exist
+
+index.rst:
+    > echo {good,bad}" apples"
+    good apples bad apples
+
+    > set -l a x y z
+    > set -l b 1 2 3
+
+    > echo $a$b
+    x1 y1 z1 x2 y2 z2 x3 y3 z3
+
+    > echo $a"-"$b
+    x-1 y-1 z-1 x-2 y-2 z-2 x-3 y-3 z-3
+
+    > echo {x,y,z}$b
+    x1 y1 z1 x2 y2 z2 x3 y3 z3
+
+    > echo {$b}word
+    1word 2word 3word
