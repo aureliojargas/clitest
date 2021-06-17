@@ -9,7 +9,7 @@
 #    make test-bash docker_run=    # test using host's bash
 
 docker_image = clitest-dev
-docker_run = docker run --rm -it -v $$PWD:/mnt $(docker_image)
+docker_run = docker run --rm -t -v $$PWD:/mnt $(docker_image)
 test_cmd = ./clitest --first --progress none test.md
 
 default:
