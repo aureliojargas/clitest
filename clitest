@@ -912,7 +912,7 @@ fi
 if test $tt_nr_files -gt 1 && test "$tt_output_mode" != 'quiet'; then
     echo
     printf '  %5s %5s %5s\n' ok fail skip
-    printf %s "$tt_files_stats" | while read -r ok fail skip; do
+    printf %s "$tt_files_stats" | while IFS=' ' read -r ok fail skip; do
         printf '  %5s %5s %5s    %s\n' "$ok" "$fail" "$skip" "$1"
         shift
     done | sed 's/     0/     -/g'  # hide zeros
