@@ -1,0 +1,11 @@
+// For format details, see https://aka.ms/devcontainer.json
+{
+    "name": "clitest dev container",
+    "dockerFile": "Dockerfile.dev",
+    "context": ".",
+    // Use the Docker CLI from inside the container.
+    // See https://aka.ms/vscode-remote/samples/docker-from-docker
+    "mounts": [
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+    ]
+}
