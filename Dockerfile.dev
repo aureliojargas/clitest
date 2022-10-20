@@ -10,12 +10,13 @@
 FROM alpine:3.12
 
 # Perl is required by clitest's --regex matching mode
+# Fish, curl are required by my user's setup script
 RUN apk --no-cache add \
     bash dash mksh zsh \
     perl \
     make \
     checkbashisms shellcheck shfmt \
     git \
-    fish
+    fish curl
 
 WORKDIR /mnt
