@@ -1,5 +1,5 @@
-# Developer workflow: run locally the same commands Travis will run in
-# the CI. See the .travis.yml file for the list of commands.
+# Developer workflow: run locally the same commands the CI will run.
+# See the .github/workflows/check.yml file for the list of commands.
 #
 # By default, the linting and testing targets are run inside the
 # clitest-dev Docker container. To run them directly on the host,
