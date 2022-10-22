@@ -1,0 +1,18 @@
+// https://aka.ms/devcontainer.json
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.245.2/containers/ubuntu
+{
+    "name": "Shell and Python dev tools (Ubuntu)",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    // https://github.com/devcontainers/features/tree/main/src
+    "features": {
+        "docker-in-docker": "latest",
+        "fish": "latest",
+        "github-cli": "latest",
+        "python": "latest",
+        "sshd": "latest"
+    },
+    // https://aka.ms/vscode-remote/containers/non-root
+    "remoteUser": "vscode"
+}
