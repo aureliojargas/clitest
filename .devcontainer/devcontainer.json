@@ -3,7 +3,7 @@
     "name": "Shell and Python dev tools (Ubuntu)",
     //
     // https://github.com/aureliojargas/devcontainer
-    "image": "ghcr.io/aureliojargas/devcontainer:latest",
+    "image": "ghcr.io/aureliojargas/devcontainer",
     //
     // https://aka.ms/vscode-remote/containers/non-root
     "remoteUser": "vscode",
