@@ -1,6 +1,6 @@
 // https://aka.ms/devcontainer.json
 {
-    "name": "Shell and Python dev tools (Ubuntu)",
+    "name": "clitest dev",
     //
     // https://github.com/aureliojargas/devcontainer
     "image": "ghcr.io/aureliojargas/devcontainer",
