@@ -42,7 +42,7 @@ $ printf ' \t  \t\t   \n'       #=> --egrep ^ 	  		   $
 # egrep regexes. You'll need to test in your system if that's the
 # case. I recommend using a literal tab to avoid problems.
 
-$ printf 'may\tfail'            #=> --egrep ^may\tfail$
+$ printf 'may\tfail'            #=> --egrep ^may\\tfail$
 $ printf 'may\tfail'            #=> --egrep ^may[\t]fail$
 $ printf 'will\tmatch'          #=> --egrep ^will	match$
 
@@ -51,7 +51,7 @@ $ printf 'will\tmatch'          #=> --egrep ^will	match$
 # These tests will fail:
 
 $ printf 'will\nfail'           #=> --egrep will.*fail
-$ printf 'will\nfail'           #=> --egrep will\nfail
+$ printf 'will\nfail'           #=> --egrep will\\nfail
 
 # If one line of a multiline results matches, the test is OK
 
