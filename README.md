@@ -264,7 +264,7 @@ $ pwd                         #=> --eval echo $PWD
   the contents of an external file. Useful to organize long/complex
   outputs into files.
 
-* Using `#=> --egrep` the test will pass if `egrep` matches at least
+* Using `#=> --egrep` the test will pass if `grep -E` matches at least
   one line of the command output.
 
 * Using `#=> --regex` the test will pass if the command output is

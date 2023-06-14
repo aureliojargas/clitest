@@ -1,12 +1,12 @@
 # Inline matching method: --egrep
 # Matches a egrep-style regular expression in the command output
 #
-# In fact, it's a real egrep match: eval $command | egrep 'regex'
-# If egrep matched, we have a successful test. That means that in
+# In fact, it's a real egrep match: eval $command | grep -E 'regex'
+# If grep matched, we have a successful test. That means that in
 # a multiline result, even if just a single line matches the regex,
 # the test is considered OK.
 #
-# Test your regexes with egrep at the command line before adding
+# Test your regexes with grep -E at the command line before adding
 # tests using them.
 
 # See man re_format in your system
