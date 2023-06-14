@@ -7,7 +7,7 @@
 # If you're searching for the official clitest Docker image (for users):
 # https://hub.docker.com/r/aureliojargas/clitest
 
-FROM alpine:3.12
+FROM alpine:3.18
 
 # Perl is required by clitest's --regex matching mode
 RUN apk --no-cache add \
