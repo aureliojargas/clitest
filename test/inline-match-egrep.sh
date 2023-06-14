@@ -18,7 +18,7 @@ $ echo 'abc123'                 #=> --egrep ^abc123$
 $ echo 'abc123'                 #=> --egrep ^abc.*3$
 $ echo 'abc123'                 #=> --egrep ^abc[0-9]+$
 
-# Omit one or both anchors to make a parcial match
+# Omit one or both anchors to make a partial match
 
 $ echo 'abc123'                 #=> --egrep ^abc
 $ echo 'abc123'                 #=> --egrep 123$
@@ -31,6 +31,7 @@ $ echo 'abc123'                 #=> --egrep .
 $ echo 'abc 123'                #=> --egrep ^abc [0-9]+$
 
 # Blank output can also be matched
+# (there are literal tabs in some of those --egrep arguments)
 
 $ echo ' '                      #=> --egrep ^ $
 $ echo '    '                   #=> --egrep ^    $
@@ -39,19 +40,17 @@ $ printf '\t\t\t\n'             #=> --egrep ^			$
 $ printf ' \t  \t\t   \n'       #=> --egrep ^ 	  		   $
 
 # In some systems, the special sequence \t is expanded to a tab in
-# egrep regexes. You'll need to test in your system if that's the
-# case. I recommend using a literal tab to avoid problems.
+# egrep regexes. In others, such as GNU grep >= 3.9, using \t (or \n)
+# won't work and warnings will be shown (see issue #53).
+# Use literal tabs to avoid problems.
 
-$ printf 'may\tfail'            #=> --egrep ^may\\tfail$
-$ printf 'may\tfail'            #=> --egrep ^may[\t]fail$
 $ printf 'will\tmatch'          #=> --egrep ^will	match$
 
 # Since it's an egrep test, regexes are not multiline.
 # You can only match a single line.
-# These tests will fail:
+# This test will fail:
 
 $ printf 'will\nfail'           #=> --egrep will.*fail
-$ printf 'will\nfail'           #=> --egrep will\\nfail
 
 # If one line of a multiline results matches, the test is OK
 

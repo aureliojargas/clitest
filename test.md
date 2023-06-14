@@ -1221,7 +1221,7 @@ $
 Mode #=> --egrep
 
 ```
-$ ./clitest --list-run test/inline-match-egrep.sh | sed 's/^\(#1[56].\)[A-Z]*/\1?/'
+$ ./clitest --list-run test/inline-match-egrep.sh
 #1	OK	echo 'abc123'                 
 #2	OK	echo 'abc123'                 
 #3	OK	echo 'abc123'                 
@@ -1236,20 +1236,17 @@ $ ./clitest --list-run test/inline-match-egrep.sh | sed 's/^\(#1[56].\)[A-Z]*/\1
 #12	OK	printf '\t\n'                 
 #13	OK	printf '\t\t\t\n'             
 #14	OK	printf ' \t  \t\t   \n'       
-#15	?	printf 'may\tfail'            
-#16	?	printf 'may\tfail'            
-#17	OK	printf 'will\tmatch'          
-#18	FAIL	printf 'will\nfail'           
-#19	FAIL	printf 'will\nfail'           
-#20	OK	printf '1\n2\n3\n4\nok\n'     
-#21	OK	printf 'ok'                   
-#22	OK	printf 'ok\n'                 
-#23	FAIL	echo 'fail'                   
-#24	FAIL	echo 'fail'                   
-#25	OK	echo ' ok'                    
-#26	OK	echo '--egrep'                
-#27	OK	echo '--egreppal'             
-#28	OK	echo '--egrep is cool'        
+#15	OK	printf 'will\tmatch'          
+#16	FAIL	printf 'will\nfail'           
+#17	OK	printf '1\n2\n3\n4\nok\n'     
+#18	OK	printf 'ok'                   
+#19	OK	printf 'ok\n'                 
+#20	FAIL	echo 'fail'                   
+#21	FAIL	echo 'fail'                   
+#22	OK	echo ' ok'                    
+#23	OK	echo '--egrep'                
+#24	OK	echo '--egreppal'             
+#25	OK	echo '--egrep is cool'        
 $
 ```
 
