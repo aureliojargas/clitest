@@ -113,6 +113,7 @@ tt_nl='
 
 ### Utilities
 
+# shellcheck disable=SC2317 # Function is reachable (invoked by a trap)
 tt_clean_up() {
     test -n "$tt_temp_dir" && rm -rf "$tt_temp_dir"
 }
@@ -257,7 +258,7 @@ tt_run_test() {
     tt_nr_file_tests=$((tt_nr_file_tests + 1))
 
     # Run range on: skip this test if it's not listed in $tt_run_range_data
-    if test -n "$tt_run_range_data" && test "$tt_run_range_data" = "${tt_run_range_data#*:$tt_test_number:}"; then
+    if test -n "$tt_run_range_data" && test "$tt_run_range_data" = "${tt_run_range_data#*:"$tt_test_number":}"; then
         tt_nr_total_skips=$((tt_nr_total_skips + 1))
         tt_nr_file_skips=$((tt_nr_file_skips + 1))
         tt_reset_test_data
@@ -266,7 +267,7 @@ tt_run_test() {
 
     # Skip range on: skip this test if it's listed in $tt_skip_range_data
     # Note: --skip always wins over --test, regardless of order
-    if test -n "$tt_skip_range_data" && test "$tt_skip_range_data" != "${tt_skip_range_data#*:$tt_test_number:}"; then
+    if test -n "$tt_skip_range_data" && test "$tt_skip_range_data" != "${tt_skip_range_data#*:"$tt_test_number":}"; then
         tt_nr_total_skips=$((tt_nr_total_skips + 1))
         tt_nr_file_skips=$((tt_nr_file_skips + 1))
         tt_reset_test_data
@@ -311,17 +312,20 @@ tt_run_test() {
     case $tt_test_mode in
         output)
             printf %s "$tt_test_ok_text" > "$tt_test_ok_file"
+            # shellcheck disable=SC2086 # diff options should be split
             tt_test_diff=$(diff $tt_diff_options "$tt_test_ok_file" "$tt_test_output_file")
             tt_test_status=$?
             ;;
         text)
             # Inline OK text represents a full line, with \n
             printf '%s\n' "$tt_test_inline" > "$tt_test_ok_file"
+            # shellcheck disable=SC2086 # diff options should be split
             tt_test_diff=$(diff $tt_diff_options "$tt_test_ok_file" "$tt_test_output_file")
             tt_test_status=$?
             ;;
         eval)
             eval "$tt_test_inline" > "$tt_test_ok_file"
+            # shellcheck disable=SC2086 # diff options should be split
             tt_test_diff=$(diff $tt_diff_options "$tt_test_ok_file" "$tt_test_output_file")
             tt_test_status=$?
             ;;
@@ -342,6 +346,7 @@ tt_run_test() {
                 tt_error "cannot read inline output file '$tt_test_inline', from line $tt_line_number of $tt_test_file"
             fi
 
+            # shellcheck disable=SC2086 # diff options should be split
             tt_test_diff=$(diff $tt_diff_options "$tt_test_inline" "$tt_test_output_file")
             tt_test_status=$?
             ;;
