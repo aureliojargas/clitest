@@ -120,9 +120,9 @@ Test the output text and the short option `-V`.
 
 ```
 $ ./clitest --version
-clitest 0.5.0
+clitest dev
 $ ./clitest -V
-clitest 0.5.0
+clitest dev
 $
 ```
 
