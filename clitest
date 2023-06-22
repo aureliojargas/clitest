@@ -27,7 +27,7 @@
 
 tt_my_name="$(basename "$0")"
 tt_my_url='https://github.com/aureliojargas/clitest'
-tt_my_version='dev'
+tt_my_version='0.5.0'
 
 # Customization (if needed, edit here or use the command line options)
 tt_prefix=''
