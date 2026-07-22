@@ -47,6 +47,28 @@ docker run --rm -t aureliojargas/clitest --help
 ```
 
 
+## GitHub Actions
+
+This repository doubles as a GitHub Action, so a workflow does not have to
+download and install the script itself:
+
+```yaml
+      - uses: actions/checkout@v7
+      - uses: aureliojargas/clitest@main
+        with:
+          files: examples/intro.txt
+```
+
+clitest runs on the runner rather than in a container, so the test files can
+invoke anything the job has already built or installed.
+
+| Input               | Description                                               | Default      |
+| ------------------- | --------------------------------------------------------- | ------------ |
+| `files`             | Test file(s) to run. Whitespace-separated, globs allowed. | *(required)* |
+| `options`           | Extra clitest options, e.g. `--first --prefix tab`        | *(none)*     |
+| `working-directory` | Directory to run clitest from                             | `.`          |
+
+
 ## Quick Intro
 
 Save the commands and their expected output in a text file:
