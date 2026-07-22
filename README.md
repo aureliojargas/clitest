@@ -296,6 +296,7 @@ Options:
   -s, --skip RANGE            Skip specific tests, by number (1,2,4-7)
       --pre-flight COMMAND    Execute command before running the first test
       --post-flight COMMAND   Execute command after running the last test
+      --junit-xml FILE        Save results to FILE, in the JUnit XML format
   -q, --quiet                 Quiet operation, no output shown
   -V, --version               Show program version and exit
 
@@ -341,6 +342,25 @@ else
     # one or more tests failed :(
 fi
 ```
+
+
+## JUnit XML report
+
+Use `--junit-xml` to also save the results to a file in the JUnit XML
+format, which is understood by most CI servers (Jenkins, GitLab CI,
+GitHub Actions reporters, …):
+
+```bash
+clitest --quiet --junit-xml results.xml tests.txt
+```
+
+The report has one `<testsuite>` per input file and one `<testcase>` per
+test, identified by its number and command line. Failed tests carry the
+diff in a `<failure>` element, and the tests skipped by `--test` or
+`--skip` are marked with `<skipped/>`.
+
+The report is saved even when the execution is aborted by `--first`, so
+it always covers the tests that were run.
 
 
 ## Run specific tests

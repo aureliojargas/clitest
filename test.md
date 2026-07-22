@@ -142,6 +142,7 @@ Options:
   -s, --skip RANGE            Skip specific tests, by number (1,2,4-7)
       --pre-flight COMMAND    Execute command before running the first test
       --post-flight COMMAND   Execute command after running the last test
+      --junit-xml FILE        Save results to FILE, in the JUnit XML format
   -q, --quiet                 Quiet operation, no output shown
   -V, --version               Show program version and exit
 
@@ -2154,6 +2155,85 @@ clitest: Error: pre-flight command failed with status=1: false
 $ ./clitest --post-flight 'false' test/ok-1.sh; echo $?
 #1	echo ok
 clitest: Error: post-flight command failed with status=1: false
+2
+$
+```
+
+## Option --junit-xml
+
+One test suite per input file, one test case per test.
+
+```
+$ ./clitest --quiet --junit-xml /tmp/junit.xml --skip 2 test/ok-2.sh test/fail-1.sh; echo $?
+1
+$ cat /tmp/junit.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="test/ok-2.sh" tests="2" failures="0" errors="0" skipped="1">
+    <testcase classname="test/ok-2.sh" name="#1: echo ok"/>
+    <testcase classname="test/ok-2.sh" name="#2: echo ok  ">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="test/fail-1.sh" tests="1" failures="1" errors="0" skipped="0">
+    <testcase classname="test/fail-1.sh" name="#3: echo ok">
+      <failure message="Failed at line 1 of test/fail-1.sh">@@ -1 +1 @@
+-fail
++ok</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
+$
+```
+
+Aborting with `--first` still saves the report for the tests already run.
+
+```
+$ ./clitest --quiet --first --junit-xml /tmp/junit.xml test/fail-2.sh; echo $?
+1
+$ cat /tmp/junit.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="test/fail-2.sh" tests="1" failures="1" errors="0" skipped="0">
+    <testcase classname="test/fail-2.sh" name="#1: echo ok">
+      <failure message="Failed at line 1 of test/fail-2.sh">@@ -1 +1 @@
+-fail
++ok</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
+$
+```
+
+XML metachars are escaped and the chars forbidden in XML (such as the ESC
+in the command output below) are removed.
+
+```
+$ ./clitest --quiet --junit-xml /tmp/junit.xml test/junit-xml-chars.sh; echo $?
+1
+$ cat /tmp/junit.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="test/junit-xml-chars.sh" tests="1" failures="1" errors="0" skipped="0">
+    <testcase classname="test/junit-xml-chars.sh" name="#1: printf 'AT&amp;T &lt;b&gt;&quot;quoted&quot;&lt;/b&gt;\033[m\n'  ">
+      <failure message="Failed at line 3 of test/junit-xml-chars.sh">@@ -1 +1 @@
+-nope
++AT&amp;T &lt;b&gt;&quot;quoted&quot;&lt;/b&gt;[m</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
+$ rm /tmp/junit.xml
+$
+```
+
+Errors: no results to report with `--list`, and unwritable report file.
+
+```
+$ ./clitest --junit-xml /tmp/junit.xml --list test/ok-1.sh; echo $?
+clitest: Error: option --junit-xml cannot be used with --list
+2
+$ ./clitest --junit-xml /tmp/no/such/dir/junit.xml test/ok-1.sh; echo $?
+clitest: Error: cannot create JUnit XML file: /tmp/no/such/dir/junit.xml
 2
 $
 ```
