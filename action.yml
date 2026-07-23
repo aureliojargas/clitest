@@ -1,0 +1,33 @@
+# A composite action, not a Docker container action, so that clitest runs on
+# the runner itself and sees the same PATH, files and environment as the rest
+# of the job. Tests usually exercise something the workflow just built or
+# installed, which would be invisible from inside a container.
+name: clitest
+description: Test the Unix command lines documented in a file
+branding:
+  icon: check-square
+  color: green
+
+inputs:
+  files:
+    description: Test file(s) to run. Whitespace-separated, globs allowed.
+    required: true
+  options:
+    description: Extra clitest options, e.g. "--first --prefix tab"
+    required: false
+    default: ""
+  working-directory:
+    description: Directory to run clitest from
+    required: false
+    default: "."
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        clitest_files: ${{ inputs.files }}
+        clitest_options: ${{ inputs.options }}
+      # Unquoted on purpose: splits multiple options and files, expands globs
+      run: '"$GITHUB_ACTION_PATH/clitest" $clitest_options $clitest_files'
