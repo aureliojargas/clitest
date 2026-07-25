@@ -1,12 +1,13 @@
 # Developer workflow: run locally the same commands the CI will run.
 # See the .github/workflows/check.yml file for the list of commands.
 #
-# By default, the linting and testing targets are run inside the
-# clitest-dev Docker container. To run them directly on the host,
-# avoiding the container, unset the `docker_run` variable. Examples:
+# By default, the linting and testing targets are run inside the clitest-dev
+# Docker container, because they require many different tools and shells to be
+# installed. If you have these in your system, skip the container by unsetting
+# the `docker_run` variable. Examples:
 #
-#    make test-bash                # test using container's bash
-#    make test-bash docker_run=    # test using host's bash
+#    make test-bash                # test using container's Bash
+#    make test-bash docker_run=    # test using host's Bash
 
 docker_image = clitest-dev
 docker_run = docker run --rm -t -v $$PWD:/mnt $(docker_image)
