@@ -1,0 +1,25 @@
+default_install_hook_types: [pre-commit, pre-push]
+repos:
+  - repo: local
+    hooks:
+      - id: validate-docs
+        name: Validate docs
+        entry: make validate-docs
+        language: system
+        pass_filenames: false
+        files: ^(README\.md|examples/.*)$
+
+      - id: make-lint
+        name: make lint (takes a few seconds)
+        entry: make lint docker_tty=
+        language: system
+        pass_filenames: false
+        files: ^(Makefile|Dockerfile\.dev|clitest)$
+
+      - id: make-test
+        name: make test (takes a few minutes)
+        entry: make test docker_tty=
+        language: system
+        pass_filenames: false
+        files: ^(Makefile|Dockerfile\.dev|clitest|test\.md|test/.*)$
+        stages: [pre-push]  # run on push only, too much wait for every commit
