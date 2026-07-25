@@ -16,23 +16,33 @@ test_cmd = ./clitest --first --progress none test.md
 default:
 	@echo "Read the comments in the Makefile for help"
 
-fmt:
-	$(docker_run) shfmt -w -i 4 -ci -kp -sr clitest
+# Run-in-host targets
 
-lint:
-	$(docker_run) shfmt -d -i 4 -ci -kp -sr clitest
-	$(docker_run) checkbashisms --posix clitest
-	$(docker_run) shellcheck clitest
+fmt-local:
+	shfmt -w -i 4 -ci -kp -sr clitest
 
-test: test-bash test-dash test-mksh test-sh test-zsh
-test-%:
-	$(docker_run) $* $(test_cmd)
+lint-local:
+	shfmt -d -i 4 -ci -kp -sr clitest
+	checkbashisms --posix clitest
+	shellcheck clitest
 
-versions:
-	@$(docker_run) sh -c 'apk list 2>/dev/null | cut -d " " -f 1 | sort'
+test-local: test-bash-local test-dash-local test-mksh-local test-sh-local test-zsh-local
+test-%-local:
+	$* $(test_cmd)
+
+# Run-in-Docker targets
+
+fmt lint test test-bash test-dash test-mksh test-sh test-zsh:
+	$(docker_run) make $@-local
+
+# Docker-exclusive targets
 
 docker-build:
 	docker build -t $(docker_image) -f Dockerfile.dev .
 
 docker-run:
 	$(docker_run) $(cmd)
+
+versions:
+	@$(docker_run) sh -c 'apk list 2>/dev/null | cut -d " " -f 1 | sort'
+
