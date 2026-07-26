@@ -295,7 +295,7 @@ $ pwd                         #=> --eval echo $PWD
   modifiers when needed.
 
 * Using `#=> --exit` the test will pass if the exit code of the command
-  is equal to the code specified. Useful when testing commands that
+  is equal to the specified code. Useful when testing commands that
   generate variable output (or no output at all), and the exit code is
   the best indication of success. Both STDOUT and STDERR are ignored
   when using this option.
