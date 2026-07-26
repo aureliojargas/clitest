@@ -2231,7 +2231,7 @@ OK: 2 of 2 tests passed
 $
 ```
 
-STDIN and STDOUT
+STDOUT and STDERR
 
 ```
 $ ./clitest test/stdout-stderr.sh
