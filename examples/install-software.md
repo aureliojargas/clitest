@@ -18,11 +18,11 @@ $
 
 ## 2. Download
 
-Download the .tgz file for the version 2.6, directly from Google Code.
+Download the .tgz file for the version 2.6.
 
 ```console
-$ url="https://fossies.org/linux/privat/txt2tags-2.6.tgz"
-$ curl -O -s -S "$url"
+$ url="https://github.com/txt2tags/old/raw/master/txt2tags-2.6.tgz"
+$ curl -fsSOL "$url"
 $
 ```
 
@@ -60,7 +60,7 @@ list the main files, just to be sure.
 
 ```console
 $ cd txt2tags-2.6
-$ ls -1F
+$ ls -1F | LC_ALL=C sort
 COPYING
 ChangeLog
 README
@@ -74,44 +74,23 @@ $
 ```
 
 
-## 5. Test
+## 5. Install
 
-The main `txt2tags` file is executable? Python is installed? Python
-version is compatible with the program? So many questions... But a
-simple command answers them all.
-
-```console
-$ ./txt2tags -V
-txt2tags version 2.6 <http://txt2tags.org>
-$
-```
-
-If the version was shown, it's a proof that the program was run
-successfully: Python is installed and it's compatible.
-
-## 6. Install
-
-By default, the program is installed in the `~/bin` user directory.
-Usually this directory is already there, but let's play safe and create
-it if necessary.
+In this tutorial, we don't want to change anything in the user's system.
+Thus, the program is installed in the `/tmp/bin` user directory. Let's
+create it if necessary.
 
 ```console
-$ test -d ~/bin || mkdir ~/bin
+$ bin_dir=/tmp/bin
+$ test -d $bin_dir || mkdir $bin_dir
 $
 ```
 
 The install process itself is just a simple file copy.
 
 ```console
-$ cp txt2tags ~/bin/
-$
-```
-
-Now just a final test, executing the program directly from `~/bin`.
-
-```console
-$ ~/bin/txt2tags -V
-txt2tags version 2.6 <http://txt2tags.org>
+$ cp -v txt2tags $bin_dir
+'txt2tags' -> '/tmp/bin/txt2tags'
 $
 ```
 

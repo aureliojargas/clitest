@@ -31,6 +31,7 @@ validate-docs:
 	./$(test_cmd) \
 		examples/cut.txt \
 		examples/hello-world.txt \
+		examples/install-software.* \
 		examples/intro.txt
 	cd examples; ../$(test_cmd) --pre-flight 'alias clitest=../clitest' README.md
 
