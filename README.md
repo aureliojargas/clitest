@@ -274,7 +274,7 @@ $ head /etc/passwd            #=> --lines 10
 $ tac /etc/passwd | tac       #=> --file /etc/passwd
 $ cat /etc/passwd             #=> --egrep ^root:
 $ echo $((2 + 10))            #=> --regex ^\d+$
-$ make test                   #=> --exit 0
+$ date                        #=> --exit 0
 $ pwd                         #=> --eval echo $PWD
 ```
 
@@ -339,6 +339,8 @@ Customization options:
       --inline-prefix PREFIX  Set inline output prefix (default: '#=> ')
       --prefix PREFIX         Set command line prefix (default: '')
       --prompt STRING         Set prompt string (default: '$ ')
+
+See also: https://github.com/aureliojargas/clitest
 $
 ```
 
