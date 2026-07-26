@@ -27,6 +27,7 @@ lint:
 # Aliases in pre-flight are necessary because there's calls to `clitest` from
 # PATH in the documentation files.
 validate-docs:
+	./$(test_cmd) --pre-flight 'alias clitest=./clitest' README.md
 	./$(test_cmd) \
 		examples/cut.txt \
 		examples/hello-world.txt \
