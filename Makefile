@@ -11,7 +11,7 @@
 
 docker_image = clitest-dev
 docker_run = docker run --rm -t -v $$PWD:/mnt $(docker_image)
-test_cmd = ./clitest --first --progress none test.md
+test_cmd = clitest --first --progress none
 
 default:
 	@echo "Read the comments in the Makefile for help"
@@ -24,9 +24,18 @@ lint:
 	$(docker_run) checkbashisms --posix clitest
 	$(docker_run) shellcheck clitest
 
+# Aliases in pre-flight are necessary because there's calls to `clitest` from
+# PATH in the documentation files.
+validate-docs:
+	./$(test_cmd) \
+		examples/cut.txt \
+		examples/hello-world.txt \
+		examples/intro.txt
+	cd examples; ../$(test_cmd) --pre-flight 'alias clitest=../clitest' README.md
+
 test: test-bash test-dash test-mksh test-sh test-zsh
 test-%:
-	$(docker_run) $* $(test_cmd)
+	$(docker_run) $* ./$(test_cmd) test.md
 
 versions:
 	@$(docker_run) sh -c 'apk list 2>/dev/null | cut -d " " -f 1 | sort'
