@@ -304,6 +304,17 @@ $ pwd                         #=> --eval echo $PWD
   same output. Useful to expand variables which store the full or
   partial output.
 
+What if the command output actually starts with one of these special
+options? How to match it as plain text? Either avoid using inline
+output or use `--text`. Examples:
+
+```console
+$ echo --lines rocks
+--lines rocks
+$ echo --lines rocks          #=> --text --lines rocks
+```
+
+
 ## Options
 
 ```console
