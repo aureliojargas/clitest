@@ -1,11 +1,10 @@
-#  Test suite for clitest
+# Test suite for clitest
 
 This is the test file for the `clitest` program. Yes, the program can test itself!
 
 This file runs all the files inside the `test` folder and checks the results. The command line options are also tested.
 
-    Usage: ./clitest test.md
-
+> Usage: `./clitest test.md`
 
 ## Preparing
 
@@ -55,7 +54,7 @@ $ TMPDIR="$TMPDIR___SAVE"
 $
 ```
 
-## I/O, file reading  (message and exit code)
+## I/O, file reading (message and exit code)
 
 Missing input file
 
@@ -166,7 +165,6 @@ Usage: clitest [options] <file ...>
 See also: https://github.com/aureliojargas/clitest
 $
 ```
-
 
 ## Option --quiet and exit code
 
@@ -716,11 +714,10 @@ clitest: Error: no test found. Maybe '--skip 1,2' was too much?
 $
 ```
 
-
 ## Options --quiet, --progress, --list and --list-run are mutually exclusive
 
-* Only one can be active, the others must be off.
-* The last informed will be the one used.
+- Only one can be active, the others must be off.
+- The last informed will be the one used.
 
 ```
 $ ./clitest --list --quiet test/ok-1.sh
@@ -814,7 +811,6 @@ $
 ```
 
 Multifile, using `-t` alone
-
 
 ```
 $ ./clitest --list -t 1,3,5-7 test/ok-1.sh test/fail-2.sh test/ok-10.sh
@@ -1132,13 +1128,14 @@ $ ./clitest test/inline-multiple-marker.sh
 #1	echo "a #=> b #=> c"  #=> --lines 99 
 OK: 1 of 1 test passed
 $
+```
 
 ## Inline match modes
 
 Mode #=> --text
 
-* This is the default mode.
-* The --text part can be omitted.
+- This is the default mode.
+- The --text part can be omitted.
 
 ```
 $ ./clitest --list-run test/inline-match-text.sh
@@ -1252,7 +1249,7 @@ $
 
 Mode #=> --perl
 
-* --regex is an alias to --perl
+- --regex is an alias to --perl
 
 ```
 $ ./clitest --list-run test/inline-match-perl.sh
@@ -1499,9 +1496,9 @@ OK: 2 of 2 tests passed
 $
 ```
 
-* Empty values inside range are ignored
-* The bogus `0-0` range is ignored
-* The resulting range is zero
+- Empty values inside range are ignored
+- The bogus `0-0` range is ignored
+- The resulting range is zero
 
 ```
 $ ./clitest -t ,,,0,0-0,,, test/ok-2.sh
@@ -1678,9 +1675,9 @@ OK: 2 of 2 tests passed
 $
 ```
 
-* Empty values inside range are ignored
-* The bogus `0-0` range is ignored
-* The resulting range is zero
+- Empty values inside range are ignored
+- The bogus `0-0` range is ignored
+- The resulting range is zero
 
 ```
 $ ./clitest -s ,,,0,0-0,,, test/ok-2.sh
@@ -2175,7 +2172,7 @@ clitest: Error: invalid option -Z
 $
 ```
 
-## Options terminator -- 
+## Options terminator --
 
 ```
 $ ./clitest -t 99 -- --quiet
@@ -2268,6 +2265,7 @@ $ find "$TMPDIR__TEST" -mindepth 1
 $ unset TMPDIR__TEST
 $
 ```
+
 Multiple commands in one line
 
 ```
@@ -2348,8 +2346,8 @@ $
 Files with no newline (`\n`) at the end
 
 1. No empty prompt at the last line
-2. Empty prompt at the last line
-3. Inline output
+1. Empty prompt at the last line
+1. Inline output
 
 ```
 $ ./clitest test/no-nl-file-1.sh
