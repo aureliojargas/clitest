@@ -4,7 +4,6 @@
 > that can also be automatically tested:
 > `clitest install-software.md`
 
-
 ## 1. Prepare
 
 First, move to the temporary directory, where we will download, extract
@@ -15,7 +14,6 @@ $ cd /tmp
 $
 ```
 
-
 ## 2. Download
 
 Download the .tgz file for the version 2.6.
@@ -25,7 +23,6 @@ $ url="https://github.com/txt2tags/old/raw/master/txt2tags-2.6.tgz"
 $ curl -fsSOL "$url"
 $
 ```
-
 
 ## 3. Verify
 
@@ -42,7 +39,6 @@ $
 
 > Note: Using `sed` to count lines because the output format of `wc -l`
 > differs between implementations, regarding leading blank spaces.
-
 
 ## 4. Extract
 
@@ -72,7 +68,6 @@ test/
 txt2tags*
 $
 ```
-
 
 ## 5. Install
 

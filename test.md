@@ -1,17 +1,16 @@
-#  Test suite for clitest
+# Test suite for clitest
 
 This is the test file for the `clitest` program. Yes, the program can test itself!
 
 This file runs all the files inside the `test` folder and checks the results. The command line options are also tested.
 
-    Usage: ./clitest test.md
-
+> Usage: `./clitest test.md`
 
 ## Preparing
 
 Make sure we're on the same folder as `clitest`, since all the file paths here are relative, not absolute.
 
-```
+```console
 $ test -f ./clitest; echo $?
 0
 $ test -d ./test/; echo $?
@@ -21,7 +20,7 @@ $
 
 Set a default terminal width of 80 columns. It's used by separator lines.
 
-```
+```console
 $ shopt -u checkwinsize 2> /dev/null  # bash: disable automatic check
 $ unset COLUMNS  # mksh: first unset, then one can manually set it
 $ COLUMNS=80
@@ -33,7 +32,7 @@ Ok. Now the real tests begins.
 
 ## Variables are persistent between tests?
 
-```
+```console
 $ echo $COLUMNS
 80
 $ not_exported=1
@@ -45,7 +44,7 @@ $ echo $not_exported  #=> --regex ^1$
 
 ## Check the temporary dir creation
 
-```
+```console
 $ TMPDIR___SAVE="$TMPDIR"
 $ TMPDIR=/notfound
 $ export TMPDIR
@@ -55,11 +54,11 @@ $ TMPDIR="$TMPDIR___SAVE"
 $
 ```
 
-## I/O, file reading  (message and exit code)
+## I/O, file reading (message and exit code)
 
 Missing input file
 
-```
+```console
 $ ./clitest; echo $?
 clitest: Error: no test file informed (try --help)
 2
@@ -72,7 +71,7 @@ $
 
 File not found
 
-```
+```console
 $ ./clitest notfound; echo $?
 clitest: Error: cannot read input file: notfound
 2
@@ -81,7 +80,7 @@ $
 
 File is a directory
 
-```
+```console
 $ ./clitest .
 clitest: Error: input file is a directory: .
 $ ./clitest ./
@@ -93,7 +92,7 @@ $
 
 ## No test found (message and exit code)
 
-```
+```console
 $ ./clitest test/no-test-found.sh; echo $?
 clitest: Error: no test found in input file: test/no-test-found.sh
 2
@@ -106,11 +105,11 @@ clitest: Error: no test found in input file: test/empty-prompts-file.sh
 $
 ```
 
-## Option --version
+## Option `--version`
 
 The exit code must always be zero.
 
-```
+```console
 $ ./clitest --version > /dev/null; echo $?
 0
 $
@@ -118,7 +117,7 @@ $
 
 Test the output text and the short option `-V`.
 
-```
+```console
 $ ./clitest --version
 clitest dev
 $ ./clitest -V
@@ -126,11 +125,11 @@ clitest dev
 $
 ```
 
-## Option --help
+## Option `--help`
 
 Test the full help text contents and the exit code (zero).
 
-```
+```console
 $ ./clitest --help; echo $?
 Usage: clitest [options] <file ...>
 
@@ -160,17 +159,16 @@ $
 
 The short option `-h` is working? Testing just the first and last lines for brevity.
 
-```
+```console
 $ ./clitest -h | sed -n '1p; $p'
 Usage: clitest [options] <file ...>
 See also: https://github.com/aureliojargas/clitest
 $
 ```
 
+## Option `--quiet` and exit code
 
-## Option --quiet and exit code
-
-```
+```console
 $ ./clitest -q test/ok-2.sh; echo $?
 0
 $ ./clitest --quiet test/ok-2.sh; echo $?
@@ -186,28 +184,28 @@ $ ./clitest --quiet test/ok-2.sh test/fail-2.sh; echo $?
 $
 ```
 
-## Option --quiet has no effect in error messages
+## Option `--quiet` has no effect in error messages
 
-```
+```console
 $ ./clitest --quiet notfound
 clitest: Error: cannot read input file: notfound
 $
 ```
 
-## Option --quiet has no effect in --debug
+## Option `--quiet` has no effect in `--debug`
 
-```
+```console
 $ ./clitest --debug --quiet test/ok-1.sh | grep -o INPUT_LINE
 INPUT_LINE
 INPUT_LINE
 $
 ```
 
-## Option --debug
+## Option `--debug`
 
-Tricky test file with: empty line, inline marker, tab, $, comment line, normal command, unclosed block.
+Tricky test file with: empty line, inline marker, tab, `$`, comment line, normal command, unclosed block.
 
-```
+```console
 $ ./clitest --debug test/option-debug.sh
 --------------------------------------------------------------------------------
 -- INPUT_LINE[# Test file to be run with --debug]
@@ -246,7 +244,7 @@ OK: 2 of 2 tests passed
 $
 ```
 
-## Option --debug with colors
+## Option `--debug` with colors
 
 - Separator line is cyan
 - `INPUT_LINE[...]` is cyan, others are normal color inside `[]`
@@ -255,7 +253,7 @@ $
 
 This test forces `--color always` because normally the tests inside this file are not colored (output is not a terminal). Note that the escape character (`\033`) is removed to have only printable ASCII characters in the output.
 
-```
+```console
 $ ./clitest --debug --color always test/option-debug-color.sh | head -n 3 | tr -d '\033'
 [36m--------------------------------------------------------------------------------[m
 [36m-- INPUT_LINE[$ echo "tab	" #=> tab	][m
@@ -265,17 +263,17 @@ $
 
 In case of multiple `#=>`, only the last one should be red:
 
-```
+```console
 $ ./clitest --debug --color always test/inline-multiple-marker.sh | command grep LINE_CMD | tr -d '\033'
 [36m--   LINE_CMD[[m$ echo "a #=> b #=> c"  #=> --lines 99 [31m#=> [m--lines 1[36m][m
 $
 ```
 
-## Option --color
+## Option `--color`
 
 Invalid value
 
-```
+```console
 $ ./clitest --color foo test/ok-1.sh; echo $?
 clitest: Error: invalid value 'foo' for --color. Use: auto, always or never.
 2
@@ -286,7 +284,7 @@ Color ON
 
 > Note that the escape character (`\033`) is removed to have only printable ASCII characters in the output.
 
-```
+```console
 $ ./clitest --color always test/ok-1.sh | tr -d '\033'
 #1	echo ok
 [32mOK:[m 1 of 1 test passed
@@ -298,7 +296,7 @@ $
 
 Color OFF
 
-```
+```console
 $ ./clitest --color never test/ok-1.sh
 #1	echo ok
 OK: 1 of 1 test passed
@@ -313,7 +311,7 @@ Color AUTO
 Inside this file, the output is not a terminal,
 so the default is no colored output.
 
-```
+```console
 $ ./clitest test/ok-1.sh
 #1	echo ok
 OK: 1 of 1 test passed
@@ -323,11 +321,11 @@ $
 The real default `--color auto` cannot be tested here.
 Test it by hand at the command line.
 
-## Option --list
+## Option `--list`
 
 Listing a file with no tests
 
-```
+```console
 $ ./clitest --list test/empty-file.sh; echo $?
 clitest: Error: no test found in input file: test/empty-file.sh
 2
@@ -336,7 +334,7 @@ $
 
 Normal results and exit code
 
-```
+```console
 $ ./clitest --list test/no-nl-command.sh; echo $?
 #1	printf 'ok\n'
 #2	printf 'fail'
@@ -351,7 +349,7 @@ $
 
 Short option `-l`
 
-```
+```console
 $ ./clitest -l test/no-nl-command.sh
 #1	printf 'ok\n'
 #2	printf 'fail'
@@ -365,7 +363,7 @@ $
 
 Multifile and exit code
 
-```
+```console
 $ ./clitest --list test/no-nl-command.sh test/ok-1.sh; echo $?
 ---------------------------------------- test/no-nl-command.sh
 #1	printf 'ok\n'
@@ -381,11 +379,11 @@ $ ./clitest --list test/no-nl-command.sh test/ok-1.sh; echo $?
 $
 ```
 
-## Option --list-run
+## Option `--list-run`
 
 Listing a file with no tests
 
-```
+```console
 $ ./clitest --list-run test/empty-file.sh; echo $?
 clitest: Error: no test found in input file: test/empty-file.sh
 2
@@ -396,7 +394,7 @@ Normal results (using colors) and exit code
 
 > Note that the escape character (`\033`) is removed to have only printable ASCII characters in the output.
 
-```
+```console
 $ ./clitest --list-run --color always test/no-nl-command.sh > /tmp/foo.txt; echo $?
 1
 $ cat /tmp/foo.txt | tr -d '\033'
@@ -413,7 +411,7 @@ $
 
 Normal results (no colors, use OK/FAIL column) and exit code
 
-```
+```console
 $ ./clitest --list-run test/no-nl-command.sh; echo $?
 #1	OK	printf 'ok\n'
 #2	FAIL	printf 'fail'
@@ -428,7 +426,7 @@ $
 
 Short option `-L`
 
-```
+```console
 $ ./clitest -L test/no-nl-command.sh
 #1	OK	printf 'ok\n'
 #2	FAIL	printf 'fail'
@@ -442,7 +440,7 @@ $
 
 Multifile and exit code
 
-```
+```console
 $ ./clitest -L test/no-nl-command.sh test/ok-1.sh; echo $?
 ---------------------------------------- test/no-nl-command.sh
 #1	OK	printf 'ok\n'
@@ -461,11 +459,11 @@ $ ./clitest -L test/ok-1.sh; echo $?
 $
 ```
 
-## Option --progress
+## Option `--progress`
 
 First, some invalid values:
 
-```
+```console
 $ ./clitest --progress test/ok-1.sh
 clitest: Error: no test file informed (try --help)
 $ ./clitest --progress '' test/ok-1.sh
@@ -484,7 +482,7 @@ $
 
 If no `--progress` option, defaults to `--progress test`:
 
-```
+```console
  $ ./clitest test/ok-1.sh
  #1	echo ok
  OK: 1 of 1 test passed
@@ -496,7 +494,7 @@ If no `--progress` option, defaults to `--progress test`:
 
 Numbers:
 
-```
+```console
 $ ./clitest --progress number test/ok-10.sh
 1 2 3 4 5 6 7 8 9 10 
 OK: 10 of 10 tests passed
@@ -517,7 +515,7 @@ $
 
 Chars:
 
-```
+```console
 $ ./clitest --progress dot test/ok-10.sh
 ..........
 OK: 10 of 10 tests passed
@@ -535,7 +533,7 @@ $
 
 No progress:
 
-```
+```console
 $ ./clitest --progress none test/ok-1.sh
 OK: 1 of 1 test passed
 $ ./clitest --progress no test/ok-1.sh
@@ -545,7 +543,7 @@ $
 
 Short option `-P`:
 
-```
+```console
 $ ./clitest -P dot test/ok-1.sh
 .
 OK: 1 of 1 test passed
@@ -554,9 +552,9 @@ OK: 1 of 1 test passed
 $
 ```
 
-Ok & fail functionality with dot:
+Ok and fail functionality with dot:
 
-```
+```console
 $ ./clitest --progress . test/ok-1.sh
 .
 OK: 1 of 1 test passed
@@ -581,7 +579,7 @@ $
 
 Multifile with dot:
 
-```
+```console
 $ ./clitest --progress . test/ok-1.sh test/ok-2.sh test/ok-10.sh
 Testing file test/ok-1.sh .
 Testing file test/ok-2.sh ..
@@ -628,7 +626,7 @@ $
 
 Multifile with no progress:
 
-```
+```console
 $ ./clitest --progress none test/ok-1.sh test/ok-2.sh test/ok-10.sh
 Testing file test/ok-1.sh
 Testing file test/ok-2.sh
@@ -673,12 +671,12 @@ FAIL: 1 of 2 tests failed
 $
 ```
 
-### Option --progress and skipped tests
+### Option `--progress` and skipped tests
 
 Since skipped tests affect the output (show nothing), it's worth
 testing if the line break issues won't appear.
 
-```
+```console
 $ ./clitest --progress . --skip 1 test/ok-2.sh
 .
 OK: 1 of 2 tests passed (1 skipped)
@@ -710,19 +708,18 @@ $
 
 Error messages appear with no leading blank line?
 
-```
+```console
 $ ./clitest --progress . --skip 1,2 test/ok-2.sh
 clitest: Error: no test found. Maybe '--skip 1,2' was too much?
 $
 ```
 
+## Options `--quiet`, `--progress`, `--list` and `--list-run` are mutually exclusive
 
-## Options --quiet, --progress, --list and --list-run are mutually exclusive
+- Only one can be active, the others must be off.
+- The last informed will be the one used.
 
-* Only one can be active, the others must be off.
-* The last informed will be the one used.
-
-```
+```console
 $ ./clitest --list --quiet test/ok-1.sh
 $ ./clitest --list-run --quiet test/ok-1.sh
 $ ./clitest --progress . --quiet test/ok-1.sh
@@ -737,11 +734,11 @@ OK: 1 of 1 test passed
 $
 ```
 
-## Option --test and --skip combined with --list and --list-run
+## Option `--test` and `--skip` combined with `--list` and `--list-run`
 
 Error: Out of range
 
-```
+```console
 $ ./clitest --list -t 99 test/ok-10.sh
 clitest: Error: no test found for the specified number or range '99'
 $ ./clitest --list-run -t 99 test/ok-10.sh; echo $?
@@ -752,7 +749,7 @@ $
 
 Error: Skipped all tests
 
-```
+```console
 $ ./clitest --list -s 1-10 test/ok-10.sh
 clitest: Error: no test found. Maybe '--skip 1-10' was too much?
 $ ./clitest --list-run -s 1-10 test/ok-10.sh; echo $?
@@ -763,7 +760,7 @@ $
 
 Error: The combination of `-t` and `-s` resulted in no tests
 
-```
+```console
 $ ./clitest --list -t 9 -s 9 test/ok-10.sh
 clitest: Error: no test found. The combination of -t and -s resulted in no tests.
 $ ./clitest --list-run -t 9 -s 9 test/ok-10.sh; echo $?
@@ -774,7 +771,7 @@ $
 
 Using `-t` alone
 
-```
+```console
 $ ./clitest --list -t 3,5-7 test/ok-10.sh
 #3	echo 3 
 #5	echo 5 
@@ -790,7 +787,7 @@ $
 
 Reverse ranges and repeated numbers are supported
 
-```
+```console
 $ ./clitest --list -t 3,7-5,3,6,5 test/ok-10.sh
 #3	echo 3 
 #5	echo 5 
@@ -801,7 +798,7 @@ $
 
 Using `-t` to limit to a range and the `-s` exclude some more
 
-```
+```console
 $ ./clitest --list -t 3,5-7 -s 6 test/ok-10.sh
 #3	echo 3 
 #5	echo 5 
@@ -815,8 +812,7 @@ $
 
 Multifile, using `-t` alone
 
-
-```
+```console
 $ ./clitest --list -t 1,3,5-7 test/ok-1.sh test/fail-2.sh test/ok-10.sh
 ---------------------------------------- test/ok-1.sh
 #1	echo ok
@@ -840,7 +836,7 @@ $
 
 Multifile, using `-t` and `-s`
 
-```
+```console
 $ ./clitest --list -t 1,3,5-7 -s 3,6 test/ok-1.sh test/fail-2.sh test/ok-10.sh
 ---------------------------------------- test/ok-1.sh
 #1	echo ok
@@ -860,7 +856,7 @@ $
 
 ## Single file, OK
 
-```
+```console
 $ ./clitest test/ok-1.sh
 #1	echo ok
 OK: 1 of 1 test passed
@@ -881,7 +877,7 @@ $
 
 ## Multifile, all OK
 
-```
+```console
 $ ./clitest test/ok-2.sh test/ok-2.sh
 Testing file test/ok-2.sh
 #1	echo ok
@@ -937,7 +933,7 @@ $
 
 ## Multifile, OK and fail
 
-```
+```console
 $ ./clitest test/ok-1.sh test/fail-1.sh test/ok-2.sh test/fail-2.sh
 Testing file test/ok-1.sh
 #1	echo ok
@@ -1017,14 +1013,14 @@ $
 
 ## Fail messages
 
-```
+```console
 $ ./clitest --prefix tab -P none test/fail-messages.md  #=> --file test/fail-messages.out.txt
 $
 ```
 
 ## Fails
 
-```
+```console
 $ ./clitest test/fail-1.sh
 #1	echo ok
 --------------------------------------------------------------------------------
@@ -1098,9 +1094,9 @@ FAIL: 2 of 2 tests failed
 $
 ```
 
-## Inline output with #=>
+## Inline output with `#=>`
 
-```
+```console
 $ ./clitest test/inline.sh
 #1	echo 'one space' 
 #2	echo 'one tab'	
@@ -1127,20 +1123,21 @@ $
 
 In case of multiple `#=>`, consider only the last one:
 
-```
+```console
 $ ./clitest test/inline-multiple-marker.sh
 #1	echo "a #=> b #=> c"  #=> --lines 99 
 OK: 1 of 1 test passed
 $
+```
 
 ## Inline match modes
 
-Mode #=> --text
+Mode `#=> --text`
 
-* This is the default mode.
-* The --text part can be omitted.
+- This is the default mode.
+- The `--text` part can be omitted.
 
-```
+```console
 $ ./clitest --list-run test/inline-match-text.sh
 #1	OK	echo 'abc'                    
 #2	OK	echo 'abc'                    
@@ -1185,9 +1182,9 @@ $ ./clitest --list-run test/inline-match-text.sh
 $
 ```
 
-Mode #=> --eval
+Mode `#=> --eval`
 
-```
+```console
 $ ./clitest --list-run test/inline-match-eval.sh
 #1	OK	folder=$(pwd)
 #2	OK	echo $folder                  
@@ -1218,9 +1215,9 @@ $ ./clitest --list-run test/inline-match-eval.sh
 $
 ```
 
-Mode #=> --egrep
+Mode `#=> --egrep`
 
-```
+```console
 $ ./clitest --list-run test/inline-match-egrep.sh
 #1	OK	echo 'abc123'                 
 #2	OK	echo 'abc123'                 
@@ -1250,11 +1247,11 @@ $ ./clitest --list-run test/inline-match-egrep.sh
 $
 ```
 
-Mode #=> --perl
+Mode `#=> --perl`
 
-* --regex is an alias to --perl
+- `--regex` is an alias to `--perl`
 
-```
+```console
 $ ./clitest --list-run test/inline-match-perl.sh
 #1	OK	echo 'abc123'                 
 #2	OK	echo 'abc123'                 
@@ -1294,9 +1291,9 @@ $ ./clitest --list-run test/inline-match-perl.sh
 $
 ```
 
-Mode #=> --file
+Mode `#=> --file`
 
-```
+```console
 $ ./clitest --list-run test/inline-match-file.sh
 #1	OK	printf '$ echo ok\nok\n'      
 #2	OK	echo 'ok' > /tmp/foo.txt
@@ -1310,9 +1307,9 @@ $ ./clitest --list-run test/inline-match-file.sh
 $
 ```
 
-Mode #=> --lines
+Mode `#=> --lines`
 
-```
+```console
 $ ./clitest --list-run test/inline-match-lines.sh
 #1	OK	a=1                           
 #2	OK	echo 'ok'                     
@@ -1340,9 +1337,9 @@ Expected 99 lines, got 1.
 $
 ```
 
-Mode #=> --exit
+Mode `#=> --exit`
 
-```
+```console
 $ ./clitest --list-run test/inline-match-exit.sh
 #1	OK	true                          
 #2	OK	false                         
@@ -1375,9 +1372,9 @@ Expected exit code 99, got 0
 $
 ```
 
-Errors for #=> --egrep
+Errors for `#=> --egrep`
 
-```
+```console
 $ ./clitest test/inline-match-egrep-error-1.sh; echo $?
 clitest: Error: empty --egrep at line 1 of test/inline-match-egrep-error-1.sh
 2
@@ -1388,9 +1385,9 @@ clitest: Error: check your inline egrep regex at line 1 of test/inline-match-egr
 $
 ```
 
-Errors for #=> --perl (and --regex)
+Errors for `#=> --perl` (and `--regex`)
 
-```
+```console
 $ ./clitest test/inline-match-perl-error-1.sh; echo $?
 clitest: Error: empty --perl at line 1 of test/inline-match-perl-error-1.sh
 2
@@ -1401,9 +1398,9 @@ clitest: Error: check your inline Perl regex at line 1 of test/inline-match-perl
 $
 ```
 
-Errors for #=> --file
+Errors for `#=> --file`
 
-```
+```console
 $ ./clitest test/inline-match-file-error-1.sh; echo $?
 clitest: Error: empty --file at line 1 of test/inline-match-file-error-1.sh
 2
@@ -1418,9 +1415,9 @@ clitest: Error: cannot read inline output file '/etc/', from line 1 of test/inli
 $
 ```
 
-Errors for #=> --lines
+Errors for `#=> --lines`
 
-```
+```console
 $ ./clitest test/inline-match-lines-error-1.sh
 clitest: Error: --lines requires a number. See line 1 of test/inline-match-lines-error-1.sh
 $ ./clitest test/inline-match-lines-error-2.sh
@@ -1433,9 +1430,9 @@ clitest: Error: --lines requires a number. See line 1 of test/inline-match-lines
 $
 ```
 
-Errors for #=> --exit
+Errors for `#=> --exit`
 
-```
+```console
 $ ./clitest test/inline-match-exit-error-1.sh
 clitest: Error: --exit requires a number. See line 1 of test/inline-match-exit-error-1.sh
 $ ./clitest test/inline-match-exit-error-2.sh
@@ -1448,20 +1445,20 @@ clitest: Error: --exit requires a number. See line 1 of test/inline-match-exit-e
 $
 ```
 
-Errors for #=> --eval
+Errors for `#=> --eval`
 
-```
+```console
 $ ./clitest test/inline-match-eval-error-1.sh; echo $?
 clitest: Error: empty --eval at line 1 of test/inline-match-eval-error-1.sh
 2
 $
 ```
 
-## Option -t, --test
+## Option `-t`, `--test`
 
 Error: Invalid argument
 
-```
+```console
 $ ./clitest -t - test/ok-2.sh
 clitest: Error: invalid argument for -t or --test: -
 $ ./clitest -t -1 test/ok-2.sh
@@ -1478,7 +1475,7 @@ $
 
 Error: Out of range
 
-```
+```console
 $ ./clitest -t 99 test/ok-2.sh; echo $?
 clitest: Error: no test found for the specified number or range '99'
 2
@@ -1487,7 +1484,7 @@ $
 
 If range = zero or empty, run all tests
 
-```
+```console
 $ ./clitest -t '' test/ok-2.sh
 #1	echo ok
 #2	echo ok  
@@ -1499,11 +1496,11 @@ OK: 2 of 2 tests passed
 $
 ```
 
-* Empty values inside range are ignored
-* The bogus `0-0` range is ignored
-* The resulting range is zero
+- Empty values inside range are ignored
+- The bogus `0-0` range is ignored
+- The resulting range is zero
 
-```
+```console
 $ ./clitest -t ,,,0,0-0,,, test/ok-2.sh
 #1	echo ok
 #2	echo ok  
@@ -1513,7 +1510,7 @@ $
 
 Normal operation, using `--test` and `-t`
 
-```
+```console
 $ ./clitest -t 1 test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
@@ -1525,7 +1522,7 @@ $
 
 Ranges `0-1` and `1-0` expand to `1`
 
-```
+```console
 $ ./clitest -t 0-1,1-0 test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
@@ -1534,7 +1531,7 @@ $
 
 Range `1-1` expand to `1`
 
-```
+```console
 $ ./clitest -t 1-1 test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
@@ -1543,7 +1540,7 @@ $
 
 Repeated values are OK
 
-```
+```console
 $ ./clitest -t 1,1,1,0,1 test/ok-10.sh
 #1	echo 1 
 OK: 1 of 10 tests passed (9 skipped)
@@ -1552,7 +1549,7 @@ $
 
 Range terminator is out of bounds
 
-```
+```console
 $ ./clitest -t 10-20 test/ok-10.sh
 #10	echo 10 
 OK: 1 of 10 tests passed (9 skipped)
@@ -1561,7 +1558,7 @@ $
 
 Inverted ranges
 
-```
+```console
 $ ./clitest -t 3,2,1 test/ok-10.sh
 #1	echo 1 
 #2	echo 2 
@@ -1577,7 +1574,7 @@ $
 
 Multifile. The test numbers always increase sequentially, regardless of the file changes.
 
-```
+```console
 $ ./clitest -t 1,5,13 test/ok-?.sh test/ok-10.sh
 Testing file test/ok-1.sh
 #1	echo ok
@@ -1626,11 +1623,11 @@ OK: 1 of 5 tests passed (4 skipped)
 $
 ```
 
-## Option -s, --skip
+## Option `-s`, `--skip`
 
 Error: Invalid argument
 
-```
+```console
 $ ./clitest -s - test/ok-2.sh
 clitest: Error: invalid argument for -s or --skip: -
 $ ./clitest -s -1 test/ok-2.sh
@@ -1647,7 +1644,7 @@ $
 
 Error: Skipped all tests
 
-```
+```console
 $ ./clitest -s 1 test/ok-1.sh; echo $?
 clitest: Error: no test found. Maybe '--skip 1' was too much?
 2
@@ -1656,7 +1653,7 @@ $
 
 Out of range: no problem, you just skipped a non-existent test. All tests will be run.
 
-```
+```console
 $ ./clitest -s 99 test/ok-2.sh
 #1	echo ok
 #2	echo ok  
@@ -1666,7 +1663,7 @@ $
 
 If range = zero or empty, run all tests
 
-```
+```console
 $ ./clitest -s '' test/ok-2.sh
 #1	echo ok
 #2	echo ok  
@@ -1678,11 +1675,11 @@ OK: 2 of 2 tests passed
 $
 ```
 
-* Empty values inside range are ignored
-* The bogus `0-0` range is ignored
-* The resulting range is zero
+- Empty values inside range are ignored
+- The bogus `0-0` range is ignored
+- The resulting range is zero
 
-```
+```console
 $ ./clitest -s ,,,0,0-0,,, test/ok-2.sh
 #1	echo ok
 #2	echo ok  
@@ -1692,7 +1689,7 @@ $
 
 Normal operation, using `--skip` and `-s`
 
-```
+```console
 $ ./clitest -s 1 test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
@@ -1704,7 +1701,7 @@ $
 
 Ranges `0-1` and `1-0` expand to `1`
 
-```
+```console
 $ ./clitest -s 0-1,1-0 test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
@@ -1713,7 +1710,7 @@ $
 
 Range `1-1` expand to `1`
 
-```
+```console
 $ ./clitest -s 1-1 test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
@@ -1722,7 +1719,7 @@ $
 
 Repeated values are OK
 
-```
+```console
 $ ./clitest -s 1,1,1,0,1 test/ok-2.sh
 #2	echo ok  
 OK: 1 of 2 tests passed (1 skipped)
@@ -1731,7 +1728,7 @@ $
 
 Range terminator is out of bounds
 
-```
+```console
 $ ./clitest -s 2-10 test/ok-2.sh
 #1	echo ok
 OK: 1 of 2 tests passed (1 skipped)
@@ -1740,7 +1737,7 @@ $
 
 Inverted ranges
 
-```
+```console
 $ ./clitest -s 10,9,8,7,6,5,4 test/ok-10.sh
 #1	echo 1 
 #2	echo 2 
@@ -1756,7 +1753,7 @@ $
 
 Multifile. The test numbers always increase sequentially, regardless of the file changes.
 
-```
+```console
 $ ./clitest -s 2,3,13 test/ok-?.sh test/ok-10.sh
 Testing file test/ok-1.sh
 #1	echo ok
@@ -1812,11 +1809,11 @@ OK: 1 of 5 tests passed (4 skipped)
 $
 ```
 
-## Option --test combined with --skip
+## Option `--test` combined with `--skip`
 
 Error: The combination of `-t` and `-s` resulted in no tests
 
-```
+```console
 $ ./clitest -t 9 -s 9 test/ok-10.sh; echo $?
 clitest: Error: no test found. The combination of -t and -s resulted in no tests.
 2
@@ -1825,7 +1822,7 @@ $
 
 The order does not matter, `-s` always wins
 
-```
+```console
 $ ./clitest -s 9 -t 9 test/ok-10.sh
 clitest: Error: no test found. The combination of -t and -s resulted in no tests.
 $
@@ -1833,7 +1830,7 @@ $
 
 Using `-t` to limit to a range and the `-s` exclude some more
 
-```
+```console
 $ ./clitest -t 3,5-7 -s 6 test/ok-10.sh
 #3	echo 3 
 #5	echo 5 
@@ -1844,7 +1841,7 @@ $
 
 Same as previous, but now multifile
 
-```
+```console
 $ ./clitest -t 1,3,5-7 -s 3,6 test/ok-1.sh test/fail-2.sh test/ok-10.sh
 Testing file test/ok-1.sh
 #1	echo ok
@@ -1862,9 +1859,9 @@ OK: 3 of 13 tests passed (10 skipped)
 $
 ```
 
-## Option --diff-options
+## Option `--diff-options`
 
-```
+```console
 $ ./clitest test/option-diff-options.sh
 #1	echo "	diff -w to ignore spaces    "
 --------------------------------------------------------------------------------
@@ -1889,9 +1886,9 @@ OK: 2 of 2 tests passed
 $
 ```
 
-## Option --prompt
+## Option `--prompt`
 
-```
+```console
 $ ./clitest test/option-prompt.sh; echo $?
 clitest: Error: no test found in input file: test/option-prompt.sh
 2
@@ -1908,9 +1905,9 @@ OK: 3 of 3 tests passed
 $
 ```
 
-## Option --inline-prefix
+## Option `--inline-prefix`
 
-```
+```console
 $ ./clitest test/option-inline-prefix.sh
 #1	echo "1 space" #==> 1 space
 --------------------------------------------------------------------------------
@@ -1964,9 +1961,9 @@ OK: 3 of 3 tests passed
 $
 ```
 
-## Option --prefix
+## Option `--prefix`
 
-```
+```console
 $ ./clitest --prefix '    ' test/option-prefix.sh
 #1	echo "1"  
 #2	echo "2"
@@ -2002,9 +1999,9 @@ OK: 6 of 6 tests passed
 $
 ```
 
-## Option --prefix: glob gotchas
+## Option `--prefix`: glob gotchas
 
-```
+```console
 $ ./clitest --prefix '?' test/option-prefix-glob.sh
 #1	echo 'prefix ?'	
 #2	echo 'prefix ?'
@@ -2048,9 +2045,9 @@ OK: 2 of 2 tests passed
 $
 ```
 
-## Option --prompt: glob gotchas (char + space)
+## Option `--prompt`: glob gotchas (char + space)
 
-```
+```console
 $ ./clitest --prompt '? ' test/option-prompt-glob-space.sh
 #1	echo 'prompt ? '	
 #2	echo 'prompt ? '
@@ -2094,9 +2091,9 @@ OK: 2 of 2 tests passed
 $
 ```
 
-## Option --prompt: glob gotchas (chars only)
+## Option `--prompt`: glob gotchas (chars only)
 
-```
+```console
 $ ./clitest --prompt '?' test/option-prompt-glob-1.sh
 #1	echo 'prompt ?'	
 #2	echo 'prompt ?'
@@ -2140,9 +2137,9 @@ OK: 2 of 2 tests passed
 $
 ```
 
-## Options --pre-flight and --post-flight
+## Options `--pre-flight` and `--post-flight`
 
-```
+```console
 $ ./clitest --pre-flight 'tt_test_number=99; tt_nr_total_tests=99' test/ok-1.sh
 #100	echo ok
 OK: 100 of 100 tests passed
@@ -2160,7 +2157,7 @@ $
 
 ## Invalid option
 
-```
+```console
 $ ./clitest --quiet --foo test/ok-1.sh
 clitest: Error: invalid option --foo
 $ ./clitest --first --foo test/ok-1.sh
@@ -2175,17 +2172,17 @@ clitest: Error: invalid option -Z
 $
 ```
 
-## Options terminator -- 
+## Options terminator `--`
 
-```
+```console
 $ ./clitest -t 99 -- --quiet
 clitest: Error: cannot read input file: --quiet
 $
 ```
 
-## File - meaning STDIN
+## File `-` meaning `STDIN`
 
-```
+```console
 $ cat test/ok-1.sh | ./clitest -
 #1	echo ok
 OK: 1 of 1 test passed
@@ -2196,9 +2193,9 @@ OK: 1 of 1 test passed
 $
 ```
 
-## Read test file from /dev/stdin
+## Read test file from `/dev/stdin`
 
-```
+```console
 $ cat test/ok-1.sh | ./clitest /dev/stdin
 #1	echo ok
 OK: 1 of 1 test passed
@@ -2207,7 +2204,7 @@ $
 
 ## Test file is a symlink
 
-```
+```console
 $ ln -s test/ok-1.sh testsymlink
 $ ./clitest testsymlink
 #1	echo ok
@@ -2218,9 +2215,9 @@ $
 
 ## Gotchas
 
-Test exit code and STDOUT/STDERR at the same time
+Test exit code and `STDOUT`/`STDERR` at the same time
 
-```
+```console
 $ ./clitest notfound; echo $?
 clitest: Error: cannot read input file: notfound
 2
@@ -2231,9 +2228,9 @@ OK: 2 of 2 tests passed
 $
 ```
 
-STDOUT and STDERR
+`STDOUT` and `STDERR`
 
-```
+```console
 $ ./clitest test/stdout-stderr.sh
 #1	echo "stdout"
 #2	echo "stdout" 2> /dev/null
@@ -2249,9 +2246,9 @@ OK: 10 of 10 tests passed
 $
 ```
 
-STDIN Isolation
+`STDIN` Isolation
 
-```
+```console
 $ ./clitest --quiet test/stdin-isolation.sh ; echo $?
 0
 $
@@ -2259,7 +2256,7 @@ $
 
 Temporary files and directories must be removed after execution
 
-```
+```console
 $ TMPDIR__TEST=$(mktemp -d)
 $ TMPDIR="$TMPDIR__TEST" ./clitest --help >/dev/null 2>&1
 $ find "$TMPDIR__TEST" -mindepth 1
@@ -2268,9 +2265,10 @@ $ find "$TMPDIR__TEST" -mindepth 1
 $ unset TMPDIR__TEST
 $
 ```
+
 Multiple commands in one line
 
-```
+```console
 $ ./clitest test/multi-commands.sh
 #1	echo 1; echo 2; echo 3; echo 4; echo 5
 #2	(echo 1; echo 2; echo 3; echo 4; echo 5) | sed -n 3p
@@ -2281,7 +2279,7 @@ $
 
 A `cd` command in one test should not affect the next
 
-```
+```console
 $ ./clitest test/cd.sh test/ok-2.sh
 Testing file test/cd.sh
 #1	cd
@@ -2299,7 +2297,7 @@ $
 
 Syntax: End-of-file or empty prompt closes the previous command
 
-```
+```console
 $ ./clitest test/close-command.sh
 #1	echo 1
 #2	echo 2
@@ -2308,9 +2306,9 @@ OK: 3 of 3 tests passed
 $
 ```
 
-Windows files (CR+LF)
+Windows files (`CR+LF`)
 
-```
+```console
 $ ./clitest test/windows.sh
 #1	echo "a file with CRLF line ending"
 #2	echo "inline output"  
@@ -2321,7 +2319,7 @@ $
 
 Unicode chars
 
-```
+```console
 $ ./clitest test/special-chars.sh | tail -1
 OK: 206 of 206 tests passed
 $
@@ -2329,7 +2327,7 @@ $
 
 Blanks (space, tab, newline) in the output
 
-```
+```console
 $ ./clitest test/blank-output.sh
 #1	echo ' '
 #2	echo '    '
@@ -2348,10 +2346,10 @@ $
 Files with no newline (`\n`) at the end
 
 1. No empty prompt at the last line
-2. Empty prompt at the last line
-3. Inline output
+1. Empty prompt at the last line
+1. Inline output
 
-```
+```console
 $ ./clitest test/no-nl-file-1.sh
 #1	printf '%s\n' 'a file with no \n at the last line'
 OK: 1 of 1 test passed
@@ -2366,7 +2364,7 @@ $
 
 Commands whose output has no `\n`
 
-```
+```console
 $ ./clitest test/no-nl-command.sh
 #1	printf 'ok\n'
 #2	printf 'fail'
@@ -2407,7 +2405,7 @@ $
 
 > Note that the escape character (`\033`) is removed to have only printable ASCII characters in the output.
 
-```
+```console
 $ ./clitest --color yes --first test/fail-2.sh | tr -d '\033'
 #1	echo ok
 [31m--------------------------------------------------------------------------------[m

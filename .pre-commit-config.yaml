@@ -13,6 +13,14 @@ repos:
     hooks:
       - id: typos
 
+  - repo: https://github.com/hukkin/mdformat
+    rev: 1.0.0
+    hooks:
+      - id: mdformat
+        additional_dependencies: [mdformat-gfm]
+        # Exclude files with intentional tab-prefixed code blocks
+        exclude: ^(examples/cut\.md|test/fail-messages\.md)$
+
   - repo: local
     hooks:
       - id: validate-docs
