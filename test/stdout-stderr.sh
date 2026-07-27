@@ -1,4 +1,4 @@
-# Output from both STDOUT and STDERR are catched by the tester.
+# Output from both STDOUT and STDERR are caught by the tester.
 
 ### STDOUT
 
