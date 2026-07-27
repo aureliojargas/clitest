@@ -105,7 +105,7 @@ clitest: Error: no test found in input file: test/empty-prompts-file.sh
 $
 ```
 
-## Option --version
+## Option `--version`
 
 The exit code must always be zero.
 
@@ -125,7 +125,7 @@ clitest dev
 $
 ```
 
-## Option --help
+## Option `--help`
 
 Test the full help text contents and the exit code (zero).
 
@@ -166,7 +166,7 @@ See also: https://github.com/aureliojargas/clitest
 $
 ```
 
-## Option --quiet and exit code
+## Option `--quiet` and exit code
 
 ```
 $ ./clitest -q test/ok-2.sh; echo $?
@@ -184,7 +184,7 @@ $ ./clitest --quiet test/ok-2.sh test/fail-2.sh; echo $?
 $
 ```
 
-## Option --quiet has no effect in error messages
+## Option `--quiet` has no effect in error messages
 
 ```
 $ ./clitest --quiet notfound
@@ -192,7 +192,7 @@ clitest: Error: cannot read input file: notfound
 $
 ```
 
-## Option --quiet has no effect in --debug
+## Option `--quiet` has no effect in `--debug`
 
 ```
 $ ./clitest --debug --quiet test/ok-1.sh | grep -o INPUT_LINE
@@ -201,9 +201,9 @@ INPUT_LINE
 $
 ```
 
-## Option --debug
+## Option `--debug`
 
-Tricky test file with: empty line, inline marker, tab, $, comment line, normal command, unclosed block.
+Tricky test file with: empty line, inline marker, tab, `$`, comment line, normal command, unclosed block.
 
 ```
 $ ./clitest --debug test/option-debug.sh
@@ -244,7 +244,7 @@ OK: 2 of 2 tests passed
 $
 ```
 
-## Option --debug with colors
+## Option `--debug` with colors
 
 - Separator line is cyan
 - `INPUT_LINE[...]` is cyan, others are normal color inside `[]`
@@ -269,7 +269,7 @@ $ ./clitest --debug --color always test/inline-multiple-marker.sh | command grep
 $
 ```
 
-## Option --color
+## Option `--color`
 
 Invalid value
 
@@ -321,7 +321,7 @@ $
 The real default `--color auto` cannot be tested here.
 Test it by hand at the command line.
 
-## Option --list
+## Option `--list`
 
 Listing a file with no tests
 
@@ -379,7 +379,7 @@ $ ./clitest --list test/no-nl-command.sh test/ok-1.sh; echo $?
 $
 ```
 
-## Option --list-run
+## Option `--list-run`
 
 Listing a file with no tests
 
@@ -459,7 +459,7 @@ $ ./clitest -L test/ok-1.sh; echo $?
 $
 ```
 
-## Option --progress
+## Option `--progress`
 
 First, some invalid values:
 
@@ -552,7 +552,7 @@ OK: 1 of 1 test passed
 $
 ```
 
-Ok & fail functionality with dot:
+Ok and fail functionality with dot:
 
 ```
 $ ./clitest --progress . test/ok-1.sh
@@ -671,7 +671,7 @@ FAIL: 1 of 2 tests failed
 $
 ```
 
-### Option --progress and skipped tests
+### Option `--progress` and skipped tests
 
 Since skipped tests affect the output (show nothing), it's worth
 testing if the line break issues won't appear.
@@ -714,7 +714,7 @@ clitest: Error: no test found. Maybe '--skip 1,2' was too much?
 $
 ```
 
-## Options --quiet, --progress, --list and --list-run are mutually exclusive
+## Options `--quiet`, `--progress`, `--list` and `--list-run` are mutually exclusive
 
 - Only one can be active, the others must be off.
 - The last informed will be the one used.
@@ -734,7 +734,7 @@ OK: 1 of 1 test passed
 $
 ```
 
-## Option --test and --skip combined with --list and --list-run
+## Option `--test` and `--skip` combined with `--list` and `--list-run`
 
 Error: Out of range
 
@@ -1094,7 +1094,7 @@ FAIL: 2 of 2 tests failed
 $
 ```
 
-## Inline output with #=>
+## Inline output with `#=>`
 
 ```
 $ ./clitest test/inline.sh
@@ -1132,10 +1132,10 @@ $
 
 ## Inline match modes
 
-Mode #=> --text
+Mode `#=> --text`
 
 - This is the default mode.
-- The --text part can be omitted.
+- The `--text` part can be omitted.
 
 ```
 $ ./clitest --list-run test/inline-match-text.sh
@@ -1182,7 +1182,7 @@ $ ./clitest --list-run test/inline-match-text.sh
 $
 ```
 
-Mode #=> --eval
+Mode `#=> --eval`
 
 ```
 $ ./clitest --list-run test/inline-match-eval.sh
@@ -1215,7 +1215,7 @@ $ ./clitest --list-run test/inline-match-eval.sh
 $
 ```
 
-Mode #=> --egrep
+Mode `#=> --egrep`
 
 ```
 $ ./clitest --list-run test/inline-match-egrep.sh
@@ -1247,9 +1247,9 @@ $ ./clitest --list-run test/inline-match-egrep.sh
 $
 ```
 
-Mode #=> --perl
+Mode `#=> --perl`
 
-- --regex is an alias to --perl
+- `--regex` is an alias to `--perl`
 
 ```
 $ ./clitest --list-run test/inline-match-perl.sh
@@ -1291,7 +1291,7 @@ $ ./clitest --list-run test/inline-match-perl.sh
 $
 ```
 
-Mode #=> --file
+Mode `#=> --file`
 
 ```
 $ ./clitest --list-run test/inline-match-file.sh
@@ -1307,7 +1307,7 @@ $ ./clitest --list-run test/inline-match-file.sh
 $
 ```
 
-Mode #=> --lines
+Mode `#=> --lines`
 
 ```
 $ ./clitest --list-run test/inline-match-lines.sh
@@ -1337,7 +1337,7 @@ Expected 99 lines, got 1.
 $
 ```
 
-Mode #=> --exit
+Mode `#=> --exit`
 
 ```
 $ ./clitest --list-run test/inline-match-exit.sh
@@ -1372,7 +1372,7 @@ Expected exit code 99, got 0
 $
 ```
 
-Errors for #=> --egrep
+Errors for `#=> --egrep`
 
 ```
 $ ./clitest test/inline-match-egrep-error-1.sh; echo $?
@@ -1385,7 +1385,7 @@ clitest: Error: check your inline egrep regex at line 1 of test/inline-match-egr
 $
 ```
 
-Errors for #=> --perl (and --regex)
+Errors for `#=> --perl` (and `--regex`)
 
 ```
 $ ./clitest test/inline-match-perl-error-1.sh; echo $?
@@ -1398,7 +1398,7 @@ clitest: Error: check your inline Perl regex at line 1 of test/inline-match-perl
 $
 ```
 
-Errors for #=> --file
+Errors for `#=> --file`
 
 ```
 $ ./clitest test/inline-match-file-error-1.sh; echo $?
@@ -1415,7 +1415,7 @@ clitest: Error: cannot read inline output file '/etc/', from line 1 of test/inli
 $
 ```
 
-Errors for #=> --lines
+Errors for `#=> --lines`
 
 ```
 $ ./clitest test/inline-match-lines-error-1.sh
@@ -1430,7 +1430,7 @@ clitest: Error: --lines requires a number. See line 1 of test/inline-match-lines
 $
 ```
 
-Errors for #=> --exit
+Errors for `#=> --exit`
 
 ```
 $ ./clitest test/inline-match-exit-error-1.sh
@@ -1445,7 +1445,7 @@ clitest: Error: --exit requires a number. See line 1 of test/inline-match-exit-e
 $
 ```
 
-Errors for #=> --eval
+Errors for `#=> --eval`
 
 ```
 $ ./clitest test/inline-match-eval-error-1.sh; echo $?
@@ -1454,7 +1454,7 @@ clitest: Error: empty --eval at line 1 of test/inline-match-eval-error-1.sh
 $
 ```
 
-## Option -t, --test
+## Option `-t`, `--test`
 
 Error: Invalid argument
 
@@ -1623,7 +1623,7 @@ OK: 1 of 5 tests passed (4 skipped)
 $
 ```
 
-## Option -s, --skip
+## Option `-s`, `--skip`
 
 Error: Invalid argument
 
@@ -1809,7 +1809,7 @@ OK: 1 of 5 tests passed (4 skipped)
 $
 ```
 
-## Option --test combined with --skip
+## Option `--test` combined with `--skip`
 
 Error: The combination of `-t` and `-s` resulted in no tests
 
@@ -1859,7 +1859,7 @@ OK: 3 of 13 tests passed (10 skipped)
 $
 ```
 
-## Option --diff-options
+## Option `--diff-options`
 
 ```
 $ ./clitest test/option-diff-options.sh
@@ -1886,7 +1886,7 @@ OK: 2 of 2 tests passed
 $
 ```
 
-## Option --prompt
+## Option `--prompt`
 
 ```
 $ ./clitest test/option-prompt.sh; echo $?
@@ -1905,7 +1905,7 @@ OK: 3 of 3 tests passed
 $
 ```
 
-## Option --inline-prefix
+## Option `--inline-prefix`
 
 ```
 $ ./clitest test/option-inline-prefix.sh
@@ -1961,7 +1961,7 @@ OK: 3 of 3 tests passed
 $
 ```
 
-## Option --prefix
+## Option `--prefix`
 
 ```
 $ ./clitest --prefix '    ' test/option-prefix.sh
@@ -1999,7 +1999,7 @@ OK: 6 of 6 tests passed
 $
 ```
 
-## Option --prefix: glob gotchas
+## Option `--prefix`: glob gotchas
 
 ```
 $ ./clitest --prefix '?' test/option-prefix-glob.sh
@@ -2045,7 +2045,7 @@ OK: 2 of 2 tests passed
 $
 ```
 
-## Option --prompt: glob gotchas (char + space)
+## Option `--prompt`: glob gotchas (char + space)
 
 ```
 $ ./clitest --prompt '? ' test/option-prompt-glob-space.sh
@@ -2091,7 +2091,7 @@ OK: 2 of 2 tests passed
 $
 ```
 
-## Option --prompt: glob gotchas (chars only)
+## Option `--prompt`: glob gotchas (chars only)
 
 ```
 $ ./clitest --prompt '?' test/option-prompt-glob-1.sh
@@ -2137,7 +2137,7 @@ OK: 2 of 2 tests passed
 $
 ```
 
-## Options --pre-flight and --post-flight
+## Options `--pre-flight` and `--post-flight`
 
 ```
 $ ./clitest --pre-flight 'tt_test_number=99; tt_nr_total_tests=99' test/ok-1.sh
@@ -2172,7 +2172,7 @@ clitest: Error: invalid option -Z
 $
 ```
 
-## Options terminator --
+## Options terminator `--`
 
 ```
 $ ./clitest -t 99 -- --quiet
@@ -2180,7 +2180,7 @@ clitest: Error: cannot read input file: --quiet
 $
 ```
 
-## File - meaning STDIN
+## File `-` meaning `STDIN`
 
 ```
 $ cat test/ok-1.sh | ./clitest -
@@ -2193,7 +2193,7 @@ OK: 1 of 1 test passed
 $
 ```
 
-## Read test file from /dev/stdin
+## Read test file from `/dev/stdin`
 
 ```
 $ cat test/ok-1.sh | ./clitest /dev/stdin
@@ -2215,7 +2215,7 @@ $
 
 ## Gotchas
 
-Test exit code and STDOUT/STDERR at the same time
+Test exit code and `STDOUT`/`STDERR` at the same time
 
 ```
 $ ./clitest notfound; echo $?
@@ -2228,7 +2228,7 @@ OK: 2 of 2 tests passed
 $
 ```
 
-STDOUT and STDERR
+`STDOUT` and `STDERR`
 
 ```
 $ ./clitest test/stdout-stderr.sh
@@ -2246,7 +2246,7 @@ OK: 10 of 10 tests passed
 $
 ```
 
-STDIN Isolation
+`STDIN` Isolation
 
 ```
 $ ./clitest --quiet test/stdin-isolation.sh ; echo $?
@@ -2306,7 +2306,7 @@ OK: 3 of 3 tests passed
 $
 ```
 
-Windows files (CR+LF)
+Windows files (`CR+LF`)
 
 ```
 $ ./clitest test/windows.sh
