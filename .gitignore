@@ -1,1 +1,5 @@
 .vscode
+
+# Dev-only empty file whose timestamp decides if the clitest-dev Docker image
+# should be built. Created and used by the Makefile targets.
+/.docker-build-done

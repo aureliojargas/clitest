@@ -27,5 +27,16 @@ For a quicker test using only a single shell:
 make test-bash  # takes less than a minute
 ```
 
+To execute those commands automatically when making commits or pushes, install
+[pre-commit][3] and run:
+
+```bash
+$ pre-commit install
+pre-commit installed at .git/hooks/pre-commit
+pre-commit installed at .git/hooks/pre-push
+$
+```
+
 [1]: https://github.com/aureliojargas/clitest/issues
 [2]: https://github.com/aureliojargas/clitest/pulls
+[3]: https://pre-commit.com
