@@ -1,5 +1,13 @@
 default_install_hook_types: [pre-commit, pre-push]
 repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+        exclude: ^test/no-nl-file-[123]\.sh$
+      - id: mixed-line-ending
+
   - repo: local
     hooks:
       - id: validate-docs
