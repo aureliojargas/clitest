@@ -44,6 +44,24 @@ You can also run clitest in a Docker container ([more info in Docker Hub](https:
 docker run --rm -t aureliojargas/clitest --help
 ```
 
+## Pre-commit hook
+
+clitest can be used as a [pre-commit](https://github.com/pre-commit/pre-commit) hook.
+Add this to your `.pre-commit-config.yaml`:
+
+```yaml
+- repo: https://github.com/aureliojargas/clitest
+  rev: 0.6.0
+  hooks:
+    - id: clitest
+
+      # Optional: add custom arguments to the clitest call
+      # args: [--first, --progress, none]
+
+      # Specify which files to test (as a regex)
+      files: ^docs/.*\.md$
+```
+
 ## GitHub Actions
 
 This repository doubles as a GitHub Action, so a workflow does not have to
