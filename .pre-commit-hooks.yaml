@@ -1,0 +1,8 @@
+# How to use it: https://github.com/aureliojargas/clitest#pre-commit-hook
+
+- id: clitest
+  name: clitest
+  description: Automatic testing in Unix command lines
+  entry: clitest
+  language: script
+  types: [text]
