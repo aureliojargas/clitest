@@ -50,6 +50,7 @@ Options:
   -s, --skip RANGE            Skip specific tests, by number (1,2,4-7)
       --pre-flight COMMAND    Execute command before running the first test
       --post-flight COMMAND   Execute command after running the last test
+      --junit-xml FILE        Save results to FILE, in the JUnit XML format
   -q, --quiet                 Quiet operation, no output shown
   -V, --version               Show program version and exit
 
@@ -85,6 +86,9 @@ tt_files_stats=
 tt_original_dir=$(pwd)
 tt_pre_command=
 tt_post_command=
+tt_junit_file=
+tt_junit_cases_file=
+tt_junit_suites_file=
 tt_run_range=
 tt_run_range_data=
 tt_skip_range=
@@ -106,6 +110,10 @@ tt_test_diff=
 tt_test_ok_text=
 tt_missing_nl=0
 
+# Removes the ---/+++ file headers from the diff output, they are noise for
+# the user (temporary file names and timestamps)
+tt_rm_diff_headers='1 { /^--- / { N; /\n+++ /d; }; }'
+
 # Special handy chars
 tt_tab='	'
 tt_nl='
@@ -115,6 +123,10 @@ tt_nl='
 
 # shellcheck disable=SC2317 # Function is reachable (invoked by a trap)
 tt_clean_up() {
+    # Note: the JUnit report is saved here, and not at the end of the script,
+    # to also cover the runs aborted by --first or by a fatal error.
+    tt_junit_write
+
     test -n "$tt_temp_dir" && rm -rf "$tt_temp_dir"
 }
 tt_message() {
@@ -243,6 +255,63 @@ tt_parse_range() { # $1=range
     test "$tt_range_data" != ':' && echo "$tt_range_data"
     return 0
 }
+tt_xml_escape() { # read STDIN, write escaped XML text to STDOUT
+    # The tr removes the control chars which are forbidden in XML 1.0,
+    # keeping tab, line feed and carriage return. Command outputs are
+    # arbitrary bytes, and a single ESC would make the report unparseable.
+    sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g' -e 's/"/\&quot;/g' |
+        tr -d '\001-\010\013\014\016-\037'
+}
+tt_junit_testcase() { # $1=ok|fail|skipped
+    test -z "$tt_junit_file" && return 0
+
+    {
+        printf '    <testcase classname="%s" name="#%s: %s"' \
+            "$(printf %s "$tt_test_file" | tt_xml_escape)" \
+            "$tt_test_number" \
+            "$(printf %s "$tt_test_command" | tt_xml_escape)"
+
+        case "$1" in
+            ok)
+                printf '/>\n'
+                ;;
+            skipped)
+                printf '>\n      <skipped/>\n    </testcase>\n'
+                ;;
+            fail)
+                printf '>\n      <failure message="Failed at line %s of %s">%s</failure>\n    </testcase>\n' \
+                    "$tt_test_line_number" \
+                    "$(printf %s "$tt_test_file" | tt_xml_escape)" \
+                    "$(printf %s "$tt_test_diff" | sed "$tt_rm_diff_headers" | tt_xml_escape)"
+                ;;
+        esac
+    } >> "$tt_junit_cases_file"
+}
+tt_junit_flush_suite() {
+    # Close the current file's test suite, using its (now known) totals
+    test -z "$tt_junit_file" && return 0
+    test -s "$tt_junit_cases_file" || return 0
+
+    {
+        printf '  <testsuite name="%s" tests="%s" failures="%s" errors="0" skipped="%s">\n' \
+            "$(printf %s "$tt_test_file" | tt_xml_escape)" \
+            "$tt_nr_file_tests" "$tt_nr_file_fails" "$tt_nr_file_skips"
+        cat "$tt_junit_cases_file"
+        printf '  </testsuite>\n'
+    } >> "$tt_junit_suites_file"
+    : > "$tt_junit_cases_file"
+}
+# shellcheck disable=SC2317 # Function is reachable (invoked by a trap)
+tt_junit_write() {
+    test -z "$tt_junit_file" && return 0
+
+    tt_junit_flush_suite  # the last file, or the one aborted mid-run
+    {
+        printf '%s\n' '<?xml version="1.0" encoding="UTF-8"?>' '<testsuites>'
+        test -f "$tt_junit_suites_file" && cat "$tt_junit_suites_file"
+        printf '%s\n' '</testsuites>'
+    } > "$tt_junit_file"
+}
 tt_reset_test_data() {
     tt_test_command=
     tt_test_inline=
@@ -261,6 +330,7 @@ tt_run_test() {
     if test -n "$tt_run_range_data" && test "$tt_run_range_data" = "${tt_run_range_data#*:"$tt_test_number":}"; then
         tt_nr_total_skips=$((tt_nr_total_skips + 1))
         tt_nr_file_skips=$((tt_nr_file_skips + 1))
+        tt_junit_testcase skipped
         tt_reset_test_data
         return 0
     fi
@@ -270,6 +340,7 @@ tt_run_test() {
     if test -n "$tt_skip_range_data" && test "$tt_skip_range_data" != "${tt_skip_range_data#*:"$tt_test_number":}"; then
         tt_nr_total_skips=$((tt_nr_total_skips + 1))
         tt_nr_file_skips=$((tt_nr_file_skips + 1))
+        tt_junit_testcase skipped
         tt_reset_test_data
         return 0
     fi
@@ -406,6 +477,7 @@ tt_run_test() {
         tt_nr_file_fails=$((tt_nr_file_fails + 1))
         tt_nr_total_fails=$((tt_nr_total_fails + 1))
         tt_failed_range="$tt_failed_range$tt_test_number,"
+        tt_junit_testcase fail
 
         # Decide the message format
         if test "$tt_output_mode" = 'list-run'; then
@@ -417,7 +489,7 @@ tt_run_test() {
                 tt_message "${tt_color_red}$(tt_separator_line)${tt_color_off}"
             fi
             tt_message "${tt_color_red}[FAILED #$tt_test_number, line $tt_test_line_number] $tt_test_command${tt_color_off}"
-            tt_message "$tt_test_diff" | sed '1 { /^--- / { N; /\n+++ /d; }; }'  # no ---/+++ headers
+            tt_message "$tt_test_diff" | sed "$tt_rm_diff_headers"
             tt_message "${tt_color_red}$(tt_separator_line)${tt_color_off}"
             tt_separator_line_shown=1
         fi
@@ -429,6 +501,7 @@ tt_run_test() {
 
     # Test OK
     else
+        tt_junit_testcase ok
         test "$tt_output_mode" = 'list-run' && tt_list_test ok
     fi
 
@@ -633,6 +706,11 @@ while test "${1#-}" != "$1"; do
             tt_post_command="$1"
             shift
             ;;
+        --junit-xml)
+            shift
+            tt_junit_file="$1"
+            shift
+            ;;
         -P | --progress)
             shift
             tt_progress="$1"
@@ -792,6 +870,25 @@ if test $? -ne 0; then
     tt_error "invalid argument for -s or --skip: $tt_skip_range"
 fi
 
+# Validate the JUnit XML report file, if informed
+if test -n "$tt_junit_file"; then
+    # --list does not run the tests, so there are no results to report
+    if test "$tt_output_mode" = 'list'; then
+        tt_error 'option --junit-xml cannot be used with --list'
+    fi
+
+    # The report is only saved at the end, but a test may 'cd' before that
+    case "$tt_junit_file" in
+        /*) : ;;
+        *) tt_junit_file="$tt_original_dir/$tt_junit_file" ;;
+    esac
+
+    # Fail now, not after having run all the tests
+    # Note: the subshell hides the shell's own redirection error message
+    (: > "$tt_junit_file") 2> /dev/null ||
+        tt_error "cannot create JUnit XML file: $tt_junit_file"
+fi
+
 ### Real execution begins here
 
 trap tt_clean_up EXIT
@@ -802,6 +899,8 @@ tt_temp_file="$tt_temp_dir/temp.txt"
 tt_stdin_file="$tt_temp_dir/stdin.txt"
 tt_test_ok_file="$tt_temp_dir/ok.txt"
 tt_test_output_file="$tt_temp_dir/output.txt"
+tt_junit_cases_file="$tt_temp_dir/junit-cases.xml"
+tt_junit_suites_file="$tt_temp_dir/junit-suites.xml"
 
 # Some preparing command to run before all the tests?
 if test -n "$tt_pre_command"; then
@@ -870,6 +969,9 @@ for tt_test_file; do
     # Save file stats
     tt_nr_file_ok=$((tt_nr_file_tests - tt_nr_file_fails - tt_nr_file_skips))
     tt_files_stats="$tt_files_stats$tt_nr_file_ok $tt_nr_file_fails $tt_nr_file_skips$tt_nl"
+
+    # One JUnit test suite per input file
+    tt_junit_flush_suite
 
     # Dots mode: any missing new line?
     # Note: had to force tt_missing_nl=0, even when it's done in tt_message :/
