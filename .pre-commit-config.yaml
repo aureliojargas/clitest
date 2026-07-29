@@ -1,0 +1,46 @@
+default_install_hook_types: [pre-commit, pre-push]
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+        exclude: ^test/no-nl-file-[123]\.sh$
+      - id: mixed-line-ending
+
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.48.0
+    hooks:
+      - id: typos
+
+  - repo: https://github.com/hukkin/mdformat
+    rev: 1.0.0
+    hooks:
+      - id: mdformat
+        additional_dependencies: [mdformat-gfm]
+        # Exclude files with intentional tab-prefixed code blocks
+        exclude: ^(examples/cut\.md|test/fail-messages\.md)$
+
+  - repo: local
+    hooks:
+      - id: validate-docs
+        name: Validate docs
+        entry: make validate-docs
+        language: system
+        pass_filenames: false
+        files: ^(README\.md|examples/.*)$
+
+      - id: make-lint
+        name: make lint (takes a few seconds)
+        entry: make lint docker_tty=
+        language: system
+        pass_filenames: false
+        files: ^(Makefile|Dockerfile\.dev|clitest)$
+
+      - id: make-test
+        name: make test (takes a few minutes)
+        entry: make test docker_tty=
+        language: system
+        pass_filenames: false
+        files: ^(Makefile|Dockerfile\.dev|clitest|test\.md|test/.*)$
+        stages: [pre-push]  # run on push only, too much wait for every commit

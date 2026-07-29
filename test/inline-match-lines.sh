@@ -48,4 +48,3 @@ $ echo '--lines is cool'         #=> --text --lines is cool
 # $ echo 'fail'                 #=> --lines -1
 # $ echo 'fail'                 #=> --lines 1.0
 # $ echo 'fail'                 #=> --lines foo
-

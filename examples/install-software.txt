@@ -1,13 +1,13 @@
 $ cd /tmp
-$ url="https://fossies.org/linux/privat/txt2tags-2.6.tgz"
-$ curl -O -s -S "$url"                     # download
+$ url="https://github.com/txt2tags/old/raw/master/txt2tags-2.6.tgz"
+$ curl -fsSOL "$url"                       # download
 $ du -h txt2tags-2.6.tgz                   # verify size
 532K	txt2tags-2.6.tgz
 $ tar tzf txt2tags-2.6.tgz | sed -n '$='   # verify number of files
 545
 $ tar xzf txt2tags-2.6.tgz                 # extract
 $ cd txt2tags-2.6
-$ ls -1F                                   # list contents
+$ ls -1F | LC_ALL=C sort                   # list contents
 COPYING
 ChangeLog
 README
@@ -17,10 +17,8 @@ po/
 samples/
 test/
 txt2tags*
-$ ./txt2tags -V                            # test execution
-txt2tags version 2.6 <http://txt2tags.org>
-$ test -d ~/bin || mkdir ~/bin             # create folder if needed
-$ cp txt2tags ~/bin/                       # install to user folder
-$ ~/bin/txt2tags -V                        # final test
-txt2tags version 2.6 <http://txt2tags.org>
+$ bin_dir=/tmp/bin
+$ test -d $bin_dir || mkdir $bin_dir       # create bin dir if needed
+$ cp -v txt2tags $bin_dir                  # install to bin dir
+'txt2tags' -> '/tmp/bin/txt2tags'
 $

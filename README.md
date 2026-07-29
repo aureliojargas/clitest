@@ -10,14 +10,13 @@ interactive prompt format, and a specialized tool tests them.
 In fact, the doctest [official][3] description can also be used for
 clitest:
 
-* The **doctest** module searches for pieces of text that look like
+- The **doctest** module searches for pieces of text that look like
   interactive **Python sessions**, and then executes those **sessions**
   to verify that they work exactly as shown.
 
-* The **clitest** command searches for pieces of text that look like
+- The **clitest** command searches for pieces of text that look like
   interactive **Unix command lines**, and then executes those
   **command lines** to verify that they work exactly as shown.
-
 
 ## Download & install
 
@@ -37,7 +36,6 @@ Now check if everything is fine:
 clitest --help
 ```
 
-
 ## Docker image
 
 You can also run clitest in a Docker container ([more info in Docker Hub](https://hub.docker.com/r/aureliojargas/clitest)).
@@ -46,6 +44,26 @@ You can also run clitest in a Docker container ([more info in Docker Hub](https:
 docker run --rm -t aureliojargas/clitest --help
 ```
 
+## GitHub Actions
+
+This repository doubles as a GitHub Action, so a workflow does not have to
+download and install the script itself:
+
+```yaml
+      - uses: actions/checkout@v7
+      - uses: aureliojargas/clitest@main
+        with:
+          files: examples/intro.txt
+```
+
+clitest runs on the runner rather than in a container, so the test files can
+invoke anything the job has already built or installed.
+
+| Input               | Description                                               | Default      |
+| ------------------- | --------------------------------------------------------- | ------------ |
+| `files`             | Test file(s) to run. Whitespace-separated, globs allowed. | *(required)* |
+| `options`           | Extra clitest options, e.g. `--first --prefix tab`        | *(none)*     |
+| `working-directory` | Directory to run clitest from                             | `.`          |
 
 ## Quick Intro
 
@@ -74,7 +92,6 @@ $ clitest examples/intro.txt
 OK: 4 of 4 tests passed
 $
 ```
-
 
 ## CLI Syntax
 
@@ -121,7 +138,6 @@ $
 There are more examples and instructions in the [examples folder][10].
 For a real-life collection of hundreds of test files, see
 [funcoeszz test files][24].
-
 
 ## Testable Documentation
 
@@ -198,14 +214,13 @@ no prefix option is needed.
 
 Examples of testable documentation handled by clitest:
 
-* https://github.com/aureliojargas/txt2regex/blob/master/tests/features.md
-* https://github.com/aureliojargas/txt2regex/blob/master/tests/cmdline.md
-* https://github.com/aureliojargas/sedsed/blob/master/test/command_line.md
-* https://github.com/aureliojargas/replace/blob/master/README.md
-* https://github.com/aureliojargas/clitest/blob/master/test.md
-* https://github.com/caarlos0/jvm/blob/master/tests/test.clitest.md
-* https://github.com/caarlos0/git-add-remote/blob/master/tests/suite.clitest.md
-
+- https://github.com/aureliojargas/txt2regex/blob/master/tests/features.md
+- https://github.com/aureliojargas/txt2regex/blob/master/tests/cmdline.md
+- https://github.com/aureliojargas/sedsed/blob/master/test/command_line.md
+- https://github.com/aureliojargas/replace/blob/master/README.md
+- https://github.com/aureliojargas/clitest/blob/master/test.md
+- https://github.com/caarlos0/jvm/blob/master/tests/test.clitest.md
+- https://github.com/caarlos0/git-add-remote/blob/master/tests/suite.clitest.md
 
 ## Alternative Syntax: Inline Output
 
@@ -241,7 +256,6 @@ $ echo "abcdef" | cut -c 1-4      #=> abcd
 > Note: If needed, you can change this marker (i.e., to `#→` or `###`)
 > at the top of the script or using the `--inline-prefix` option.
 
-
 ## Advanced Tests
 
 When using the `#=>` marker, you can take advantage of special options
@@ -252,35 +266,45 @@ $ head /etc/passwd            #=> --lines 10
 $ tac /etc/passwd | tac       #=> --file /etc/passwd
 $ cat /etc/passwd             #=> --egrep ^root:
 $ echo $((2 + 10))            #=> --regex ^\d+$
-$ make test                   #=> --exit 0
+$ date                        #=> --exit 0
 $ pwd                         #=> --eval echo $PWD
 ```
 
-* Using `#=> --lines` the test will pass if the command output has
+- Using `#=> --lines` the test will pass if the command output has
   exactly `N` lines. Handy when the output text is variable
   (unpredictable), but the number of resulting lines is constant.
 
-* Using `#=> --file` the test will pass if the command output matches
+- Using `#=> --file` the test will pass if the command output matches
   the contents of an external file. Useful to organize long/complex
   outputs into files.
 
-* Using `#=> --egrep` the test will pass if `grep -E` matches at least
+- Using `#=> --egrep` the test will pass if `grep -E` matches at least
   one line of the command output.
 
-* Using `#=> --regex` the test will pass if the command output is
+- Using `#=> --regex` the test will pass if the command output is
   matched by a [Perl regular expression][9]. A multiline output is
   matched as a single string, with inner `\n`'s. Use the `(?ims)`
   modifiers when needed.
 
-* Using `#=> --exit` the test will pass if the exit code of the command
-  is equal to the code specified. Useful when testing commands that
+- Using `#=> --exit` the test will pass if the exit code of the command
+  is equal to the specified code. Useful when testing commands that
   generate variable output (or no output at all), and the exit code is
-  the best indication of success. Both STDIN and STDOUT are ignored
+  the best indication of success. Both STDOUT and STDERR are ignored
   when using this option.
 
-* Using `#=> --eval` the test will pass if both commands result in the
+- Using `#=> --eval` the test will pass if both commands result in the
   same output. Useful to expand variables which store the full or
   partial output.
+
+What if the command output actually starts with one of these special
+options? How to match it as plain text? Either avoid using inline
+output or use `--text`. Examples:
+
+```console
+$ echo --lines rocks
+--lines rocks
+$ echo --lines rocks          #=> --text --lines rocks
+```
 
 ## Options
 
@@ -307,16 +331,16 @@ Customization options:
       --inline-prefix PREFIX  Set inline output prefix (default: '#=> ')
       --prefix PREFIX         Set command line prefix (default: '')
       --prompt STRING         Set prompt string (default: '$ ')
+
+See also: https://github.com/aureliojargas/clitest
 $
 ```
 
-
 ## Exit codes
 
-* `0` - All tests passed, or normal operation (--help, --list, …)
-* `1` - One or more tests have failed
-* `2` - An error occurred (file not found, invalid range, …)
-
+- `0` - All tests passed, or normal operation (--help, --list, …)
+- `1` - One or more tests have failed
+- `2` - An error occurred (file not found, invalid range, …)
 
 ## Fail fast
 
@@ -326,7 +350,6 @@ execution when any test fails.
 Useful for Continuous Integration (CI), or when running sequential
 tests where the next test depends on the correct result of the
 previous.
-
 
 ## Quiet operation
 
@@ -342,7 +365,6 @@ else
     # one or more tests failed :(
 fi
 ```
-
 
 ## JUnit XML report
 
@@ -362,7 +384,6 @@ diff in a `<failure>` element, and the tests skipped by `--test` or
 The report is saved even when the execution is aborted by `--first`, so
 it always covers the tests that were run.
 
-
 ## Run specific tests
 
 To rerun a specific problematic test, or to limit the execution to a
@@ -377,7 +398,6 @@ clitest --skip 11,15   tests.txt   # Run all tests, except #11 and #15
 clitest -t 1-10 -s 5   tests.txt   # Run first 10 tests, but skip #5
 ```
 
-
 ## Pre/post scripts
 
 You can run a preparing script or command before the first test with
@@ -388,7 +408,6 @@ At the end of all tests, run a final cleanup script/command with
 ```bash
 clitest --pre-flight ./test-init.sh --post-flight 'rm *.tmp' tests.txt
 ```
-
 
 ## Customization
 
@@ -407,52 +426,47 @@ Or maybe you use a different prompt (`$PS1`) in your documentation?
 clitest  --prefix 4 --prompt '[john@localhost ~]$ ' README.md
 ```
 
-
-
-
 ## Nerdiness
 
-* Use any text file format for the tests, it doesn't matter. The command
+- Use any text file format for the tests, it doesn't matter. The command
   lines just need to be grepable and have a fixed prefix (or even none).
   Even Windows text files (CR+LF) will work fine.
 
-* The command line power is available in your test files: use variables,
+- The command line power is available in your test files: use variables,
   pipes, redirection, create files, folders, move around…
 
-* All the commands are tested using a single shell session. This means
+- All the commands are tested using a single shell session. This means
   that variables, aliases and functions defined in one test will persist
   in the following tests.
 
-* Both STDOUT and STDERR are captured, so you can also test error
+- Both STDOUT and STDERR are captured, so you can also test error
   messages.
 
-* To test STDOUT/STDERR and the exit code at the same time, add a
+- To test STDOUT/STDERR and the exit code at the same time, add a
   `;echo $?` after the command.
 
-* Use an empty `$` prompt to close the last command output.
+- Use an empty `$` prompt to close the last command output.
 
-* In the output, every single char (blank or not) counts. Any
+- In the output, every single char (blank or not) counts. Any
   difference will cause a test to fail. To ignore the difference in
   blanks, use `--diff-options '-u -w'`.
 
-* Unlike doctest's `<BLANKLINE>`, in clitest blank lines in the
+- Unlike doctest's `<BLANKLINE>`, in clitest blank lines in the
   command output aren't a problem. Just insert them normally.
 
-* To test outputs with no final `\n`, such as `printf foo`, use `#=>
-  --regex ^foo$`.
+- To test outputs with no final `\n`, such as `printf foo`, use `#=> --regex ^foo$`.
 
-* In multifile mode, the current folder (`$PWD`) is reset when
+- In multifile mode, the current folder (`$PWD`) is reset when
   starting to test a new file. This avoids that a `cd` command in a
   previous file will affect the next.
 
-* Multiline prompts (`$PS2`) are not yet supported.
+- Multiline prompts (`$PS2`) are not yet supported.
 
-* Ellipsis (as in doctest) are not supported. Use `#=> --regex`
+- Ellipsis (as in doctest) are not supported. Use `#=> --regex`
   instead.
 
-* Simple examples in [examples/][10]. Hardcore examples in
+- Simple examples in [examples/][10]. Hardcore examples in
   [test.md][11] and [test/][12], the clitest own test-suite.
-
 
 ## Choose the execution shell
 
@@ -485,7 +499,7 @@ automatically tested in the CI, using the following shells:
 - sh (busybox)
 - zsh
 
-> Fish shell is not supported (it's not POSIX), but you 
+> Fish shell is not supported (it's not POSIX), but you
 > can use [doctest.fish][27] instead.
 
 Portability issues are considered serious bugs, please
@@ -493,26 +507,23 @@ Portability issues are considered serious bugs, please
 
 Developers: Learn more about portability in POSIX shells:
 
-* [How to make bash scripts work in dash][15]
-* [Ubuntu — Dash as /bin/sh][16]
-* [Rich’s sh (POSIX shell) tricks][17]
-* [lintsh][18]
-* [Official POSIX specification: Shell & Utilities][19]
-
+- [How to make bash scripts work in dash][15]
+- [Ubuntu — Dash as /bin/sh][16]
+- [Rich’s sh (POSIX shell) tricks][17]
+- [lintsh][18]
+- [Official POSIX specification: Shell & Utilities][19]
 
 ## [KISS][20]
 
-A shell script to test shell commands.  
+A shell script to test shell commands.\
 No other language or environment involved.
-
 
 ## Meta
 
-* Author:   [Aurelio Jargas][21]
-* Created:  2013-07-24
-* Language: Shell Script
-* License:  [MIT][22]
-
+- Author: [Aurelio Jargas][21]
+- Created: 2013-07-24
+- Language: Shell Script
+- License: [MIT][22]
 
 [1]: #portability
 [2]: http://en.wikipedia.org/wiki/Doctest

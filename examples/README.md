@@ -2,7 +2,6 @@
 
 Here's some simple examples to show you how a test file looks like.
 
-
 ## Pure CLI Tests
 
 Take a look at the `.txt` files. They're just like a shell session
@@ -30,15 +29,13 @@ $
 ### Easily create your own test files:
 
 1. Go to your terminal
-2. Set your prompt accordingly: `PS1='$ '`
-3. Type and run the desired commands
-4. Copy & paste it all into a text file
-5. Done
-
-
+1. Set your prompt accordingly: `PS1='$ '`
+1. Type and run the desired commands
+1. Copy & paste it all into a text file
+1. Done
 
 ## Documentation Tests
- 
+
 Now take a look at the `.md` files. They're normal Markdown documents
 (with titles, paragraphs, code blocks), created to be read by humans
 (after HTML conversion).
@@ -64,7 +61,6 @@ prefixed by a tab, you must use the `--prefix` option.
 
 Even this `README.md` file you're reading is testable. No options
 needed, since the code blocks here do not use prefixes.
-
 
 ## Play Around
 

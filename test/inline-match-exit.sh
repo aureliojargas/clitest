@@ -6,12 +6,12 @@ $ false                         #=> --exit 1
 $ sh -c 'exit 3'                #=> --exit 3
 $ command-not-found             #=> --exit 127
 
-# STDIN and STDOUT are ignored when using --exit
+# STDOUT and STDERR are ignored when using --exit
 
 $ echo "STDOUT ignored"         #=> --exit 0
 This output will be ignored.
 $ cut                           #=> --exit 1
-This output will be ignored.
+This error message will be ignored.
 $ 
 
 # You can also safely omit the output in the test file
